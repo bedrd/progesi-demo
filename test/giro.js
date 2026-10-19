@@ -15,7 +15,7 @@ const { CHROME, URL_DEMO } = require('./config');
   const toast = async () => nb(await p.evaluate(() => document.querySelector('#toast-t').textContent));
   const prova = async () => nb(await p.evaluate(() => document.querySelector('#vista p.text-ambra')?.innerText || ''));
   const ok = (n, c, d = '') => esiti.push(`${c ? 'OK ' : 'NO '} ${n}${d ? ' :: ' + d : ''}`);
-  const nav = t => clic('#nav .nav-i', t), ruolo = r => clic(`header [data-a="ruolo"][data-v="${r}"]`);
+  const nav = t => clic('#nav .nav-i', t), ruolo = r => clic(`#barra-demo [data-a="ruolo"][data-v="${r}"]`);
   const sub = (sel, f) => p.evaluate((sel, f) => { const x = document.querySelector(sel); for (const [k, v] of Object.entries(f)) x.querySelector(`[name="${k}"]`).value = v; x.requestSubmit(); }, sel, f).then(() => pausa(300));
 
   ok('console 44/44', logs.some(l => l.includes('44/44')));

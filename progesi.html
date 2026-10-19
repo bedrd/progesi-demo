@@ -42,7 +42,23 @@
   :focus-visible { outline: 2px solid #DD0000; outline-offset: 2px; border-radius: 6px; }
   input:focus-visible, select:focus-visible, textarea:focus-visible { outline-color: #303030; }
 
-  #app { display: flex; height: 100dvh; overflow: hidden; flex-direction: column; }
+  body { display: flex; flex-direction: column; height: 100dvh; }
+  #app { display: flex; flex: 1 1 0; min-height: 0; overflow: hidden; flex-direction: column; }
+  /* barra della demo: chi sta guardando, suggerimenti, guida. Separata dal gestionale vero */
+  #barra-demo { position: relative; z-index: 20; flex: none; background: #303030; color: #fff; }
+  .seg-demo { display: inline-flex; background: rgba(255,255,255,.12); border-radius: 4px; padding: 2px; gap: 2px; }
+  .seg-demo button { flex: 1 1 auto; border-radius: 3px; padding: .25rem .6rem; font-size: .75rem; font-weight: 700; color: rgba(255,255,255,.78); white-space: nowrap; transition: background-color .15s, color .15s; }
+  .seg-demo button:hover { color: #fff; }
+  .seg-demo button[aria-pressed="true"] { background: #fff; color: #303030; }
+  .demo-btn { display: inline-flex; align-items: center; gap: .35rem; border-radius: 3px; padding: .25rem .5rem; font-size: .75rem; font-weight: 700; color: rgba(255,255,255,.85); }
+  .demo-btn:hover { background: rgba(255,255,255,.12); color: #fff; }
+  .demo-btn[aria-pressed="false"] { color: rgba(255,255,255,.5); }
+  #barra-demo :focus-visible { outline-color: #fff; }
+  /* parole spiegate: sottolineate a puntini, la spiegazione compare al passaggio o al tocco */
+  .gl { border-bottom: 1px dotted #555; cursor: help; }
+  .gl:hover, .gl:focus-visible { border-bottom-style: solid; }
+  #glossa { position: fixed; z-index: 80; max-width: 300px; background: #303030; color: #fff; font-size: .8125rem; line-height: 1.45; border-radius: 4px; padding: .6rem .75rem; box-shadow: 0 8px 24px rgba(0,0,0,.2); pointer-events: none; }
+  #glossa strong { display: block; margin-bottom: .15rem; }
   @media (min-width: 1024px) { #app { display: grid; grid-template-columns: 256px 1fr; grid-template-rows: 100%; } }
   #app > *, #vista, #colonna { min-height: 0; min-width: 0; }
   #sidebar { display: none; }
@@ -93,6 +109,10 @@
   .nav-i .bi { font-size: 1.05rem; }
   #nav .nav-i { white-space: nowrap; }
   .badge { margin-left: auto; background: #B45309; color: #fff; font-size: .75rem; font-weight: 700; border-radius: 3px; min-width: 1.25rem; padding: 0 .35rem; text-align: center; }
+  /* numerini calmi: grigi per le cose da fare, arancio solo per quelle urgenti (scadute, scartate, da pagare entro 7 giorni) */
+  .badge.calmo { background: #E4E4E4; color: #3A3A3A; }
+  .nav-g { display: flex; align-items: center; gap: .4rem; width: 100%; padding: 0 .75rem; margin-bottom: .375rem; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #555; text-align: left; }
+  .nav-g:hover { color: #303030; }
 
   .barra { display: flex; height: 8px; border-radius: 2px; background: #E2E2E2; overflow: hidden; }
   .barra > span { display: block; height: 100%; background: #3A3A3A; }
@@ -208,6 +228,20 @@
   .fumetto { background: #fff; border: 1px solid #E2E2E2; border-radius: 3px; padding: 4px 8px; font-size: 11px; line-height: 1.3; max-width: 210px; width: max-content; text-align: left; color: #303030; box-shadow: 0 6px 16px -6px rgba(48,48,48,.28); animation: pop .25s ease-out; }
   .fumetto b { font-weight: 700; }
   .slot-f { display: contents; }
+  /* sala per stanze: la scena si mette a fuoco sulla stanza scelta, gli agenti di fuori si spengono */
+  .scena-vista { overflow: hidden; border-radius: 4px; }
+  .scena { transform-origin: 50% 50%; transition: transform .6s cubic-bezier(.22,.8,.3,1); }
+  @media (prefers-reduced-motion: reduce) { .scena { transition: none; } }
+  .badge-ag { transition: opacity .3s; }
+  .badge-ag.spento, .badge-ag.fuori { opacity: .32; }
+  .badge-ag .conta { font-size: 10px; font-weight: 700; color: #fff; background: #B45309; border-radius: 99px; padding: 0 5px; line-height: 15px; margin-left: 1px; }
+  .stanza { position: absolute; transform: translate(-50%, -50%); z-index: 2; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.94); border: 1px solid #D6D6D6; border-radius: 3px; padding: 3px 9px; font-family: Ubuntu, sans-serif; font-weight: 500; font-size: 12px; color: #303030; white-space: nowrap; transition: border-color .15s, opacity .3s; }
+  .stanza:hover, .stanza.sel { border-color: #303030; }
+  .stanza.sel { box-shadow: 0 0 0 2px rgba(48,48,48,.18); }
+  .stanza .per-voi { font-family: Lato, sans-serif; font-weight: 700; font-size: 11px; color: #B45309; }
+  .stanza.spenta { opacity: .45; }
+  @media (max-width: 1023px) { .stanza { font-size: 10px; padding: 2px 6px; } .stanza .per-voi { font-size: 10px; } }
+  @media (max-width: 767px) { .stanza { display: none; } }
   .fumetto { pointer-events: none; }
   @keyframes pop { from { opacity: 0; transform: translateY(4px) scale(.96); } to { opacity: 1; transform: none; } }
   @media (max-width: 767px) {
@@ -287,6 +321,21 @@
 </head>
 <body>
 
+<div id="barra-demo" role="region" aria-label="Comandi della demo">
+  <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 px-4 sm:px-6 py-1.5">
+    <span class="text-[10px] font-bold tracking-wider uppercase bg-white text-inchiostro rounded-sm px-1.5 py-0.5">Demo</span>
+    <span class="text-xs text-white/70 hidden lg:inline">Dati di esempio: ricaricando la pagina si riparte da capo.</span>
+    <span class="text-xs text-white/70 hidden sm:inline sm:ml-auto">Guarda come:</span>
+    <div class="seg-demo order-last w-full sm:order-none sm:w-auto" role="group" aria-label="Chi sta usando il sistema">
+      <button data-a="ruolo" data-v="dir">Direzione</button>
+      <button data-a="ruolo" data-v="rt">Resp. tecnico</button>
+      <button data-a="ruolo" data-v="amm"><span class="sm:hidden">Ammin.</span><span class="hidden sm:inline">Amministrazione</span></button>
+      <button data-a="ruolo" data-v="tec">Tecnico</button>
+    </div>
+    <button class="demo-btn ml-auto sm:ml-0" data-a="guida" aria-pressed="true" title="Mostra o nasconde le righe gialle Prova"><i class="bi bi-lightbulb"></i>Suggerimenti</button>
+    <button class="demo-btn" data-a="benvenuto"><i class="bi bi-question-circle"></i>Guida</button>
+  </div>
+</div>
 <div id="app">
   <aside id="sidebar" class="flex-col bg-white border-r border-linea h-full" aria-label="Menu principale">
     <div class="px-5 h-16 flex items-center gap-2.5 border-b border-linea shrink-0">
@@ -320,26 +369,13 @@
             <button data-a="modo" data-v="gestionale"><i class="bi bi-grid-1x2"></i> Gestionale</button>
             <button data-a="modo" data-v="sala"><i class="bi bi-people"></i> Sala agenti</button>
           </div>
-          <span class="text-xs text-grigio hidden 2xl:inline ml-1">Stai guardando come:</span>
-          <div class="seg" role="group" aria-label="Chi sta usando il sistema">
-            <button data-a="ruolo" data-v="dir">Direzione</button>
-            <button data-a="ruolo" data-v="rt">Resp. tecnico</button>
-            <button data-a="ruolo" data-v="amm">Amministrazione</button>
-            <button data-a="ruolo" data-v="tec">Tecnico</button>
-          </div>
         </div>
       </div>
     </header>
-    <div class="xl:hidden shrink-0 bg-white border-b border-linea px-4 sm:px-6 py-2 space-y-1.5 sm:space-y-0 sm:flex sm:gap-3">
+    <div id="barra-modo" class="xl:hidden shrink-0 bg-white border-b border-linea px-4 sm:px-6 py-2">
       <div class="seg modo-seg w-full" role="group" aria-label="Come vedere il sistema">
         <button class="!px-1.5 !text-xs" data-a="modo" data-v="gestionale"><i class="bi bi-grid-1x2"></i> Gestionale</button>
         <button class="!px-1.5 !text-xs" data-a="modo" data-v="sala"><i class="bi bi-people"></i> Sala agenti</button>
-      </div>
-      <div class="seg w-full" role="group" aria-label="Chi sta usando il sistema">
-        <button class="!px-1.5 !text-xs" data-a="ruolo" data-v="dir">Direzione</button>
-        <button class="!px-1.5 !text-xs" data-a="ruolo" data-v="rt">Resp. tecnico</button>
-        <button class="!px-1.5 !text-xs" data-a="ruolo" data-v="amm"><span class="sm:hidden">Ammin.</span><span class="hidden sm:inline">Amministrazione</span></button>
-        <button class="!px-1.5 !text-xs" data-a="ruolo" data-v="tec">Tecnico</button>
       </div>
     </div>
     <main id="vista" class="flex-1 overflow-y-auto"></main>
@@ -347,6 +383,7 @@
 </div>
 
 <div id="modale"></div>
+<div id="glossa" role="tooltip" hidden></div>
 <div id="toast" role="status" aria-live="polite"><div class="bg-inchiostro text-white text-sm rounded px-4 py-3 shadow-xl flex items-center gap-2.5 max-w-xl"><i class="bi bi-check2-circle text-[#8FD3A9] text-base"></i><span id="toast-t"></span></div></div>
 
 <script>
@@ -602,7 +639,7 @@ const ad = t => /^[aeiouAEIOU]/.test(t) ? 'ad' : 'a';
 const saluto = () => { const h = new Date().getHours(); return h >= 5 && h < 13 ? 'Buongiorno' : h >= 13 && h < 18 ? 'Buon pomeriggio' : 'Buonasera'; };
 const NOME = { dir: 'Giorgio', rt: '', amm: 'Elena', tec: 'Paolo' };
 function nuovoPrev(cliId, serv = 'dvr') { return { id: null, cli: cliId, righe: [{ serv, qty: 1, prezzo: srv(serv).prezzo }], sconto: 0, validita: 30, note: '' }; }
-const S = { view: 'home', ruolo: 'dir', costoH: 38, servSel: 'dvr', cliSel: 3, estratto: 'no', chiudi: null, perdi: null, doc: null, zuc: 0, confOra: 0, prev: nuovoPrev(3), numPrev: 48, modo: 'gestionale', tabCont: 'prima', tabFatt: 'emesse', vistoIva: false, pacchetto: false, ob: false, migr: 2, cerca: '', filtro: 'tutti', kf: { tec: '', q: '' }, per: 'mese', perM: 12, oreMese: 0, oreFile: { timb: null, dich: null }, richiesta: null, mese: { fatt: 0, ore: 0 }, prossimaFt: 432 };
+const S = { view: 'home', ruolo: 'dir', costoH: 38, servSel: 'dvr', cliSel: 3, estratto: 'no', chiudi: null, perdi: null, doc: null, confOra: 0, prev: nuovoPrev(3), numPrev: 48, modo: 'gestionale', tabCont: 'prima', tabFatt: 'emesse', vistoIva: false, pacchetto: false, ob: false, migr: 2, cerca: '', filtro: 'tutti', kf: { tec: '', q: '' }, per: 'mese', perM: 12, oreMese: 0, oreFile: { timb: null, dich: null }, richiesta: null, mese: { fatt: 0, ore: 0 }, prossimaFt: 432, prossimaNc: 1, navAperti: {}, margDett: false };
 
 /* ---------- calcoli ---------- */
 const lavori = (serv, per = 12) => [
@@ -637,7 +674,10 @@ const pctK = k => margK(k) / k.canone;
 const giustoK = k => prezzoGiusto(k.ore * S.costoH + (k.ext || 0));
 const kDaRivedere = () => CONTRATTI.filter(k => pctK(k) < SOGLIA && !k.proposta && !k.disdetto);
 const carico = t => sum(ORDINI.filter(o => o.stato === 'assegnato' && o.tec === t), o => srv(o.serv).orePrev);
-const daIncassare = () => sum(FATT.filter(f => f.stato !== 'incassata'), f => f.imp - f.pagato);
+// quanto resta da incassare di una fattura: tolti pagamenti e note di credito
+const resto = f => Math.round((f.imp - f.pagato - (f.nc || 0)) * 100) / 100;
+const aperta = f => f.stato !== 'incassata' && f.stato !== 'stornata';
+const daIncassare = () => sum(FATT.filter(aperta), f => resto(f));
 const mese = () => { const fatt = BASE.fatt + S.mese.fatt, ore = BASE.ore + S.mese.ore, cOre = ore * S.costoH, forn = sum(FORN, f => f.imp); return { fatt, ore, cOre, forn, marg: fatt - forn - cOre }; };
 const promOggi = () => PROMEMORIA.filter(x => !x.fatto && x.g <= 0);
 const richAperte = () => RICHIESTE.filter(r => !r.chiusa);
@@ -679,8 +719,7 @@ function coda() {
 const NAV = [
   ['', [['home', 'bi-speedometer2', 'Controllo di gestione']]],
   ['Commerciale', [['ordini', 'bi-kanban', 'Preventivi e ordini'], ['trattative', 'bi-funnel', 'Trattative', 'CRM'], ['clienti', 'bi-person-vcard', 'Clienti', 'CRM'], ['contratti', 'bi-arrow-repeat', 'Contratti ricorrenti']]],
-  ['Tecnici', [['pianifica', 'bi-calendar-week', 'Pianificazione']]],
-  ['Analisi', [['margini', 'bi-graph-up-arrow', 'Prezzi e margini']]],
+  ['Lavori e margini', [['pianifica', 'bi-calendar-week', 'Pianificazione'], ['margini', 'bi-graph-up-arrow', 'Prezzi e margini']]],
   ['Amministrazione', [['contabilita', 'bi-journal-bookmark', 'Contabilità'], ['fatture', 'bi-receipt-cutoff', 'Fatture'], ['incassi', 'bi-bank', 'Incassi'], ['banca', 'bi-wallet2', 'Banca'], ['fornitori', 'bi-truck', 'Ordini fornitori'], ['ore', 'bi-clock-history', 'Ore e timbrature', 'Opzionale']]],
   ['', [['impostazioni', 'bi-gear', 'Impostazioni'], ['sicurezza', 'bi-shield-lock', 'Sicurezza e conformità']]],
 ];
@@ -692,8 +731,16 @@ const vede = v => !VISIBILI[S.ruolo] || VISIBILI[S.ruolo].includes(v);
 const modulo = t => `<span class="text-[0.6rem] font-bold uppercase text-grigio border border-[#C8C8C8] rounded-sm px-1 leading-4 whitespace-nowrap">${t}</span>`;
 const nota = (tag, t) => `<div class="card p-4 mb-5 flex flex-wrap gap-x-3 gap-y-2 items-center text-sm"><span class="chip c-pieno">${tag}</span><p class="text-grigio">${t}</p></div>`;
 
+// un gruppo lungo del menu della direzione parte chiuso, salvo che ci siate dentro; si apre e chiude a mano
+const aperto = (g, items) => S.navAperti[g] ?? (S.ruolo !== 'dir' || items.length <= 4 || items.some(([v]) => v === S.view));
 function renderNav() {
   const tec = S.ruolo === 'tec';
+  // urgenti: fatture scadute senza sollecito, fatture scartate dallo SdI, pagamenti entro 7 giorni
+  const urgente = {
+    incassi: FATT.some(f => f.stato === 'aperta' && f.scad < 0 && !f.sollecitata),
+    fatture: SCARTI.length > 0,
+    contabilita: daPagare().some(x => x.scad <= 7),
+  };
   const badge = {
     ordini: ORDINI.filter(o => o.stato === 'confermato' || o.stato === 'chiuso').length,
     contratti: kDaRivedere().filter(k => k.rin <= 90).length,
@@ -701,18 +748,22 @@ function renderNav() {
     clienti: promOggi().length,
     trattative: richAperte().length,
     pianifica: ORDINI.filter(o => o.stato === 'confermato').length,
-    fatture: SCARTI.length + PASSIVE.filter(x => !x.registrata).length + ORDINI.filter(o => o.stato === 'chiuso').length,
+    fatture: SCARTI.length + PASSIVE.filter(x => !x.registrata).length + ORDINI.filter(o => o.stato === 'chiuso').length + (ncDi(NC_RICH.ft).length ? 0 : 1),
     contabilita: daPagare().filter(x => x.scad <= 7).length,
   };
   $('#nav').innerHTML = tec
     ? `<ul><li><button class="nav-i" aria-current="page"><i class="bi bi-tools"></i>I miei lavori</button></li></ul>
        <p class="px-3 text-xs text-grigio leading-relaxed"><i class="bi bi-phone"></i> Il tecnico vede solo i suoi lavori, anche da telefono. Niente prezzi, niente margini.</p>`
-    : NAV.map(([g, tutte]) => { const items = tutte.filter(([v]) => vede(v)); return !items.length ? '' : `<div>${g ? `<p class="px-3 mb-1.5 text-xs font-bold uppercase tracking-wider text-grigio">${g}</p>` : ''}
-      <ul class="space-y-0.5">${items.map(([v, ico, t, mod]) => `<li><button class="nav-i" data-a="vai" data-v="${v}" ${S.view === v ? 'aria-current="page"' : ''}><i class="bi ${ico}"></i>${t}${mod ? `<span class="${badge[v] ? 'ml-1' : 'ml-auto'}">${modulo(mod)}</span>` : ''}${badge[v] ? `<span class="badge" aria-label="${badge[v]} da guardare">${badge[v]}</span>` : ''}</button></li>`).join('')}</ul></div>`; }).join('') +
+    : NAV.map(([g, tutte]) => { const items = tutte.filter(([v]) => vede(v)); if (!items.length) return '';
+      const chiuso = g && !aperto(g, items), n = sum(items, ([v]) => badge[v] || 0), urg = items.some(([v]) => badge[v] && urgente[v]);
+      return `<div>${g ? `<button class="nav-g" data-a="nav-gruppo" data-v="${g}" aria-expanded="${!chiuso}"><i class="bi bi-chevron-${chiuso ? 'right' : 'down'} text-[0.65rem]"></i>${g}${chiuso ? `<span class="font-normal normal-case tracking-normal text-grigio">${items.length} voci</span>${n ? `<span class="badge ${urg ? '' : 'calmo'}" aria-label="${n} da guardare">${n}</span>` : ''}` : ''}</button>` : ''}
+      <ul class="space-y-0.5" ${chiuso ? 'hidden' : ''}>${items.map(([v, ico, t, mod]) => `<li><button class="nav-i" data-a="vai" data-v="${v}" ${S.view === v ? 'aria-current="page"' : ''}><i class="bi ${ico}"></i>${t}${mod ? `<span class="${badge[v] ? 'ml-1' : 'ml-auto'}">${modulo(mod)}</span>` : ''}${badge[v] ? `<span class="badge ${urgente[v] ? '' : 'calmo'}" aria-label="${badge[v]} da guardare${urgente[v] ? ', urgente' : ''}">${badge[v]}</span>` : ''}</button></li>`).join('')}</ul></div>`; }).join('') +
       (S.ruolo === 'dir' ? `<p class="px-3 text-xs text-grigio leading-relaxed">Le voci senza etichetta sono la proposta base. ${modulo('CRM')} si aggiunge con la proposta con CRM, ${modulo('Opzionale')} si sceglie a parte.</p>` : `<p class="px-3 text-xs text-grigio leading-relaxed"><i class="bi bi-person-lock"></i> ${RUOLO[S.ruolo][1]} vede solo le pagine del suo lavoro.</p>`);
   document.querySelectorAll('[data-a="ruolo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.ruolo));
   document.querySelectorAll('[data-a="modo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.modo));
   document.querySelectorAll('.modo-seg').forEach(x => x.classList.toggle('!hidden', tec));
+  $('#barra-modo').classList.toggle('!hidden', tec);
+  $('[data-a="guida"]').setAttribute('aria-pressed', S.guida !== false);
   const [ini, nome, ruolo] = RUOLO[S.ruolo];
   $('#avatar').textContent = ini; $('#utente-nome').textContent = nome; $('#utente-ruolo').textContent = ruolo;
   const n = avvisi().length;
@@ -735,10 +786,93 @@ function render(nuova) {
   const v = S.ruolo === 'tec' ? 'tecnico' : S.modo === 'sala' ? 'sala' : S.view;
   $('#titolo').textContent = TITOLI[v];
   $('#vista').innerHTML = `<div class="${v === 'sala' ? 'px-4 sm:px-6 py-4 lg:py-5 pb-24' : 'px-4 sm:px-6 lg:px-10 py-6 lg:py-8 pb-24'} ${nuova ? 'entra' : ''}">${VISTE[v]()}</div>`;
+  glossa($('#vista'));
 }
-const prova = t => `<p class="mb-5 text-sm text-ambra bg-arancio-velo border border-arancio/40 rounded px-3.5 py-2.5 flex gap-2"><i class="bi bi-hand-index"></i><span><strong>Prova:</strong> ${t}</span></p>`;
+const prova = t => S.guida === false ? '' : `<p class="prova-riga mb-5 text-sm text-ambra bg-arancio-velo border border-arancio/40 rounded px-3.5 py-2.5 flex gap-2"><i class="bi bi-hand-index"></i><span><strong>Prova:</strong> ${t}</span></p>`;
 const kpi = (label, val, sub = '', cls = '', az = '') => { const corpo = `<span class="flex items-start justify-between gap-2 text-sm text-grigio"><span>${label}</span>${az ? '<i class="bi bi-arrow-up-right text-xs mt-1 opacity-60 group-hover:opacity-100 transition-opacity"></i>' : ''}</span><span class="block font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3 text-[1.6rem] sm:text-[2rem] xl:text-[2.4rem] ${cls}">${val}</span>${sub ? `<span class="block text-xs sm:text-sm mt-2.5 text-grigio">${sub}</span>` : ''}`;
   return az ? `<button type="button" class="group card p-4 sm:p-6 text-left w-full hover:border-[#BDBDBD] transition-colors" data-a="dettaglio" data-v="${az}" aria-label="${label}: apri il dettaglio">${corpo}</button>` : `<div class="card p-4 sm:p-6">${corpo}</div>`; };
+/* ---------- parole spiegate ----------
+   La prima volta che una parola tecnica compare in una pagina viene sottolineata a puntini:
+   passandoci sopra, o toccandola da telefono, compare la spiegazione in parole semplici. */
+const GLOSSARIO = [
+  ['SdI', /\bSdI\b/, 'Il Sistema di Interscambio dell\'Agenzia delle Entrate: il canale obbligatorio da cui passano tutte le fatture elettroniche, in uscita e in arrivo.'],
+  ['Prima nota', /\b[Pp]rima nota\b/, 'Il registro di tutti i movimenti in ordine di data: ogni fattura, incasso o pagamento diventa una riga. Qui si scrive da sola.'],
+  ['Registri IVA', /\b[Rr]egistr[oi] IVA\b/, 'Gli elenchi delle fatture emesse (vendite) e ricevute (acquisti), con l\'IVA di ognuna. Da qui si calcola l\'IVA del mese.'],
+  ['Liquidazione IVA', /\b[Ll]iquidazione IVA\b/, 'Il conto dell\'IVA del periodo: l\'IVA delle fatture ai clienti meno quella delle fatture dei fornitori. Se resta da pagare, si versa con l\'F24.'],
+  ['Scadenzario', /\b[Ss]cadenzario\b/, 'Chi vi deve pagare e chi dovete pagare, in ordine di scadenza.'],
+  ['Piano dei conti', /\b[Pp]iano dei conti\b/, 'L\'elenco delle voci in cui si dividono entrate, uscite, crediti e debiti: banca, clienti, ricavi, costi e così via.'],
+  ['Dare e avere', /\bDare\b/, 'Le due colonne della prima nota. Ogni movimento scrive la stessa cifra in dare su un conto e in avere su un altro: per questo i due totali coincidono.'],
+  ['Imponibile', /\b[Ii]mponibile\b/, 'L\'importo senza IVA.'],
+  ['Margine', /\b[Mm]argine\b/, 'Quello che resta di un lavoro dopo aver tolto il costo delle ore interne e dei fornitori, prima dei costi fissi come affitto e ufficio.'],
+  ['CRM', /\bCRM\b/, 'La gestione dei clienti: anagrafiche, referenti, telefonate, promemoria e trattative in un posto solo.'],
+  ['Open banking', /\b[Oo]pen banking\b/, 'La lettura automatica dei movimenti del conto tramite un fornitore autorizzato da Banca d\'Italia: solo con il vostro consenso e solo in lettura.'],
+  ['Estratto conto', /\b[Ee]stratto( conto)?\b/, 'Il file con i movimenti del conto che scaricate dal sito della banca.'],
+  ['XML FatturaPA', /\bXML( FatturaPA)?\b|\bFatturaPA\b/, 'Il formato della fattura elettronica che lo SdI accetta: un file di dati, non un PDF. Il PDF serve solo per leggerla.'],
+  ['Conservazione a norma', /\b[Cc]onservazione a norma\b|\b[Cc]onservazione\b/, 'Le fatture elettroniche vanno custodite per 10 anni senza poterle modificare. Lo fa l\'intermediario, senza stampare niente.'],
+  ['Intermediario accreditato', /\b[Ii]ntermediario( accreditato)?\b/, 'La società autorizzata dall\'Agenzia delle Entrate che invia e riceve le fatture allo SdI per conto vostro.'],
+  ['F24', /\bF24\b/, 'Il modulo con cui si pagano tasse, IVA e contributi.'],
+  ['Agente AI', /\b[Aa]gent[ei]( AI)?\b/, 'Un assistente automatico che lavora sui dati del gestionale: prepara preventivi, fatture e abbinamenti e ve li propone. Niente parte senza il vostro ok.'],
+  ['Costo orario interno', /\b[Cc]osto orario\b/, 'Quanto vi costa un\'ora di lavoro di un tecnico: stipendio, contributi e struttura, divisi per le ore lavorate.'],
+  ['Commessa', /\b[Cc]ommess[ae]\b/, 'Un lavoro per un cliente, dal preventivo alla fattura.'],
+  ['Split payment', /\b[Ss]plit payment\b/, 'Per i clienti pubblici: l\'IVA della fattura la versa direttamente l\'ente, non voi.'],
+  ['Ritenuta d\'acconto', /\b[Rr]itenut[ae] d'acconto\b/, 'Una parte del compenso dei professionisti che trattenete e versate allo Stato al posto loro.'],
+  ['Cespiti', /\b[Cc]espiti\b/, 'I beni che durano più anni, come furgoni e computer: il costo si divide sugli anni con l\'ammortamento.'],
+  ['Nota di credito', /\b[Nn]ot[ae] di credito\b/, 'Il documento che annulla o riduce una fattura già emessa.'],
+  ['Esente art. 10', /\b[Ee]sent[ei],? art\. 10\b/, 'Operazioni senza IVA per legge, come le prestazioni sanitarie: la visita medica non ha IVA.'],
+  ['Saldi di apertura', /\b[Ss]aldi di apertura\b/, 'Quanto c\'era su ogni conto, credito e debito il giorno in cui si comincia a usare il gestionale.'],
+];
+const SALTA_GL = 'button, a, input, select, textarea, option, label, h1, h2, th, svg, code, pre, script, style, .gl, .chip, .badge, .num, .prova-riga, [data-a], [contenteditable]';
+function glossa(radice) {
+  if (!radice) return;
+  const visti = new Set(), nodi = [], w = document.createTreeWalker(radice, NodeFilter.SHOW_TEXT, { acceptNode: n => n.nodeValue.trim() && !n.parentElement.closest(SALTA_GL) ? 1 : 2 });
+  while (w.nextNode()) nodi.push(w.currentNode);
+  const tratta = n => {
+    let meglio = null;
+    for (const g of GLOSSARIO) { if (visti.has(g[0])) continue; const m = g[1].exec(n.nodeValue); if (m && (!meglio || m.index < meglio.m.index)) meglio = { g, m }; }
+    if (!meglio) return;
+    visti.add(meglio.g[0]);
+    const parola = n.splitText(meglio.m.index), dopo = parola.splitText(meglio.m[0].length), s = document.createElement('span');
+    s.className = 'gl'; s.tabIndex = 0; s.dataset.gl = meglio.g[0];
+    parola.replaceWith(s); s.append(parola);
+    tratta(dopo);
+  };
+  nodi.forEach(tratta);
+}
+const glossaTip = () => $('#glossa');
+function mostraGlossa(el) {
+  const g = GLOSSARIO.find(x => x[0] === el.dataset.gl); if (!g) return;
+  const t = glossaTip(); t.innerHTML = `<strong>${g[0]}</strong>${g[2]}`; t.hidden = false; t.id = 'glossa'; el.setAttribute('aria-describedby', 'glossa');
+  const r = el.getBoundingClientRect(), w = t.offsetWidth, h = t.offsetHeight;
+  t.style.left = Math.max(8, Math.min(r.left, innerWidth - w - 8)) + 'px';
+  t.style.top = (r.bottom + 6 + h > innerHeight - 8 ? r.top - h - 6 : r.bottom + 6) + 'px';
+  S.glFisso = null;
+}
+function nascondiGlossa() { const t = glossaTip(); if (t) t.hidden = true; S.glFisso = null; }
+document.addEventListener('mouseover', e => { const el = e.target.closest?.('.gl'); if (el) mostraGlossa(el); });
+document.addEventListener('mouseout', e => { const el = e.target.closest?.('.gl'); if (el && S.glFisso !== el) nascondiGlossa(); });
+document.addEventListener('focusin', e => { if (e.target.classList?.contains('gl')) mostraGlossa(e.target); });
+document.addEventListener('focusout', e => { if (e.target.classList?.contains('gl')) nascondiGlossa(); });
+document.addEventListener('click', e => { const el = e.target.closest?.('.gl'); if (el) { mostraGlossa(el); S.glFisso = el; } else nascondiGlossa(); });
+document.addEventListener('scroll', nascondiGlossa, true);
+
+/* ---------- benvenuto: cos'è, come si usa la demo, da dove partire ---------- */
+const PARTENZE = { dir: ['bi-bar-chart', 'Direzione', 'I numeri del mese, i preventivi e le decisioni degli agenti.'], amm: ['bi-calculator', 'Amministrazione', 'Fatture, banca, IVA e il pacchetto per il commercialista.'], rt: ['bi-calendar-week', 'Responsabile tecnico', 'Chi fa quale lavoro, e quando.'], tec: ['bi-phone', 'Tecnico', 'I miei lavori della settimana, anche da telefono.'] };
+function benvenuto() {
+  try { localStorage.setItem('progesi-benvenuto', '1'); } catch (e) {}
+  const ordine = [S.ruolo, ...Object.keys(PARTENZE).filter(k => k !== S.ruolo)];
+  apriModale('Benvenuti nel gestionale di Progesi', `<div class="px-5 sm:px-6 py-5 text-sm">
+    <p class="text-base">Preventivi, lavori, fatture, banca e contabilità in un posto solo. Gli agenti preparano il lavoro, voi decidete.</p>
+    <p class="font-bold mt-5">Come si usa questa demo</p>
+    <ul class="mt-2 space-y-2">
+      <li class="flex gap-2.5"><i class="bi bi-person-badge text-grigio mt-0.5"></i><span>Nella <strong>barra scura in alto</strong> scegliete chi siete: ognuno vede solo le pagine del suo lavoro.</span></li>
+      <li class="flex gap-2.5"><i class="bi bi-hand-index text-grigio mt-0.5"></i><span>Le <strong>righe gialle "Prova"</strong> dicono cosa cliccare in ogni pagina. Si spengono da <strong>Suggerimenti</strong>.</span></li>
+      <li class="flex gap-2.5"><i class="bi bi-chat-square-text text-grigio mt-0.5"></i><span>Le <span class="border-b border-dotted border-[#555]">parole sottolineate a puntini</span> hanno la spiegazione: passateci sopra, o toccatele da telefono.</span></li>
+      <li class="flex gap-2.5"><i class="bi bi-arrow-counterclockwise text-grigio mt-0.5"></i><span>I dati sono di esempio: ricaricando la pagina si riparte da capo. Questa guida si riapre da <strong>Guida</strong>.</span></li>
+    </ul>
+    <p class="font-bold mt-5">Da dove volete partire?</p>
+    <div class="grid sm:grid-cols-2 gap-2 mt-2">${ordine.map(k => { const [ic, t, d] = PARTENZE[k]; return `<button class="text-left rounded border border-linea bg-white hover:border-grafite px-3.5 py-3 flex gap-3 items-start transition-colors" data-a="benvenuto-ruolo" data-v="${k}"><i class="bi ${ic} text-lg text-grigio"></i><span><span class="block font-bold">${t}</span><span class="block text-grigio">${d}</span></span></button>`; }).join('')}</div>
+  </div>`, true);
+}
 const testata = (tit, sotto) => `<div class="mb-6"><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${tit}</h1><p class="text-grigio mt-1.5 max-w-3xl">${sotto}</p></div>`;
 const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const pulisci = t => String(t ?? '').replace(/[<>]/g, '').trim();
@@ -751,6 +885,7 @@ const vuoto = t => `<p class="px-4 sm:px-6 py-5 text-sm text-grigio">${t}</p>`;
 function apriModale(titolo, corpo, largo = false) {
   S.focusPrima = document.activeElement;
   $('#modale').innerHTML = `<div class="modale-velo"><div class="modale card entra ${largo ? 'max-w-3xl' : 'max-w-lg'}" role="dialog" aria-modal="true" aria-labelledby="modale-t"><div class="flex items-center gap-3 px-5 sm:px-6 py-4 border-b border-linea"><h2 id="modale-t" class="font-display font-medium text-lg flex-1">${titolo}</h2><button type="button" class="btn btn-gh !px-2 !text-grigio" data-a="chiudi-modale" aria-label="Chiudi"><i class="bi bi-x-lg"></i></button></div>${corpo}</div></div>`;
+  glossa($('#modale'));
   $('#modale').querySelector('form input:not([type=hidden]):not([readonly]):not([type=radio]):not([type=checkbox]), form select, form textarea')?.focus();
 }
 function chiudiModale() { $('#modale').innerHTML = ''; S.focusPrima?.focus?.(); }
@@ -793,7 +928,10 @@ function hintRiga(r, i, cliId) {
   const { s, sim, st, costoU, giusto, resa } = stimaRiga(r, cliId);
   if (!st.n) return `<p class="text-xs text-grigio"><i class="bi bi-info-circle"></i> Nessun lavoro di questo tipo ancora chiuso: si parte dal listino e dalle ${s.orePrev} ore previste.</p>`;
   const basso = resa < TARGET && giusto > r.prezzo;
-  return `<div class="text-xs ${basso ? 'text-ambra' : 'text-grigio'}"><p><i class="bi ${basso ? 'bi-exclamation-triangle' : 'bi-graph-up'}"></i> <strong>${st.n} ${s.ric ? 'contratti' : 'lavori'} ${sim.f != null ? `su aziende ${FASCE[sim.f]}` : 'di questo tipo'}:</strong> ${nf(st.ore, 1)} ore in media (da ${nf(st.min)} a ${nf(st.max)}). A ${eur(r.prezzo)} rende il ${pc(resa)}.</p>${basso ? `<p class="mt-0.5">Per tenere il ${pc(TARGET)}: costo medio ${eur(costoU)} / ${nf(1 - TARGET, 1)} = ${eur(costoU / (1 - TARGET))}, arrotondato a <strong>${eur(giusto)}</strong>. <button type="button" class="font-bold underline underline-offset-2 hover:no-underline" data-a="prev-giusto" data-v="${i}">Usa ${eur(giusto)}</button></p>` : ''}</div>`;
+  const base = `${st.n} ${s.ric ? 'contratti' : 'lavori'} ${sim.f != null ? `su aziende ${FASCE[sim.f]}` : 'di questo tipo'}: ${nf(st.ore, 1)} ore in media (da ${nf(st.min)} a ${nf(st.max)}).`;
+  if (!basso) return `<p class="text-xs text-grigio"><i class="bi bi-graph-up"></i> <strong>Prezzo in linea:</strong> a ${eur(r.prezzo)} ci guadagnate il ${pc(resa)}. <span class="hidden sm:inline">${base}</span></p>`;
+  return `<div class="text-xs text-ambra"><p><i class="bi bi-exclamation-triangle"></i> <strong>Prezzo consigliato ${eur(giusto)}</strong>: a ${eur(r.prezzo)} ci guadagnate solo il ${pc(resa)}. <button type="button" class="font-bold underline underline-offset-2 hover:no-underline" data-a="prev-giusto" data-v="${i}">Usa ${eur(giusto)}</button></p>
+    <details class="mt-0.5"><summary class="cursor-pointer w-max">Come lo calcolo</summary><p class="mt-0.5">${base} Costo medio ${eur(costoU)}; per tenere il ${pc(TARGET)}: ${eur(costoU)} / ${nf(1 - TARGET, 1)} = ${eur(costoU / (1 - TARGET))}, arrotondato a ${eur(giusto)}.</p></details></div>`;
 }
 const rigaCls = b => `rounded border p-3 ${b ? 'bg-arancio-velo border-arancio/50' : 'bg-white border-linea'}`;
 const totRiga = r => `${eur(r.qty * r.prezzo)}${srv(r.serv).ric ? '<span class="block text-xs font-normal text-grigio">l\'anno</span>' : ''}`;
@@ -891,8 +1029,8 @@ function formFattura(o = null) {
     <p class="text-xs text-grigio"><i class="bi bi-info-circle"></i> Parte allo SdI tramite l'intermediario accreditato e si conserva a norma per 10 anni. Lo stato torna qui da solo.</p>
     ${piedeForm('Emetti e invia allo SdI')}</form>`;
 }
-const formIncasso = f => `<form data-form="incasso" class="px-5 sm:px-6 py-5 space-y-4"><input type="hidden" name="n" value="${f.n}"><p class="text-sm">FT ${f.n} · ${esc(cli(f.cli).nome)} · restano <strong class="num">${eur2(f.imp - f.pagato)}</strong></p>
-  <div class="grid sm:grid-cols-3 gap-4">${campo('Importo (€)', `<input name="imp" type="number" min="0.01" step="0.01" required class="campo w-full num" value="${(f.imp - f.pagato).toFixed(2)}">`)}${campo('Data', `<input type="date" name="data" class="campo w-full" value="${OGGI.toISOString().slice(0, 10)}">`)}${campo('Come', `<select name="metodo" class="campo w-full"><option>Bonifico</option><option>RiBa</option><option>Assegno</option><option>Contanti</option></select>`)}</div>${piedeForm('Registra l\'incasso')}</form>`;
+const formIncasso = f => `<form data-form="incasso" class="px-5 sm:px-6 py-5 space-y-4"><input type="hidden" name="n" value="${f.n}"><p class="text-sm">FT ${f.n} · ${esc(cli(f.cli).nome)} · restano <strong class="num">${eur2(resto(f))}</strong></p>
+  <div class="grid sm:grid-cols-3 gap-4">${campo('Importo (€)', `<input name="imp" type="number" min="0.01" step="0.01" required class="campo w-full num" value="${(resto(f)).toFixed(2)}">`)}${campo('Data', `<input type="date" name="data" class="campo w-full" value="${OGGI.toISOString().slice(0, 10)}">`)}${campo('Come', `<select name="metodo" class="campo w-full"><option>Bonifico</option><option>RiBa</option><option>Assegno</option><option>Contanti</option></select>`)}</div>${piedeForm('Registra l\'incasso')}</form>`;
 const formForn = () => `<form data-form="forn" class="px-5 sm:px-6 py-5 space-y-4">${campo('Fornitore', `<input name="forn" required list="elenco-forn" class="campo w-full"><datalist id="elenco-forn">${[...new Set(FORN.map(f => f.forn))].map(x => `<option value="${x}">`).join('')}</datalist>`)}
   ${campo('Cosa avete ordinato', '<input name="cosa" required class="campo w-full" placeholder="Es. visite mediche periodiche">')}
   <div class="grid sm:grid-cols-2 gap-4">${campo('Commessa', `<select name="cli" class="campo w-full"><option value="">Costi generali</option>${CLIENTI.filter(x => x.tipo === 'cliente').map(x => `<option value="${x.id}">${x.nome}</option>`).join('')}</select>`, 'Se è per un cliente, pesa sul suo margine.')}${campo('Importo (€)', '<input name="imp" type="number" min="1" step="1" required class="campo w-full num">')}</div>${piedeForm('Registra l\'ordine')}</form>`;
@@ -1005,7 +1143,7 @@ const virg = n => String(Math.round(n * 100) / 100).replace('.', ',');
 const esporta = v => `<button class="btn btn-sec" data-a="esporta" data-v="${v}"><i class="bi bi-file-earmark-spreadsheet"></i><span class="hidden sm:inline">Esporta in Excel</span><span class="sm:hidden">Excel</span></button>`;
 const ESPORTA = {
   contratti: () => scarica('contratti-ricorrenti', [['Cliente', 'Servizio', 'Canone', 'Ore previste', 'Ore fatte', 'Margine', 'Margine %', 'Rinnovo tra giorni', 'Tecnico', 'Stato'], ...CONTRATTI.map(k => [cli(k.cli).nome, srv(k.serv).nome, k.canone, k.prev, k.ore, Math.round(margK(k)), Math.round(pctK(k) * 100), k.rin, k.tec, k.disdetto ? 'Disdetto' : k.proposta ? 'Proposta inviata' : 'Attivo'])]),
-  incassi: () => scarica('fatture-e-incassi', [['Fattura', 'Cliente', 'Importo', 'Incassato', 'Residuo', 'Stato', 'Scadenza tra giorni'], ...FATT.map(f => [`FT ${f.n}`, cli(f.cli).nome, virg(f.imp), virg(f.pagato), virg(f.imp - f.pagato), f.stato, f.scad])]),
+  incassi: () => scarica('fatture-e-incassi', [['Fattura', 'Cliente', 'Importo', 'Incassato', 'Residuo', 'Stato', 'Scadenza tra giorni'], ...FATT.map(f => [`FT ${f.n}`, cli(f.cli).nome, virg(f.imp), virg(f.pagato), virg(resto(f)), f.stato, f.scad])]),
   fornitori: () => scarica('ordini-fornitori', [['Fornitore', 'Cosa', 'Commessa', 'Importo', 'Stato'], ...FORN.map(f => [f.forn, f.cosa, f.cli ? cli(f.cli).nome : 'Costi generali', f.imp, f.stato])]),
   margini: () => scarica('prezzi-e-margini', [['Servizio', 'Lavori', 'Ore previste', 'Ore reali medie', 'Prezzo medio', 'Margine medio', 'Margine %'], ...Object.keys(SERV).map(id => { const x = stat(lavori(id, S.perM)); return x.n ? [srv(id).nome, x.n, srv(id).orePrev, virg(x.ore), Math.round(x.prezzo), Math.round(x.margMedio), Math.round(x.pct * 100)] : null; }).filter(Boolean)]),
   ore: () => scarica(`ore-${nomeMese(S.oreMese)}`, [['Collaboratore', 'Ore dichiarate', 'Ore timbrate', 'Differenza', 'Esito'], ...ORE.map(o => [o.nome, virg(o.dich), virg(o.timb), virg(o.dich - o.timb), o.ok ? 'Approvate' : o.chiesto ? 'Chiesto chiarimento' : Math.abs(o.dich - o.timb) > 1 ? 'Non torna' : 'Torna'])]),
@@ -1045,7 +1183,7 @@ const VISTE = {
     const serie = [...TREND, { f: m.fatt, m: m.marg }], max = Math.max(...serie.map(x => x.f));
     return `<div class="flex flex-wrap items-end justify-between gap-4 mb-6"><div><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${saluto()}, ${NOME[S.ruolo] || NOME.dir}</h1><p class="text-grigio mt-1.5 max-w-3xl">I numeri ${P.label}, aggiornati a stamattina. Oggi li vedete solo con il bilancio del commercialista, ogni tre mesi.</p></div>
       <div class="seg" role="group" aria-label="Periodo">${[['mese', 'Mese'], ['trim', 'Ultimi 3 mesi'], ['anno', 'Da inizio anno']].map(([v, t]) => `<button data-a="per" data-v="${v}" aria-pressed="${S.per === v}">${t}</button>`).join('')}</div></div>
-    ${S.ruolo === 'dir' ? prova('passa in alto a <strong>Tecnico</strong>, chiudi il DVR di Cascina Rosa con le ore fatte, poi torna su <strong>Direzione</strong>. I quattro riquadri qui sotto si aprono nel dettaglio.') : ''}
+    ${S.ruolo === 'dir' ? prova('passa in alto a <strong>Tecnico</strong>, chiudi il DVR di Cascina Rosa con le ore fatte, poi torna su <strong>Direzione</strong>. I quattro riquadri qui sotto si aprono nel dettaglio. Per gli aggiornamenti normativi: <strong>Impostazioni</strong>, primo riquadro.') : ''}
     <div class="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-6 scaglione">
       ${kpi(`Fatturato ${P.label}`, eur(P.f), 'dalle fatture elettroniche emesse', '', 'fatt')}
       ${kpi('Ordini fornitori', eur(P.forn), S.per === 'mese' ? `${FORN.length} ordini del mese` : 'a consuntivo, mese per mese', '', 'forn')}
@@ -1071,7 +1209,7 @@ const VISTE = {
         <div class="flex h-4 rounded-sm overflow-hidden mt-4 bg-fumo"><div class="apre bg-grafite" style="width:${Math.round(quota * 100)}%"></div></div>
         <div class="flex flex-wrap justify-between gap-3 mt-3 text-sm"><p><span class="font-bold">${eur(ric)}</span> <span class="text-grigio">da contratti che si rinnovano (${pc(quota)})</span></p><p><span class="font-bold">${eur(m.fatt - ric)}</span> <span class="text-grigio">da lavori una tantum</span></p></div>
         <p class="text-xs text-grigio mt-3">${AZ.contratti} contratti attivi valgono ${eur(AZ.ricorrente)} l'anno: ${eur(AZ.ricorrente)} / 12 = ${eur(ric)} al mese già in casa prima di vendere niente.</p></div>
-      <div class="card p-6"><p class="font-bold">Da incassare</p><p class="font-display font-medium tabular-nums text-[1.6rem] sm:text-[2rem] leading-none mt-3">${eur(daIncassare())}</p><p class="text-sm text-grigio mt-1">${FATT.filter(f => f.stato !== 'incassata').length} fatture aperte</p>
+      <div class="card p-6"><p class="font-bold">Da incassare</p><p class="font-display font-medium tabular-nums text-[1.6rem] sm:text-[2rem] leading-none mt-3">${eur(daIncassare())}</p><p class="text-sm text-grigio mt-1">${FATT.filter(aperta).length} fatture aperte</p>
         <button class="btn btn-sec mt-4 w-full" data-a="vai" data-v="incassi">Vai agli incassi <i class="bi bi-arrow-right"></i></button></div>
     </div>`;
   },
@@ -1151,12 +1289,12 @@ const VISTE = {
   clienti() {
     const c = cli(S.cliSel) || CLIENTI[0], id = c.id;
     const k = CONTRATTI.filter(x => x.cli === id), st = STORICO.filter(x => x.cli === id), aperti = ORDINI.filter(o => o.cli === id && !['fatturato', 'perso', 'attivato'].includes(o.stato));
-    const ff = FATT.filter(f => f.cli === id && f.stato !== 'incassata'), lav = [...st, ...k.map(x => ({ serv: x.serv, cli: id, tec: x.tec, ore: x.ore, prezzo: x.canone, ext: x.ext || 0 }))], m = stat(lav);
+    const ff = FATT.filter(f => f.cli === id && aperta(f)), lav = [...st, ...k.map(x => ({ serv: x.serv, cli: id, tec: x.tec, ore: x.ore, prezzo: x.canone, ext: x.ext || 0 }))], m = stat(lav);
     const docs = [...st.map(l => ({ nome: l.doc || `${docNome(l.serv)} ${ANNO}.pdf`, chi: l.tec, nuovo: l.nuovo })), ...k.filter(x => x.ore).map(x => ({ nome: `${docNome(x.serv)} ${ANNO}.pdf`, chi: x.tec }))].sort((a, b) => (b.nuovo ? 1 : 0) - (a.nuovo ? 1 : 0));
     const prom = PROMEMORIA.filter(x => x.cli === id && !x.fatto).sort((a, b) => a.g - b.g), att = attivitaDi(id);
     const occ = [...k.map(x => ({ cosa: `Rinnovo ${srv(x.serv).nome}`, g: x.rin, sotto: pctK(x) < SOGLIA && !x.proposta, contratto: true })), ...OCCASIONI.filter(o => o.cli === id && !o.preparata && !ORDINI.some(x => x.cli === id && x.stato !== 'perso' && (x.righe || [{ serv: x.serv }]).some(r => r.serv === o.serv)))].sort((a, b) => a.g - b.g);
     const STATO = { preventivo: 'Preventivo inviato', confermato: 'Da assegnare', assegnato: 'In lavorazione', chiuso: 'Da fatturare' };
-    return `<div class="flex flex-wrap items-start justify-between gap-3">${testata('Clienti', "Anagrafiche, referenti, attività e promemoria, con i lavori, i contratti e le fatture di ognuno. Oggi sono tra Zucchetti, i Word e le telefonate.")}<div class="flex flex-wrap gap-2 shrink-0 mb-5">${esporta('clienti')}<button class="btn btn-pri" data-a="nuovo-cliente"><i class="bi bi-person-plus"></i>Nuovo cliente</button></div></div>
+    return `<div class="flex flex-wrap items-start justify-between gap-3">${testata('Clienti', "Anagrafiche, referenti, attività e promemoria, con i lavori, i contratti e le fatture di ognuno. Tutto in un posto, senza Word e senza telefonate da ricordare.")}<div class="flex flex-wrap gap-2 shrink-0 mb-5">${esporta('clienti')}<button class="btn btn-pri" data-a="nuovo-cliente"><i class="bi bi-person-plus"></i>Nuovo cliente</button></div></div>
     ${nota('Proposta con CRM', "Clienti e potenziali clienti, attività, promemoria e occasioni di vendita si aggiungono alla proposta base. Lavori, contratti e fatture arrivano dalle altre pagine.")}
     ${prova('apri <strong>Salumificio Crotti</strong> tra i potenziali: c\'è una richiesta di ieri. Segna la telefonata e aggiungi un promemoria per richiamarli. Il preventivo lo prepari da <strong>Trattative</strong>.')}
     <div class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-5 items-start">
@@ -1175,7 +1313,7 @@ const VISTE = {
           ${kpi('Contratti che si rinnovano', k.length, k.length ? `${eur(sum(k, x => x.canone))} l'anno` : 'nessuno')}
           ${kpi('Lavori quest\'anno', st.length + aperti.length, aperti.length ? `${aperti.length} ${pl(aperti.length, 'ancora aperto', 'ancora aperti')}` : st.length ? 'tutti chiusi' : 'nessuno')}
           ${kpi('Margine su questo cliente', m.n ? pc(m.pct) : 'n.d.', m.n ? `su ${m.n} lavori e contratti` : 'nessun lavoro chiuso', m.n && m.pct < SOGLIA ? 'text-ambra' : '')}
-          ${kpi('Da incassare', eur(sum(ff, f => f.imp - f.pagato)), `${ff.length} ${pl(ff.length, 'fattura aperta', 'fatture aperte')}`)}
+          ${kpi('Da incassare', eur(sum(ff, f => resto(f))), `${ff.length} ${pl(ff.length, 'fattura aperta', 'fatture aperte')}`)}
         </div>
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 items-start">
           ${box('Promemoria', prom.length, `${prom.length ? `<ul class="divide-y divide-[#EEEEEE]">${prom.map(x => `<li class="px-4 sm:px-6 py-2.5 flex items-center gap-3 text-sm ${x.nuovo ? 'lampo' : ''}"><input type="checkbox" class="w-4 h-4 shrink-0 accent-[#3A3A3A]" data-a="prom-fatto" data-v="${x.id}" aria-label="Fatto: ${esc(x.testo)}"><span class="flex-1 min-w-0">${esc(x.testo)}</span><span class="chip ${x.g < 0 ? 'c-ko' : x.g === 0 ? 'c-bl' : 'c-at'}">${quando(x.g)}</span></li>`).join('')}</ul>` : vuoto('Niente da ricordare per questo cliente.')}
@@ -1190,7 +1328,7 @@ const VISTE = {
         ${box('Contratti ricorrenti', k.length, k.length ? `<div class="scroll-x"><table class="tab-t impila larga min-w-[560px]"><tbody>${k.map(x => `<tr class="${x.nuovo ? 'lampo' : ''}"><td class="font-bold m-full">${srv(x.serv).nome}<p class="text-xs text-grigio font-normal">${x.tec} · ${x.ore} ore fatte su ${x.prev}</p></td><td class="r num" data-l="Canone">${eur(x.canone)}</td><td class="r" data-l="Margine" style="white-space:nowrap">${margCell(margK(x), pctK(x))}</td><td data-l="Rinnovo" style="white-space:nowrap">tra ${gg(x.rin)}</td><td class="r m-dx" style="white-space:nowrap">${x.proposta ? `<span class="chip c-bl"><i class="bi bi-send-check"></i>Proposti ${eur(x.proposta)}</span>` : pctK(x) < SOGLIA ? `<button class="btn btn-sec !py-1.5" data-a="vai" data-v="contratti">Da rivedere</button>` : ''}</td></tr>`).join('')}</tbody></table></div>` : vuoto('Nessun contratto annuale.'))}
         ${box('Lavori', st.length + aperti.length, st.length + aperti.length ? `<div class="scroll-x"><table class="tab-t impila larga min-w-[560px]"><tbody>${aperti.map(o => `<tr class="${o.nuovo ? 'lampo' : ''}"><td class="font-bold m-full">${srv(o.serv).nome}${o.righe && o.righe.length > 1 ? ` <span class="text-xs text-grigio font-normal">e ${o.righe.length - 1 === 1 ? 'un altro servizio' : `altri ${o.righe.length - 1} servizi`}</span>` : ''}</td><td data-l="Tecnico">${o.tec || '-'}</td><td class="r num" data-l="Ore">${o.ore ? nf(o.ore, 1) : '-'}</td><td class="r num m-no">${eur(o.prezzo)}</td><td class="r m-dx"><span class="chip c-at">${o.bozza ? 'Bozza' : STATO[o.stato]}</span></td></tr>`).join('')}${st.map(x => `<tr class="${x.nuovo ? 'lampo' : ''}"><td class="font-bold m-full">${srv(x.serv).nome}</td><td data-l="Tecnico">${x.tec}</td><td class="r num" data-l="Ore">${nf(x.ore, 1)}</td><td class="r num m-no">${eur(x.prezzo)}</td><td class="r m-dx" style="white-space:nowrap">${margCell(marg(x), marg(x) / x.prezzo)}</td></tr>`).join('')}</tbody></table></div>` : vuoto('Nessun lavoro quest\'anno.'))}
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 items-start">
-          ${box('Fatture aperte', ff.length, ff.length ? `<ul class="divide-y divide-[#EEEEEE]">${ff.map(f => `<li class="px-4 sm:px-6 py-3 flex flex-wrap items-center gap-3 text-sm"><span class="num">FT ${f.n}</span><span class="num font-bold">${eur2(f.imp - f.pagato)}</span><span class="ml-auto chip ${f.scad < 0 ? 'c-ko' : 'c-at'}">${f.scad < 0 ? `Scaduta da ${gg(-f.scad)}` : `Scade tra ${gg(f.scad)}`}</span></li>`).join('')}</ul>` : vuoto('Niente da incassare.'))}
+          ${box('Fatture aperte', ff.length, ff.length ? `<ul class="divide-y divide-[#EEEEEE]">${ff.map(f => `<li class="px-4 sm:px-6 py-3 flex flex-wrap items-center gap-3 text-sm"><span class="num">FT ${f.n}</span><span class="num font-bold">${eur2(resto(f))}</span><span class="ml-auto chip ${f.scad < 0 ? 'c-ko' : 'c-at'}">${f.scad < 0 ? `Scaduta da ${gg(-f.scad)}` : `Scade tra ${gg(f.scad)}`}</span></li>`).join('')}</ul>` : vuoto('Niente da incassare.'))}
           ${box('Documenti', docs.length, docs.length ? `<ul class="divide-y divide-[#EEEEEE]">${docs.map(d => `<li><button class="w-full text-left px-4 sm:px-6 py-3 flex items-center gap-3 text-sm hover:bg-[#F7F7F7] transition-colors ${d.nuovo ? 'lampo' : ''}" data-a="doc" data-v="${d.nome}"><i class="bi bi-file-earmark-pdf text-grigio text-lg"></i><span class="flex-1 min-w-0"><span class="block truncate">${d.nome}</span><span class="block text-xs text-grigio">caricato da ${d.chi}${d.nuovo ? ', oggi' : ''}</span></span><i class="bi bi-box-arrow-up-right text-grigio text-xs"></i></button></li>`).join('')}</ul>` : vuoto('Nessun documento.'))}
         </div>
       </div>
@@ -1210,8 +1348,10 @@ const VISTE = {
 
   impostazioni() {
     const L = Object.entries(tutti());
-    return `${testata('Impostazioni', 'Collegamenti, numeri di riferimento, listino e utenti. Le cambia la direzione e valgono per tutti.')}
-    ${passaggioG1()}
+    return `${testata('Impostazioni', 'Aggiornamenti normativi, collegamenti, numeri di riferimento, listino e utenti. Le cambia la direzione e valgono per tutti.')}
+    ${prova('qui trovi la risposta alla domanda sugli aggiornamenti normativi: chi li fa, come arrivano e cosa è cambiato. Poi, sotto, esegui un passo dell\'avvio dei dati.')}
+    <section class="card p-4 sm:p-6 mb-5"><div class="flex flex-wrap items-start gap-3 mb-4"><div class="flex-1 min-w-[240px]"><p class="font-display font-medium text-lg">Aggiornamenti normativi</p><p class="text-sm text-grigio mt-0.5">Le regole di fatture, IVA e registri si aggiornano da sole, senza installare niente. Qui sotto chi le aggiorna, come arrivano e cosa è cambiato.</p></div>${chipNorma()}</div>${normativaCorpo()}</section>
+    ${avvioDati()}
     <section class="card p-4 sm:p-6 mb-5"><p class="font-display font-medium text-lg">Fattura elettronica e banca</p><div class="grid md:grid-cols-3 gap-4 mt-3 text-sm">
       <p><span class="block font-bold">Invio allo SdI</span><span class="text-grigio">Tramite intermediario accreditato presso l'Agenzia delle Entrate. Ricevute e scarti tornano qui da soli.</span></p>
       <p><span class="block font-bold">Conservazione</span><span class="text-grigio">A norma per 10 anni, per le fatture emesse e per quelle ricevute.</span></p>
@@ -1237,11 +1377,12 @@ const VISTE = {
     <div class="card p-5 mb-5 flex flex-wrap items-center gap-4"><label for="costoH" class="text-sm font-bold">Costo orario interno di un tecnico: <span class="num text-base" id="costoH-n">${eur(S.costoH)}</span></label>
       <input id="costoH" type="range" min="28" max="60" step="1" value="${S.costoH}" class="flex-1 min-w-[200px] accent-[#3A3A3A]"><p class="text-xs text-grigio w-full">È il vostro numero: stipendio, contributi e struttura divisi per le ore lavorate. 38 € è un valore di esempio.</p></div>
     <div class="flex flex-wrap items-center justify-between gap-2 mb-3"><div class="seg" role="group" aria-label="Periodo">${[[12, "Quest'anno"], [6, 'Ultimi 6 mesi'], [3, 'Ultimi 3 mesi']].map(([v, t]) => `<button data-a="per-marg" data-v="${v}" aria-pressed="${P === v}">${t}</button>`).join('')}</div>${esporta('margini')}</div>
-    <div class="card scroll-x mb-5"><table class="tab-t impila larga min-w-[940px]"><thead><tr><th>Servizio</th><th class="r">Lavori</th><th class="r">Ore previste</th><th class="r">Ore reali, media</th><th class="r">Prezzo medio</th><th class="r">Margine medio</th><th class="r">Anno scorso</th><th>Giudizio</th></tr></thead><tbody>
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-2"><p class="text-sm text-grigio">${S.margDett ? 'Con ore e anno scorso.' : 'Prezzo, margine e giudizio. Clicca un servizio per il perché.'}</p><button class="btn btn-gh !py-1 !text-xs !text-grigio" data-a="marg-dett"><i class="bi bi-${S.margDett ? 'dash' : 'plus'}-square"></i>${S.margDett ? 'Meno colonne' : 'Mostra ore e anno scorso'}</button></div>
+    <div class="card scroll-x mb-5"><table class="tab-t impila ${S.margDett ? 'larga min-w-[940px]' : 'min-w-[620px]'}"><thead><tr><th>Servizio</th>${S.margDett ? '<th class="r">Lavori</th><th class="r">Ore previste</th><th class="r">Ore reali, media</th>' : ''}<th class="r">Prezzo medio</th><th class="r">Margine medio</th>${S.margDett ? '<th class="r">Anno scorso</th>' : ''}<th>Giudizio</th></tr></thead><tbody>
     ${ids.map(id => { const x = stat(lavori(id, P)), [cls, t] = giudizio(id, P), oltre = x.ore > srv(id).orePrev * 1.15;
       return `<tr class="clic ${id === sel ? 'sel' : ''}" data-a="serv-sel" data-v="${id}" tabindex="0" aria-current="${id === sel}"><td class="font-bold m-full">${srv(id).nome}${srv(id).ric && !/annual/i.test(srv(id).nome) ? ' <span class="chip c-at ml-1 font-normal">annuale</span>' : ''}</td>
-      <td class="r num m-no">${x.n}</td><td class="r num" data-l="Ore previste">${srv(id).orePrev}</td><td class="r num ${oltre ? 'text-ambra font-bold' : ''}" data-l="Ore reali">${nf(x.ore, 1)}</td><td class="r num m-no">${eur(x.prezzo)}</td>
-      <td class="r" data-l="Margine" style="white-space:nowrap">${margCell(x.margMedio, x.pct)}</td><td class="r" data-l="Anno scorso" style="white-space:nowrap">${annoScorso(id, x.pct)}</td><td class="m-dx"><span class="chip c-${cls}">${t}</span></td></tr>`; }).join('')}
+      ${S.margDett ? `<td class="r num m-no">${x.n}</td><td class="r num" data-l="Ore previste">${srv(id).orePrev}</td><td class="r num ${oltre ? 'text-ambra font-bold' : ''}" data-l="Ore reali">${nf(x.ore, 1)}</td>` : ''}<td class="r num ${S.margDett ? 'm-no' : ''}" data-l="Prezzo medio">${eur(x.prezzo)}</td>
+      <td class="r" data-l="Margine" style="white-space:nowrap">${margCell(x.margMedio, x.pct)}</td>${S.margDett ? `<td class="r" data-l="Anno scorso" style="white-space:nowrap">${annoScorso(id, x.pct)}</td>` : ''}<td class="m-dx"><span class="chip c-${cls}">${t}</span></td></tr>`; }).join('')}
     </tbody></table></div>
 
     <div class="card p-4 sm:p-6">
@@ -1266,15 +1407,15 @@ const VISTE = {
 
   incassi() {
     const fatto = S.estratto === 'si', inc = sum(FATT, f => f.pagato), dub = FATT.filter(f => f.stato === 'acconto?' || f.stato === 'dubbio').length;
-    const st = f => ({ aperta: f.scad < 0 ? ['ko', `Scaduta da ${gg(-f.scad)}`] : ['at', `Scade tra ${gg(f.scad)}`], incassata: ['ok', '<i class="bi bi-check2"></i>Incassata'], 'acconto?': ['ko', 'Acconto da confermare'], dubbio: ['ko', 'Da confermare'], parziale: ['bl', `Acconto registrato, restano ${eur2(f.imp - f.pagato)}`] }[f.stato]);
+    const st = f => ({ aperta: f.scad < 0 ? ['ko', `Scaduta da ${gg(-f.scad)}`] : ['at', `Scade tra ${gg(f.scad)}`], incassata: ['ok', '<i class="bi bi-check2"></i>Incassata'], 'acconto?': ['ko', 'Acconto da confermare'], dubbio: ['ko', 'Da confermare'], parziale: ['bl', `Acconto registrato, restano ${eur2(resto(f))}`] }[f.stato]);
     return `${testata('Incassi', `L'estratto conto si abbina da solo alle fatture emesse, usando il numero in causale. A voi restano solo i casi dubbi.`)}${fatto ? prova('conferma il bonifico di <strong>Carpenteria Oglio</strong>: non ha il numero fattura in causale.') : prova('premi <strong>Carica l\'estratto conto</strong>.')}
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 scaglione">
-      <div class="col-span-2 sm:col-span-1 grid">${kpi('Da incassare', eur(daIncassare()), `${FATT.filter(f => f.stato !== 'incassata').length} fatture aperte`)}</div>
+      <div class="col-span-2 sm:col-span-1 grid">${kpi('Da incassare', eur(daIncassare()), `${FATT.filter(aperta).length} fatture aperte`)}</div>
       ${kpi('Incassato', eur(inc), fatto ? "abbinato dall'ultimo estratto" : inc ? 'registrato a mano' : 'carica un estratto', inc ? 'text-ok' : '')}
       ${kpi('Da guardare', dub, fatto ? 'casi dubbi, il resto è abbinato' : 'dopo il caricamento', dub ? 'text-ambra' : '')}
     </div>
     ${fatto ? '' : `<section class="card p-5 sm:p-6 lg:p-8 mb-6 flex flex-col lg:flex-row lg:items-center gap-5"><div class="flex-1"><p class="font-display font-medium text-xl">Estratto conto di ${MESE}</p>
-      <p class="text-grigio mt-1.5 max-w-2xl">Oggi chi segue l'amministrazione apre la banca, cerca il pagamento e lo associa a mano alla fattura in Zucchetti. Qui caricate l'estratto conto che scaricate già, mensile o giornaliero, e basta.</p></div>
+      <p class="text-grigio mt-1.5 max-w-2xl">Oggi chi segue l'amministrazione apre la banca, cerca il pagamento e lo associa a mano alla fattura. Qui caricate l'estratto conto che scaricate già, mensile o giornaliero, e basta.</p></div>
       <button class="btn btn-pri !py-3 !px-5 !text-base" data-a="carica" ${S.estratto === 'carico' ? 'disabled' : ''}>${S.estratto === 'carico' ? '<i class="bi bi-arrow-repeat gira"></i>Sto abbinando...' : "<i class=\"bi bi-upload\"></i>Carica l'estratto conto"}</button></section>`}
     <div class="flex flex-wrap items-center justify-between gap-3 mb-3"><p class="text-sm text-grigio"><i class="bi bi-receipt-cutoff"></i> Fatture emesse e non ancora incassate. Ogni incasso va da solo in prima nota.</p><div class="flex flex-wrap gap-2">${esporta('incassi')}<button class="btn btn-sec" data-a="vai" data-v="banca"><i class="bi bi-wallet2"></i>Vai alla banca</button></div></div>
     <div class="card scroll-x"><table class="tab-t impila larga min-w-[920px]"><thead><tr><th>Fattura</th><th>Cliente</th><th class="r">Importo</th><th>Sull'estratto conto</th><th>Stato</th><th></th></tr></thead><tbody>
@@ -1349,6 +1490,12 @@ const AZ_ = {
   'per-marg': v => { S.perM = +v; render(); },
   dettaglio: v => dettaglio(v),
   'vai-chiudi': v => { chiudiModale(); vai(v); },
+  'marg-dett': () => { S.margDett = !S.margDett; render(); },
+  'nav-gruppo': v => { const items = NAV.find(([g]) => g === v)[1].filter(([x]) => vede(x)); S.navAperti[v] = !aperto(v, items); renderNav(); },
+  guida: () => { S.guida = S.guida === false; render(); },
+  benvenuto: () => benvenuto(),
+  'benvenuto-ruolo': v => { chiudiModale(); S.modo = 'gestionale'; S.view = 'home'; AZ_.ruolo(v); },
+  normativa: () => apriModale('Aggiornamenti normativi', `<div class="px-5 sm:px-6 py-5 max-h-[70vh] overflow-y-auto">${normativaCorpo()}</div><div class="flex justify-end px-5 sm:px-6 py-4 border-t border-linea"><button class="btn btn-sec" data-a="chiudi-modale">Chiudi</button></div>`, true),
   esporta: v => ESPORTA[v](),
   avvisi: () => { const p = $('#avvisi'), aperto = p.classList.contains('hidden'); chiudiTendine(); if (!aperto) return; const l = avvisi();
     p.innerHTML = `<p class="px-4 py-3 border-b border-linea font-bold text-sm">Avvisi</p><ul class="p-1.5 max-h-[60vh] overflow-y-auto">${l.map(e => `<li><button class="w-full text-left px-3 py-2.5 rounded hover:bg-[#F3F3F3] flex gap-3 items-start text-sm" data-a="vai" data-v="${e.go}"><i class="bi ${e.ico} text-petrolio mt-0.5"></i><span><span class="block">${e.tit}</span><span class="block text-xs text-grigio">${e.sub}</span></span></button></li>`).join('') || '<li class="px-3 py-4 text-sm text-grigio">Niente in sospeso.</li>'}</ul>`;
@@ -1435,7 +1582,7 @@ const AZ_ = {
   inc: v => {
     spegni(); const [n, how] = v.split('|'), f = FATT.find(x => x.n == n); f.agg = true;
     if (how === 'acconto') { f.stato = 'parziale'; f.pagato = f.mov.imp; MOVBANCA.unshift({ g: -1, conto: 'cp', desc: `Acconto ${cli(f.cli).nome}, FT ${f.n}`, imp: f.mov.imp, fonte: 'estratto', nuovo: true }); toast(`Acconto di ${eur2(f.mov.imp)} registrato sulla FT ${f.n}. Il saldo resta aperto.`); }
-    if (how === 'ok') { MOVBANCA.unshift({ g: -1, conto: 'cp', desc: `Bonifico ${cli(f.cli).nome}, FT ${f.n}`, imp: f.imp - f.pagato, fonte: 'estratto', nuovo: true }); f.stato = 'incassata'; f.pagato = f.imp; SALA.racconta('inc', `Ha abbinato il bonifico alla FT ${f.n} di ${cli(f.cli).nome}.`); toast(`FT ${f.n} incassata. La prossima volta questo cliente lo abbino da solo.`); }
+    if (how === 'ok') { MOVBANCA.unshift({ g: -1, conto: 'cp', desc: `Bonifico ${cli(f.cli).nome}, FT ${f.n}`, imp: resto(f), fonte: 'estratto', nuovo: true }); f.stato = 'incassata'; f.pagato = f.imp; SALA.racconta('inc', `Ha abbinato il bonifico alla FT ${f.n} di ${cli(f.cli).nome}.`); toast(`FT ${f.n} incassata. La prossima volta questo cliente lo abbino da solo.`); }
     if (how === 'sollecita') { f.sollecitata = true; SALA.racconta('inc', `Ha mandato il sollecito per la FT ${f.n} a ${cli(f.cli).nome}.`); toast(`Sollecito inviato a ${cli(f.cli).nome} per la FT ${f.n}.`); }
     render();
   },
@@ -1469,9 +1616,9 @@ const FORM = {
   nota: d => { ATTIVITA.forEach(a => a.nuovo = false); ATTIVITA.unshift({ cli: +d.cli, tipo: d.tipo, testo: pulisci(d.testo), g: 0, chi: 'Giorgio', nuovo: true }); toast('Attività salvata nella scheda.'); render(); },
   prom: d => { PROMEMORIA.forEach(x => x.nuovo = false); PROMEMORIA.push({ id: Math.max(...PROMEMORIA.map(x => x.id)) + 1, cli: +d.cli, testo: pulisci(d.testo), g: +d.g, nuovo: true }); toast(`Promemoria per ${quando(+d.g)}: compare anche nel controllo di gestione quel giorno.`); render(); },
   incasso: d => {
-    spegni(); const f = FATT.find(x => x.n == d.n), imp = Math.min(+d.imp, f.imp - f.pagato);
+    spegni(); const f = FATT.find(x => x.n == d.n), imp = Math.min(+d.imp, resto(f));
     MOVBANCA.unshift({ g: 0, conto: 'cp', desc: `${d.metodo} ${cli(f.cli).nome}, FT ${f.n}`, imp, fonte: 'mano', nuovo: true }); f.pagato = +(f.pagato + imp).toFixed(2); f.stato = f.pagato >= f.imp - 0.005 ? 'incassata' : 'parziale'; f.agg = true;
-    chiudiModale(); toast(f.stato === 'incassata' ? `FT ${f.n} incassata: ${eur2(imp)} con ${d.metodo.toLowerCase()}.` : `Registrati ${eur2(imp)} sulla FT ${f.n}: restano ${eur2(f.imp - f.pagato)}.`); render();
+    chiudiModale(); toast(f.stato === 'incassata' ? `FT ${f.n} incassata: ${eur2(imp)} con ${d.metodo.toLowerCase()}.` : `Registrati ${eur2(imp)} sulla FT ${f.n}: restano ${eur2(resto(f))}.`); render();
   },
   forn: d => { FORN.forEach(f => f.nuovo = false); FORN.unshift({ id: Math.max(...FORN.map(f => f.id)) + 1, forn: pulisci(d.forn), cosa: pulisci(d.cosa), cli: d.cli ? +d.cli : null, imp: Math.round(+d.imp), g: 0, stato: 'da ricevere', nuovo: true }); chiudiModale(); toast(`Ordine a ${pulisci(d.forn)} registrato: ${eur(+d.imp)} pesano già sul margine del mese.`); render(); },
   servizio: d => { const id = 'x' + (Object.keys(EXTRA).length + 1); EXTRA[id] = { nome: pulisci(d.nome), prezzo: +d.prezzo, orePrev: +d.ore, ext: +d.ext || 0, ric: !!d.ric, nuovo: true }; chiudiModale(); toast(`${pulisci(d.nome)} aggiunto al listino: lo trovate nei nuovi preventivi.`); render(); },
@@ -1531,8 +1678,8 @@ document.addEventListener('input', e => {
   if (k === 'qty' || k === 'prezzo') { S.prev.righe[+t.dataset.i][k] = Math.max(0, +t.value || 0); aggiornaPrev(); }
 });
 
-/* ================= AMMINISTRAZIONE SENZA ZUCCHETTI =================
-   Fatture elettroniche, fatture dei fornitori, banca, prima nota, IVA e passaggio dal G1.
+/* ================= AMMINISTRAZIONE =================
+   Fatture elettroniche, fatture dei fornitori, banca, prima nota, IVA e avvio dei dati.
    Ogni numero si calcola dagli stessi dati del gestionale: niente importi scritti a mano. */
 // le fatture già emesse sono consegnate; em = giorni da oggi della data di emissione (30 giorni prima della scadenza)
 // date di emissione in ordine di numero: dalla 399 in poi sono di questo mese, la 398 è del mese scorso ed è scaduta
@@ -1561,21 +1708,31 @@ const CHIUSE = (() => {
     return { n: v.n, cli: v.cli, netto, imp: Math.round(netto * (1 + IVA) * 100) / 100, em, inc, scad: inc, stato: 'incassata', sdi: 'consegnata', desc: elencoServ([...new Set(v.righe)]) };
   });
 })();
-// passaggio da Zucchetti G1: lo stesso riquadro in Impostazioni e in Contabilità
-const passaggioG1 = () => `<section class="card p-4 sm:p-6 mb-5"><div class="flex flex-wrap items-start gap-3"><div class="flex-1 min-w-[240px]"><p class="font-display font-medium text-lg">Passaggio da Zucchetti G1</p><p class="text-sm text-grigio mt-0.5">Si portano dentro anagrafiche, fatture aperte, scadenze e saldi. G1 resta consultabile in sola lettura fino alla chiusura dell'anno.</p></div>${S.migr < 5 ? '<button class="btn btn-pri" data-a="passo-g1"><i class="bi bi-arrow-right-circle"></i>Esegui il passo successivo</button>' : '<span class="chip c-ok !py-1 !px-2.5"><i class="bi bi-check2"></i>Passaggio completato</span>'}</div>
-      <ol class="grid sm:grid-cols-2 xl:grid-cols-5 gap-2 mt-4">${[['Esportazione dal G1', 'database e archivi del gestionale'], ['Anagrafiche', `tutti i clienti e i fornitori di G1, qui in demo ${CLIENTI.filter(c => c.tipo === 'cliente').length} clienti e ${new Set(FORN.map(f => f.forn)).size} fornitori`], ['Fatture aperte e scadenze', `${FATT.filter(f => f.stato !== 'incassata').length} da incassare, ${daPagare().length} da pagare, ${AZ.contratti} contratti`], ['Saldi di apertura', `${CONTI.length} conti e il piano dei conti`], ['Controllo finale', "quadratura con l'amministrazione e il commercialista"]].map(([t, d], i) => { const st = i < S.migr ? 'fatto' : i === S.migr ? 'in corso' : 'da fare'; return `<li class="rounded border ${st === 'fatto' ? 'border-linea bg-carta' : st === 'in corso' ? 'border-grafite bg-white' : 'border-linea bg-white'} p-3 text-sm"><span class="flex items-center gap-2"><span class="w-6 h-6 rounded-full flex-none flex items-center justify-center text-xs font-bold ${st === 'fatto' ? 'bg-ok text-white' : 'bg-[#EDEDED]'}">${st === 'fatto' ? '<i class="bi bi-check2"></i>' : i + 1}</span><span class="font-bold">${t}</span></span><span class="block text-xs text-grigio mt-1.5">${d}</span><span class="chip ${st === 'fatto' ? 'c-ok' : st === 'in corso' ? 'c-at' : 'c-bl'} mt-2">${st}</span></li>`; }).join('')}</ol></section>`;
-// cosa fa oggi G1 per l'amministrazione e dove si fa qui: la scaletta per chi la fa
-const DA_G1 = [
+// note di credito: stornano in tutto o in parte una fattura già consegnata, con lo stesso giro SdI (TD04)
+const NOTE = [];
+const MOTIVI_NC = ['Lavoro annullato dal cliente', 'Importo sbagliato in fattura', 'Sconto concordato dopo la fattura', 'Fattura emessa due volte'];
+// la richiesta di esempio: un cliente ha annullato il corso lavoratori già fatturato e pagato
+const NC_RICH = (() => { const f = CHIUSE.find(x => x.desc.toLowerCase().includes(corto('corso').toLowerCase()) && x.netto >= srv('corso').prezzo * 2) || CHIUSE[0];
+  return { ft: f.n, netto: srv('corso').prezzo, motivo: MOTIVI_NC[0], nota: `Email del cliente: il corso lavoratori è saltato, chiede lo storno di ${eur(srv('corso').prezzo)} più IVA.` }; })();
+const ncDi = n => NOTE.filter(x => x.ncDi == n);
+const ncRichiesta = f => f.n === NC_RICH.ft && !ncDi(f.n).length;
+const maxNc = f => Math.round((impon(f) - sum(ncDi(f.n), x => x.netto)) * 100) / 100;
+const creditiNc = () => NOTE.filter(x => x.chiusura === 'scala').map(x => `<li class="px-4 sm:px-6 py-3 flex flex-wrap items-center gap-3 text-sm ${x.nuovo ? 'lampo' : ''}"><span class="flex-1 min-w-[180px]"><span class="block font-bold">${esc(cli(x.cli).nome)}</span><span class="block text-xs text-grigio">NC ${x.n}, storno della FT ${x.ncDi}</span></span><span class="num font-bold">−${eur2(x.imp)}</span><span class="chip c-at">da scalare sulla prossima fattura</span></li>`).join('');
+// avvio dei dati: lo stesso riquadro in Impostazioni e in Contabilità
+const avvioDati = () => `<section class="card p-4 sm:p-6 mb-5"><div class="flex flex-wrap items-start gap-3"><div class="flex-1 min-w-[240px]"><p class="font-display font-medium text-lg">Avvio: i vostri dati qui dentro</p><p class="text-sm text-grigio mt-0.5">Si portano dentro anagrafiche, fatture aperte, scadenze e saldi di apertura. Dal primo giorno si lavora solo qui. I vecchi archivi restano consultabili in sola lettura fino alla chiusura dell'anno.</p></div>${S.migr < 5 ? '<button class="btn btn-pri" data-a="passo-avvio"><i class="bi bi-arrow-right-circle"></i>Esegui il passo successivo</button>' : '<span class="chip c-ok !py-1 !px-2.5"><i class="bi bi-check2"></i>Avvio completato</span>'}</div>
+      <ol class="grid sm:grid-cols-2 xl:grid-cols-5 gap-2 mt-4">${[['Esportazione dei dati', 'dagli archivi che usate oggi'], ['Anagrafiche', `tutti i clienti e i fornitori, qui in demo ${CLIENTI.filter(c => c.tipo === 'cliente').length} clienti e ${new Set(FORN.map(f => f.forn)).size} fornitori`], ['Fatture aperte e scadenze', `${FATT.filter(aperta).length} da incassare, ${daPagare().length} da pagare, ${AZ.contratti} contratti`], ['Saldi di apertura', `${CONTI.length} conti e il piano dei conti`], ['Controllo finale', "quadratura con l'amministrazione e il commercialista"]].map(([t, d], i) => { const st = i < S.migr ? 'fatto' : i === S.migr ? 'in corso' : 'da fare'; return `<li class="rounded border ${st === 'fatto' ? 'border-linea bg-carta' : st === 'in corso' ? 'border-grafite bg-white' : 'border-linea bg-white'} p-3 text-sm"><span class="flex items-center gap-2"><span class="w-6 h-6 rounded-full flex-none flex items-center justify-center text-xs font-bold ${st === 'fatto' ? 'bg-ok text-white' : 'bg-[#EDEDED]'}">${st === 'fatto' ? '<i class="bi bi-check2"></i>' : i + 1}</span><span class="font-bold">${t}</span></span><span class="block text-xs text-grigio mt-1.5">${d}</span><span class="chip ${st === 'fatto' ? 'c-ok' : st === 'in corso' ? 'c-at' : 'c-bl'} mt-2">${st}</span></li>`; }).join('')}</ol></section>`;
+// tutto quello che fa l'amministrazione e dove si fa qui: la scaletta per chi la fa
+const COPERTURA = [
   ['Fatture ai clienti e invio allo SdI', 'Fatture, emesse', 'demo'], ['Fatture dei fornitori dallo SdI', 'Fatture, ricevute', 'demo'],
   ['Prima nota', 'Contabilità, scritta da fatture, incassi e pagamenti', 'demo'], ['Registri IVA e liquidazione', 'Contabilità', 'demo'],
   ['Scadenzario clienti e fornitori, solleciti', 'Contabilità e Incassi', 'demo'], ['Incassi e pagamenti dalla banca', 'Incassi e Banca', 'demo'],
   ['Ordini clienti e ordini fornitori', 'Preventivi e ordini, Ordini fornitori', 'demo'],
-  ['Note di credito', 'dalla fattura emessa, con lo stesso giro SdI', 'previsto'], ['Bollo sulle fatture esenti', 'aggiunto da solo sopra 77,47 €', 'previsto'],
+  ['Note di credito', 'Fatture, emesse: dalla fattura, con lo stesso giro SdI', 'demo'], ['Bollo sulle fatture esenti', 'aggiunto da solo sopra 77,47 €', 'previsto'],
   ['Ritenute d\'acconto dei professionisti', 'nel registro acquisti, con la certificazione di fine anno', 'verifica'], ['Split payment per clienti pubblici', 'solo se ne avete', 'verifica'],
   ['Periodicità IVA, mensile o trimestrale', 'si imposta una volta', 'verifica'], ['Cespiti e ammortamenti', 'oggi chi li tiene?', 'verifica'],
   ['Bilancio, dichiarativi, F24 delle imposte', 'il commercialista, dal pacchetto del mese', 'fuori'], ['Paghe', 'lo studio paghe, una scrittura al mese', 'fuori'],
 ];
-const STATO_G1 = { demo: ['c-ok', 'in demo'], previsto: ['c-bl', 'previsto'], verifica: ['c-at', 'da verificare con voi'], fuori: ['c-bl', 'resta fuori'] };
+const STATO_COP = { demo: ['c-ok', 'in demo'], previsto: ['c-bl', 'previsto'], verifica: ['c-at', 'da verificare con voi'], fuori: ['c-bl', 'resta fuori'] };
 const ftDi = n => FATT.find(x => x.n == n) || SCARTI.find(x => x.n == n) || CHIUSE.find(x => x.n == n);
 // uscite del mese che non passano da una fattura: affitto, stipendi e F24 dallo studio paghe
 const delMese = d => Math.min(-1, d - OGGI.getDate());
@@ -1587,7 +1744,8 @@ const FISSI = [
 ];
 
 function registroVendite() {
-  return [...CHIUSE, ...FATT.filter(f => nelMese(f.em))].map(f => ({ n: f.n, num: `FT ${f.n}`, g: f.em, cli: cli(f.cli).nome, imp: impon(f), iva: Math.round((f.imp - impon(f)) * 100) / 100 })).sort((a, b) => a.g - b.g || a.n - b.n);
+  const nc = NOTE.map(x => ({ n: x.n, num: `NC ${x.n}`, g: x.em, cli: cli(x.cli).nome, imp: -x.netto, iva: -Math.round((x.imp - x.netto) * 100) / 100, nc: true }));
+  return [...CHIUSE, ...FATT.filter(f => nelMese(f.em))].map(f => ({ n: f.n, num: `FT ${f.n}`, g: f.em, cli: cli(f.cli).nome, imp: impon(f), iva: Math.round((f.imp - impon(f)) * 100) / 100 })).concat(nc).sort((a, b) => a.g - b.g || a.n - b.n);
 }
 const registroAcquisti = () => PASSIVE.filter(p => p.registrata).map(p => ({ num: p.num, g: -p.g, forn: p.forn, imp: p.imp, iva: p.esente ? 0 : p.imp * IVA, esente: p.esente })).sort((a, b) => a.g - b.g);
 function liquidazione() {
@@ -1602,7 +1760,8 @@ function movimentiBanca() {
 const saldoConto = id => CONTI.find(c => c.id === id).saldoIniziale + sum(movimentiBanca().filter(m => m.conto === id), m => m.imp);
 function primaNota() {
   const r = [], add = (g, desc, conto, dare, avere) => r.push({ g, desc, conto, dare: Math.round(dare * 100) / 100, avere: Math.round(avere * 100) / 100 });
-  registroVendite().forEach(v => { const d = `Fattura ${v.num} · ${v.cli}`; add(v.g, d, 'Crediti verso clienti', v.imp + v.iva, 0); add(v.g, d, 'Ricavi per servizi', 0, v.imp); add(v.g, d, 'IVA a debito', 0, v.iva); });
+  registroVendite().forEach(v => { if (v.nc) { const d = `Nota di credito ${v.num} · ${v.cli}`; add(v.g, d, 'Ricavi per servizi', -v.imp, 0); add(v.g, d, 'IVA a debito', -v.iva, 0); add(v.g, d, 'Crediti verso clienti', 0, -(v.imp + v.iva)); return; }
+    const d = `Fattura ${v.num} · ${v.cli}`; add(v.g, d, 'Crediti verso clienti', v.imp + v.iva, 0); add(v.g, d, 'Ricavi per servizi', 0, v.imp); add(v.g, d, 'IVA a debito', 0, v.iva); });
   registroAcquisti().forEach(a => { const d = `Fattura ${a.num} · ${a.forn}`; add(a.g, d, /consulenz|medic|docente|formator|laboratorio/i.test(a.forn + d) ? 'Costi per consulenze esterne' : 'Costi per servizi e materiali', a.imp, 0); if (a.iva) add(a.g, d, 'IVA a credito', a.iva, 0); add(a.g, d, 'Debiti verso fornitori', 0, a.imp + a.iva); });
   movimentiBanca().forEach(m => { if (m.imp > 0) { add(m.g, m.desc, 'Banca c/c', m.imp, 0); add(m.g, m.desc, 'Crediti verso clienti', 0, m.imp); } else { add(m.g, m.desc, m.contro || 'Debiti verso fornitori', -m.imp, 0); add(m.g, m.desc, 'Banca c/c', 0, -m.imp); } });
   const paghe = `Scrittura paghe di ${PAGHE.mese}, dallo studio paghe`; add(PAGHE.g, paghe, 'Costo del personale', PAGHE.netti + PAGHE.f24, 0); add(PAGHE.g, paghe, 'Debiti verso dipendenti ed enti', 0, PAGHE.netti + PAGHE.f24);
@@ -1620,11 +1779,32 @@ const PASSI_AMM = () => [
   ['Controlla la liquidazione IVA del mese', !!S.vistoIva, 'contabilita:iva'],
   ['Manda il pacchetto al commercialista', !!S.pacchetto, 'contabilita:pacchetto'],
 ];
-const NORMATIVA = `<div class="card p-4 sm:p-5"><p class="font-bold"><i class="bi bi-journal-check"></i> Chi tiene aggiornata la normativa</p><ul class="mt-2 space-y-2 text-sm">
-  <li class="flex gap-2"><i class="bi bi-send-check text-grigio mt-0.5"></i><span><strong>Tracciati SdI e conservazione</strong>: l'intermediario accreditato presso l'Agenzia delle Entrate. Quando cambia il formato, cambia lui.</span></li>
-  <li class="flex gap-2"><i class="bi bi-sliders text-grigio mt-0.5"></i><span><strong>Aliquote, registri e regole contabili</strong>: Altalogik, con il contratto di manutenzione.</span></li>
-  <li class="flex gap-2"><i class="bi bi-person-check text-grigio mt-0.5"></i><span><strong>Bilancio, dichiarativi e F24 delle imposte</strong>: il vostro commercialista, che riceve il pacchetto del mese.</span></li></ul></div>`;
-const tabs = (chiave, voci) => `<div class="seg mb-4 max-w-full overflow-x-auto sm:flex-wrap sm:overflow-visible" role="tablist">${voci.map(([v, t, n]) => `<button role="tab" data-a="tab" data-v="${chiave}|${v}" aria-pressed="${S[chiave] === v}" class="!whitespace-nowrap">${t}${n ? ` <span class="badge !ml-1">${n}</span>` : ''}</button>`).join('')}</div>`;
+// aggiornamenti normativi: la domanda di Giorgio nella call 2. Solo novità vere e verificate (fonti in HANDOFF §11), la più recente per prima
+const NORME = [
+  { dal: '15 maggio 2026', tit: 'Fattura elettronica, specifiche tecniche 1.9.1', breve: 'SdI 1.9.1', cosa: 'L\'Agenzia delle Entrate aggiunge nuovi controlli sulle fatture e aggiorna le regole per i gruppi IVA.', voi: 'Niente cambia nel vostro modo di fatturare: i controlli nuovi girano prima dell\'invio.', chi: 'Intermediario accreditato' },
+  { dal: '1 aprile 2025', tit: 'Fattura elettronica, specifiche tecniche 1.9', breve: 'SdI 1.9', cosa: 'Nuovo modulo per segnalare all\'Agenzia una fattura che il fornitore non ha emesso o ha emesso male, e nuove regole per le piccole imprese europee in franchigia IVA.', voi: 'La segnalazione serve solo se un fornitore non vi fattura: lo schema è già pronto.', chi: 'Intermediario accreditato e Altalogik' },
+];
+const REGOLE_ATTIVE = ['IVA 22% sui servizi', 'Visite mediche esenti, art. 10', 'Bollo da 2 € sulle fatture esenti sopra 77,47 €', 'Conservazione a norma per 10 anni', 'Liquidazione IVA mensile, da confermare con voi'];
+const CHI_NORMA = [
+  ['bi-send-check', 'Fattura elettronica e conservazione', 'L\'intermediario accreditato presso l\'Agenzia delle Entrate', 'Tracciati e controlli dello SdI, aggiornati entro la data in cui diventano obbligatori. Quando cambia il formato, cambia lui.'],
+  ['bi-sliders', 'IVA, registri e prima nota', 'Altalogik, con il contratto di manutenzione', 'Aliquote, registri, liquidazione e regole contabili. Le novità le segnala un commercialista di riferimento, i tempi sono scritti nel contratto.'],
+  ['bi-person-check', 'Bilancio, dichiarativi e F24 delle imposte', 'Il vostro commercialista', 'Come oggi. Riceve ogni mese il pacchetto con prima nota, registri e liquidazione.'],
+];
+const ultimaNorma = () => NORME[0];
+const chipNorma = () => `<button class="chip c-ok !py-1 !px-2.5 hover:brightness-95" data-a="normativa" title="Chi tiene aggiornata la normativa e cosa è cambiato"><i class="bi bi-patch-check"></i>Normativa aggiornata: ${ultimaNorma().breve}</button>`;
+function normativaCorpo() {
+  return `<div class="grid md:grid-cols-3 gap-4 text-sm">${CHI_NORMA.map(([ic, cosa, chi, come]) => `<div class="rounded border border-linea bg-carta px-4 py-3"><p class="text-xs text-grigio flex items-center gap-1.5"><i class="bi ${ic}"></i>${cosa}</p><p class="font-bold mt-1">${chi}</p><p class="text-grigio mt-1">${come}</p></div>`).join('')}</div>
+    <p class="font-bold mt-6">Come arriva un aggiornamento</p>
+    <ol class="grid sm:grid-cols-2 xl:grid-cols-4 gap-2 mt-2 text-sm">${['Esce una regola nuova: Agenzia delle Entrate, legge di bilancio, nuove specifiche SdI.', 'La recepiamo e la proviamo, nei tempi scritti nel contratto di manutenzione.', 'La trovate qui sotto: cosa cambia, da quando vale, cosa cambia per voi.', 'Dal giorno in cui vale si applica da sola, per tutti. Niente da installare.'].map((t, i) => `<li class="flex gap-2.5 items-start rounded border border-linea px-3 py-2.5"><span class="w-6 h-6 rounded-full flex-none flex items-center justify-center text-xs font-bold bg-[#EDEDED]">${i + 1}</span><span>${t}</span></li>`).join('')}</ol>
+    <p class="font-bold mt-6">Registro degli aggiornamenti</p>
+    <ul class="mt-2 divide-y divide-[#EEEEEE] border-y border-linea">${NORME.map(n => `<li class="py-3 flex flex-wrap items-start gap-x-4 gap-y-1.5 text-sm"><span class="num text-grigio w-32 shrink-0">dal ${n.dal}</span><span class="flex-1 min-w-[220px]"><span class="block font-bold">${n.tit}</span><span class="block">${n.cosa}</span><span class="block text-grigio mt-0.5"><strong class="font-bold text-inchiostro">Per voi:</strong> ${n.voi}</span></span><span class="flex flex-col items-start gap-1"><span class="chip c-ok"><i class="bi bi-check2"></i>In uso</span><span class="text-xs text-grigio">${n.chi}</span></span></li>`).join('')}</ul>
+    <p class="font-bold mt-6">Regole già attive</p>
+    <div class="flex flex-wrap gap-1.5 mt-2">${REGOLE_ATTIVE.map(r => `<span class="chip c-bl">${r}</span>`).join('')}</div>
+    <div class="mt-6 rounded border border-linea px-4 py-3 text-sm flex gap-3"><i class="bi bi-diagram-3 text-grigio text-lg"></i><p><strong>Se preferite un gestionale contabile del mercato.</strong> <span class="text-grigio">Registri e liquidazione possono stare su un gestionale con collegamento aperto (API), con i suoi aggiornamenti. Qui restano fatture, incassi, agenti e controllo di gestione. Lo decidiamo insieme.</span></p></div>`;
+}
+const NORMATIVA = `<div class="card p-4 sm:p-5"><p class="font-bold"><i class="bi bi-journal-check"></i> Chi tiene aggiornata la normativa</p><ul class="mt-2 space-y-2 text-sm">${CHI_NORMA.map(([ic, cosa, chi]) => `<li class="flex gap-2"><i class="bi ${ic} text-grigio mt-0.5"></i><span><strong>${cosa}</strong>: ${chi.replace(/^(Il|L')/, m => m.toLowerCase())}.</span></li>`).join('')}</ul>
+  <p class="text-sm mt-3 pt-3 border-t border-linea flex flex-wrap items-center gap-2"><span class="text-grigio">Ultimo aggiornamento: ${ultimaNorma().tit.toLowerCase()}, dal ${ultimaNorma().dal}.</span><button class="underline underline-offset-2" data-a="normativa">Come arrivano gli aggiornamenti</button></p></div>`;
+const tabs = (chiave, voci) => `<div class="seg mb-4 max-w-full overflow-x-auto sm:flex-wrap sm:overflow-visible" role="tablist">${voci.map(([v, t, n]) => `<button role="tab" data-a="tab" data-v="${chiave}|${v}" aria-pressed="${S[chiave] === v}" class="!whitespace-nowrap">${t}${n ? ` <span class="badge calmo !ml-1">${n}</span>` : ''}</button>`).join('')}</div>`;
 const chipSdi = s => ({ consegnata: '<span class="chip c-ok"><i class="bi bi-check2"></i>Consegnata</span>', inviata: '<span class="chip c-at"><span class="w-1.5 h-1.5 rounded-full bg-grafite pulsa"></span>Inviata allo SdI</span>', scartata: '<span class="chip c-ko"><i class="bi bi-x-circle"></i>Scartata</span>' }[s]);
 
 /* ---------- XML FatturaPA di esempio, scaricabile ---------- */
@@ -1637,7 +1817,7 @@ function xmlFattura(f) {
     <CessionarioCommittente><DatiAnagrafici><IdFiscaleIVA><IdPaese>IT</IdPaese><IdCodice>${f.pivaErrata || c.piva}</IdCodice></IdFiscaleIVA><Anagrafica><Denominazione>${esc(c.nome)}</Denominazione></Anagrafica></DatiAnagrafici></CessionarioCommittente>
   </FatturaElettronicaHeader>
   <FatturaElettronicaBody>
-    <DatiGenerali><DatiGeneraliDocumento><TipoDocumento>TD01</TipoDocumento><Divisa>EUR</Divisa><Data>${giorno(f.em).toISOString().slice(0, 10)}</Data><Numero>${f.n}</Numero><ImportoTotaleDocumento>${f.imp.toFixed(2)}</ImportoTotaleDocumento></DatiGeneraliDocumento></DatiGenerali>
+    <DatiGenerali><DatiGeneraliDocumento><TipoDocumento>${f.ncDi ? 'TD04' : 'TD01'}</TipoDocumento><Divisa>EUR</Divisa><Data>${giorno(f.em).toISOString().slice(0, 10)}</Data><Numero>${f.ncDi ? 'NC' : ''}${f.n}</Numero><ImportoTotaleDocumento>${f.imp.toFixed(2)}</ImportoTotaleDocumento>${f.ncDi ? `<Causale>${esc(f.motivo)}</Causale>` : ''}</DatiGeneraliDocumento>${f.ncDi ? `<DatiFattureCollegate><IdDocumento>${f.ncDi}</IdDocumento><Data>${giorno(ftDi(f.ncDi).em).toISOString().slice(0, 10)}</Data></DatiFattureCollegate>` : ''}</DatiGenerali>
     <DatiBeniServizi><DettaglioLinee><NumeroLinea>1</NumeroLinea><Descrizione>${esc(f.desc || 'Servizi di sicurezza sul lavoro')}</Descrizione><PrezzoUnitario>${imp.toFixed(2)}</PrezzoUnitario><PrezzoTotale>${imp.toFixed(2)}</PrezzoTotale><AliquotaIVA>22.00</AliquotaIVA></DettaglioLinee>
       <DatiRiepilogo><AliquotaIVA>22.00</AliquotaIVA><ImponibileImporto>${imp.toFixed(2)}</ImponibileImporto><Imposta>${(f.imp - imp).toFixed(2)}</Imposta></DatiRiepilogo></DatiBeniServizi>
   </FatturaElettronicaBody>
@@ -1652,8 +1832,20 @@ function anteprimaFattura(f, scarto) {
     <div class="mt-4 flex justify-between gap-3 border-t border-b border-linea py-2"><span>${esc(f.desc || 'Servizi di sicurezza sul lavoro')}</span><span class="num">${eur2(imp)}</span></div>
     <div class="ml-auto mt-3 max-w-[240px] space-y-1"><p class="flex justify-between"><span>Imponibile</span><span class="num">${eur2(imp)}</span></p><p class="flex justify-between"><span>IVA 22%</span><span class="num">${eur2(f.imp - imp)}</span></p><p class="flex justify-between font-bold border-t border-inchiostro pt-1"><span>Totale</span><span class="num">${eur2(f.imp)}</span></p></div>
     <p class="mt-4 text-[12px]">Pagamento con bonifico${f.stato === 'incassata' ? ': incassata.' : `, scadenza ${giorno(f.scad).toLocaleDateString('it-IT')}.`}</p>
+    ${ncDi(f.n).map(x => `<p class="mt-2 text-[12px] font-bold">Stornata per ${eur2(x.imp)} con la nota di credito NC ${x.n}: ${esc(minuscola(x.motivo))}.</p>`).join('')}
     <p class="mt-2 text-[11px] text-grigio">Trasmessa allo SdI tramite intermediario accreditato. Conservata a norma per 10 anni.</p></div></div>
-    <div class="flex flex-wrap justify-end gap-2 px-5 sm:px-6 py-4 border-t border-linea"><button class="btn btn-sec" data-a="xml" data-v="${f.n}"><i class="bi bi-filetype-xml"></i>Scarica XML FatturaPA</button><button class="btn btn-pri" data-a="chiudi-modale">Chiudi</button></div>`;
+    <div class="flex flex-wrap justify-end gap-2 px-5 sm:px-6 py-4 border-t border-linea">${!scarto && f.sdi === 'consegnata' && maxNc(f) > 0 ? `<button class="btn btn-sec" data-a="nota-credito" data-v="${f.n}"><i class="bi bi-arrow-counterclockwise"></i>Nota di credito</button>` : ''}<button class="btn btn-sec" data-a="xml" data-v="${f.n}"><i class="bi bi-filetype-xml"></i>Scarica XML FatturaPA</button><button class="btn btn-pri" data-a="chiudi-modale">Chiudi</button></div>`;
+}
+function anteprimaNota(x) {
+  const c = cli(x.cli), f = ftDi(x.ncDi);
+  return `<div class="p-3 sm:p-6 bg-carta"><div class="bg-white border border-linea mx-auto max-w-[600px] p-5 sm:p-8 text-[13px]">
+    <div class="flex flex-wrap justify-between gap-4 border-b-2 border-petrolio pb-3"><p class="font-display font-bold text-petrolio text-lg tracking-wide">PROGESI</p><div class="sm:text-right text-[11px] text-grigio"><p>Progesi S.r.l.</p><p>Via F. Tensini 2M, 26010 Offanengo (CR)</p></div></div>
+    <div class="flex flex-wrap justify-between gap-4 mt-4"><div><p class="text-[11px] uppercase tracking-wider text-grigio">Nota di credito elettronica</p><p class="font-bold">NC ${x.n} del ${giorno(x.em).toLocaleDateString('it-IT')}</p><p>Storna la FT ${f.n} del ${giorno(f.em).toLocaleDateString('it-IT')}</p></div><div class="sm:text-right"><p class="text-[11px] uppercase tracking-wider text-grigio">Cliente</p><p class="font-bold">${esc(c.nome)}</p><p>P. IVA <span class="num">${c.piva}</span></p></div></div>
+    <div class="mt-4 flex justify-between gap-3 border-t border-b border-linea py-2"><span>${esc(x.motivo)}</span><span class="num">${eur2(x.netto)}</span></div>
+    <div class="ml-auto mt-3 max-w-[240px] space-y-1"><p class="flex justify-between"><span>Imponibile</span><span class="num">${eur2(x.netto)}</span></p><p class="flex justify-between"><span>IVA 22%</span><span class="num">${eur2(x.imp - x.netto)}</span></p><p class="flex justify-between font-bold border-t border-inchiostro pt-1"><span>Totale stornato</span><span class="num">${eur2(x.imp)}</span></p></div>
+    <p class="mt-4 text-[12px]">${{ scala: 'Il credito si scala dalla prossima fattura.', rimborso: 'Rimborsata con bonifico.', residuo: `Il cliente paga solo la differenza della FT ${f.n}.` }[x.chiusura]}</p>
+    <p class="mt-2 text-[11px] text-grigio">Trasmessa allo SdI tramite intermediario accreditato. Conservata a norma per 10 anni.</p></div></div>
+    <div class="flex flex-wrap justify-end gap-2 px-5 sm:px-6 py-4 border-t border-linea"><button class="btn btn-sec" data-a="xml-nc" data-v="${x.n}"><i class="bi bi-filetype-xml"></i>Scarica XML FatturaPA</button><button class="btn btn-pri" data-a="chiudi-modale">Chiudi</button></div>`;
 }
 
 /* ---------- viste ---------- */
@@ -1673,42 +1865,43 @@ Object.assign(VISTE, {
       <p class="flex justify-between gap-3 border-t border-linea pt-2 font-bold text-base"><span>${L.saldo >= 0 ? 'IVA da versare' : 'IVA a credito'}</span><span class="num">${eur2(Math.abs(L.saldo))}</span></p></div>
       <p class="text-sm mt-4 rounded bg-carta px-3 py-2"><i class="bi bi-calendar-event"></i> Versamento entro il <strong>${L.scad}</strong>. L'F24 lo prepara il commercialista dal pacchetto del mese.</p>
       <p class="text-xs text-grigio mt-3">Una fattura dei fornitori ancora da registrare non entra nel conto: registrandola, l'IVA a credito sale e il saldo scende.</p></section>${NORMATIVA}</div>`;
-    if (t === 'scad') { const P = daPagare(), C = FATT.filter(f => f.stato !== 'incassata').sort((a, b) => a.scad - b.scad);
+    if (t === 'scad') { const P = daPagare(), C = FATT.filter(aperta).sort((a, b) => a.scad - b.scad);
       corpo = `<div class="grid grid-cols-1 2xl:grid-cols-2 gap-5 items-start">${box('Da pagare ai fornitori', P.length, P.length ? `<ul class="divide-y divide-[#EEEEEE]">${P.map(p => `<li class="px-4 sm:px-6 py-3 flex flex-wrap items-center gap-3 text-sm ${p.nuovo ? 'lampo' : ''}"><span class="flex-1 min-w-[180px]"><span class="block font-bold">${esc(p.forn)}</span><span class="block text-xs text-grigio">Fattura ${p.num} · ${esc(p.cosa)}</span></span><span class="num font-bold">${eur2(p.tot)}</span><span class="chip ${p.scad <= 7 ? 'c-ko' : 'c-at'}">${p.scad < 0 ? `scaduta da ${gg(-p.scad)}` : `scade tra ${gg(p.scad)}`}</span><button class="btn btn-sec !py-1.5" data-a="paga" data-v="${p.id}"><i class="bi bi-bank"></i>Paga</button></li>`).join('')}</ul>` : vuoto('Niente da pagare: le fatture registrate sono saldate.'))}
-        ${box('Da incassare dai clienti', C.length, `<ul class="divide-y divide-[#EEEEEE]">${C.map(f => `<li class="px-4 sm:px-6 py-3 flex flex-wrap items-center gap-3 text-sm"><span class="flex-1 min-w-[180px]"><span class="block font-bold">${esc(cli(f.cli).nome)}</span><span class="block text-xs text-grigio">FT ${f.n}</span></span><span class="num font-bold">${eur2(f.imp - f.pagato)}</span><span class="chip ${f.scad < 0 ? 'c-ko' : 'c-at'}">${f.scad < 0 ? `scaduta da ${gg(-f.scad)}` : `scade tra ${gg(f.scad)}`}</span></li>`).join('')}</ul>`, '<button class="btn btn-gh !py-1 !text-xs" data-a="vai" data-v="incassi">Vai agli incassi</button>')}</div>`; }
-    if (t === 'g1') corpo = `${passaggioG1()}${box('Cosa fa oggi G1, e dove si fa qui', DA_G1.length, `<ul class="divide-y divide-[#EEEEEE]">${DA_G1.map(([c, d, st]) => `<li class="px-4 sm:px-6 py-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm"><span class="flex-1 min-w-[200px]"><span class="block font-bold">${c}</span><span class="block text-xs text-grigio">${d}</span></span><span class="chip ${STATO_G1[st][0]}">${STATO_G1[st][1]}</span></li>`).join('')}</ul><p class="px-4 sm:px-6 py-3 text-xs text-grigio border-t border-linea">Le voci "da verificare" sono le domande per chi oggi fa l'amministrazione in G1.</p>`)}`;
-    if (t === 'conti') corpo = box('Piano dei conti', PIANO.length, `<div class="scroll-x"><table class="tab-t impila min-w-[520px]"><thead><tr><th>Codice</th><th>Conto</th><th class="r">Movimenti di ${MESE}</th></tr></thead><tbody>${PIANO.map(([k, n]) => { const sd = saldoPiano(n); return `<tr><td class="num" data-l="Codice">${k}</td><td class="m-full m-prima font-bold">${n}</td><td class="r num" data-l="Saldo">${sd ? `${eur2(Math.abs(sd))} <span class="text-xs text-grigio">${sd > 0 ? 'dare' : 'avere'}</span>` : '<span class="text-grigio">-</span>'}</td></tr>`; }).join('')}</tbody></table></div><p class="px-4 sm:px-6 py-3 text-xs text-grigio border-t border-linea">Il piano dei conti e i saldi di apertura arrivano dal G1 con il passaggio: qui ci sono i movimenti del mese, il saldo dei conti correnti è in Banca. Gli stipendi restano allo studio paghe e arrivano come una scrittura al mese.</p>`);
+        ${box('Da incassare dai clienti', C.length, `<ul class="divide-y divide-[#EEEEEE]">${C.map(f => `<li class="px-4 sm:px-6 py-3 flex flex-wrap items-center gap-3 text-sm"><span class="flex-1 min-w-[180px]"><span class="block font-bold">${esc(cli(f.cli).nome)}</span><span class="block text-xs text-grigio">FT ${f.n}</span></span><span class="num font-bold">${eur2(resto(f))}</span><span class="chip ${f.scad < 0 ? 'c-ko' : 'c-at'}">${f.scad < 0 ? `scaduta da ${gg(-f.scad)}` : `scade tra ${gg(f.scad)}`}</span></li>`).join('')}${creditiNc()}</ul>`, '<button class="btn btn-gh !py-1 !text-xs" data-a="vai" data-v="incassi">Vai agli incassi</button>')}</div>`; }
+    if (t === 'copertura') corpo = `${avvioDati()}${box('Tutto quello che fa l\'amministrazione, e dove si fa qui', COPERTURA.length, `<ul class="divide-y divide-[#EEEEEE]">${COPERTURA.map(([c, d, st]) => `<li class="px-4 sm:px-6 py-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm"><span class="flex-1 min-w-[200px]"><span class="block font-bold">${c}</span><span class="block text-xs text-grigio">${d}</span></span><span class="chip ${STATO_COP[st][0]}">${STATO_COP[st][1]}</span></li>`).join('')}</ul><p class="px-4 sm:px-6 py-3 text-xs text-grigio border-t border-linea">Le voci "da verificare" sono le domande per chi oggi fa l'amministrazione.</p>`)}`;
+    if (t === 'conti') corpo = box('Piano dei conti', PIANO.length, `<div class="scroll-x"><table class="tab-t impila min-w-[520px]"><thead><tr><th>Codice</th><th>Conto</th><th class="r">Movimenti di ${MESE}</th></tr></thead><tbody>${PIANO.map(([k, n]) => { const sd = saldoPiano(n); return `<tr><td class="num" data-l="Codice">${k}</td><td class="m-full m-prima font-bold">${n}</td><td class="r num" data-l="Saldo">${sd ? `${eur2(Math.abs(sd))} <span class="text-xs text-grigio">${sd > 0 ? 'dare' : 'avere'}</span>` : '<span class="text-grigio">-</span>'}</td></tr>`; }).join('')}</tbody></table></div><p class="px-4 sm:px-6 py-3 text-xs text-grigio border-t border-linea">Il piano dei conti e i saldi di apertura arrivano con l'avvio dei dati: qui ci sono i movimenti del mese, il saldo dei conti correnti è in Banca. Gli stipendi restano allo studio paghe e arrivano come una scrittura al mese.</p>`);
     if (t === 'pacchetto') corpo = `<div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start"><section class="card p-4 sm:p-6"><p class="font-display font-medium text-lg">Pacchetto di ${MESE} per il commercialista</p><p class="text-sm text-grigio mt-1">Prima nota, registri IVA, liquidazione e scadenzario, nel formato che il suo software importa. Bilancio e dichiarativi restano a lui.</p>
-      <ul class="mt-4 space-y-1.5 text-sm">${[['Prima nota', `${primaNota().length} righe`], ['Registro IVA vendite', `${registroVendite().length} documenti`], ['Registro IVA acquisti', `${registroAcquisti().length} documenti`], ['Liquidazione IVA', eur2(L.saldo)], ['Scadenzario', `${daPagare().length} da pagare, ${FATT.filter(f => f.stato !== 'incassata').length} da incassare`]].map(([a, b]) => `<li class="flex justify-between gap-3"><span><i class="bi bi-file-earmark-spreadsheet text-grigio"></i> ${a}</span><span class="num text-grigio">${b}</span></li>`).join('')}</ul>
+      <ul class="mt-4 space-y-1.5 text-sm">${[['Prima nota', `${primaNota().length} righe`], ['Registro IVA vendite', `${registroVendite().length} documenti`], ['Registro IVA acquisti', `${registroAcquisti().length} documenti`], ['Liquidazione IVA', eur2(L.saldo)], ['Scadenzario', `${daPagare().length} da pagare, ${FATT.filter(aperta).length} da incassare`]].map(([a, b]) => `<li class="flex justify-between gap-3"><span><i class="bi bi-file-earmark-spreadsheet text-grigio"></i> ${a}</span><span class="num text-grigio">${b}</span></li>`).join('')}</ul>
       ${PASSIVE.some(p => !p.registrata) ? `<p class="text-sm mt-4 text-ambra"><i class="bi bi-exclamation-triangle"></i> Ci sono fatture dei fornitori ancora da registrare: il pacchetto partirebbe senza.</p>` : ''}
       <div class="flex flex-wrap gap-2 mt-5"><button class="btn btn-pri" data-a="pacchetto"><i class="bi bi-send"></i>${S.pacchetto ? 'Rimanda il pacchetto' : 'Manda al commercialista'}</button><button class="btn btn-sec" data-a="pacchetto-scarica"><i class="bi bi-download"></i>Scarica il file</button></div>
       ${S.pacchetto ? `<p class="text-sm text-ok mt-3"><i class="bi bi-check2-circle"></i> Mandato oggi al commercialista.</p>` : ''}</section>${NORMATIVA}</div>`;
-    return `<div class="flex flex-wrap items-start justify-between gap-3">${testata('Contabilità', 'Quello che oggi fa l\'amministrazione in G1, qui dentro: prima nota, registri IVA, liquidazione, scadenzario. Si scrive da sola da fatture, incassi e pagamenti.')}<div class="flex flex-wrap gap-2 shrink-0 mb-5"><button class="btn btn-pri" data-a="tab" data-v="tabCont|pacchetto"><i class="bi bi-send"></i>Pacchetto per il commercialista</button></div></div>
+    return `<div class="flex flex-wrap items-start justify-between gap-3">${testata('Contabilità', 'Tutto quello che serve all\'amministrazione, qui dentro: prima nota, registri IVA, liquidazione, scadenzario. Si scrive da sola da fatture, incassi e pagamenti.')}<div class="flex flex-wrap items-center gap-2 max-w-full mb-5">${chipNorma()}<button class="btn btn-pri" data-a="tab" data-v="tabCont|pacchetto"><i class="bi bi-send"></i>Pacchetto per il commercialista</button></div></div>
     ${prova('segui i sei passi qui sotto, uno alla volta: è il mese di chi fa l\'amministrazione, dalla fattura al commercialista.')}
     <section class="card p-4 sm:p-5 mb-5"><div class="flex flex-wrap items-center gap-2"><p class="font-bold">Il mese dell'amministrazione</p><span class="text-xs text-grigio">${fatti} di 6 fatti</span><div class="barra flex-1 min-w-[120px] max-w-[260px] ml-auto"><span style="width:${Math.round(fatti / 6 * 100)}%"></span></div></div>
       <ol class="grid sm:grid-cols-2 xl:grid-cols-3 gap-2 mt-3">${passi.map(([t, ok, dove], i) => `<li><button class="w-full text-left rounded border ${ok ? 'border-linea bg-carta' : 'border-[#BDBDBD] bg-white hover:border-grafite'} px-3 py-2.5 text-sm flex items-start gap-2.5 transition-colors" data-a="passo" data-v="${dove}"><span class="w-6 h-6 rounded-full flex-none flex items-center justify-center text-xs font-bold ${ok ? 'bg-ok text-white' : 'bg-[#EDEDED] text-inchiostro'}">${ok ? '<i class="bi bi-check2"></i>' : i + 1}</span><span class="${ok ? 'text-grigio line-through decoration-[#BDBDBD]' : ''}">${t}</span></button></li>`).join('')}</ol></section>
     <div class="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-5 scaglione">${kpi(`Fatturato di ${MESE}`, eur(sum(registroVendite(), r => r.imp)), 'imponibile dal registro vendite')}${kpi('IVA del mese', eur(L.saldo), `da versare entro il ${L.scad}`)}${kpi('Da pagare ai fornitori', eur(sum(daPagare(), p => p.tot)), `${daPagare().length} fatture registrate`)}${kpi('In banca', eur(sum(CONTI, c => saldoConto(c.id))), `${CONTI.length} conti`)}</div>
-    ${tabs('tabCont', [['prima', 'Prima nota'], ['registri', 'Registri IVA'], ['iva', 'Liquidazione IVA'], ['scad', 'Scadenzario', daPagare().filter(p => p.scad <= 7).length], ['conti', 'Piano dei conti'], ['pacchetto', 'Pacchetto'], ['g1', 'Da G1 a qui']])}
+    ${tabs('tabCont', [['prima', 'Prima nota'], ['registri', 'Registri IVA'], ['iva', 'Liquidazione IVA'], ['scad', 'Scadenzario', daPagare().filter(p => p.scad <= 7).length], ['conti', 'Piano dei conti'], ['pacchetto', 'Pacchetto'], ['copertura', 'Cosa c\'è dentro']])}
     ${corpo}`;
   },
 
   fatture() {
     const t = S.tabFatt, chiusi = ORDINI.filter(o => o.stato === 'chiuso'), daReg = PASSIVE.filter(p => !p.registrata);
     let corpo = '';
-    if (t === 'emesse') { const righe = [...SCARTI.map(x => ({ ...x, sdi: 'scartata', scarto: true })), ...[...FATT, ...CHIUSE].sort((a, b) => b.n - a.n)];
+    if (t === 'emesse') { const righe = [...SCARTI.map(x => ({ ...x, sdi: 'scartata', scarto: true })), ...[...FATT, ...CHIUSE].sort((a, b) => ncRichiesta(b) - ncRichiesta(a) || b.n - a.n)];
       corpo = `${chiusi.length ? `<section class="card mb-5"><div class="px-4 sm:px-6 py-3.5 border-b border-linea"><p class="font-bold">Lavori chiusi da fatturare <span class="num text-xs text-grigio font-normal">${chiusi.length}</span></p></div><ul class="divide-y divide-[#EEEEEE]">${chiusi.map(o => `<li class="px-4 sm:px-6 py-3 flex flex-wrap items-center gap-3 text-sm ${o.nuovo ? 'lampo' : ''}"><span class="flex-1 min-w-[200px]"><span class="block font-bold">${esc(cli(o.cli).nome)}</span><span class="block text-xs text-grigio">${srv(o.serv).nome} · chiuso da ${o.tec}, ${oreN(o.ore)}</span></span><span class="num font-bold">${eur(o.prezzo)} <span class="text-xs text-grigio font-normal">più IVA</span></span><button class="btn btn-pri !py-1.5" data-a="fattura" data-v="${o.id}"><i class="bi bi-send"></i>Emetti fattura elettronica</button></li>`).join('')}</ul></section>` : ''}
       <div class="flex flex-wrap items-center justify-between gap-2 mb-3"><p class="text-sm text-grigio"><i class="bi bi-send-check"></i> Partono allo SdI tramite intermediario accreditato e si conservano a norma per 10 anni.</p><button class="btn btn-sec" data-a="reg-fattura" data-v=""><i class="bi bi-plus-lg"></i>Nuova fattura</button></div>
       <div class="card scroll-x"><table class="tab-t impila larga min-w-[900px]"><thead><tr><th>Fattura</th><th>Cliente</th><th class="r">Imponibile</th><th class="r">Totale</th><th>Stato SdI</th><th></th></tr></thead><tbody>
-      ${righe.map(f => `<tr class="${f.nuovo || f.agg ? 'lampo' : ''}"><td class="num" data-l="Fattura">FT ${f.n}<p class="text-xs text-grigio">${dataG(f.em)}</p></td><td class="font-bold m-full m-prima">${linkCli(f.cli)}${f.scarto ? `<p class="text-xs text-ambra font-normal mt-0.5"><i class="bi bi-exclamation-triangle"></i> ${f.motivo}</p>` : ''}</td><td class="r num" data-l="Imponibile">${eur2(impon(f))}</td><td class="r num" data-l="Totale">${eur2(f.imp)}</td><td class="m-dx">${chipSdi(f.sdi)}</td>
-        <td class="r m-full" style="white-space:nowrap">${f.scarto ? `<button class="btn btn-pri !py-1.5" data-a="correggi" data-v="${f.n}">Correggi e rinvia</button>` : ''}<button class="btn !py-1.5 !px-2 !font-normal text-grigio hover:bg-[#EDEDED] hover:text-inchiostro" data-a="vedi-ft" data-v="${f.n}"><i class="bi bi-eye"></i>Apri</button></td></tr>`).join('')}</tbody></table></div>`; }
+      ${[...NOTE].reverse().map(x => `<tr class="${x.nuovo || x.agg ? 'lampo' : ''}"><td class="num" data-l="Documento">NC ${x.n}<p class="text-xs text-grigio">${dataG(x.em)}</p></td><td class="font-bold m-full m-prima">${linkCli(x.cli)}<p class="text-xs text-grigio font-normal mt-0.5">Nota di credito sulla FT ${x.ncDi}: ${esc(minuscola(x.motivo))}</p></td><td class="r num" data-l="Imponibile">−${eur2(x.netto)}</td><td class="r num" data-l="Totale">−${eur2(x.imp)}</td><td class="m-dx">${chipSdi(x.sdi)}</td><td class="r m-full" style="white-space:nowrap"><button class="btn !py-1.5 !px-2 !font-normal text-grigio hover:bg-[#EDEDED] hover:text-inchiostro" data-a="vedi-nc" data-v="${x.n}"><i class="bi bi-eye"></i>Apri</button></td></tr>`).join('')}
+      ${righe.map(f => `<tr class="${f.nuovo || f.agg ? 'lampo' : ''}"><td class="num" data-l="Fattura">FT ${f.n}<p class="text-xs text-grigio">${dataG(f.em)}</p></td><td class="font-bold m-full m-prima">${linkCli(f.cli)}${f.scarto ? `<p class="text-xs text-ambra font-normal mt-0.5"><i class="bi bi-exclamation-triangle"></i> ${f.motivo}</p>` : ''}${ncRichiesta(f) ? `<p class="text-xs text-ambra font-normal mt-0.5"><i class="bi bi-envelope"></i> ${NC_RICH.nota}</p>` : ''}${ncDi(f.n).length ? `<p class="text-xs text-grigio font-normal mt-0.5">Stornata per ${eur2(sum(ncDi(f.n), x => x.imp))} con ${ncDi(f.n).map(x => `NC ${x.n}`).join(', ')}</p>` : ''}</td><td class="r num" data-l="Imponibile">${eur2(impon(f))}</td><td class="r num" data-l="Totale">${eur2(f.imp)}</td><td class="m-dx">${chipSdi(f.sdi)}</td>
+        <td class="r m-full" style="white-space:nowrap">${f.scarto ? `<button class="btn btn-pri !py-1.5" data-a="correggi" data-v="${f.n}">Correggi e rinvia</button>` : ''}${ncRichiesta(f) ? `<button class="btn btn-pri !py-1.5" data-a="nota-credito" data-v="${f.n}"><i class="bi bi-arrow-counterclockwise"></i>Nota di credito</button>` : ''}<button class="btn !py-1.5 !px-2 !font-normal text-grigio hover:bg-[#EDEDED] hover:text-inchiostro" data-a="vedi-ft" data-v="${f.n}"><i class="bi bi-eye"></i>Apri</button></td></tr>`).join('')}</tbody></table></div>`; }
     else corpo = `<div class="flex flex-wrap items-center justify-between gap-2 mb-3"><p class="text-sm text-grigio"><i class="bi bi-inbox"></i> Arrivano dallo SdI e si abbinano da sole all'ordine fornitore: nessuno le scarica più dalla PEC.</p>${daReg.length > 1 ? `<button class="btn btn-sec" data-a="registra-tutte"><i class="bi bi-check2-all"></i>Registra le ${daReg.length}</button>` : ''}</div>
       <div class="card scroll-x"><table class="tab-t impila larga min-w-[940px]"><thead><tr><th>Fornitore</th><th>Fattura</th><th>Abbinata all'ordine</th><th class="r">Imponibile</th><th class="r">IVA</th><th>Stato</th><th></th></tr></thead><tbody>
       ${[...PASSIVE].sort((a, b) => (a.registrata - b.registrata) || a.g - b.g).map(p => `<tr class="${p.agg ? 'lampo' : ''}"><td class="font-bold m-full m-prima">${esc(p.forn)}</td><td class="num" data-l="Fattura">${p.num}<p class="text-xs text-grigio">${dataG(-p.g)}</p></td><td class="m-full" data-l="Ordine">${esc(p.cosa)}${p.cli ? ` · <span class="text-grigio">${esc(cli(p.cli).nome)}</span>` : ''}</td><td class="r num" data-l="Imponibile">${eur2(p.imp)}</td><td class="r num" data-l="IVA">${p.esente ? '<span class="text-xs text-grigio">esente art. 10</span>' : eur2(p.imp * IVA)}</td>
         <td class="m-dx"><span class="chip ${!p.registrata ? 'c-ko' : p.pagata ? 'c-ok' : 'c-at'}">${!p.registrata ? 'Da registrare' : p.pagata ? 'Pagata' : 'Registrata'}</span></td><td class="r m-full">${!p.registrata ? `<button class="btn btn-pri !py-1.5" data-a="reg-passiva" data-v="${p.id}">Registra</button>` : ''}</td></tr>`).join('')}</tbody></table></div>
       <p class="text-xs text-grigio mt-3">Registrare una fattura scrive la prima nota (costo, IVA a credito, debito verso il fornitore) e la mette nello scadenzario dei pagamenti.</p>`;
-    return `${testata('Fatture', 'Le fatture elettroniche che emettete e quelle che vi arrivano, con lo stato dello SdI. Senza Zucchetti e senza ribattere niente.')}
-    ${prova(t === 'emesse' ? (chiusi.length ? 'premi <strong>Emetti fattura elettronica</strong> e guarda lo stato passare da Inviata a Consegnata. Poi correggi la <strong>FT 430</strong> scartata.' : 'apri la <strong>FT 430</strong> scartata dallo SdI e premi <strong>Correggi e rinvia</strong>.') : 'registra la fattura del <strong>Laboratorio Analisi Padano</strong>: è già abbinata all\'ordine delle analisi di Trafilerie Adda.')}
-    ${tabs('tabFatt', [['emesse', 'Emesse', SCARTI.length + chiusi.length], ['ricevute', 'Ricevute', daReg.length]])}
+    return `${testata('Fatture', 'Le fatture elettroniche che emettete e quelle che vi arrivano, con lo stato dello SdI. Senza ribattere niente.')}
+    ${prova(t === 'emesse' ? [chiusi.length ? 'premi <strong>Emetti fattura elettronica</strong> e guarda lo stato passare da Inviata a Consegnata.' : '', SCARTI.length ? 'correggi la <strong>FT 430</strong> scartata dallo SdI con <strong>Correggi e rinvia</strong>.' : '', !ncDi(NC_RICH.ft).length ? `${esc(cli(ftDi(NC_RICH.ft).cli).nome)} ha annullato un corso già pagato: sulla <strong>FT ${NC_RICH.ft}</strong>, in cima, premi <strong>Nota di credito</strong>. Fatturato, registro IVA e prima nota si correggono da soli.` : 'apri la nota di credito appena fatta: va allo SdI come una fattura e richiama la fattura che storna.'].filter(Boolean).map((x, i) => i ? cap(x) : x).join(' ') :'registra la fattura del <strong>Laboratorio Analisi Padano</strong>: è già abbinata all\'ordine delle analisi di Trafilerie Adda.')}
+    ${tabs('tabFatt', [['emesse', 'Emesse', SCARTI.length + chiusi.length + (ncDi(NC_RICH.ft).length ? 0 : 1)], ['ricevute', 'Ricevute', daReg.length]])}
     ${corpo}`;
   },
 
@@ -1725,6 +1918,7 @@ Object.assign(VISTE, {
   sicurezza() {
     const blocco = (ic, t, righe) => `<section class="card p-4 sm:p-6"><p class="font-display font-medium text-lg flex items-center gap-2"><i class="bi ${ic} text-grigio"></i>${t}</p><ul class="mt-3 space-y-2 text-sm">${righe.map(r => `<li class="flex gap-2"><i class="bi bi-check2 text-ok mt-0.5"></i><span>${r}</span></li>`).join('')}</ul></section>`;
     return `${testata('Sicurezza e conformità', 'Dove stanno i dati, chi vede cosa, e come fatture e conti restano in regola con l\'Agenzia delle Entrate.')}
+    ${prova('leggi i quattro riquadri: dove stanno i dati, chi vede cosa, come restano in regola fatture e conti. In fondo, chi tiene aggiornata la normativa.')}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
       ${blocco('bi-people', 'Dati dei clienti (GDPR)', ['Progesi è titolare dei dati dei suoi clienti. Altalogik è responsabile del trattamento, con la nomina scritta.', 'Dati su server nell\'Unione europea, con copie di sicurezza ogni giorno.', 'Nessun dato sanitario dei lavoratori: della medicina del lavoro restano solo i contratti.'])}
       ${blocco('bi-shield-lock', 'Sicurezza', [`Accessi per ruolo: ${Object.values(RUOLI).join(', ').toLowerCase()}. Il tecnico non vede prezzi e margini.`, 'Accesso con password e secondo fattore. Il registro delle operazioni dice chi ha fatto cosa e quando.', 'Gli agenti AI propongono: niente esce verso clienti, SdI o banca senza un ok.'])}
@@ -1748,6 +1942,17 @@ Object.assign(AZ_, {
   },
   'vedi-ft': v => { const f = ftDi(v); apriModale(`Fattura FT ${f.n}`, anteprimaFattura(f, SCARTI.includes(f)), true); },
   xml: v => { const f = ftDi(v); scaricaTesto(`IT_FT${f.n}.xml`, xmlFattura(f), 'application/xml'); toast(`Scaricato l'XML FatturaPA della FT ${f.n}.`); },
+  'vedi-nc': v => { const x = NOTE.find(y => y.n == v); apriModale(`Nota di credito NC ${x.n}`, anteprimaNota(x), true); },
+  'xml-nc': v => { const x = NOTE.find(y => y.n == v); scaricaTesto(`IT_NC${x.n}.xml`, xmlFattura(x), 'application/xml'); toast(`Scaricato l'XML della NC ${x.n}: tipo documento TD04, collegato alla FT ${x.ncDi}.`); },
+  'nota-credito': v => { const f = ftDi(v), c = cli(f.cli), max = maxNc(f), r = ncRichiesta(f) ? NC_RICH : null, gia = sum(ncDi(f.n), x => x.netto);
+    apriModale(`Nota di credito sulla FT ${f.n}`, `<form data-form="nc" class="px-5 sm:px-6 py-5 space-y-4"><input type="hidden" name="ft" value="${f.n}">
+      <p class="text-sm"><strong>${esc(c.nome)}</strong> · FT ${f.n} del ${giorno(f.em).toLocaleDateString('it-IT')} · imponibile ${eur2(impon(f))}${gia ? `, già stornati ${eur2(gia)}` : ''}</p>
+      ${r ? `<p class="text-sm rounded bg-carta px-3 py-2"><i class="bi bi-envelope"></i> ${r.nota}</p>` : ''}
+      ${campo('Imponibile da stornare (€)', `<input name="netto" type="number" min="0.01" max="${max}" step="0.01" required class="campo w-full num" value="${r ? Math.min(r.netto, max) : max}">`, `Tutta la fattura: ${eur2(max)}. L'IVA al 22% si toglie da sola.`)}
+      ${campo('Motivo', `<select name="motivo" class="campo w-full">${MOTIVI_NC.map(m => `<option ${r && r.motivo === m ? 'selected' : ''}>${m}</option>`).join('')}</select>`, 'Finisce nella nota di credito: il cliente lo legge.')}
+      ${f.stato === 'incassata' ? campo('Il cliente ha già pagato: come gli restituite la differenza?', `<select name="chiusura" class="campo w-full"><option value="scala">La scalate dalla prossima fattura</option><option value="rimborso">Rimborso con bonifico</option></select>`) : `<input type="hidden" name="chiusura" value="residuo"><p class="text-sm text-grigio">La fattura non è ancora pagata: il cliente pagherà solo la differenza.</p>`}
+      <p class="text-xs text-grigio">Parte allo SdI come la fattura. Fatturato del mese, registro IVA, liquidazione e prima nota si correggono da soli.</p>
+      ${piedeForm('<i class="bi bi-send"></i>Invia allo SdI')}</form>`); },
   correggi: v => { const f = SCARTI.find(x => x.n == v), c = cli(f.cli); apriModale(`Correggi la FT ${f.n}`, `<form data-form="rinvia" class="px-5 sm:px-6 py-5 space-y-4"><input type="hidden" name="n" value="${f.n}"><p class="text-sm"><strong>${esc(c.nome)}</strong> · ${eur2(f.imp)}</p><p class="text-sm text-ambra"><i class="bi bi-exclamation-triangle"></i> ${f.motivo}</p>
     ${campo('Partita IVA del cliente', `<input name="piva" required pattern="[0-9]{11}" title="11 cifre" class="campo w-full num" value="${c.piva}">`, `Indicata in fattura: ${f.pivaErrata}. Questa è quella della scheda cliente.`)}${piedeForm('Rinvia allo SdI')}</form>`); },
   'reg-passiva': v => { spegni(); const p = PASSIVE.find(x => x.id == v); p.registrata = true; p.agg = true; SALA.racconta('forn', `Ha registrato la fattura ${p.num} di ${p.forn}: ${eur2(p.imp)}.`); toast(`Fattura ${p.num} di ${p.forn} registrata: costo ${eur2(p.imp)}${p.esente ? ', esente IVA' : `, IVA a credito ${eur2(p.imp * IVA)}`}. È nello scadenzario.`); render(); },
@@ -1763,9 +1968,17 @@ Object.assign(AZ_, {
     setTimeout(() => { const f = FATT.find(x => x.n === 431); if (!f || f.stato === 'incassata') return; f.mov = { causale: 'BONIFICO AUTOTRASPORTI DOSSENA FT 431', imp: f.imp, tipo: 'auto' }; f.stato = 'incassata'; f.pagato = f.imp; f.agg = true;
       MOVBANCA.unshift({ g: 0, conto: 'cp', desc: 'Bonifico Autotrasporti Dossena, FT 431', imp: f.imp, fonte: 'banca', nuovo: true }); SALA.racconta('inc', `Dalla banca è arrivato il bonifico di Autotrasporti Dossena: abbinato da solo alla FT 431.`, true);
       toast('Dalla banca: bonifico di Autotrasporti Dossena, 1.464,00 €. Abbinato da solo alla FT 431.'); if (S.modo === 'sala' || ['banca', 'incassi', 'contabilita', 'fatture'].includes(S.view)) render(); else renderNav(); }, 1800); },
-  'passo-g1': () => { S.migr = Math.min(5, S.migr + 1); toast(S.migr === 5 ? 'Passaggio completato: G1 resta consultabile in sola lettura fino alla chiusura dell\'anno.' : `Passo ${S.migr} fatto.`); render(); },
+  'passo-avvio': () => { S.migr = Math.min(5, S.migr + 1); toast(S.migr === 5 ? 'Avvio completato: i vecchi archivi restano consultabili in sola lettura fino alla chiusura dell\'anno.' : `Passo ${S.migr} fatto.`); render(); },
 });
 Object.assign(FORM, {
+  nc: d => { spegni(); const f = ftDi(d.ft), c = cli(f.cli), netto = Math.min(Math.round(+d.netto * 100) / 100, maxNc(f)); if (!(netto > 0)) return toast('Niente da stornare su questa fattura.');
+    const imp = Math.round(netto * (1 + IVA) * 100) / 100, x = { n: S.prossimaNc++, ncDi: f.n, cli: f.cli, netto, imp, em: 0, motivo: d.motivo || MOTIVI_NC[0], chiusura: d.chiusura || (f.stato === 'incassata' ? 'scala' : 'residuo'), sdi: 'inviata', nuovo: true };
+    NOTE.push(x); S.mese.fatt -= netto;
+    if (x.chiusura === 'residuo') { f.nc = Math.round(((f.nc || 0) + imp) * 100) / 100; if (resto(f) <= 0.005) f.stato = 'stornata'; }
+    if (x.chiusura === 'rimborso') MOVBANCA.unshift({ g: 0, conto: 'cp', desc: `Rimborso a ${c.nome}, NC ${x.n}`, imp: -imp, fonte: 'pagamento', contro: 'Crediti verso clienti', nuovo: true });
+    SALA.racconta('fatt', `Ha mandato allo SdI la nota di credito NC ${x.n} per ${c.nome}: storna ${eur2(netto)} più IVA dalla FT ${f.n}.`);
+    setTimeout(() => { x.sdi = 'consegnata'; x.agg = true; toast(`NC ${x.n} consegnata a ${c.nome}: lo SdI ha confermato.`); if (S.modo === 'sala' || ['fatture', 'contabilita', 'incassi'].includes(S.view)) render(); else renderNav(); }, 2600);
+    chiudiModale(); toast(`NC ${x.n} inviata allo SdI: storna ${eur2(netto)} più IVA dalla FT ${f.n}. Fatturato, registro IVA e prima nota già corretti.`); render(); },
   rinvia: d => { const i = SCARTI.findIndex(x => x.n == d.n), f = SCARTI[i], c = cli(f.cli); c.piva = pulisci(d.piva); SCARTI.splice(i, 1);
     emettiFattura({ n: f.n, cli: f.cli, imp: f.imp, scad: 30 + f.em, stato: 'aperta', pagato: 0, nuovo: true, sdi: 'inviata', em: f.em, desc: f.desc, nuova: true }, c.nome); S.mese.fatt += impon(f);
     SALA.racconta('fatt', `Ha corretto la partita IVA di ${c.nome} e rinviato la FT ${f.n} allo SdI.`); chiudiModale(); toast(`FT ${f.n} rinviata allo SdI con la partita IVA corretta.`); render(); },
@@ -1807,7 +2020,11 @@ const SALA = (() => {
   const REP_RUOLO = { dir: null, rt: ['oper', 'rh'], amm: ['cont', 'rh'] };
   const mioReparto = a => { const r = REP_RUOLO[S.ruolo]; return !r || !a.rep || r.includes(a.rep); };
   const unita = (a, n) => a.unita[n === 1 ? 0 : 1];
-  const st = { sel: null, aperta: null, pausa: false, feed: [], fumetti: {}, attivi: {}, passo: 0, chat: {}, az: { coord: 9, prev: 3, rich: 2, rinn: 12, fatt: 5, inc: 11, forn: 6, pian: 7, scad: 5, doc: 14, ore: 2 }, avviata: false };
+  // da guardare: prezzi, soldi verso i clienti, messaggi ai clienti. Tutto il resto è di routine e si approva insieme
+  const GUARDARE = /^(prev-|rinn-|nc-|inc-dub|inc-acc|inc-sol)/;
+  const peso = d => GUARDARE.test(d.id) ? 'guardare' : 'routine';
+  const nPerVoi = a => decisioni().filter(d => d.ag === a.id).length;
+  const st = { sel: null, stanza: null, rinviate: [], zoomDa: 'none', aperta: null, pausa: false, feed: [], fumetti: {}, attivi: {}, passo: 0, chat: {}, az: { coord: 9, prev: 3, rich: 2, rinn: 12, fatt: 5, inc: 11, forn: 6, pian: 7, scad: 5, doc: 14, ore: 2 }, avviata: false };
 
   /* ---------- decisioni, calcolate dallo stato del gestionale ---------- */
   const minus = t => t.charAt(0).toLowerCase() + t.slice(1);
@@ -1854,6 +2071,9 @@ const SALA = (() => {
       scelte: [['Sì, fattura', () => AZ_.fattura(o.id), `Ha emesso la fattura elettronica per ${cli(o.cli).nome}, ${eur(o.prezzo)} più IVA, e l'ha mandata allo SdI.`]] }));
     // Fatturatore: fatture scartate dallo SdI
     SCARTI.forEach(f => { const c = cli(f.cli); l.push({ id: 'scarto-' + f.n, ag: 'fatt', titolo: `FT ${f.n} scartata dallo SdI: correggo la partita IVA di ${c.nome} e la rinvio?`, testo: `${f.motivo} In fattura c'era ${f.pivaErrata}, nella scheda cliente ${c.piva}.`, scelte: [['Sì, correggi e rinvia', () => FORM.rinvia({ n: f.n, piva: c.piva }), `Ha corretto la partita IVA di ${c.nome} e rinviato la FT ${f.n}.`]] }); });
+    // Fatturatore: la nota di credito chiesta dal cliente
+    if (!ncDi(NC_RICH.ft).length) { const f = ftDi(NC_RICH.ft), c = cli(f.cli); l.push({ id: 'nc-' + f.n, ag: 'fatt', titolo: `${c.nome}: preparo la nota di credito di ${eur(NC_RICH.netto)} sulla FT ${f.n}?`, testo: `${NC_RICH.nota} La FT ${f.n} è già pagata: la nota si scala dalla prossima fattura.`,
+      scelte: [['Sì, prepara e invia', () => FORM.nc({ ft: f.n, netto: NC_RICH.netto, motivo: NC_RICH.motivo, chiusura: 'scala' }), `Ha mandato allo SdI la nota di credito per ${c.nome}, ${eur(NC_RICH.netto)} più IVA.`]] }); }
     // Fornitori: fatture arrivate dallo SdI da registrare
     PASSIVE.filter(x => !x.registrata).slice(0, 2).forEach(x => l.push({ id: 'pass-' + x.id, ag: 'forn', titolo: `${x.forn}: registro la fattura ${x.num} di ${eur2(x.imp)}?`, testo: `Arrivata dallo SdI ${fa(x.g)}. Corrisponde all'ordine "${x.cosa}"${x.cli ? ` per ${cli(x.cli).nome}` : ''}, stesso importo.${x.esente ? ' Visite mediche: esente IVA, art. 10.' : ''}`,
       scelte: [['Sì, registra', () => AZ_['reg-passiva'](x.id), `Ha registrato la fattura ${x.num} di ${x.forn}.`]] }));
@@ -1969,7 +2189,7 @@ const SALA = (() => {
     const [ox, oy] = P(BX0 - 0.9, 0, 4.2);
     s += `<circle cx="${f1(ox)}" cy="${f1(oy)}" r="13" fill="#FFFFFF" stroke="#CFC6BA" stroke-width="2"/><line id="lancetta-h" x1="${f1(ox)}" y1="${f1(oy)}" x2="${f1(ox)}" y2="${f1(oy - 6)}" stroke="#303030" stroke-width="2" stroke-linecap="round"/><line id="lancetta-m" x1="${f1(ox)}" y1="${f1(oy)}" x2="${f1(ox)}" y2="${f1(oy - 9.5)}" stroke="#303030" stroke-width="1.3" stroke-linecap="round"/>`;
     ZONE.forEach(z => { s += poly([P(z.x0, z.y0), P(z.x1, z.y0), P(z.x1, z.y1), P(z.x0, z.y1)], rgba(z.r.colore, 0.08), `stroke="${rgba(z.r.colore, 0.22)}" stroke-width="1"`);
-      s += `<text transform="${suPavimento(z.x0 + 0.2, z.y1 + 0.7)}" font-size="0.34" letter-spacing="0.05" fill="${shade(z.r.colore, -.05)}" opacity="0.8" font-family="Ubuntu" font-weight="500">${z.r.nome.toUpperCase()}</text>`; });
+    });
     s += poly([P(5.6, 0.15), P(10.6, 0.15), P(10.6, 4.2), P(5.6, 4.2)], '#F1E7D6') + `<text transform="${suPavimento(5.8, 4.0)}" font-size="0.3" letter-spacing="0.06" fill="#8E7F70" font-family="Ubuntu" font-weight="500">REGIA</text>`;
     const g = 'fill="rgba(196,219,228,0.28)" stroke="rgba(110,135,148,0.55)" stroke-width="1.2"', gh = 2.7;
     add(5.7, `<polygon points="${pts([P(5.6, 0.15), P(5.6, 4.2), P(5.6, 4.2, gh), P(5.6, 0.15, gh)])}" ${g}/>`);
@@ -1989,21 +2209,42 @@ const SALA = (() => {
 
   /* ---------- pezzi dell'interfaccia ---------- */
   const quando = t => { const m = Math.round((Date.now() - t) / 60000); return m < 1 ? 'adesso' : m === 1 ? '1 minuto fa' : m < 60 ? `${m} minuti fa` : m < 24 * 60 ? `${Math.floor(m / 60)} h fa` : 'ieri'; };
+  const fuocoRep = () => st.stanza || (st.sel && ag(st.sel).rep) || null;
+  const puntoDi = a => (a === COORD ? decisioni().length : nPerVoi(a)) ? '#B45309' : col(a);
+  const classiBadge = a => { const f = fuocoRep(); return { attivo: !!st.attivi[a.id], sel: st.sel === a.id, spento: a !== COORD && !mioReparto(a), fuori: !!f && a !== COORD && a.rep !== f }; };
   function badges() {
-    const n = decisioni().length;
-    return AG.map(a => { const [px, py] = P(a.x, a.y + 0.25, 2.05), f = st.fumetti[a.id], coord = a === COORD, punto = coord && n ? '#B45309' : col(a);
-      return `<div class="badge-ag ${st.attivi[a.id] ? 'attivo' : ''} ${st.sel === a.id ? 'sel' : ''}" data-ag="${a.id}" style="left:${(px / VBW * 100).toFixed(2)}%;top:${(py / VBH * 100).toFixed(2)}%"><div class="slot-f">${f ? `<div class="fumetto">${f}</div>` : ''}</div><button class="nome" data-a="sala-ag" data-v="${a.id}" aria-label="${a.nome}"><span class="punto" style="background:${punto};color:${punto}"></span><span class="testo">${testoBadge(a, n)}</span></button></div>`; }).join('');
+    return AG.map(a => { const [px, py] = P(a.x, a.y + 0.25, 2.05), f = st.fumetti[a.id], c = classiBadge(a), punto = puntoDi(a);
+      return `<div class="badge-ag ${Object.keys(c).filter(k => c[k]).join(' ')}" data-ag="${a.id}" style="left:${(px / VBW * 100).toFixed(2)}%;top:${(py / VBH * 100).toFixed(2)}%"><div class="slot-f">${f ? `<div class="fumetto">${f}</div>` : ''}</div><button class="nome" data-a="sala-ag" data-v="${a.id}" aria-label="${a.nome}"><span class="punto" style="background:${punto};color:${punto}"></span><span class="testo">${testoBadge(a)}</span></button></div>`; }).join('');
   }
-  const testoBadge = (a, n) => `${a.nome}${a === COORD ? ` <span class="font-normal text-grigio">· ${n ? `aspetta voi (${n})` : 'tutto deciso'}</span>` : ''}`;
+  const testoBadge = a => { if (a === COORD) { const n = decisioni().length; return `${a.nome} <span class="font-normal text-grigio">· ${n ? `aspetta voi (${n})` : 'tutto deciso'}</span>`; } const k = nPerVoi(a); return `${a.nome}${k ? `<span class="conta" title="${k} per voi">${k}</span>` : ''}`; };
   function aggiornaBadges() {
     const box = $('#badges'); if (!box) return;
     if (box.children.length !== AG.length) { box.innerHTML = badges(); return; }
-    const n = decisioni().length;
     AG.forEach(a => { const el = box.querySelector(`[data-ag="${a.id}"]`); if (!el) return;
-      el.classList.toggle('attivo', !!st.attivi[a.id]); el.classList.toggle('sel', st.sel === a.id);
+      const c = classiBadge(a); Object.keys(c).forEach(k => el.classList.toggle(k, c[k]));
       const f = st.fumetti[a.id], slot = el.querySelector('.slot-f'), html = f ? `<div class="fumetto">${f}</div>` : '';
       if (slot.innerHTML !== html) slot.innerHTML = html;
-      if (a === COORD) { const t = el.querySelector('.testo'), h = testoBadge(a, n); if (t.innerHTML !== h) t.innerHTML = h; el.querySelector('.punto').style.background = n ? '#B45309' : col(a); } });
+      const t = el.querySelector('.testo'), h = testoBadge(a); if (t.innerHTML !== h) t.innerHTML = h; el.querySelector('.punto').style.background = puntoDi(a); });
+  }
+  // le stanze: etichetta sul pavimento, cliccabile, con quante decisioni aspettano voi
+  function stanze() {
+    return ZONE.map(z => { const [px, py] = P((z.x0 + z.x1) / 2, z.y1 + 0.8, 0), n = sum(AG.filter(a => a.rep === z.r.id), nPerVoi), mio = mioReparto({ rep: z.r.id });
+      return `<button class="stanza ${fuocoRep() === z.r.id ? 'sel' : ''} ${mio ? '' : 'spenta'}" data-a="sala-stanza" data-v="${z.r.id}" style="left:${(px / VBW * 100).toFixed(2)}%;top:${(py / VBH * 100).toFixed(2)}%" aria-label="Stanza ${z.r.nome}${n ? `, ${n} per voi` : ''}"><span class="w-2 h-2 rounded-full" style="background:${z.r.colore}"></span>${z.r.nome}${n ? `<span class="per-voi">· ${n} per voi</span>` : ''}</button>`; }).join('');
+  }
+  // fuoco: la stanza scelta va al centro della scena, ingrandita
+  function zoomTarget() {
+    const f = fuocoRep(), z = f && ZONE.find(x => x.r.id === f); if (!z) return 'none';
+    const [cx, cy] = P((z.x0 + z.x1) / 2, (z.y0 + z.y1) / 2, 1), k = 1.55, px = cx / VBW * 100, py = cy / VBH * 100;
+    return `translate(${(-k * (px - 50)).toFixed(2)}%, ${(-k * (py - 50)).toFixed(2)}%) scale(${k})`;
+  }
+  function zooma() { const t = zoomTarget(), e = document.getElementById('scena'); if (e && e.style.transform !== t) e.style.transform = t; st.zoomDa = t; }
+  // le decisioni in ordine: prima quelle da guardare, quelle rimandate in fondo
+  const ordinate = () => decisioni().map((d, i) => ({ d, i })).sort((x, y) => (st.rinviate.indexOf(x.d.id) + 1 || 0) - (st.rinviate.indexOf(y.d.id) + 1 || 0) || (peso(x.d) === 'guardare' ? 0 : 1) - (peso(y.d) === 'guardare' ? 0 : 1) || x.i - y.i).map(x => x.d);
+  const chipPeso = d => peso(d) === 'guardare' ? '<span class="chip c-at !text-[11px]">da guardare</span>' : '<span class="chip c-bl !text-[11px]">di routine</span>';
+  // il nastro: le ultime cose fatte, ognuna porta dove si vede nel gestionale
+  function nastroHtml() {
+    return st.feed.slice(-4).reverse().map(f => { const a = ag(f.ag), v = vistaAg(a), ok = vede(v.split(':')[0]);
+      return `<li><button class="w-full h-full text-left rounded border border-linea bg-white hover:border-grafite px-3 py-2 text-sm transition-colors ${f.nuovo ? 'lampo' : ''}" ${ok ? `data-a="sala-vai" data-v="${v}"` : `data-a="sala-ag" data-v="${a.id}"`}><span class="flex items-center gap-1.5 text-xs text-grigio"><span class="w-1.5 h-1.5 rounded-full flex-none" style="background:${col(a)}"></span>${a.nome} · ${quando(f.t)}</span><span class="block mt-0.5 leading-snug">${f.txt}</span></button></li>`; }).join('') || '<li class="text-sm text-grigio">Ancora niente oggi.</li>';
   }
   function feedHtml() {
     const l = st.sel ? st.feed.filter(f => f.ag === st.sel).slice(-6).reverse() : st.feed.slice(-8).reverse();
@@ -2012,20 +2253,36 @@ const SALA = (() => {
   function cardDecisione(d) {
     const a = ag(d.ag), aperta = st.aperta === d.id;
     return `<div class="rounded border ${aperta ? 'border-[#BDBDBD] bg-carta' : 'border-linea bg-white'}">
-      <button class="w-full text-left px-3.5 pt-3 ${aperta ? 'pb-1' : 'pb-3'} flex gap-2" data-a="sala-apri" data-v="${d.id}"><span class="flex-1"><span class="flex items-center gap-1.5 text-xs text-grigio"><span class="w-1.5 h-1.5 rounded-full" style="background:${col(a)}"></span>${a.nome}${a.rep ? ` · ${rep(a.rep).nome}` : ''}</span><span class="block text-sm font-bold leading-snug mt-0.5">${d.titolo}</span></span><i class="bi bi-chevron-${aperta ? 'up' : 'down'} text-grigio text-xs mt-1"></i></button>
+      <button class="w-full text-left px-3.5 pt-3 ${aperta ? 'pb-1' : 'pb-3'} flex gap-2" data-a="sala-apri" data-v="${d.id}"><span class="flex-1"><span class="flex flex-wrap items-center gap-1.5 text-xs text-grigio"><span class="w-1.5 h-1.5 rounded-full" style="background:${col(a)}"></span>${a.nome}${a.rep ? ` · ${rep(a.rep).nome}` : ''}${chipPeso(d)}</span><span class="block text-sm font-bold leading-snug mt-0.5">${d.titolo}</span></span><i class="bi bi-chevron-${aperta ? 'up' : 'down'} text-grigio text-xs mt-1"></i></button>
       ${aperta ? `<div class="px-3.5 pb-3.5"><p class="text-sm text-grigio mt-1">${d.testo}</p><div class="flex flex-wrap gap-2 mt-3">${d.scelte.map(([t], i) => `<button class="btn ${i ? 'btn-sec' : 'btn-pri'} !py-1.5" data-a="sala-decidi" data-v="${d.id}|${i}">${t}</button>`).join('')}${vede(vistaAg(a).split(':')[0]) ? `<button class="btn btn-sec !py-1.5" data-a="sala-vai" data-v="${vistaAg(a)}">Apri nel gestionale</button>` : ''}</div></div>` : ''}</div>`;
   }
   function pannelloCoord() {
-    const r = decisioni(), nome = chiDecide();
-    return `<div class="p-5"><div class="flex items-center gap-2.5"><span class="w-9 h-9 rounded bg-inchiostro text-white flex items-center justify-center"><i class="bi bi-person-badge"></i></span><div class="flex-1"><p class="font-bold leading-tight">Il Coordinatore chiede</p><p class="text-xs text-grigio">${r.length ? `${r.length} ${pl(r.length, 'decisione aspetta', 'decisioni aspettano')} ${nome}` : 'Niente in sospeso'}</p></div>${r.length > 1 ? `<button class="btn btn-pri !py-1.5" data-a="sala-tutte">Approva le ${r.length}</button>` : ''}</div>
-      <div class="mt-3 space-y-2">${r.map(cardDecisione).join('') || '<p class="text-sm text-grigio rounded bg-carta p-3">Tutto deciso. Gli agenti vanno avanti da soli.</p>'}</div>
-      <p class="text-xs text-grigio mt-3"><i class="bi bi-shield-check"></i> Gli agenti lavorano, ${nome} decide: niente di tutto questo parte senza un ok.</p>
-      <div class="flex items-center gap-2 mt-6 mb-2"><p class="font-bold text-sm">Cosa hanno appena fatto gli agenti</p><span class="ml-auto chip ${st.pausa ? 'c-ko' : 'c-ok'}"><span class="w-1.5 h-1.5 rounded-full ${st.pausa ? 'bg-arancio' : 'bg-ok pulsa'}"></span>${st.pausa ? 'in pausa' : 'dal vivo'}</span></div><ul id="sala-feed" class="space-y-2">${feedHtml()}</ul></div>`;
+    const r = ordinate(), nome = chiDecide(), d = r[0], rout = r.filter(x => peso(x) === 'routine'), guard = r.length - rout.length, altre = r.slice(1);
+    const prima = d ? (() => { const a = ag(d.ag), v = vistaAg(a); return `<div class="mt-4 rounded border border-[#BDBDBD] bg-white p-4">
+        <p class="flex flex-wrap items-center gap-2 text-xs text-grigio"><span>Prossima decisione · 1 di ${r.length}</span>${chipPeso(d)}</p>
+        <button class="block w-full text-left mt-2" data-a="sala-apri" data-v="${d.id}"><span class="flex items-center gap-1.5 text-xs text-grigio"><span class="w-1.5 h-1.5 rounded-full" style="background:${col(a)}"></span>${a.nome}${a.rep ? ` · ${rep(a.rep).nome}` : ''}</span><span class="block font-display font-medium text-lg leading-snug mt-1">${d.titolo}</span></button>
+        <p class="text-sm text-grigio mt-2">${d.testo}</p>
+        <div class="flex flex-wrap gap-2 mt-4">${d.scelte.map(([t], i) => `<button class="btn ${i ? 'btn-sec' : 'btn-pri'} !py-1.5" data-a="sala-decidi" data-v="${d.id}|${i}">${t}</button>`).join('')}${vede(v.split(':')[0]) ? `<button class="btn btn-sec !py-1.5" data-a="sala-vai" data-v="${v}">Vedi nel gestionale</button>` : ''}${r.length > 1 ? `<button class="btn btn-gh !py-1.5 !text-grigio" data-a="sala-dopo" data-v="${d.id}">Più tardi</button>` : ''}</div></div>`; })() : '<p class="mt-4 text-sm text-grigio rounded bg-carta p-3">Tutto deciso. Gli agenti vanno avanti da soli.</p>';
+    const gruppi = [{ id: null, nome: 'Regia' }, ...REP].map(g => ({ g, l: altre.filter(x => (ag(x.ag).rep || null) === g.id) })).filter(x => x.l.length);
+    return `<div class="p-5"><div class="flex items-center gap-2.5"><span class="w-9 h-9 rounded bg-inchiostro text-white flex items-center justify-center"><i class="bi bi-person-badge"></i></span><div class="flex-1"><p class="font-bold leading-tight">Il Coordinatore chiede</p><p class="text-xs text-grigio">${r.length ? `${r.length} ${pl(r.length, 'decisione', 'decisioni')} per ${nome}: ${guard} da guardare, ${rout.length} di routine` : 'Niente in sospeso'}</p></div></div>
+      ${prima}
+      ${rout.length > 1 ? `<div class="mt-3 rounded bg-carta p-3 text-sm flex flex-wrap items-center gap-2"><span class="flex-1 min-w-[190px]"><strong>${rout.length} di routine</strong>: fatture dei fornitori, bozze, assegnazioni, file delle ore. Niente prezzi e niente soldi verso i clienti.</span><button class="btn btn-sec !py-1.5" data-a="sala-tutte"><i class="bi bi-check2-all"></i>Approva le ${rout.length}</button></div>` : ''}
+      ${gruppi.map(({ g, l }) => `<p class="text-xs font-bold text-grigio uppercase tracking-wider mt-5 mb-1.5">${g.nome} · ${l.length}</p><div class="space-y-1.5">${l.map(cardDecisione).join('')}</div>`).join('')}
+      <p class="text-xs text-grigio mt-4"><i class="bi bi-shield-check"></i> Gli agenti lavorano, ${nome} decide: niente di tutto questo parte senza un ok. Quelle da guardare toccano prezzi, soldi o clienti e si decidono una per una.</p></div>`;
   }
+  function pannelloStanza(r) {
+    const membri = AG.filter(a => a.rep === r.id), dec = ordinate().filter(d => ag(d.ag).rep === r.id);
+    return `<div class="p-5 entra"><button class="btn btn-sec !py-1 mb-4" data-a="sala-chiudi"><i class="bi bi-arrow-left"></i>Torna al Coordinatore</button>
+      <div class="flex items-center gap-3"><span class="w-11 h-11 rounded text-white flex items-center justify-center" style="background:${r.colore}"><i class="bi bi-door-open text-lg"></i></span><div><p class="font-display font-medium text-xl leading-tight">${r.nome}</p><p class="text-sm text-grigio">${membri.length} agenti · ${dec.length ? `${dec.length} ${pl(dec.length, 'decisione', 'decisioni')} per voi` : 'niente in sospeso'}</p></div></div>
+      ${mioReparto({ rep: r.id }) ? '' : `<p class="mt-4 rounded border border-linea px-3.5 py-2.5 text-sm text-grigio"><i class="bi bi-eye-slash"></i> Questa stanza lavora per altri: le sue decisioni le prende ${{ comm: 'la direzione', cont: "l'amministrazione o la direzione", oper: 'il responsabile tecnico o la direzione', rh: 'la direzione' }[r.id]}.</p>`}
+      <div class="mt-4 space-y-1.5">${membri.map(a => { const k = nPerVoi(a); return `<button class="w-full text-left rounded border border-linea bg-white hover:border-grafite px-3 py-2.5 text-sm flex gap-2.5 items-start transition-colors" data-a="sala-ag" data-v="${a.id}"><span class="w-2 h-2 rounded-full mt-1.5 flex-none" style="background:${puntoDi(a)}"></span><span class="flex-1"><span class="block font-bold">${a.nome}${k ? ` <span class="font-normal text-[#B45309]">· ${k} per voi</span>` : ''}</span><span class="block text-grigio">${adesso(a)}</span></span><i class="bi bi-chevron-right text-grigio text-xs mt-1"></i></button>`; }).join('')}</div>
+      ${dec.length ? `<p class="text-sm font-bold mt-5 mb-2">Aspettano il vostro ok</p><div class="space-y-1.5">${dec.map(cardDecisione).join('')}</div>` : ''}</div>`;
+  }
+  const pannello = () => st.sel ? pannelloAgente(ag(st.sel)) : st.stanza ? pannelloStanza(rep(st.stanza)) : pannelloCoord();
   const DOMANDE = ['Cosa stai facendo?', 'Cosa hai fatto oggi?', 'Cosa non fai da solo?', 'Da dove prendi i dati?'];
   function pannelloAgente(a) {
     const r = decisioni().filter(d => d.ag === a.id), chat = st.chat[a.id] || [];
-    return `<div class="p-5 entra"><button class="btn btn-sec !py-1 mb-4" data-a="sala-chiudi"><i class="bi bi-arrow-left"></i>Torna al Coordinatore</button>
+    return `<div class="p-5 entra"><button class="btn btn-sec !py-1 mb-4" data-a="sala-chiudi"><i class="bi bi-arrow-left"></i>${st.stanza ? `Torna a ${rep(st.stanza).nome}` : 'Torna al Coordinatore'}</button>
       <div class="flex items-center gap-3"><span class="w-11 h-11 rounded text-white flex items-center justify-center" style="background:${col(a)}"><i class="bi bi-robot text-lg"></i></span><div><p class="font-display font-medium text-xl leading-tight">${a.nome}${a.opz ? ` <span class="align-middle">${modulo('Opzionale')}</span>` : ''}</p><p class="text-sm text-grigio">${a.rep ? rep(a.rep).nome : 'Regia'} · <span class="num">${st.az[a.id]} ${unita(a, st.az[a.id])} oggi</span></p></div></div>
       ${(() => { const v = vistaAg(a), base = v.split(':')[0]; return vede(base) ? `<button class="btn btn-pri w-full mt-4 !whitespace-normal !h-auto text-center leading-snug" data-a="sala-vai" data-v="${v}"><i class="bi bi-box-arrow-up-right flex-none"></i>Vedi nel gestionale: ${base === 'clienti' ? `scheda di ${esc(cli(+v.split(':')[1]).nome)}` : TITOLI[base]}</button>` : `<p class="mt-4 rounded border border-linea px-3.5 py-2.5 text-sm text-grigio"><i class="bi bi-eye-slash"></i> Il suo lavoro nel gestionale, in ${TITOLI[base]}, ${chiVede(base) === 'la direzione' ? 'lo vede' : 'lo vedono'} ${chiVede(base)}.</p>`; })()}
       <div class="mt-4 rounded bg-carta p-3.5 text-sm"><p class="text-xs font-bold text-grigio uppercase tracking-wider">Adesso</p><p class="mt-1">${adesso(a)}</p></div>
@@ -2043,24 +2300,26 @@ const SALA = (() => {
   }
   function html() {
     scena();
-    const oggi = new Date(), nome = NOME[S.ruolo], n = decisioni().length, fatte = sum(AG, a => st.az[a.id]);
+    const oggi = new Date(), nome = NOME[S.ruolo], r = decisioni(), n = r.length, guard = r.filter(d => peso(d) === 'guardare').length, fatte = sum(AG, a => st.az[a.id]), ore = nf(sum(AG, a => st.az[a.id] * a.min) / 60, 1);
+    setTimeout(zooma, 30);
     return `<div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_380px] gap-5 items-start">
       <section class="min-w-0">
-        ${prova('clicca il <strong>Preventivista</strong> e poi <strong>Vedi nel gestionale</strong>. Oppure approva una decisione nel pannello del Coordinatore e passa a <strong>Gestionale</strong>: la trovi già fatta.')}
+        ${prova('decidi la prossima nel pannello del Coordinatore, o approva insieme quelle di routine: le ritrovi fatte nel <strong>Gestionale</strong>. Poi clicca una stanza, per esempio <strong>Contabilità</strong>, o un agente come il <strong>Preventivista</strong>, e premi <strong>Vedi nel gestionale</strong>.')}
         <div class="relative">
           <div class="lg:absolute xl:static min-[1360px]:absolute lg:inset-x-0 lg:top-2 z-[5] flex flex-wrap items-start justify-between gap-3 mb-3 lg:mb-0 xl:mb-3 min-[1360px]:mb-0 lg:pointer-events-none">
             <div class="max-w-xl lg:max-w-[26rem] lg:pointer-events-auto saluto-velo"><p class="text-sm text-grigio">${cap(oggi.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' }))}</p><h1 class="font-display font-medium text-[1.6rem] sm:text-[1.9rem] leading-tight mt-0.5">${saluto()}${nome ? `, ${nome}` : ''}.</h1>
-              <p class="text-grigio mt-1.5 text-[0.95rem]">Oggi gli agenti hanno fatto <strong class="text-inchiostro">${fatte} cose</strong> sui dati del gestionale: preventivi, fatture, incassi, assegnazioni. ${n ? `Il Coordinatore ha <strong class="text-inchiostro">${n} ${pl(n, 'decisione', 'decisioni')}</strong> per voi.` : 'Nessuna decisione in sospeso.'}</p></div>
+              <p class="text-grigio mt-1.5 text-[0.95rem]">Oggi gli agenti hanno fatto <strong class="text-inchiostro">${fatte} cose</strong> e vi hanno risparmiato <strong class="text-inchiostro">${ore} ore</strong>. ${n ? `<strong class="text-inchiostro">${n}</strong> ${pl(n, 'aspetta', 'aspettano')} un vostro ok: ${guard} da guardare, ${n - guard} di routine.` : 'Nessuna decisione in sospeso.'}</p></div>
             <div class="flex flex-wrap items-center gap-2 lg:pointer-events-auto"><span class="chip c-bl !py-1 !px-2.5"><i class="bi bi-geo-alt"></i>Offanengo · ${TEC.length} tecnici, ${ORDINI.filter(o => o.stato === 'assegnato').length} lavori in corso</span><span class="chip ${st.pausa ? 'c-ko' : 'c-ok'} !py-1 !px-2.5"><span class="w-2 h-2 rounded-full ${st.pausa ? 'bg-arancio' : 'bg-ok pulsa'}"></span>${st.pausa ? 'In pausa' : `${AG.length} agenti al lavoro`}</span><button class="btn btn-sec !py-1 !px-2.5" data-a="sala-pausa">${st.pausa ? '<i class="bi bi-play-fill"></i>Riprendi' : '<i class="bi bi-pause-fill"></i>Pausa'}</button></div>
           </div>
-          <div class="scena" id="scena">${SVG}<div id="badges">${badges()}</div></div>
+          <div class="scena-vista"><div class="scena" id="scena" style="transform:${st.zoomDa}">${SVG}<div id="stanze">${stanze()}</div><div id="badges">${badges()}</div></div></div>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 2xl:grid-cols-6 gap-2 mt-3">${LAVAGNA.map(([t, v], i) => `<div class="card px-3 py-2"><p class="text-[11px] text-grigio leading-tight">${t}</p><p id="kf-${i}" class="num font-display font-medium text-lg leading-tight mt-0.5">${v()}</p></div>`).join('')}</div>
-        <p class="hidden md:block text-xs text-grigio mt-2"><i class="bi bi-hand-index"></i> Clicca un agente per vedere cosa fa, cosa non fa da solo e dove si vede il suo lavoro nel gestionale.</p>
-        <div class="md:hidden mt-4">${[{ id: null, nome: 'Regia' }, ...REP].map(r => `<p class="text-xs font-bold text-grigio uppercase tracking-wider mt-3 mb-1.5">${r.nome}</p><div class="grid grid-cols-2 gap-1.5">${AG.filter(a => a.rep === r.id).map(a => `<button class="text-left rounded bg-white border border-linea px-2.5 py-2 text-sm flex items-center gap-2 ${st.sel === a.id ? '!border-inchiostro' : ''}" data-a="sala-ag" data-v="${a.id}"><span class="w-2 h-2 rounded-full flex-none" style="background:${col(a)}"></span><span class="font-bold leading-tight">${a.nome}</span><span class="ml-auto text-xs text-grigio num" title="cose fatte oggi">${a === COORD ? `${decisioni().length} da decidere` : `${st.az[a.id]} oggi`}</span></button>`).join('')}</div>`).join('')}</div>
-        <div class="card p-4 mt-5"><p class="text-sm font-bold mb-2"><i class="bi bi-calculator text-grigio"></i> Da dove vengono i numeri di oggi</p><ul class="grid md:grid-cols-2 gap-x-6 gap-y-1.5 text-xs text-grigio leading-relaxed"><li><span class="font-bold text-inchiostro">Fatturato e da incassare.</span> Gli stessi del controllo di gestione e degli incassi.</li><li><span class="font-bold text-inchiostro">Lavori aperti.</span> Ordini confermati e in lavorazione nella lavagna degli ordini.</li><li><span class="font-bold text-inchiostro">Decisioni per voi.</span> Le proposte degli agenti che aspettano un ok, nel pannello del Coordinatore.</li><li><span class="font-bold text-inchiostro">Ore risparmiate.</span> Cose fatte oggi da ogni agente × i minuti che servirebbero a mano, stima.</li></ul></div>
+        <p class="text-xs text-grigio mt-2 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#B45309]"></span>aspetta voi</span><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-ok pulsa"></span>al lavoro adesso</span><span class="hidden md:inline"><i class="bi bi-hand-index"></i> Clicca una stanza o un agente per metterlo a fuoco.</span>${fuocoRep() ? '<button class="underline underline-offset-2" data-a="sala-chiudi">Torna a tutto l\'ufficio</button>' : ''}</p>
+        <div class="mt-4"><div class="flex items-center gap-2 mb-2"><p class="font-bold text-sm">Cosa hanno appena fatto</p><span class="chip ${st.pausa ? 'c-ko' : 'c-ok'}"><span class="w-1.5 h-1.5 rounded-full ${st.pausa ? 'bg-arancio' : 'bg-ok pulsa'}"></span>${st.pausa ? 'in pausa' : 'dal vivo'}</span><span class="text-xs text-grigio ml-auto hidden sm:inline">Clicca per vederlo nel gestionale</span></div><ul id="sala-nastro" class="grid sm:grid-cols-2 2xl:grid-cols-4 gap-2">${nastroHtml()}</ul></div>
+        <div class="grid grid-cols-3 gap-2 mt-3">${LAVAGNA.map(([t, v], i) => [0, 1, 5].includes(i) ? `<div class="card px-3 py-2"><p class="text-[11px] text-grigio leading-tight">${t}</p><p id="kf-${i}" class="num font-display font-medium text-lg leading-tight mt-0.5">${v()}</p></div>` : '').join('')}</div>
+        <div class="md:hidden mt-4">${[{ id: null, nome: 'Regia' }, ...REP].map(r => r.id ? `<button class="w-full flex items-center gap-2 text-xs font-bold text-grigio uppercase tracking-wider mt-3 mb-1.5 ${fuocoRep() === r.id ? '!text-inchiostro' : ''}" data-a="sala-stanza" data-v="${r.id}"><span class="w-2 h-2 rounded-full" style="background:${r.colore}"></span>${r.nome}${(() => { const k = sum(AG.filter(a => a.rep === r.id), nPerVoi); return k ? `<span class="normal-case tracking-normal text-[#B45309]">· ${k} per voi</span>` : ''; })()}<i class="bi bi-chevron-right ml-auto"></i></button>` : `<p class="text-xs font-bold text-grigio uppercase tracking-wider mt-3 mb-1.5">${r.nome}</p><div class="grid grid-cols-2 gap-1.5">${AG.filter(a => a.rep === r.id).map(a => `<button class="text-left rounded bg-white border border-linea px-2.5 py-2 text-sm flex items-center gap-2 ${st.sel === a.id ? '!border-inchiostro' : ''}" data-a="sala-ag" data-v="${a.id}"><span class="w-2 h-2 rounded-full flex-none" style="background:${col(a)}"></span><span class="font-bold leading-tight">${a.nome}</span><span class="ml-auto text-xs text-grigio num" title="cose fatte oggi">${a === COORD ? `${decisioni().length} da decidere` : `${st.az[a.id]} oggi`}</span></button>`).join('')}</div>`).join('')}</div>
+        <details class="mt-3"><summary class="text-xs text-grigio cursor-pointer">Come si calcolano questi numeri</summary><ul class="grid md:grid-cols-2 gap-x-6 gap-y-1.5 text-xs text-grigio leading-relaxed mt-2"><li><span class="font-bold text-inchiostro">Fatturato e da incassare.</span> Gli stessi del controllo di gestione e degli incassi.</li><li><span class="font-bold text-inchiostro">Lavori aperti.</span> Ordini confermati e in lavorazione nella lavagna degli ordini.</li><li><span class="font-bold text-inchiostro">Decisioni per voi.</span> Le proposte degli agenti che aspettano un ok, nel pannello del Coordinatore.</li><li><span class="font-bold text-inchiostro">Ore risparmiate.</span> Cose fatte oggi da ogni agente × i minuti che servirebbero a mano, stima.</li></ul></details>
       </section>
-      <aside id="sala-pannello" class="card overflow-hidden xl:sticky xl:top-0 xl:max-h-[calc(100dvh-8.5rem)] xl:overflow-y-auto">${st.sel ? pannelloAgente(ag(st.sel)) : pannelloCoord()}</aside>
+      <aside id="sala-pannello" class="card overflow-hidden xl:sticky xl:top-0 xl:max-h-[calc(100dvh-8.5rem)] xl:overflow-y-auto">${pannello()}</aside>
     </div>`;
   }
 
@@ -2072,6 +2331,8 @@ const SALA = (() => {
     LAVAGNA.forEach(([, v], i) => { const e = document.getElementById('k-' + i), e2 = document.getElementById('kf-' + i); if (e) e.textContent = v(); if (e2) e2.textContent = v(); });
     AG.forEach(a => { const e = document.getElementById('schermo-' + a.id); if (e) e.setAttribute('fill', st.attivi[a.id] ? shade(col(a), .55) : shade(col(a), .35)); });
     const f = $('#sala-feed'); if (f) f.innerHTML = feedHtml();
+    const nn = $('#sala-nastro'), hn = nastroHtml(); if (nn && nn.innerHTML !== hn) nn.innerHTML = hn;
+    const sz = $('#stanze'), hs = stanze(); if (sz && sz.innerHTML !== hs) sz.innerHTML = hs;
   }
   function log(id, txt) {
     txt = txt.replace(/\.\.(\s|$)/g, '.$1'); st.feed.forEach(f => f.nuovo = false);
@@ -2123,17 +2384,19 @@ const SALA = (() => {
      [44, 'fatt', `Ha preparato la fattura del lavoro di ${cli(5).nome}: 480 €, aspetta l'ok.`], [63, 'rinn', `Ha trovato ${kDaRivedere().filter(k => k.rin <= 90).length} contratti che si rinnovano sotto prezzo entro 90 giorni.`],
      [95, 'pian', `Ha preparato le proposte di assegnazione per ${ORDINI.filter(o => o.stato === 'confermato').length} lavori confermati.`], [140, 'ore', 'Ha controllato le timbrature di ieri: tutte presenti.'], [1150, 'rich', `Ha aperto la richiesta di ${cli(22).nome}: DVR e piano HACCP, arrivata per telefono.`]]
       .sort((a, b) => b[0] - a[0]).forEach(([m, id, t]) => st.feed.push({ ag: id, t: Date.now() - m * 60000, txt: t }));
-    setInterval(battito, 3800); setInterval(orologio, 20000); setInterval(() => { const f = $('#sala-feed'); if (f && inSala()) f.innerHTML = feedHtml(); }, 30000);
+    setInterval(battito, 3800); setInterval(orologio, 20000); setInterval(() => { const f = $('#sala-feed'); if (f && inSala()) f.innerHTML = feedHtml(); const nn = $('#sala-nastro'); if (nn && inSala()) nn.innerHTML = nastroHtml(); }, 30000);
   }
-  function ridisegna() { if (inSala()) { $('#sala-pannello').innerHTML = st.sel ? pannelloAgente(ag(st.sel)) : pannelloCoord(); aggiornaPezzi(); } }
+  function ridisegna() { if (inSala()) { $('#sala-pannello').innerHTML = pannello(); aggiornaPezzi(); } }
   const AZIONI = {
-    'sala-ag': v => { st.sel = st.sel === v && v !== 'coord' ? null : v === 'coord' ? null : v; render(); if (window.innerWidth < 1280) setTimeout(() => $('#sala-pannello')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30); },
-    'sala-chiudi': () => { st.sel = null; render(); },
+    'sala-ag': v => { st.sel = st.sel === v && v !== 'coord' ? null : v === 'coord' ? null : v; if (v === 'coord') st.stanza = null; render(); if (window.innerWidth < 1280) setTimeout(() => $('#sala-pannello')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30); },
+    'sala-chiudi': () => { if (st.sel) st.sel = null; else st.stanza = null; render(); },
+    'sala-stanza': v => { st.sel = null; st.stanza = st.stanza === v ? null : v; render(); if (window.innerWidth < 1280 && st.stanza) setTimeout(() => $('#sala-pannello')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30); },
+    'sala-dopo': v => { st.rinviate = st.rinviate.filter(x => x !== v).concat(v); st.aperta = null; ridisegna(); },
     'sala-apri': v => { st.aperta = st.aperta === v ? null : v; ridisegna(); },
     'sala-decidi': v => { const [id, i] = v.split('|'), d = decisioni().find(x => x.id === id); if (!d) return; const [, fn, esito] = d.scelte[+i]; spegni(); fn(); st.az[d.ag]++; log(d.ag, `${esito} ${+i ? 'Deciso' : 'Approvato'} ${daChi()}.`); fumetto(d.ag, +i ? 'Ricevuto, <b>faccio così</b>' : 'Approvato, <b>parto</b>', 2600); setTimeout(() => documento(COORD, ag(d.ag)), 50); st.aperta = null; render(); },
-    'sala-tutte': () => { const ids = decisioni().map(d => d.id); let n = 0;
+    'sala-tutte': () => { const ids = decisioni().filter(d => peso(d) === 'routine').map(d => d.id); let n = 0;
       ids.forEach(id => { const d = decisioni().find(x => x.id === id) || (id.startsWith('pian-') && decisioni().find(x => x.id.startsWith('pian-') && ids.includes(x.id))); if (!d) return; spegni(); const [, fn, esito] = d.scelte[0]; fn(); n++; st.az[d.ag]++; log(d.ag, `${esito} Approvato ${daChi()}.`); });
-      st.aperta = null; render(); toast(`${n} ${pl(n, 'decisione approvata', 'decisioni approvate')}: gli agenti le hanno già eseguite nel gestionale.`); },
+      st.aperta = null; render(); const g = decisioni().length; toast(`${n} ${pl(n, 'decisione di routine approvata', 'decisioni di routine approvate')}: gli agenti le hanno già eseguite nel gestionale.${g ? ` ${g === 1 ? 'Resta 1 da guardare' : `Restano ${g} da guardare`}, una per una.` : ''}`); },
     'sala-pausa': () => { st.pausa = !st.pausa; render(); },
     'sala-chiedi': v => { const a = ag(st.sel); (st.chat[a.id] = st.chat[a.id] || []).push([DOMANDE[+v], risposta(a, DOMANDE[+v])]); ridisegna(); },
     'sala-vai': v => { const [vista, t] = v.split(':'); if (!vede(vista)) return toast(`Questa pagina la ${chiVede(vista) === 'la direzione' ? 'vede' : 'vedono'} ${chiVede(vista)}.`);
@@ -2143,7 +2406,7 @@ const SALA = (() => {
   const domanda = d => { const a = ag(d.ag), q = pulisci(d.q); (st.chat[a.id] = st.chat[a.id] || []).push([q, risposta(a, q)]); ridisegna(); };
   // quando il lavoro lo fate voi nel gestionale, la sala lo racconta
   const racconta = (id, txt, sempre) => { if (st.avviata && (sempre || S.modo !== 'sala')) { st.az[id]++; log(id, txt); aggiornaPezzi(); } };
-  return { html, avvia, AZIONI, domanda, racconta, decisioni, chiudi: () => { if (st.sel) { st.sel = null; render(); return true; } return false; }, stato: st };
+  return { html, avvia, AZIONI, domanda, racconta, decisioni, peso, chiudi: () => { if (st.sel || st.stanza) { AZIONI['sala-chiudi'](); return true; } return false; }, stato: st };
 })();
 VISTE.sala = SALA.html;
 Object.assign(AZ_, SALA.AZIONI, { modo: v => { S.modo = v; chiudiTendine(); document.body.classList.remove('menu-aperto'); render(true); $('#vista').scrollTop = 0; } });
@@ -2175,6 +2438,7 @@ function check() {
 render(true);
 check();
 SALA.avvia();
+{ let visto = false; try { visto = !!localStorage.getItem('progesi-benvenuto'); } catch (e) {} if (!visto && !navigator.webdriver) benvenuto(); }
 </script>
 </body>
 </html>
