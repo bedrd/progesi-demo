@@ -57,17 +57,27 @@ const OUT = __dirname + '/shots/sala-';
   // estratto caricato dalla sala
   await clic('header [data-a="modo"][data-v="sala"]'); await clic('[data-a="sala-apri"][data-v="inc-estratto"]'); await clic('[data-a="sala-decidi"][data-v="inc-estratto|0"]'); await pausa(1700);
   ok('estratto letto dalla sala e decisioni nuove', await p.evaluate(() => S.estratto === 'si' && SALA.decisioni().some(d => d.id === 'inc-dub-426')));
-  // approva tutte
-  const prima = await p.evaluate(() => SALA.decisioni().map(d => d.id));
+  // approva insieme solo quelle di routine; quelle da guardare restano, una per una
+  const prima = await p.evaluate(() => SALA.decisioni().map(d => [d.id, SALA.peso(d)]));
   await clic('[data-a="sala-tutte"]'); await pausa(300);
   const dopo = await p.evaluate(() => SALA.decisioni().map(d => d.id));
-  ok('approva tutte: quelle mostrate sono fatte', !prima.some(id => dopo.includes(id)), `prima ${prima.join(',')} | dopo ${dopo.join(',')}`);
+  ok('approva le routine: fatte', !prima.some(([id, w]) => w === 'routine' && dopo.includes(id)), `prima ${prima.map(x => x.join(':')).join(',')} | dopo ${dopo.join(',')}`);
+  ok('quelle da guardare restano', prima.filter(([, w]) => w === 'guardare').every(([id]) => dopo.includes(id)));
+  ok('la prossima decisione in grande è da guardare', await p.evaluate(() => !!document.querySelector('#sala-pannello .chip') && document.querySelector('#sala-pannello').innerText.includes('Prossima decisione')));
+  for (let i = 0; i < 20; i++) { const id = await p.evaluate(() => SALA.decisioni()[0]?.id); if (!id) break; await p.evaluate(id => AZ_['sala-decidi'](id + '|0'), id); }
+  ok('una per una: tutto deciso', await p.evaluate(() => !SALA.decisioni().length));
+  // stanze e fuoco
+  await clic('[data-a="sala-stanza"][data-v="cont"]'); await pausa(700);
+  ok('stanza Contabilità a fuoco', await p.evaluate(() => document.querySelector('#scena').style.transform.includes('scale') && document.querySelector('#sala-pannello').innerText.includes('Contabilità') && document.querySelectorAll('#badges .badge-ag.fuori').length === 7));
+  await clic('#sala-pannello [data-a="sala-chiudi"]'); await pausa(700);
+  ok('torna a tutto l\'ufficio', await p.evaluate(() => document.querySelector('#scena').style.transform === 'none' && !document.querySelector('#badges .badge-ag.fuori')));
+  ok('nastro delle ultime cose fatte', await p.evaluate(() => document.querySelectorAll('#sala-nastro li button').length >= 3));
   ok('nessun doppione per lo stesso cliente', await p.evaluate(() => { const c = SALA.decisioni().map(d => d.titolo.split(':')[0]); return new Set(c).size === c.length; }));
   await foto('tutto-deciso');
   // ruoli
-  await clic('header [data-a="ruolo"][data-v="amm"]'); ok('amministrazione resta nella sala, solo le sue decisioni', (await titolo()) === 'Sala agenti');
-  await clic('header [data-a="ruolo"][data-v="tec"]'); ok('il tecnico non vede la sala né il selettore', (await titolo()) === 'I miei lavori' && await p.evaluate(() => getComputedStyle(document.querySelector('header .modo-seg')).display === 'none'));
-  await clic('header [data-a="ruolo"][data-v="dir"]');
+  await clic('#barra-demo [data-a="ruolo"][data-v="amm"]'); ok('amministrazione resta nella sala, solo le sue decisioni', (await titolo()) === 'Sala agenti');
+  await clic('#barra-demo [data-a="ruolo"][data-v="tec"]'); ok('il tecnico non vede la sala né il selettore', (await titolo()) === 'I miei lavori' && await p.evaluate(() => getComputedStyle(document.querySelector('header .modo-seg')).display === 'none'));
+  await clic('#barra-demo [data-a="ruolo"][data-v="dir"]');
   // telefono
   await p.setViewport({ width: 390, height: 844 }); await clic('[data-a="modo"][data-v="sala"]');
   ok('telefono senza scorrimento laterale', await p.evaluate(() => document.documentElement.scrollWidth) <= 390);

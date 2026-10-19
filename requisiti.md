@@ -216,4 +216,10 @@ Invariato rispetto alla demo attuale:
 Tutti i requisiti DENTRO e OPZIONALE sono nella demo, R1 a R13 e R16. In più, dopo la verifica:
 - scheda "Da G1 a qui" in Contabilità: il passaggio da G1 e l'elenco di cosa fa oggi G1 e dove si fa qui, con le voci da verificare con chi fa l'amministrazione (note di credito, ritenute, split payment, periodicità IVA, cespiti);
 - registro IVA vendite fattura per fattura; in banca anche stipendi, F24 e affitto, con la scrittura paghe del mese in prima nota;
-- il responsabile tecnico vede Ore e timbrature, come il socio che oggi confronta i file.
+- il responsabile tecnico vede Ore e timbrature, come il socio che oggi confronta i file;
+- meno rumore a primo impatto: menu della direzione con i gruppi lunghi chiusi, numerini grigi e arancio solo se urgente, Prezzi e margini con 4 colonne di partenza, prezzo consigliato in una riga nel preventivo;
+- Sala agenti rifatta per chi la vede la prima volta (R10, R12): riepilogo in una frase, stanze per reparto con stato di ogni agente e fuoco al clic, prossima decisione in grande una alla volta, routine approvabili insieme e quelle con prezzi, soldi o clienti una per una, nastro delle ultime cose fatte che porta al gestionale;
+- nota di credito completa (R3): dalla fattura emessa, con lo stesso giro SdI, XML TD04, effetti su fatturato, registro IVA, liquidazione, prima nota e scadenzario; caso di esempio di un corso annullato già pagato, anche come decisione del Fatturatore nella Sala;
+- tolto dalla demo ogni nome o accenno al vecchio gestionale, su richiesta di Ervin: il passaggio dei dati (R8) si chiama "Avvio: i vostri dati qui dentro", la scheda di Contabilità "Cosa c'è dentro";
+- demo più facile a primo impatto per chi non la conosce (anteprima di Giorgio ai soci, senza nessuno che la presenti): barra della demo separata dal gestionale, benvenuto con la scelta da dove partire, parole tecniche spiegate al passaggio;
+- R5 messo in evidenza, perché è la domanda principale di Giorgio nella call 2: sezione "Aggiornamenti normativi" in cima a Impostazioni (chi li fa, come arrivano, registro con le novità SdI vere 1.9 e 1.9.1, regole attive, alternativa di un gestionale contabile con API), etichetta "Normativa aggiornata" in Contabilità e riga "Prova:" per la direzione.

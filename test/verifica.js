@@ -14,7 +14,7 @@ const URL = process.argv[2] || URL_DEMO;
   for (const w of [390, 768, 1024, 1280, 1366, 1440]) {
     const p = await nuova(w); const tagli = [];
     for (const [r, vv] of Object.entries(VISTE)) for (const v of vv) {
-      const tabsList = v === 'contabilita' ? ['prima', 'registri', 'iva', 'scad', 'conti', 'g1'] : v === 'fatture' ? ['emesse', 'ricevute'] : [null];
+      const tabsList = v === 'contabilita' ? ['prima', 'registri', 'iva', 'scad', 'conti', 'copertura'] : v === 'fatture' ? ['emesse', 'ricevute'] : [null];
       for (const t of tabsList) {
         const res = await p.evaluate((r, v, t) => { AZ_.ruolo(r); if (t) S[v === 'fatture' ? 'tabFatt' : 'tabCont'] = t; vai(v);
           const x = [...document.querySelectorAll('#vista .scroll-x, #vista .overflow-x-auto')].filter(e => e.scrollWidth > e.clientWidth + 2 && !e.closest('#kanban')).map(e => `${e.scrollWidth}/${e.clientWidth} ${e.className.slice(0, 40)} > ${(e.firstElementChild?.className || "").toString().slice(0, 50)}`);
@@ -64,8 +64,8 @@ const URL = process.argv[2] || URL_DEMO;
     ok('feed senza righe doppie', dopo[1] === dopo[2], `${dopo[1]} righe, ${dopo[2]} diverse`);
     const risp = await p.evaluate(() => { AZ_['sala-chiudi'](); AZ_['sala-ag']('prev'); AZ_['sala-chiedi']('1'); AZ_['sala-chiedi']('3'); return [...document.querySelectorAll('#sala-pannello .bolla-a')].map(e => e.textContent); });
     ok('risposte coerenti con le decisioni e senza doppi punti', risp[0].includes('Aspetto il vostro ok') && !/\.\./.test(risp.join(' ')), risp.join(' || '));
-    // clic durante il battito
-    let presi = 0; for (let i = 0; i < 12; i++) { const id = ['prev', 'fatt', 'inc', 'pian'][i % 4]; const box = await p.evaluate(id => { AZ_['sala-chiudi'](); const r = document.querySelector(`#badges button[data-v="${id}"]`).getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }, id); await p.mouse.move(box[0], box[1]); await p.mouse.down(); await pausa(180); await p.mouse.up(); await pausa(150); if (await p.evaluate(id => SALA.stato.sel === id, id)) presi++; await pausa(700); }
+    // clic durante il battito (dopo il ritorno a tutto l'ufficio, che si anima per 0,6 secondi)
+    let presi = 0; for (let i = 0; i < 12; i++) { const id = ['prev', 'fatt', 'inc', 'pian'][i % 4]; await p.evaluate(() => AZ_['sala-chiudi']()); await pausa(750); const box = await p.evaluate(id => { const r = document.querySelector(`#badges button[data-v="${id}"]`).getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }, id); await p.mouse.move(box[0], box[1]); await p.mouse.down(); await pausa(180); await p.mouse.up(); await pausa(150); if (await p.evaluate(id => SALA.stato.sel === id, id)) presi++; await pausa(700); }
     ok('clic sugli agenti presi anche durante il battito', presi === 12, `${presi}/12`);
     const saluti = await p.evaluate(() => { AZ_.ruolo('rt'); return document.querySelector('#vista h1').textContent; });
     ok('saluto del resp. tecnico senza "Responsabile."', !/Responsabile\./.test(saluti), saluti);
