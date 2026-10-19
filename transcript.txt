@@ -1,0 +1,213 @@
+0:22 - Mihail Catana
+Salve Giorgio, buongiorno.
+
+0:23 - Oratore non identificato
+Ciao.
+
+0:24 - Mihail Catana
+Ciao, tutto bene? Sì, sì.
+
+0:27 - Oratore non identificato
+Eccoci qua. Allora, Giorgio, ti dico la verità.
+
+0:32 - Mihail Catana
+L'altra volta forse avevo detto che ti avrei presentato la proposta, però prima di fare questo voglio usare questa chiamata per strutturare bene il tutto, capire le due differenze tra quella con il CRM e quella senza il CRM, strutturare le due, cioè fare due proposte economiche ben definite e poi da lì capire un attimo insieme quale delle due ha più senso muoversi verso. Tanto questa, te lo dico per correttezza, è una chiamata registrata, mi serve a me poi per automatizzando tutto la trascrizione, quindi posso più in fretta.
+
+ Giusto per capire, allora, per riandare verso le informazioni che avevamo discusso l'altra volta, tu sei uno dei tre soci e fai il direttore commerciale.
+
+1:31 - Giorgio
+Ci sono gli altri due soci, riesci a dirmi di cosa si occupano loro due? Uno fa semplicemente legale rappresentante e non è operativo nell'attività. L'altro è Vice President. L'altro è responsabile dei tecnici. Della sicurezza.
+
+1:48 - Mihail Catana
+Ok, ok, perfetto. Mi hai detto che è il responsabile tecnico che sceglie la risorsa che va a fare il corso. Allora, voi al momento utilizzate Zucchetti?
+
+2:02 - Oratore non identificato
+Sì.
+
+2:02 - Mihail Catana
+Sai dirmi quale ramo di Zucchetti utilizzate?
+
+2:06 - Giorgio
+G1 si chiama il software.
+
+2:08 - Mihail Catana
+G1, che è quello per come CRM?
+
+2:12 - Giorgio
+No, è la parte di amministrazione. Di amministrazione. Gestione ordini fornitore e clienti e arriva fino alla prima nota, però non me ne occupo io, quindi nel dettaglio non so dirti esattamente.
+
+2:27 - Mihail Catana
+Perfetto. Invece per quanto riguarda la parte di gestione dell'informazione dei clienti?
+
+2:33 - Giorgio
+Allora sì, all'interno dei zucchetti ci sono le informazioni dei clienti, vengono inseriti gli ordini, però non abbiamo un CRM specifico.
+
+2:43 - Mihail Catana
+Usate quello e funziona per il momento per fare ambe le cose, quindi sia il lato amministrazione che il lato un po' commerciale. C'è una figura all'interno dell'azienda che si occupa dell'aspetto tecnico, cioè di sviluppo, integrazioni, processi?
+
+3:01 - Giorgio
+No, perché magari avevi un...
+
+3:03 - Mihail Catana
+solitamente le aziende o ce l'hanno internamente, quando sono abbastanza grandi, oppure semplicemente prendono un esterno in partita Allora, noi abbiamo chi si occupa della parte informatica e ci appoggiamo un'azienda.
+
+3:18 - Giorgio
+Ok, quindi quello che è il supporto tecnico. Sì, la parte informatica, però la questione software, gestione organizzativa, sviluppo dei software, così me ne occupo io.
+
+3:31 - Mihail Catana
+Ok, perfetto, perfetto. Il processo in sé, avevamo detto, quindi commerciale vi arriva la richiesta del cliente, sì il commerciale fa un preventivo sì fa il word al momento sì se viene confermato giustamente dal dal cliente si si va in amministrazione che lo inserisce su zucchetti sì successivamente una volta che viene inserito viene passato dall'amministrazione al responsabile tecnico per fare per allocare la risorsa che andrà a parte di servizio per il cliente, una volta finito il servizio la cosa va in contabilità.
+
+
+
+4:14 - Giorgio
+Esatto, sì. Allora, questo per un tipo di ordini. Abbiamo anche un altro tipo di ordini che sono gli ordini ricorrenti, cioè I contratti che si rinnovano ogni anno. Quindi noi abbiamo, ad esempio, noi abbiamo il servizio di nomina di responsabile esterno per la sicurezza, che si chiama RSPP, alle aziende e questo questo è un contratto che di anno in anno si rinnova in automatico.
+
+4:42 - Mihail Catana
+Per legge, perché ogni anno lo deve fare. E solo per quanto riguarda l'aspetto dell'RSPP?
+
+4:49 - Giorgio
+Ci può essere l'RSPP, ci può essere solo una consulenza annuale che si rinnova, ci può essere una consulenza annuale relativa al tema ambiente, quindi tutte le pratiche ambientali, ci può essere il contratto della manutenzione di estintori che si rinnova ogni anno, il contratto di medicina del lavoro, della nomina del medico che si rinnova ogni anno, diciamo quelli che sono I rinnovi annuali che devono essere fatti, diciamo che voi avete il cliente e poi quel cliente può avere servizi che utilizza una volta sola, servizi che invece avrà bisogno poi di voi, che immagino sia il business che tira avanti perché giustamente è quello che sei assicurato, più o meno, un po' come Netflix, assicurato che il cliente
+
+5:41 - Mihail Catana
+ritorna al mese prossimo a pagare, no? Esatto. La stessa cosa. Ok, perfetto. Allora, idealmente sono d'accordo con te che si potrebbe fare, ma per Zucchetti, fate anche la parte di fatturazione con Zucchetti? Cioè mandate le fatture al cliente?
+
+6:00 - Giorgio
+Sì, sì.
+
+6:01 - Mihail Catana
+Fatturazione elettronica e tutto. Per quanto riguarda I controlli di contabilità quindi se un cliente ha pagato fate l'estratto conto bancario esatto e manualmente lo confrontate con zucchetti o inserite I dati su zucchetti poi anche penso che venga fatto manualmente però li devo cioè chi si occupa dell'amministrazione controlla il conto bancario verifica il pagamento e lo associa in zucchetti a una determinata fattura allora ehm questo si può tranquillamente cioè possiamo automatizzare anche questo in quanto dipende dal collegamento cioè allora si può fare un'automazione quindi un'integrazione con l'automazione cento per cento se è possibile eh avere l'intelligenza artificiale che si collega tramite chiave API vabbè comunque fa un collegamento e estrai I dati del conto bancario cioè non sul conto bancario ma l'estratto conto mensile o giornaliero, quello che è a fare richiesta e lo confronta, altrimenti la persona in contabilità anziché controllarlo manualmente lo carica semplicemente sulla piattaforma, quindi fa lo stesso processo di scaricarlo e però poi dopo anziché farlo lui il controllo semplicemente lo carica sul sulla sulla soluzione e in automatico fa il controllo e associa le due cose e successivamente compiuta la anche quello che sarebbe al momento Zucchetti, quindi associa l'entrata con poi il...
+
+ Perché immagino che la causale sia poi il riferimento del contratto col cliente. Sì, solitamente la causale è il numero della fattura.
+
+7:42 - Giorgio
+Esatto, esatto.
+
+7:43 - Mihail Catana
+Quindi c'è un collegamento facile da fare, però è ripetitivo. Ci sono quelle cose ripetitive. La gestione invece delle risorse umane, cioè nel senso che chi se ne occupa?
+
+7:55 - Giorgio
+Sempre tutto Allora, no, nel senso che noi abbiamo uno studio che fa le paghe, abbiamo un timbratore per le risorse umane, quindi a fine mese il mio collega, cioè il mio socio, si fa dare un file .exe con tutte le ore che dichiarano I collaboratori e poi lo confronta con le timbrature.
+
+8:23 - Mihail Catana
+Ok, perfetto. Anche questo si può automatizzare. Ogni volta che parlo con le PMI, solitamente perché si crede che l'intelligenza artificiale debba un po' sostituire l'essere umano, invece è il contrario, nel senso che soprattutto nelle PMI, dove c'è tanto lavoro ripetitivo e poco personale a disposizione, rispetto magari a un'azienda che ha 300 dipendenti, dove si può permettere di avere quei tre o quattro che perdono del tempo a fare del controllo di numeri.
+
+ Sono queste cose, queste piccolezze che è 1% di qua, 1% di là arrivi a fine mese che hai buttato via il 50% del tuo tempo. Quindi tutte queste cose poi verranno viste. Tu adesso mi hai dato una una visuale ben precisa di quello di cui vi occupate. Diciamo così quelli che sono le attività giornaliere e mensili all'interno di Progesi.
+
+9:22 - Mihail Catana
+ci servono queste cose per andare a capire cosa automatizzare, cosa rendere più facile per voi. Per esempio, per il tuo socio, avere in automatico le ore trasferite dalla macchina delle temperature. Non so se è un software che lui può entrare o semplicemente...
+
+9:37 - Giorgio
+In senso di sì, c'è un software.
+
+9:40 - Mihail Catana
+Esatto, scarica anche lì, carica di qua e ti fa tutta la gestione delle ore. Poi ovviamente ti manda in fase di revisione e ti dice, guarda, queste dieci persone hanno fatto queste ore questo mese.
+
+9:55 - Giorgio
+E' giusto? Poi c'è la verifica finale.
+
+9:58 - Mihail Catana
+Esattamente, però ti evita di dover fare quel controllo visivo manuale ogni volta.
+
+10:03 - Giorgio
+Altre cose che ti vengono in mente, che possano essere semplici, Allora, quello che vorrei provare a inserire è quando viene dato un ordine poi il responsabile tecnico dà un ordine ai vari tecnici e una volta che il tecnico ha confermato che il lavoro è finito quindi si può fatturare, lì vorrei capire il tempo che ci mettono a fare lavoro per capire per capire più che altro non quanto ci mettono a controllarli ma se stiamo vendendo al prezzo giusto o se stiamo vendendo sotto costo o se stiamo guadagnando troppo poco sul servizio.
+
+ Riesci a farmi un esempio pratico che magari mi aiuta? Arriva l'ordine stesura del documento di valutazione dei rischi di VR per un cliente viene assegnato a Paolo per dire e Paolo mi deve dire ok io ho finito il lavoro, ci ho messo sei ore. È una cosa che noi adesso non teniamo, mi servirebbe più avere poi uno storico per capire se vendiamo al prezzo giusto o meno.
+
+11:22 - Mihail Catana
+Quindi vogliamo riuscire ad avere lo storico e quindi dei dati che ti dicono, per esempio, la stessa operazione, la stessa tipologia di lavoro, in questa azienda ci abbiamo messo 10 ore, in questa ci abbiamo messo 6, per questo cliente per l'altro. Quindi non il tracciamento effettivo di come viene fatto, ma semplicemente una visione dei dati, tranquillamente fattibile. Si sviluppa, anziché dirlo a te, in qualche modo lo facciamo arrivare alla piattaforma, e successivamente poi da lì avrai una dashboard che potrai interagire per andare a vederti le differenti numeri, figure del passato.
+
+ Comparando lo stesso tipo di servizio, magari dici ok, Francesco, non so se esiste una figura che si chiama Francesco, però Francesco quest'anno ha fatto questa tipologia di servizio dieci volte. Francesco ogni volta ci ha messo cinque ore, non in media, ma ogni volta ci ha messo cinque ore. Quindi vuol dire che lui lo fa uguale per tutti. Sì, sì, sì. Oppure gli sono capitate le aziende. Quindi si fa un incrocio anche di dati, perché magari in un'azienda dove ci sono più dipendenti, se fai un servizio di RSPP ci metti di più.
+
+ Sì, sì, certo. Quindi ecco, tutte queste cose combinate insieme per dargli una visibilità. È giusto, è corretto, un po' come per noi funziona la parte di pipeline. Andiamo a capire, funzionerà anche per voi così, quanti clienti abbiamo perso, dove li abbiamo persi, il motivo per cui li abbiamo persi. Tutto uno studio di dati, tranquillamente fattibile.
+
+13:16 - Giorgio
+Qualcos'altro che ne valga la pena? Non so se avete qualcosa mai fatto del controllo di gestione del dell'amministrazione nel senso sapere se io avere una dashboard che mi dice questo mese il fatturato è questo, gli ordini fornitori sono questi, il margine è questo, c'è una dashboard che mi dà I dati in tempo reale perché noi ok ogni tre mesi abbiamo il bilancio che ci fa il commercialista ma giorno prima non sappiamo bene cosa stiamo facendo, a meno che vado lì, pulisco tutti I dati manualmente e mi faccio un'idea.
+
+ Però sarebbe comodo anche una cosa del genere.
+
+14:05 - Mihail Catana
+Allora, l'ideale, se andiamo a creare una soluzione tutta intera, è avere la parte di amministrazione, scusami, di fatturazione, di contabilità sulla soluzione, quindi una combinazione tra CRM e gestione delle finanze tutte insieme in maniera tale che poi ci sia anche una reportistica dell'andamento della realtà. Quindi, assolutamente sì, soprattutto da direttore commerciale la cosa ti interessa perché ti dà visibilità sull'andamento delle cose, è tranquillamente fattibile.
+
+ Adesso poi mi studierò un attimo la proposta economica e I vari... Perché poi le nostre proposte economiche vanno in base ai moduli che inseriamo, Sì, per l'esempio già fatto che gli sviluppatori funzionano.
+
+14:54 - Giorgio
+Una cosa, una volta sviluppati I moduli per la mia attività, poi io sono proprietario di quei moduli, corretto?
+
+15:02 - Mihail Catana
+Assolutamente sì. Tutto il codice?
+
+15:04 - Giorgio
+Non c'è un numero di licenze? No, lo gestisco io come volete.
+
+15:09 - Mihail Catana
+La soluzione diventa di vostra proprietà, diventa di fatto un asset aziendale. C'è capitato in passato che qualcuno, uno dei nostri clienti, abbia venduto l'attività e viene considerato dal commercialista o comunque da chi fa la valutazione come un asset aziendale in quanto ci sono su dei dati e niente tutto qua. Il pagamento solitamente è un intra tranche quindi la fase iniziale del progetto a metà e poi quella finale serve semplicemente uno a noi per partire con il progetto e due a voi ai nostri clienti per dire ok questa prima parte del progetto piacendo come sta venendo, c'è una seconda tranche, cioè partiamo con la seconda, quindi lo troviamo giusto per entrambe le parti.
+
+ Poi basta, per il momento ho un'idea chiara, ho quello che mi serve per strutturare le cose, a meno che tu non abbia domande per me.
+
+16:07 - Giorgio
+No, io guardo, non so se te l'avevo già detto al telefono, noi ci stiamo facendo fare qualche proposta in giro, Non so se l'avevo anticipato al telefono, ma anche da altri competitor vostri. Quindi noi siamo disposti, ci serve questo lavoro, perché comunque è una cosa che ci serve, perché sennò far girare sempre la carta, andare a chiedere, chiamare, dammi questo documento, dammi questo o l'altro, è una perdita di tempo.
+
+ Aspetto la vostra proposta.
+
+16:43 - Mihail Catana
+Io conosco la concorrenza sul mercato, Giorgio, ti posso garantire, magari hai trovato qualcuno che io non conosco, però solitamente sui prezzi c'è un abisso tra loro e noi, nel senso che noi per la struttura aziendale che abbiamo, riusciamo ad offrire un servizio di alta qualità a un prezzo decente. Noi per un periodo in passato abbiamo fatto gli agenti vocali, non so se perché andavano tanto di moda, ci venivano richieste tantissimo.
+
+ Quindi abbiamo avuto uno o due sviluppatori che specializzavano in quello e clienti che mi dicevano di aver ricevuto proposte economiche per un agente vocale da 20.000 euro. Cioè, con 20.000 euro ti rifatti tutta la tutela della società. Però è così. Dipende, dipende. Non garantisco mai di essere a essere quello che costa di meno, però sono sicuro che la qualità è alta. Poi avrai modo anche tu di scoprirlo.
+
+ Niente, Giorgio, ti ringrazio.
+
+17:51 - Giorgio
+Buona giornata e buon lavoro.
+
+17:54 - Mihail Catana
+Tu la mia mail ce l'hai, sì? Sì, però prima di lasciarti andare, la mettiamo già calendario la prossima, così almeno ho anche una deadline per farti la proposta.
+
+18:09 - Giorgio
+Minimo settimana prossima, immagino. Sì, sì.
+
+18:14 - Mihail Catana
+Possiamo fare la settimana, più o meno.
+
+18:21 - Giorgio
+Sempre mercoledì a quest'ora alle 15 o 14.30.
+
+18:29 - Mihail Catana
+Ok, fammi controllare un attimo. Abbiamo andato settimana prossima.
+
+18:36 - Giorgio
+Mercoledì 7.
+
+18:38 - Mihail Catana
+Sempre verso le 15? Sì.
+
+18:41 - Giorgio
+Allora, se riesci anche a 14.30.
+
+18:45 - Mihail Catana
+Perfetto. Ti ho mandato comunque l'invito a calendario. Poi tu mi dicevi che siete di Milano, giusto?
+
+18:57 - Giorgio
+Allora, io sono di Novara.
+
+19:00 - Mihail Catana
+Il fondatore di Bologna, però la società è a Milano.
+
+19:05 - Giorgio
+Sì, no, perché quello che mi interessa a me è avere anche qualcuno... Tu sei di Milano? No, siamo di Crema, siamo mezz'ora da Milano.
+
+19:14 - Mihail Catana
+Vecino, comunque in zona Milano. Adesso che mi ha menzionato, mi ricordo di aver parlato di questa cosa, del fatto che fossimo comunque vicini. Allora, sia io che il fondatore possiamo tranquillamente venire. Uno, perché lui è molto spesso a Milano, Io da Novara a Crema sono 40 minuti. La prima volta che ho controllato non mi ricordo, quindi non è un problema. Successivamente si può tranquillamente considerare di venire insieme.
+
+ Possiamo anche fare, se la cosa ti interessa, possiamo anche venire con la proposta economica e parlarne di persona, magari tu e I tuoi soci e io e il fondatore.
+
+19:55 - Giorgio
+Intanto facciamo la chiamata.
+
+19:57 - Mihail Catana
+Andrebbe ben organizzata perché ci sono un po' di persone da allineare, però si può tranquillamente considerare come opzione.
+
+20:04 - Giorgio
+Va bene.
+
+20:05 - Mihail Catana
+La facciamo magari settimana prossima io e Giusto per darti un'idea e poi da lì consideriamo come allinearci. Va bene, perfetto. Ciao Giorgio, grazie.

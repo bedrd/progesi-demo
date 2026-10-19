@@ -1,0 +1,140 @@
+0:00 - Giorgio
+Allora Giorgio io ti direi di darci un feedback su come è andata la conversazione con I due soci.
+
+0:29 - Mihail Catana
+Ho visto che mi hanno chiesto anche il permesso per l'accesso alla demo, cosa che gli ho garantito.
+
+0:35 - Giorgio
+Mi hanno detto che non sono usciti a vederla quella.
+
+0:39 - Mihail Catana
+Alla registrazione forse loro avevano chiesto. Io l'accesso gliel'ho dato non immediatamente, un po' dopo, quindi magari è per quello che ho pretenduto che non sia uscito. Mi è arrivata la notifica, però non mi è arrivata sul telefono, era sul pc, quindi non gli ho garantito immediatamente però sì.
+
+0:57 - Giorgio
+Allora no diciamo che è piaciuto la piattaforma. Guardo di qua perché intanto c'ho la piattaforma aperta. Così vi dico eh quello che abbiamo pensato. Quello che non ci torna è la questione eh parte amministrativa. Nel senso noi con questa perché se tu vedi dove c'è impostazioni collegamento con Zucchetti senza Zucchetti registro interno. Quella parte lì di registro interno comprende tutta la contabilità e se ci sono degli aggiornamenti normativi non so noi con Zucchetti tutti gli aggiornamenti normativi per quanto riguarda la contabilità o anche con Team System o con tutti I software lì che comunque paghi anche non poco, ci sono gli aggiornamenti continui.
+
+ Io qui, se dovessi fare una contabilità sul nostro portale dedicato, dedicato a noi, questi aggiornamenti normativi ci sono o no? Prendo la parola, intanto ti presento, sono Ervin, tecnico quindi in questo caso.
+
+2:13 - Ervin BDMedia
+Allora sì, in questo caso, come hai ben detto, tu vedi di con zucchetti e senza. La demo appunto presenta le due forme, in questo caso una con e una senza. Ovviamente, come sicuramente avrei detto, Mihail per quanto riguarda momentaneamente è una demo. Demo classificabile come da parte vostra organizzativa e modificabile sotto ogni vostro punto di richiesta. Ovviamente tu quando clicchi su senza zucchetti non lo vedi, essendo appunto una demo, ma per quanto riguarda la normativa che tu hai detto, quello tranquillamente è classificabile come dato e fattibile da parte vostra.
+
+ Quindi tranquillamente quello è aggregabile dentro al software. Quindi diciamo che c'è una piattaforma di contabilità che voi fornite che ha tutte le caratteristiche di quelle più famose, nel senso che non so se poi sarà proprietaria vostra o vi appoggiate a qualcun altro, Allora, per quanto riguarda ovviamente la parte della contabilità, sarà parte della funzione AI, ovvero sono banalmente cinque la parte della AI, ma divise magari in quattro categorie, ovvero la parte commerciale, la contabilità, che conta anche dentro la fatturazione, l'operatività, quindi gestione appunto dei progetti, dei tecnici e tutto quello che ne concerne, che ovviamente ne parleremo meglio di tutto quello che volete voi dentro, e delle risorse umane, le temperature, il conto delle ore e quali si vogliono le informazioni.
+
+ Quindi sì, sì esatto.
+
+3:49 - Giorgio
+Ok, no perché il nostro problema è che mi sono informato perché con Zucchetti, soprattutto con G1 che è quello che abbiamo noi, si collega a fatica. Ecco, non c'è la possibilità di collegarsi con delle applicazioni esterne.
+
+4:06 - Ervin BDMedia
+Quello noi lo facciamo, sì. Il nostro software appunto permette eh collegamenti esterni e eh prendo un attimino appunto la palla in balzo per eh appunto dirti due due cosette che appunto saranno automazioni dentro al al vostro appunto software ovvero l'automazione per estrarre I conti ok?
+
+4:27 - Unidentified Speaker
+Ok.
+
+4:27 - Ervin BDMedia
+E sicuramente eh dalla parte di eh di zucchetti come appunto tu dicevi eh mancava. Sì. Hai due scelte. Du eh la prima è umana. E poi tu la passi alla E, e la E poi ti estrae tutto l'estato di conto. La seconda è un collegamento diretto alla banca con chiavi API, ok? Quindi questo cosa vuol dire? Tramite l'autorizzo dell'utente, quindi in questo caso vostro, il software riceve tutte le vostre notifiche, quindi dalla banca, dalle transazioni che voi emettete.
+
+ E lega il pagamento alla fattura. Esatto, alla quale poi verranno emesse da un fornitore di Open Banking, ok? Questo cosa vuol dire? Sotto una norma legislativa europea e italiana tu la puoi fare, non è che la puoi fare da solo, però se sei coperto da un fornitore che eccelle in questo campo è meglio, ok? Noi ovviamente ce l'abbiamo, si chiama Fabric, ok? È un fornitore proprio italiano che che offre questi servizi di come dire, di aggregazione di conti bancari e di collegamenti appunto API per prestazione dei conti e fare tutto appunto all'IA, perché il vostro punto in questo momento che voi volete togliere è la carta.
+
+ L'altro punto è il provider, una sorta di... Come viene il gioco in italiano? Ehm fornitore fornitore grazie è un fornitore di appunto di certificazioni europeo legislativo che ehm che lavora a mo' di fatturazioni elettroniche. Tu lo puoi sempre fare però eh per eh l'agenzia delle entrate sì tu non conti nulla. Sì. Eh con questo fornitore che appunto sempre noi abbiamo contatto con loro e mh presso eh le l'agenzia delle entrate e siete così coperti dalla fatturazione e conservazione e potenzialmente anche il collegamento diretto eh dalla banca per gli incassi.
+
+ Ho detto potenzialmente perché loro cambiano la privacy ogni tot. Io adesso non mi ricordo esattamente entro quando ma potenzialmente potrebbe starci dentro.
+
+6:51 - Giorgio
+Quello è ancora da verificare. Ok. Allora quello che mi interesserebbe a me in questo che verrà associata nel caso alla piattaforma, almeno una demo così per capire anche con chi fa la mia amministrazione, quindi la nostra amministrazione, tutto quello che potrebbe servirci.
+
+7:13 - Ervin BDMedia
+Certo, in quel punto lì servirà ovviamente una procedura standard alla quale bisogna fare un altro brief ulteriore, quindi come stai facendo in questo momento te Giorgio, di amplimento di informazioni, ovvero tu vuoi sapere un ottimino o un ottimino di più, come funzionare meglio, ok? Comunque c'è stata la coltratemia, c'è stata giustamente una breve spiegazione di tutto il software, ma quello che tu vuoi ancora di più giustamente è quello che ci sarà dopo e come va gestito.
+
+7:46 - Giorgio
+Ti dico, la piattaforma ha tutto quello che ci siamo detti. Il nostro problema è che con Zucchetti non possiamo collegare quindi io cambio il gestionale di uno e prendo un altro come Team System o altri ad hoc che si collegano con la piattaforma o facciamo tutto dentro. Però devo assicurarmi che se facciamo tutto dentro la piattaforma nostra ci sia tutto quello che ci serve per l'amministrazione e la contabilità.
+
+8:17 - Ervin BDMedia
+Allora sì, puoi fare tutto dentro, quindi tu puoi proprio uscire da Zucchetti G1 e appunto entrare in questo nuovo software. Unica cosa, la fase di quando passi da Zucchetti al nostro nuovo software ovviamente non si manderà tutto giù subito, ma bisogna estrapolare quante più informazioni si abbia dal G1 che voi avete in questo momento, per poi passare tutto quanto dentro al nuovo software.
+
+8:46 - Giorgio
+Ok, e quindi quello che vi dicevo è il prossimo passaggio è verificare se dentro la contabilità che potremmo fare su questa piattaforma c'è tutto quello che effettivamente di là fanno.
+
+9:01 - Ervin BDMedia
+Esatto, esatto. Tranquillamente è un passaggio da fare. Esatto, tranquillamente fattibile anche perché per quanto nome faccia a Zucchetti e a G1 nel 2026 comunque bene o male non saper integrare delle API un po' così, ok? Quindi tranquillamente l'ultimo elemento sarà il passaggio di informazioni, che di tutela da parte vostra e nostra si può tranquillamente fare senza nessun tipo di problema. Ovviamente ha il suo tempo perché devi passare tutto, questo è vero, bisogna tenerelo in conto, però risposta finale sì.
+
+9:41 - Mihail Catana
+Io mi sono immaginato così, nel senso, come ci lasceremo dopo questa chiamata, giusto per poi in anticipo, andiamo a ritoccare la demo, togliere la parte senza zucchetti, quindi la demo diventerà il sostituivo di zucchetti e tutte le automazioni.
+
+9:42 - Giorgio
+Ok. Allora, scusami prendo un attimo la parola.
+
+10:02 - Mihail Catana
+Però una domanda per te, ora ti faccio una condivisione e mi devi e mi dai una risposta così capisco se vuoi anche questo nella demo oppure no, o eventualmente anche nella soluzione finale.
+
+10:23 - Giorgio
+Riesci a vedere?
+
+10:25 - Unidentified Speaker
+Sì.
+
+10:26 - Mihail Catana
+Allora, questa è una dashboard interattiva degli agenti AI. Questo cosa significa? Tu praticamente quello che vedi nella tua demo di adesso manca tutto tranne quello che è la parte di background degli agenti AI, quindi quelli che ti fanno I preventivi, quelli che ti fanno l'allocazione delle risorse, cioè dei progetti, tutto quello che avviene in background degli agenti AI rispetto a Zucchetti che non lo ha quello.
+
+ La mia domanda è, noi te lo possiamo introdurre all'interno della demo così almeno è più facile immaginarsi come lavora la soluzione, cioè come funziona.
+
+11:08 - Ervin BDMedia
+Perché giustamente tu vedi l'esterno dell'operatività del software e non il background, quello che c'è dietro.
+
+11:15 - Mihail Catana
+Certo, però qua te lo possiamo mettere anche poi nella soluzione finale. Non cambia a livello di prezzo, nel senso che alla fine l'unica cosa che è una dimostrazione è interazione. Tu puoi andare a cliccare un un po' come quando entri in ufficio e vedi tutti I dipendenti che lavorano. Vedi e vai da uno e gli chiedi cosa sta facendo e vai dall'altro. Secondo me è molto utile a livello rappresentativo e poi nell'utilizzarlo però devi far sì sì va bene va bene prova a mettermela dentro.
+
+ Perfetto e detto questo la prossima cosa è venire con la demo Finita. Di persona io e Ervin a trovarvi. Noi stiamo pensando come date il 29, il 30 o il 2 novembre.
+
+12:14 - Giorgio
+Allora aspetta un attimo che apro. Mi si è chiuso il pc. Allora 29, 30 o 2. Io farei il 2. Il 2? Lunedì, sì. Sono delle date indicative che ci siamo messi noi potrebbe potrebbe andar bene va bene va bene l'orario preferisce la mattina al pomeriggio quando siete più comodi voi allora non troppo presto la mattina perché devo portare I bambini in asilo tranquillo non vedrai Ervin arrivare però magari nel primo pomeriggio dopo pranzo 14 30 si potrebbe andare va bene mi mandi tu solito l'invinto e tutto.
+
+13:02 - Mihail Catana
+Organizzo tutto io a calendario se non c'è problema. Perfetto. E detto questo era solo per per capire un attimo come muoverci successiva a questa chiamata io direi che confermamelo però io direi che quando veniamo di persona mi porto già anche la proposta economica e il contratto. Sì la proposta economica sicuramente.
+
+13:23 - Giorgio
+Lo porto con me.
+
+13:24 - Mihail Catana
+Poi è un documento di panda che puoi anche firmare lo dopo. Però porto tutto così decidiamo già che siamo lì di persona. Questa è la prima visita, poi se c'è bisogno di una seconda si può tranquillamente organizzare. Però voglio arrivare preparato e portarvi tutto quello che eventualmente ci potrebbe servire. A livello tecnico ho parlato con Ervin di tutto quello che erano comunque le... E la visita serve soprattutto a Ervin per concretizzare quello sarà poi il livello, cioè come strutturarvi la soluzione.
+
+ Nel senso che per materializzare quello che è di fatto il software. Perché online possiamo parlarne quanto vogliamo, però quando poi ci incontriamo di persona riusciamo effettivamente ad arrivare, secondo me. Sì, preferisco molto. Esattamente, stessa cosa ho detto anche a Ervin, se preferisci di andare di persona per lui mi ha detto di sì. Quindi ci troviamo tutti e tre sulla stessa barca e niente.
+
+14:29 - Giorgio
+Va bene. Allora ci vediamo il 2 novembre. Se volete anticiparmi qualcosa, qualche demo quando è pronto. Assolutamente sì, assolutamente sì. Io la faccio vedere anche agli altri e poi ci vediamo.
+
+14:47 - Mihail Catana
+Non appena l'ho finita con appunto la dimostrazione senza il pacchetto. Una volta che è tutto definito la giro e mi dai un feedback. Quando veniamo il 2 novembre è già al 90% quello che dovrebbe essere. Va bene Giorgio, a meno che non ci siano domande o altri dubbi che hai nel frattempo.
+
+15:14 - Giorgio
+No, per il momento direi che siamo a posto.
+
+15:19 - Unidentified Speaker
+così.
+
+15:19 - Mihail Catana
+Perfetto. Noi ci prepareremo anche sull'aspetto legislativo quindi vi faremo avere tutte le informazioni a riguardo cyber security, agenzia delle entrate quindi tutti gli adiempimenti necessari sia sotto un aspetto di vista. Più che altro per la contabilità ci teniamo parecchio che sia tutto normale.
+
+15:41 - Giorgio
+E' giusto.
+
+15:42 - Mihail Catana
+C'è la parte di GDPR dei clienti, c'è la parte di Cyber Security vostra e c'è la parte di contabilità, quindi di essere in regola con l'agenzia dell'entrata.
+
+15:55 - Unidentified Speaker
+Esatto.
+
+15:55 - Mihail Catana
+Che I pagamenti siano leciti, giustamente. Assolutamente sì. Vi faremo avere tutta una parte scritta e una parte di demo che serve per capire come funzionano I software, però sì, ci sarà anche tutta la parte scritta dietro che vi servirà voi per non so, magari se avete un legale rappresentante con cui consultare, almeno ci date anche un feedback sotto quel punto di vista lì.
+
+16:24 - Giorgio
+Dovrebbe essere tutto normale, però. Ok, va bene.
+
+16:27 - Mihail Catana
+Perfetto. Va bene, Giorgio, io ti ringrazio.
+
+16:30 - Giorgio
+Grazie a voi e ci riaggiorniamo. Ti aggiorno non appena ho tutto. Va bene.
+
+16:36 - Ervin BDMedia
+Perfetto. Buona giornata. Ciao, ciao.

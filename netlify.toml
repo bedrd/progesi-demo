@@ -1,0 +1,9 @@
+# si pubblica solo la demo: transcript, PDF e demo di altri clienti restano fuori dal sito
+[build]
+  command = "mkdir -p dist && cp progesi.html dist/index.html"
+  publish = "dist"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

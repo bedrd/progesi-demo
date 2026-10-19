@@ -1,0 +1,2432 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calibro · Gestione commesse</title>
+
+<!--
+  ============================================================
+  CALIBRO · Demo gestione commesse
+  Prodotto generico personalizzabile per officine metalmeccaniche.
+  ------------------------------------------------------------
+  PERSONALIZZA PER UN NUOVO LEAD (cerca-e-sostituisci in questo file):
+    · Nome prodotto ....... "Calibro"                 (titolo, sidebar, footer)
+    · Icona logo .......... <i class="bi bi-rulers">   (riquadro in alto a sinistra)
+    · Azienda cliente ..... "Meccanica Rossi S.r.l."   (utente sidebar, firma email)
+    · Utente demo ......... "Marco Rossi" / "Marco" / "MR"
+    · Gestionale/ERP ...... "Gestionale"               (metti il nome reale: Mago, Arca, TeamSystem…)
+    · Colore accento ...... variabile --color-accent   (blocco @theme qui sotto)
+  Vedi README.md per la guida completa.
+  ============================================================
+-->
+
+<!-- Tailwind CSS v4 (browser, zero build) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+
+<!-- Google Fonts: Space Grotesk (display) · Inter (body) · JetBrains Mono (dati) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style type="text/tailwindcss">
+  @theme {
+    --color-bg:           #F4F5F7;
+    --color-surface:      #FFFFFF;
+    --color-surface-2:    #F8F9FB;
+    --color-ink:          #14171A;
+    --color-muted:        #667085;
+    --color-faint:        #98A2B3;
+    --color-accent:       #1F5FE0;
+    --color-accent-soft:  #E7EEFD;
+    --color-steel:        #2F4A5C;
+    --color-steel-soft:   #E1E9ED;
+    --color-line:         #E6E8EC;
+    --color-line-2:       #EEF0F3;
+    --color-line-strong:  #D3D7DE;
+    --color-ok:           #1E9E6A;
+    --color-ok-soft:      #DCF3E8;
+    --color-warn:         #B7791F;
+    --color-warn-soft:    #F7EDD4;
+    --color-danger:       #D0402E;
+    --color-danger-soft:  #FBE3DF;
+
+    /* codifica colore per lavorazione */
+    --color-torno:     #2F4A5C;
+    --color-fresa:     #3E7D5A;
+    --color-laser:     #E8590C;
+    --color-piega:     #5B6CB0;
+    --color-saldatura: #A8581F;
+    --color-taglio:    #76796F;
+
+    --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    --font-body:    "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+  }
+</style>
+
+<style>
+  :root { color-scheme: light; }
+  /* Colori lavorazione esposti come CSS var: la build-browser di Tailwind non
+     emette le variabili @theme non usate da una classe utility, e questi colori
+     servono solo inline (pallini filtro, pillole, barrette) → li dichiaro qui. */
+  :root {
+    --color-torno:     #2F4A5C;
+    --color-fresa:     #3E7D5A;
+    --color-laser:     #E8590C;
+    --color-piega:     #5B6CB0;
+    --color-saldatura: #A8581F;
+    --color-taglio:    #76796F;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background-color: #F4F5F7;
+    color: #14171A;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Stile ibrido: sfondo pulito, niente griglia blueprint sul main.
+     .blueprint neutralizzata; .blueprint-strong resta solo come carta tecnica
+     tenue nei mock (dropzone, cartiglio marcato). */
+  .blueprint { background-image: none; }
+  .blueprint-strong {
+    background-image:
+      linear-gradient(to right, rgba(47,74,92,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(47,74,92,0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  /* Card SaaS: ombra tenue su superfici bianche bordate */
+  .bg-surface.border { box-shadow: 0 1px 2px rgba(16,24,40,.04); }
+
+  /* Stile ibrido: tacche d'angolo disattivate (look pulito) */
+  .ticks { position: relative; }
+  .ticks::before, .ticks::after { content: none; }
+
+  /* Linea di quota (dimension line) decorativa */
+  .dimline { position: relative; }
+  .dimline::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 50%;
+    height: 1px; background: var(--color-line-strong);
+  }
+
+  /* Cursore a manina su tutto ciò che è interattivo
+     (Tailwind v4 non applica più cursor:pointer ai button di default) */
+  button:not(:disabled), [role="button"], [onclick], summary, a[href] { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+
+  /* Tab attivo */
+  .tab-active { color: var(--color-ink); border-color: var(--color-accent); }
+
+  /* Filtri (lavorazione / anomalie): attivo sempre leggibile, niente bianco-su-bianco all'hover */
+  .lav-filter, .anom-filter { transition: background .12s ease, color .12s ease, border-color .12s ease; }
+  .lav-filter:not(.active):hover, .anom-filter:not(.active):hover { background: var(--color-surface-2); }
+  .lav-filter.active, .anom-filter.active { background: var(--color-ink); color: #fff; border-color: var(--color-ink); }
+
+  /* Nav item attivo (stile ibrido: riempimento accent-soft) */
+  .nav-item.active {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+  .nav-item.active .nav-ico { color: var(--color-accent); }
+
+  /* Focus tastiera visibile */
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible, input:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  /* Scrollbar discreta */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #D3D7DE; border-radius: 6px; border: 2px solid #F4F5F7; }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  .view[hidden] { display: none; }
+
+  /* Griglie del preventivatore: le stesse colonne per l'intestazione e per ogni riga,
+     così restano allineate (è la struttura dell'editor vero). */
+  .riga-grid {
+    display: grid;
+    grid-template-columns: 6px 28px minmax(110px,140px) minmax(160px,1fr) 60px 300px 84px 104px 104px 34px;
+    align-items: center;
+  }
+  /* Pannello della riga: comandi officina a sinistra, tre colonne prezzi + azioni a destra. */
+  .zona-grid {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 120px 92px 136px 36px;
+    align-items: stretch;
+  }
+  .money, .money-x {
+    background: #fbfaf6;
+    border-left: 1px solid var(--color-line-strong);
+    display: flex; align-items: center;
+    min-height: 52px;
+  }
+  .money { justify-content: flex-end; padding-left: .625rem; padding-right: .625rem; }
+  .money-x { justify-content: center; }
+  /* Lista delle regole: le intestazioni dicono la frase che una regola rappresenta. */
+  .regola-grid {
+    display: grid;
+    grid-template-columns: minmax(150px,1fr) minmax(140px,0.9fr) minmax(180px,1.3fr) minmax(200px,1.6fr) auto;
+    gap: .75rem;
+    align-items: center;
+  }
+  /* Viola del "pezzo simile": è un match geometrico, non una stima — colore suo. */
+  :root { --color-viola: #6d4a96; --color-viola-soft: #ece3f6; }
+
+  /* ---------- Mobile (< 768px): le griglie a colonne fisse diventano schede ---------- */
+  @media (max-width: 767px) {
+    .riga-head, .zona-head, .regola-head { display: none; }
+
+    /* riga del preventivo: stato · articolo · chevron / descrizione / q.tà · materiale · peso / prezzo · imponibile */
+    .riga-grid {
+      grid-template-columns: 6px 28px minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) 34px;
+      grid-template-areas:
+        "s st art  art  art  chev"
+        "s .  desc desc desc desc"
+        "s .  q    mat  mat  mat"
+        "s .  peso prz  imp  imp";
+      row-gap: .375rem;
+      padding: .5rem 0 .625rem;
+    }
+    .riga-grid > :nth-child(1)  { grid-area: s; align-self: stretch; }
+    .riga-grid > :nth-child(2)  { grid-area: st; }
+    .riga-grid > :nth-child(3)  { grid-area: art; }
+    .riga-grid > :nth-child(4)  { grid-area: desc; }
+    .riga-grid > :nth-child(5)  { grid-area: q; }
+    .riga-grid > :nth-child(6)  { grid-area: mat; }
+    .riga-grid > :nth-child(7)  { grid-area: peso; }
+    .riga-grid > :nth-child(8)  { grid-area: prz; text-align: left; }
+    .riga-grid > :nth-child(9)  { grid-area: imp; text-align: left; }
+    .riga-grid > :nth-child(10) { grid-area: chev; }
+    .riga-grid > :nth-child(n+5):nth-child(-n+9)::before {
+      display: block; margin-bottom: 2px;
+      font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .04em;
+      color: var(--color-muted);
+    }
+    .riga-grid > :nth-child(5)::before { content: "q.tà"; }
+    .riga-grid > :nth-child(6)::before { content: "materiale"; }
+    .riga-grid > :nth-child(7)::before { content: "peso kg"; }
+    .riga-grid > :nth-child(8)::before { content: "prezzo un."; }
+    .riga-grid > :nth-child(9)::before { content: "imponibile"; }
+
+    /* pannello del prezzo: comandi su una riga intera, sotto costo · ricarico · totale con l'etichetta */
+    .zona-grid { grid-template-columns: minmax(0,1fr) minmax(0,.8fr) minmax(0,1.1fr) 36px; }
+    .zona-grid > :first-child { grid-column: 1 / -1; }
+    .zona-grid > :nth-child(2) { border-left: 0; }
+    .money { flex-direction: column; align-items: flex-end; justify-content: center; gap: 2px; padding-top: .375rem; padding-bottom: .375rem; }
+    .money, .money-x { border-top: 1px solid var(--color-line-2); min-height: 0; }
+    .zona-grid > :nth-child(n+2):nth-child(-n+4)::before {
+      font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--color-muted);
+    }
+    .zona-grid > :nth-child(2)::before { content: "costo €"; }
+    .zona-grid > :nth-child(3)::before { content: "ric. %"; }
+    .zona-grid > :nth-child(4)::before { content: "totale €"; }
+
+    /* regola: codice + Modifica, poi quando / applica / dice all'AI una sotto l'altra */
+    .regola-grid {
+      grid-template-columns: minmax(0,1fr) auto;
+      grid-template-areas: "cod mod" "quando quando" "allora allora" "ai ai";
+      gap: .375rem .75rem;
+    }
+    .regola-grid > :nth-child(1) { grid-area: cod; }
+    .regola-grid > :nth-child(2) { grid-area: quando; }
+    .regola-grid > :nth-child(3) { grid-area: allora; }
+    .regola-grid > :nth-child(4) { grid-area: ai; }
+    .regola-grid > :nth-child(5) { grid-area: mod; align-self: start; }
+    .regola-grid > :nth-child(3)::before, .regola-grid > :nth-child(4)::before {
+      font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--color-faint);
+      margin-right: .4rem; flex-shrink: 0;
+    }
+    .regola-grid > :nth-child(3)::before { content: "applica"; }
+    .regola-grid > :nth-child(4)::before { content: "dice all'AI"; }
+  }
+
+  /* range stepper officina */
+  input[type="range"] { -webkit-appearance: none; appearance: none; height: 6px; border-radius: 6px; background: var(--color-line); }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--color-accent); border: 3px solid #fff; box-shadow: 0 0 0 1px var(--color-line-strong); cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 18px; height: 18px; border-radius: 50%; background: var(--color-accent);
+    border: 3px solid #fff; box-shadow: 0 0 0 1px var(--color-line-strong); cursor: pointer;
+  }
+
+  .toast { transition: transform .35s cubic-bezier(.2,.8,.2,1), opacity .35s; }
+
+  /* pulse durante elaborazione */
+  @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(400%); } }
+  .scanning { position: relative; overflow: hidden; }
+  .scanning::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 30%;
+    background: linear-gradient(180deg, transparent, rgba(31,95,224,0.14), transparent);
+    animation: scanline 1.1s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+    .scanning::after { display: none; }
+  }
+</style>
+</head>
+
+<body class="min-h-screen">
+
+<!-- ===================== APP SHELL ===================== -->
+<div class="flex min-h-screen">
+
+  <!-- backdrop mobile -->
+  <div id="backdrop" class="fixed inset-0 z-30 bg-ink/40 backdrop-blur-[1px] lg:hidden" hidden></div>
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-40 w-[252px] -translate-x-full lg:translate-x-0 transition-transform duration-300
+           bg-surface border-r border-line flex flex-col">
+
+    <!-- brand -->
+    <div class="h-16 px-4 flex items-center gap-3 border-b border-line">
+      <div class="ticks h-9 w-9 grid place-items-center bg-ink text-bg shrink-0" style="border-radius:6px">
+        <i class="bi bi-rulers text-lg" aria-hidden="true"></i>
+      </div>
+      <div class="leading-tight">
+        <div class="font-display font-700 text-[15px] tracking-tight">Calibro</div>
+        <div class="font-mono text-[10px] text-muted uppercase tracking-[0.16em]">gestione commesse</div>
+      </div>
+      <button id="closeNav" class="ml-auto lg:hidden text-muted hover:text-ink p-1" aria-label="Chiudi menu">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- nav -->
+    <nav class="flex-1 overflow-y-auto py-3" aria-label="Navigazione principale">
+      <p class="px-5 pb-2 pt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Officina</p>
+      <button data-go="dashboard" class="nav-item active w-full flex items-center gap-3 px-5 py-2.5 text-sm text-muted hover:text-ink">
+        <i class="bi bi-grid-1x2 nav-ico text-base text-faint"></i> Dashboard
+      </button>
+      <button data-go="commessa" class="nav-item w-full flex items-center gap-3 px-5 py-2.5 text-sm text-muted hover:text-ink">
+        <i class="bi bi-diagram-3 nav-ico text-base text-faint"></i> Commesse
+        <span class="ml-auto font-mono text-[10px] bg-line-2 text-muted px-1.5 py-0.5 rounded">7</span>
+      </button>
+      <button data-go="anomalie" class="nav-item w-full flex items-center gap-3 px-5 py-2.5 text-sm text-muted hover:text-ink">
+        <i class="bi bi-exclamation-octagon nav-ico text-base text-faint"></i> Controllo anomalie
+        <span id="navAnomalie" class="ml-auto font-mono text-[10px] bg-danger-soft text-danger px-1.5 py-0.5 rounded">6</span>
+      </button>
+      <button data-go="approvv" class="nav-item w-full flex items-center gap-3 px-5 py-2.5 text-sm text-muted hover:text-ink">
+        <i class="bi bi-truck nav-ico text-base text-faint"></i> Approvvigionamento
+        <span class="ml-auto font-mono text-[10px] bg-warn-soft text-warn px-1.5 py-0.5 rounded">4</span>
+      </button>
+      <button data-go="sal" class="nav-item w-full flex items-center gap-3 px-5 py-2.5 text-sm text-muted hover:text-ink">
+        <i class="bi bi-broadcast nav-ico text-base text-faint"></i> Avanzamento SAL
+      </button>
+      <button data-go="preventivo" class="nav-item w-full flex items-center gap-3 px-5 py-2.5 text-sm text-muted hover:text-ink">
+        <i class="bi bi-calculator nav-ico text-base text-faint"></i> Preventivatore
+      </button>
+      <button data-go="regole" class="nav-item w-full flex items-center gap-3 pl-[52px] pr-5 py-2 text-[13px] text-muted hover:text-ink">
+        <i class="bi bi-book nav-ico text-sm text-faint"></i> Regole e istruzioni
+      </button>
+
+      <p class="px-5 pb-2 pt-5 font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Sistema</p>
+      <button data-go="automazioni" class="nav-item w-full flex items-center gap-3 px-5 py-2.5 text-sm text-muted hover:text-ink">
+        <i class="bi bi-sliders nav-ico text-base text-faint"></i> Automazioni
+      </button>
+      <button data-go="gestionale" class="nav-item w-full flex items-center gap-3 px-5 py-2.5 text-sm text-muted hover:text-ink">
+        <i class="bi bi-plug nav-ico text-base text-faint"></i> Gestionale
+      </button>
+    </nav>
+
+    <!-- connection status -->
+    <div class="px-4 py-3 border-t border-line">
+      <div class="flex items-center gap-2 text-[11px] font-mono text-muted whitespace-nowrap">
+        <span class="h-2 w-2 rounded-full bg-ok inline-block shrink-0"></span>
+        <span>Gestionale collegato</span>
+        <span class="ml-auto text-faint">4 min</span>
+      </div>
+    </div>
+
+    <!-- user -->
+    <div class="px-4 py-3 border-t border-line flex items-center gap-3">
+      <div class="h-9 w-9 rounded-full bg-steel text-white grid place-items-center font-mono text-xs font-700 shrink-0">MR</div>
+      <div class="leading-tight min-w-0">
+        <div class="text-sm font-600 truncate">Marco Rossi</div>
+        <div class="text-[11px] text-muted truncate">Direzione · Meccanica Rossi S.r.l.</div>
+      </div>
+      <i class="bi bi-three-dots-vertical ml-auto text-muted"></i>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="flex-1 lg:ml-[252px] min-w-0 flex flex-col">
+
+    <!-- topbar -->
+    <header class="sticky top-0 z-20 h-16 bg-bg/85 backdrop-blur border-b border-line flex items-center gap-3 px-4 sm:px-6">
+      <button id="openNav" class="lg:hidden text-ink p-1" aria-label="Apri menu"><i class="bi bi-list text-2xl"></i></button>
+
+      <div class="hidden sm:flex items-center gap-2 font-mono text-[11px] text-muted uppercase tracking-wider">
+        <span id="crumb" class="text-ink">Dashboard</span>
+      </div>
+
+      <div class="ml-auto flex items-center gap-2">
+        <button class="h-9 px-3.5 inline-flex items-center gap-2 bg-ink text-white rounded-md text-sm font-500 hover:bg-ink/90" onclick="goto('commessa')">
+          <i class="bi bi-plus-lg"></i> Nuova commessa
+        </button>
+      </div>
+    </header>
+
+    <!-- scroll area -->
+    <main class="flex-1 blueprint">
+
+      <!-- =============================================== -->
+      <!-- VIEW: DASHBOARD                                  -->
+      <!-- =============================================== -->
+      <section data-view="dashboard" class="view px-4 sm:px-6 lg:px-8 py-7 max-w-[1180px] mx-auto">
+
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-6 reveal">
+          <div>
+            <h1 class="font-display font-700 text-2xl sm:text-3xl tracking-tight">Buongiorno, Marco.</h1>
+            <p class="text-muted text-sm mt-1.5 max-w-2xl"><span class="inline-block font-mono text-[10px] uppercase tracking-wider bg-line-2 text-muted px-1.5 py-0.5 rounded mr-1.5 align-middle">demo</span>anteprima dimostrativa: numeri e commesse sono simulati e non rappresentano il prodotto finale, che potrà cambiare.</p>
+          </div>
+          <button class="inline-flex items-center gap-2 h-10 px-4 bg-accent text-white rounded-md text-sm font-500 hover:brightness-95" onclick="goto('commessa')">
+            <i class="bi bi-upload"></i> Carica disegni commessa
+          </button>
+        </div>
+
+        <!-- KPI (con sparkline) -->
+        <div id="kpiRow" class="reveal grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-7"></div>
+
+        <div class="space-y-5">
+          <!-- commesse list -->
+          <div class="reveal">
+            <div class="flex flex-wrap items-center justify-between gap-y-2 mb-3">
+              <h2 class="font-display font-600 text-lg">Commesse aperte</h2>
+              <div class="flex items-center gap-1 font-mono text-[11px]">
+                <button class="px-2.5 py-1 rounded bg-ink text-bg">Tutte</button>
+                <button class="px-2.5 py-1 rounded text-muted hover:bg-surface">Da approvvig.</button>
+                <button class="px-2.5 py-1 rounded text-muted hover:bg-surface">In produzione</button>
+              </div>
+            </div>
+
+            <div class="bg-surface border border-line rounded-lg overflow-hidden" style="border-radius:8px">
+              <!-- header row -->
+              <div class="hidden sm:grid grid-cols-[110px_1fr_120px_92px] gap-3 px-4 py-2.5 border-b border-line bg-surface-2 font-mono text-[10px] uppercase tracking-wider text-muted">
+                <span>Commessa</span><span>Cliente · oggetto</span><span>Stato</span><span class="text-right">Avanz.</span>
+              </div>
+
+              <!-- P001 (clickable) -->
+              <button onclick="goto('commessa')" class="w-full text-left grid grid-cols-1 sm:grid-cols-[110px_1fr_120px_92px] gap-1 sm:gap-3 px-4 py-3 border-b border-line hover:bg-surface-2 transition">
+                <div class="font-mono text-sm font-700 text-ink flex items-center gap-2">P001
+                  <span class="sm:hidden text-[10px] font-400 text-danger">· 6 anomalie</span>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-sm font-500 truncate">Console operatore <span class="text-faint">· 13 articoli</span></div>
+                  <div class="text-[12px] text-muted truncate">Lauretti Automazioni Industriali · OA.568/2026</div>
+                </div>
+                <div class="sm:self-center"><span class="inline-flex items-center gap-1.5 font-mono text-[11px] bg-warn-soft text-warn px-2 py-0.5 rounded"><i class="bi bi-exclamation-triangle-fill"></i> Da verificare</span></div>
+                <div class="sm:self-center sm:text-right">
+                  <div class="font-mono text-sm font-700">35%</div>
+                  <div class="h-1.5 mt-1 rounded bg-line-2 overflow-hidden"><span class="block h-full bg-accent" style="width:35%"></span></div>
+                </div>
+              </button>
+
+              <!-- P002 -->
+              <div class="grid grid-cols-1 sm:grid-cols-[110px_1fr_120px_92px] gap-1 sm:gap-3 px-4 py-3 border-b border-line hover:bg-surface-2">
+                <div class="font-mono text-sm font-700 text-ink">P002</div>
+                <div class="min-w-0"><div class="text-sm font-500 truncate">Gruppo trasporto a nastro <span class="text-faint">· 28 articoli</span></div>
+                  <div class="text-[12px] text-muted truncate">Vesta Robotics S.p.A. · OA.611/2026</div></div>
+                <div class="sm:self-center"><span class="inline-flex items-center gap-1.5 font-mono text-[11px] bg-steel-soft text-steel px-2 py-0.5 rounded"><i class="bi bi-gear-fill"></i> In produzione</span></div>
+                <div class="sm:self-center sm:text-right"><div class="font-mono text-sm font-700">72%</div><div class="h-1.5 mt-1 rounded bg-line-2 overflow-hidden"><span class="block h-full bg-steel" style="width:72%"></span></div></div>
+              </div>
+
+              <!-- C-2412 -->
+              <div class="grid grid-cols-1 sm:grid-cols-[110px_1fr_120px_92px] gap-1 sm:gap-3 px-4 py-3 border-b border-line hover:bg-surface-2">
+                <div class="font-mono text-sm font-700 text-ink">C-2412</div>
+                <div class="min-w-0"><div class="text-sm font-500 truncate">Telaio quadro comandi <span class="text-faint">· 9 articoli</span></div>
+                  <div class="text-[12px] text-muted truncate">Lauretti Automazioni Industriali · OA.540/2026</div></div>
+                <div class="sm:self-center"><span class="inline-flex items-center gap-1.5 font-mono text-[11px] bg-ok-soft text-ok px-2 py-0.5 rounded"><i class="bi bi-clipboard-check-fill"></i> Collaudo</span></div>
+                <div class="sm:self-center sm:text-right"><div class="font-mono text-sm font-700">90%</div><div class="h-1.5 mt-1 rounded bg-line-2 overflow-hidden"><span class="block h-full bg-ok" style="width:90%"></span></div></div>
+              </div>
+
+              <!-- P004 -->
+              <div class="grid grid-cols-1 sm:grid-cols-[110px_1fr_120px_92px] gap-1 sm:gap-3 px-4 py-3 border-b border-line hover:bg-surface-2">
+                <div class="font-mono text-sm font-700 text-ink">P004</div>
+                <div class="min-w-0"><div class="text-sm font-500 truncate">Supporto sensori <span class="text-faint">· 14 articoli</span></div>
+                  <div class="text-[12px] text-muted truncate">Caleido Packaging S.r.l. · OA.629/2026</div></div>
+                <div class="sm:self-center"><span class="inline-flex items-center gap-1.5 font-mono text-[11px] bg-warn-soft text-warn px-2 py-0.5 rounded"><i class="bi bi-box-seam-fill"></i> Da approvvig.</span></div>
+                <div class="sm:self-center sm:text-right"><div class="font-mono text-sm font-700">20%</div><div class="h-1.5 mt-1 rounded bg-line-2 overflow-hidden"><span class="block h-full bg-accent" style="width:20%"></span></div></div>
+              </div>
+
+              <!-- C-2415 -->
+              <div class="grid grid-cols-1 sm:grid-cols-[110px_1fr_120px_92px] gap-1 sm:gap-3 px-4 py-3 hover:bg-surface-2">
+                <div class="font-mono text-sm font-700 text-ink">C-2415</div>
+                <div class="min-w-0"><div class="text-sm font-500 truncate">Flangia riduttore <span class="text-faint">· 4 articoli</span></div>
+                  <div class="text-[12px] text-muted truncate">Sigma Riduttori S.r.l. · OA.598/2026</div></div>
+                <div class="sm:self-center"><span class="inline-flex items-center gap-1.5 font-mono text-[11px] bg-steel-soft text-steel px-2 py-0.5 rounded"><i class="bi bi-gear-fill"></i> In produzione</span></div>
+                <div class="sm:self-center sm:text-right"><div class="font-mono text-sm font-700">55%</div><div class="h-1.5 mt-1 rounded bg-line-2 overflow-hidden"><span class="block h-full bg-steel" style="width:55%"></span></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- side column -->
+          <div class="space-y-5">
+            <!-- attenzione P001 -->
+            <div class="reveal ticks bg-surface border border-line rounded-lg p-5" style="border-radius:8px">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="h-8 w-8 grid place-items-center rounded bg-danger-soft text-danger"><i class="bi bi-exclamation-octagon-fill"></i></span>
+                <h3 class="font-display font-600">Richiede la tua firma</h3>
+              </div>
+              <p class="text-sm text-muted mb-3">La commessa <span class="font-mono font-600 text-ink">P001</span> ha <span class="text-danger font-600">6 anomalie</span> tra disegno e ordine. Risolvile prima di mandare in acquisto.</p>
+              <ul class="space-y-1.5 text-[13px] mb-4">
+                <li class="flex gap-2"><i class="bi bi-dot text-danger"></i> Materiale inox vs FE zincata <span class="font-mono text-faint">(431, 432)</span></li>
+                <li class="flex gap-2"><i class="bi bi-dot text-warn"></i> Quantità 6 vs 4 <span class="font-mono text-faint">(333)</span></li>
+                <li class="flex gap-2"><i class="bi bi-dot text-warn"></i> Descrizione errata <span class="font-mono text-faint">(392)</span></li>
+              </ul>
+              <button onclick="goto('anomalie')" class="w-full h-10 inline-flex items-center justify-center gap-2 bg-ink text-bg rounded-md text-sm font-500 hover:bg-ink/90">
+                Apri controllo anomalie <i class="bi bi-arrow-right"></i>
+              </button>
+            </div>
+
+            <!-- attività -->
+            <div class="reveal bg-surface border border-line rounded-lg p-5" style="border-radius:8px">
+              <h3 class="font-display font-600 mb-3">Attività recente</h3>
+              <ol class="space-y-3 text-[13px]">
+                <li class="flex gap-3"><span class="font-mono text-[10px] text-faint pt-0.5 w-9 shrink-0">09:41</span><span>Distinta grezzi <span class="font-mono">P001</span> generata — 13 pezzi, 7 grezzi aggregati.</span></li>
+                <li class="flex gap-3"><span class="font-mono text-[10px] text-faint pt-0.5 w-9 shrink-0">09:41</span><span>Rilevato conflitto materiale su <span class="font-mono">431/432</span>.</span></li>
+                <li class="flex gap-3"><span class="font-mono text-[10px] text-faint pt-0.5 w-9 shrink-0">08:55</span><span>Comunicazione SAL inviata a <span class="font-600">Vesta Robotics</span> — 72%.</span></li>
+                <li class="flex gap-3"><span class="font-mono text-[10px] text-faint pt-0.5 w-9 shrink-0">ieri</span><span>Sincronizzati 4 ordini dal gestionale.</span></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =============================================== -->
+      <!-- VIEW: COMMESSA P001                              -->
+      <!-- =============================================== -->
+      <section data-view="commessa" class="view px-4 sm:px-6 lg:px-8 py-7 max-w-[1180px] mx-auto" hidden>
+
+        <!-- breadcrumb mini -->
+        <button onclick="goto('dashboard')" class="font-mono text-[11px] text-muted hover:text-ink mb-4 inline-flex items-center gap-1">
+          <i class="bi bi-arrow-left"></i> tutte le commesse
+        </button>
+
+        <!-- CARTIGLIO (signature title block) -->
+        <div class="reveal bg-surface border border-line-strong rounded-lg overflow-hidden mb-6" style="border-radius:8px">
+          <div class="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-line border-b border-line">
+            <div class="p-4 col-span-2 md:col-span-1">
+              <span class="font-mono text-[10px] uppercase tracking-wider text-muted">Commessa</span>
+              <div class="font-display font-700 text-2xl text-ink leading-none mt-1">P001</div>
+              <div class="text-sm text-muted mt-1">Console operatore + gruppo sganciatore</div>
+            </div>
+            <div class="p-4">
+              <span class="font-mono text-[10px] uppercase tracking-wider text-muted">Cliente</span>
+              <div class="text-sm font-600 mt-1 leading-snug">Lauretti Automazioni<br>Industriali S.r.l.</div>
+              <div class="text-[12px] text-muted mt-0.5">Ceccano (FR)</div>
+            </div>
+            <div class="p-4">
+              <span class="font-mono text-[10px] uppercase tracking-wider text-muted">Documenti</span>
+              <div class="font-mono text-[13px] mt-1">OA.568/2026</div>
+              <div class="font-mono text-[12px] text-muted">conf. 26-00124</div>
+            </div>
+            <div class="p-4">
+              <span class="font-mono text-[10px] uppercase tracking-wider text-muted">Imponibile ordine</span>
+              <div class="font-mono font-700 text-lg mt-1">€ 1.885,51</div>
+              <div class="text-[12px] text-muted">IVA inclusa · 13 articoli</div>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-1 px-4 py-2.5 bg-surface-2 font-mono text-[11px] text-muted">
+            <span>SCALA <span class="text-ink">var.</span></span>
+            <span>DISEGNATO <span class="text-ink">Lauretti</span></span>
+            <span>VERIFICATO <span class="text-ink">Ufficio tecnico</span></span>
+            <span>LAVORAZIONI <span class="text-ink">tornio · fresa · laser · piega</span></span>
+            <span class="ml-auto text-accent">ISO 9001</span>
+          </div>
+        </div>
+
+        <!-- STATE A: ingest / scomposizione (pre-run) -->
+        <div id="ingest" class="reveal bg-surface border border-line rounded-lg p-5 sm:p-7 mb-6" style="border-radius:8px">
+          <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-center">
+            <div>
+              <h2 class="font-display font-700 text-xl mb-1">Scomposizione automatica della commessa</h2>
+              <p class="text-sm text-muted mb-4 max-w-xl">Carica il pacchetto del cliente — <span class="font-600">tavola 2D in PDF + modello 3D in STEP</span> (com'è nell'80% dei casi) e la distinta delle quantità. Il sistema legge cartiglio e geometria, classifica ogni particolare per lavorazione, ricava lo sviluppo lamiera dal 3D e prepara le distinte, poi controlla la coerenza con l'ordine sul gestionale.</p>
+
+              <!-- dropzone -->
+              <div class="blueprint-strong border-2 border-dashed border-line-strong rounded-lg p-5 flex flex-wrap items-center gap-4" style="border-radius:8px">
+                <div class="flex -space-x-3">
+                  <span class="h-12 w-10 bg-surface border border-line rounded shadow-sm grid place-items-center font-mono text-[9px] text-muted rotate-[-4deg]">PDF<br>2D</span>
+                  <span class="h-12 w-10 bg-surface border border-line rounded shadow-sm grid place-items-center font-mono text-[9px] text-muted rotate-[2deg]">STEP<br>3D</span>
+                  <span class="h-12 w-10 bg-surface border border-line rounded shadow-sm grid place-items-center font-mono text-[8px] text-faint rotate-[6deg]">DWG<br>raro</span>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-sm font-600">13 disegni + distinta caricati <span class="text-ok"><i class="bi bi-check-circle-fill"></i></span></div>
+                  <div class="font-mono text-[11px] text-muted truncate">208 · 209 · 332 · 333 · 334 · 335 · 336 · 337 · 392 · 393 · 431 · 432 · 438</div>
+                </div>
+              </div>
+
+              <button id="btnScompon" class="mt-5 inline-flex items-center gap-2 h-11 px-5 bg-accent text-white rounded-md font-500 hover:brightness-95">
+                <i class="bi bi-cpu"></i> Avvia scomposizione AI
+              </button>
+              <p class="text-[11px] text-muted mt-2 font-mono">demo · l'elaborazione è simulata su dati reali della commessa</p>
+            </div>
+
+            <!-- steps -->
+            <ol id="steps" class="space-y-2.5">
+              <li data-step class="flex items-center gap-3 p-3 border border-line rounded-md bg-surface-2" style="border-radius:7px">
+                <span class="step-ico h-7 w-7 grid place-items-center rounded-full border border-line text-faint shrink-0"><i class="bi bi-file-earmark-text"></i></span>
+                <span class="text-sm flex-1">Lettura cartiglio e geometria</span>
+                <i class="step-state bi bi-dash text-faint"></i>
+              </li>
+              <li data-step class="flex items-center gap-3 p-3 border border-line rounded-md bg-surface-2" style="border-radius:7px">
+                <span class="step-ico h-7 w-7 grid place-items-center rounded-full border border-line text-faint shrink-0"><i class="bi bi-diagram-2"></i></span>
+                <span class="text-sm flex-1">Classificazione per lavorazione</span>
+                <i class="step-state bi bi-dash text-faint"></i>
+              </li>
+              <li data-step class="flex items-center gap-3 p-3 border border-line rounded-md bg-surface-2" style="border-radius:7px">
+                <span class="step-ico h-7 w-7 grid place-items-center rounded-full border border-line text-faint shrink-0"><i class="bi bi-rulers"></i></span>
+                <span class="text-sm flex-1">Sviluppo lamiera · fattore k</span>
+                <i class="step-state bi bi-dash text-faint"></i>
+              </li>
+              <li data-step class="flex items-center gap-3 p-3 border border-line rounded-md bg-surface-2" style="border-radius:7px">
+                <span class="step-ico h-7 w-7 grid place-items-center rounded-full border border-line text-faint shrink-0"><i class="bi bi-shield-check"></i></span>
+                <span class="text-sm flex-1">Controllo coerenza con l'ordine</span>
+                <i class="step-state bi bi-dash text-faint"></i>
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- STATE B: results (hidden until run) -->
+        <div id="results" hidden>
+
+          <!-- result banner -->
+          <div class="bg-ink text-bg rounded-lg px-5 py-4 mb-5 flex flex-wrap items-center gap-4" style="border-radius:8px">
+            <span class="h-9 w-9 grid place-items-center rounded-full bg-ok text-white shrink-0"><i class="bi bi-check-lg"></i></span>
+            <div class="text-sm">
+              <div class="font-600">Scomposizione completata in 11 secondi.</div>
+              <div class="text-bg/70">13 pezzi classificati · 7 grezzi aggregati · 5 sviluppi lamiera · <span class="text-accent font-600">6 anomalie</span> da verificare.</div>
+            </div>
+            <button onclick="goto('anomalie')" class="ml-auto inline-flex items-center gap-2 h-9 px-3.5 bg-accent text-white rounded-md text-sm font-500 hover:brightness-95">
+              <i class="bi bi-exclamation-octagon"></i> Vedi le 6 anomalie
+            </button>
+          </div>
+
+          <!-- tabs -->
+          <div class="border-b border-line mb-5 flex gap-1 overflow-x-auto">
+            <button data-tab="grezzi" class="tab tab-active px-4 py-2.5 text-sm font-500 border-b-2 -mb-px whitespace-nowrap">Distinta grezzi</button>
+            <button data-tab="lamiera" class="tab px-4 py-2.5 text-sm font-500 text-muted border-b-2 border-transparent -mb-px whitespace-nowrap">Sviluppo lamiera</button>
+            <button data-tab="commerciali" class="tab px-4 py-2.5 text-sm font-500 text-muted border-b-2 border-transparent -mb-px whitespace-nowrap">Commerciali (BOM)</button>
+          </div>
+
+          <!-- ===== TAB grezzi ===== -->
+          <div data-panel="grezzi">
+            <!-- legend + filter -->
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <span class="font-mono text-[10px] uppercase tracking-wider text-muted mr-1">Lavorazione:</span>
+              <button class="lav-filter active font-mono text-[11px] px-2.5 py-1 rounded border border-line" data-lav="all">tutte</button>
+              <button class="lav-filter font-mono text-[11px] px-2.5 py-1 rounded border border-line" data-lav="torno"><span class="inline-block h-2 w-2 rounded-full align-middle mr-1" style="background:var(--color-torno)"></span>tornio</button>
+              <button class="lav-filter font-mono text-[11px] px-2.5 py-1 rounded border border-line" data-lav="fresa"><span class="inline-block h-2 w-2 rounded-full align-middle mr-1" style="background:var(--color-fresa)"></span>fresa</button>
+              <button class="lav-filter font-mono text-[11px] px-2.5 py-1 rounded border border-line" data-lav="laser"><span class="inline-block h-2 w-2 rounded-full align-middle mr-1" style="background:var(--color-laser)"></span>laser</button>
+              <button class="lav-filter font-mono text-[11px] px-2.5 py-1 rounded border border-line" data-lav="piega"><span class="inline-block h-2 w-2 rounded-full align-middle mr-1" style="background:var(--color-piega)"></span>piega</button>
+              <button class="lav-filter font-mono text-[11px] px-2.5 py-1 rounded border border-line" data-lav="saldatura"><span class="inline-block h-2 w-2 rounded-full align-middle mr-1" style="background:var(--color-saldatura)"></span>saldatura</button>
+              <button class="ml-auto inline-flex items-center gap-1.5 font-mono text-[11px] text-steel hover:underline" onclick="toast('Esportazione distinta in Excel (demo)')"><i class="bi bi-file-earmark-spreadsheet"></i> Esporta Excel</button>
+            </div>
+
+            <!-- table -->
+            <div class="bg-surface border border-line rounded-lg overflow-hidden" style="border-radius:8px">
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm min-w-[760px]">
+                  <thead>
+                    <tr class="bg-surface-2 border-b border-line font-mono text-[10px] uppercase tracking-wider text-muted text-left">
+                      <th class="px-4 py-2.5 font-500">Cod.</th>
+                      <th class="px-3 py-2.5 font-500">Pezzo</th>
+                      <th class="px-3 py-2.5 font-500">Lavorazioni</th>
+                      <th class="px-3 py-2.5 font-500">Grezzo / formato</th>
+                      <th class="px-3 py-2.5 font-500">Materiale · tratt.</th>
+                      <th class="px-3 py-2.5 font-500 text-right">Q.tà</th>
+                      <th class="px-3 py-2.5 font-500 text-center">Stato</th>
+                    </tr>
+                  </thead>
+                  <tbody id="grezziBody" class="divide-y divide-line"><!-- rows injected --></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- aggregato approvvigionamento -->
+            <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="md:col-span-2 bg-surface border border-line rounded-lg p-5" style="border-radius:8px">
+                <div class="flex items-center justify-between mb-3">
+                  <h3 class="font-display font-600">Approvvigionamento aggregato</h3>
+                  <span class="font-mono text-[11px] text-muted">7 grezzi · pronto per acquisti</span>
+                </div>
+                <ul id="aggBody" class="space-y-2 text-[13px]"><!-- injected --></ul>
+              </div>
+              <div class="ticks bg-steel text-white rounded-lg p-5 flex flex-col justify-between" style="border-radius:8px">
+                <div>
+                  <span class="font-mono text-[10px] uppercase tracking-wider text-white/70">Pronto per il gestionale</span>
+                  <p class="text-sm text-white/90 mt-2">Le distinte vengono scritte come righe d'ordine sul gestionale. Da qui partono le richieste d'offerta ai fornitori, suddivise per materiale.</p>
+                </div>
+                <button onclick="goto('approvv')" class="mt-4 h-10 inline-flex items-center justify-center gap-2 bg-white text-steel rounded-md text-sm font-600 hover:bg-white/90">
+                  <i class="bi bi-truck"></i> Vai all'approvvigionamento
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== TAB lamiera ===== -->
+          <div data-panel="lamiera" hidden>
+            <div class="bg-accent-soft border border-accent/30 rounded-lg p-4 mb-5 flex gap-3 text-sm" style="border-radius:8px">
+              <i class="bi bi-info-circle-fill text-accent text-lg shrink-0"></i>
+              <p class="text-ink/80">Lo sviluppo del piano dipende dal <span class="font-600">fattore k</span>, diverso per materiale e spessore. Il sistema attinge al tuo Excel storico (legato alle cave delle presse) e calcola la lunghezza neutra di ogni piega.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="lamieraBody"><!-- injected --></div>
+
+            <!-- formula -->
+            <div class="mt-5 bg-surface border border-line rounded-lg p-5" style="border-radius:8px">
+              <h3 class="font-display font-600 mb-2 text-sm">Come viene calcolato</h3>
+              <div class="font-mono text-[12px] sm:text-[13px] text-steel bg-surface-2 border border-line rounded-md p-3 overflow-x-auto" style="border-radius:6px">
+                sviluppo = Σ lati_piani + Σ ( R + k · s ) · θ<sub>rad</sub>
+              </div>
+              <p class="text-[12px] text-muted mt-2">R = raggio interno · s = spessore · k = fattore k dalla tabella officina · θ = angolo di piega</p>
+            </div>
+          </div>
+
+          <!-- ===== TAB commerciali ===== -->
+          <div data-panel="commerciali" hidden>
+            <div class="bg-warn-soft border border-warn/30 rounded-lg p-4 mb-5 flex gap-3 text-sm" style="border-radius:8px">
+              <i class="bi bi-exclamation-triangle-fill text-warn text-lg shrink-0"></i>
+              <p class="text-ink/80">Nel pacchetto P001 mancava il <span class="font-600">complessivo con pallinatura</span>. Questa è la stima dei commerciali dedotta dagli accoppiamenti dei particolari: caricando il complessivo numerato la lista diventa esatta.</p>
+            </div>
+
+            <!-- angolo 4: da ore a minuti -->
+            <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-stretch gap-3 mb-5">
+              <div class="bg-surface border border-line rounded-lg p-4 flex flex-col justify-center" style="border-radius:8px">
+                <div class="font-mono text-[10px] uppercase tracking-wider text-muted">Prima · a mano</div>
+                <div class="font-mono font-700 text-2xl text-faint mt-1 line-through decoration-danger/60">1h 27′</div>
+                <div class="text-[11px] text-muted mt-0.5">sfogliare il complessivo, catalogo alla mano</div>
+              </div>
+              <div class="hidden sm:grid place-items-center text-faint"><i class="bi bi-arrow-right text-xl"></i></div>
+              <div class="ticks bg-surface border border-accent/40 rounded-lg p-4 flex flex-col justify-center" style="border-radius:8px">
+                <div class="font-mono text-[10px] uppercase tracking-wider text-accent">Ora · con Calibro</div>
+                <div class="font-mono font-700 text-2xl text-accent mt-1">1′ 48″</div>
+                <div class="text-[11px] text-muted mt-0.5">carichi il PDF, la lista d'acquisto esce da sola</div>
+              </div>
+            </div>
+
+            <div class="bg-surface border border-line rounded-lg overflow-hidden" style="border-radius:8px">
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm min-w-[640px]">
+                  <thead>
+                    <tr class="bg-surface-2 border-b border-line font-mono text-[10px] uppercase tracking-wider text-muted text-left">
+                      <th class="px-4 py-2.5 font-500">Pos.</th>
+                      <th class="px-3 py-2.5 font-500">Componente commerciale</th>
+                      <th class="px-3 py-2.5 font-500">Norma</th>
+                      <th class="px-3 py-2.5 font-500 text-right">Q.tà</th>
+                      <th class="px-3 py-2.5 font-500">Fornitore sugg.</th>
+                    </tr>
+                  </thead>
+                  <tbody id="commBody" class="divide-y divide-line"><!-- injected --></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="mt-4 flex flex-wrap items-center gap-3">
+              <button onclick="toast('BOM commerciali esportato (demo)')" class="inline-flex items-center gap-2 h-10 px-4 bg-ink text-bg rounded-md text-sm font-500"><i class="bi bi-file-earmark-spreadsheet"></i> Esporta lista d'acquisto</button>
+              <button onclick="toast('Carica il complessivo con pallinatura (demo)')" class="inline-flex items-center gap-2 h-10 px-4 border border-line rounded-md text-sm font-500 hover:bg-surface"><i class="bi bi-upload"></i> Carica complessivo</button>
+            </div>
+          </div>
+
+          <!-- ===== MARCATURA & QR → GESTIONALE ===== -->
+          <div class="mt-7 pt-6 border-t border-line">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">Marcatura & produzione</span>
+              <span class="font-mono text-[9px] bg-ok-soft text-ok px-1.5 py-0.5 rounded uppercase tracking-wider">automatico</span>
+            </div>
+            <h3 class="font-display font-700 text-lg mb-4">Dal disegno alla macchina, tutto tracciato</h3>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <!-- PDF marcato -->
+              <div class="ticks bg-surface border border-line rounded-lg p-5" style="border-radius:8px">
+                <p class="text-sm text-muted mb-4">Oggi la marcatura (numero commessa, lavorazione, QR) si scrive a mano su ogni foglio. Il sistema la applica in automatico e genera un QR per pezzo. In officina l'operatore lo inquadra dal tablet, vede lavorazione, materiale e note, e registra il tempo con un tap: i dati tornano da soli sul <span class="font-600 text-ink">gestionale</span>. Zero fogli persi, zero telefonate per sapere a che punto è il pezzo.</p>
+
+                <!-- mock cartiglio marcato -->
+                <div class="blueprint-strong border border-line-strong rounded-md overflow-hidden" style="border-radius:7px">
+                  <div class="flex items-stretch">
+                    <div class="flex-1 grid grid-cols-3 divide-x divide-line border-r border-line text-[11px]">
+                      <div class="p-2.5"><div class="font-mono text-[9px] uppercase text-muted">Commessa</div><div class="font-mono font-700 text-ink">P001</div></div>
+                      <div class="p-2.5"><div class="font-mono text-[9px] uppercase text-muted">Pezzo</div><div class="font-mono font-700 text-ink">333</div></div>
+                      <div class="p-2.5"><div class="font-mono text-[9px] uppercase text-muted">Lavoraz.</div><div class="font-mono font-700" style="color:var(--color-laser)">laser · piega</div></div>
+                    </div>
+                    <div class="w-[78px] grid place-items-center bg-surface p-2">
+                      <i class="bi bi-qr-code text-ink" style="font-size:46px;line-height:1"></i>
+                    </div>
+                  </div>
+                  <div class="px-2.5 py-1.5 bg-surface border-t border-line font-mono text-[10px] text-muted flex flex-wrap gap-x-3">
+                    <span>MAT <span class="text-ink">FE 6mm</span></span><span>Q.tà <span class="text-ink">4</span></span><span>REV <span class="text-ink">00</span></span>
+                  </div>
+                </div>
+
+                <button onclick="toast('13 PDF marcati + QR generati e pronti per la stampa (demo)')" class="mt-4 w-full h-10 inline-flex items-center justify-center gap-2 bg-ink text-bg rounded-md text-sm font-500 hover:bg-ink/90">
+                  <i class="bi bi-upc-scan"></i> Genera PDF marcati + QR (13 pezzi)
+                </button>
+              </div>
+
+              <!-- consuntivo / marginalità -->
+              <div class="bg-surface border border-line rounded-lg p-5" style="border-radius:8px">
+                <div class="flex items-center justify-between mb-1">
+                  <h4 class="font-display font-600">Consuntivo & marginalità</h4>
+                  <span class="font-mono text-[10px] text-muted">tempi dal gestionale</span>
+                </div>
+                <p class="text-[12px] text-muted mb-3">In officina sparano il QR con la pistola: i tempi reali rientrano dal gestionale e si confrontano col valore preventivato, pezzo per pezzo.</p>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-[13px]">
+                    <thead><tr class="border-b border-line font-mono text-[10px] uppercase tracking-wider text-muted text-left">
+                      <th class="py-2 pr-2 font-500">Pezzo</th><th class="py-2 px-2 font-500 text-right">Valutato</th><th class="py-2 px-2 font-500 text-right">Costo reale</th><th class="py-2 pl-2 font-500 text-right">Margine</th>
+                    </tr></thead>
+                    <tbody class="divide-y divide-line font-mono">
+                      <tr><td class="py-2 pr-2 font-sans">334 · perno</td><td class="py-2 px-2 text-right">10,00</td><td class="py-2 px-2 text-right text-muted">8,00</td><td class="py-2 pl-2 text-right text-ok font-700">+2,00</td></tr>
+                      <tr><td class="py-2 pr-2 font-sans">336 · asta</td><td class="py-2 px-2 text-right">14,00</td><td class="py-2 px-2 text-right text-muted">11,20</td><td class="py-2 pl-2 text-right text-ok font-700">+2,80</td></tr>
+                      <tr><td class="py-2 pr-2 font-sans">333 · staffa</td><td class="py-2 px-2 text-right">9,00</td><td class="py-2 px-2 text-right text-muted">9,40</td><td class="py-2 pl-2 text-right text-danger font-700">−0,40</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="mt-3 pt-3 border-t border-line flex items-center justify-between text-sm">
+                  <span class="text-muted">Margine commessa stimato</span>
+                  <span class="font-mono font-700 text-ok">+ 18,4%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =============================================== -->
+      <!-- VIEW: ANOMALIE (Modulo D)                        -->
+      <!-- =============================================== -->
+      <section data-view="anomalie" class="view px-4 sm:px-6 lg:px-8 py-7 max-w-[1080px] mx-auto" hidden>
+
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-5 reveal">
+          <div>
+            <h1 class="font-display font-700 text-2xl sm:text-3xl tracking-tight">Controllo anomalie</h1>
+            <p class="text-muted text-sm mt-1.5 max-w-2xl"><span class="inline-block font-mono text-[10px] uppercase tracking-wider bg-line-2 text-muted px-1.5 py-0.5 rounded mr-1.5 align-middle">demo</span>esempio dimostrativo del confronto disegno ↔ ordine. Dati simulati: è un'anteprima, non il prodotto finale, e potrà cambiare.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="text-right">
+              <div class="font-mono text-[10px] uppercase tracking-wider text-muted">Da risolvere</div>
+              <div class="font-mono font-700 text-2xl"><span id="openCount" class="text-danger">6</span><span class="text-faint text-lg"> / 6</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- toolbar -->
+        <div class="flex flex-wrap items-center gap-2 mb-4">
+          <button class="anom-filter active font-mono text-[11px] px-3 py-1.5 rounded border border-line" data-filter="all">Tutte</button>
+          <button class="anom-filter font-mono text-[11px] px-3 py-1.5 rounded border border-line" data-filter="open">Da risolvere</button>
+          <button class="anom-filter font-mono text-[11px] px-3 py-1.5 rounded border border-line" data-filter="done">Risolte</button>
+          <div class="ml-auto flex items-center gap-2 font-mono text-[11px] text-muted">
+            <span class="inline-flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-danger"></span> critica</span>
+            <span class="inline-flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-warn"></span> da chiarire</span>
+          </div>
+        </div>
+
+        <!-- anomaly list -->
+        <div id="anomList" class="space-y-3"><!-- injected --></div>
+
+        <!-- footer action -->
+        <div id="anomDone" class="mt-6 bg-ok-soft border border-ok/30 rounded-lg p-5 flex flex-wrap items-center gap-4" style="border-radius:8px" hidden>
+          <span class="h-10 w-10 grid place-items-center rounded-full bg-ok text-white"><i class="bi bi-check-lg text-lg"></i></span>
+          <div class="text-sm"><div class="font-600">Tutte le anomalie risolte.</div><div class="text-muted">La commessa P001 può andare in approvvigionamento.</div></div>
+          <button onclick="goto('commessa')" class="ml-auto h-10 px-4 inline-flex items-center gap-2 bg-ink text-bg rounded-md text-sm font-500">Torna alla distinta <i class="bi bi-arrow-right"></i></button>
+        </div>
+      </section>
+
+      <!-- =============================================== -->
+      <!-- VIEW: APPROVVIGIONAMENTO (RDO fornitori)         -->
+      <!-- =============================================== -->
+      <section data-view="approvv" class="view px-4 sm:px-6 lg:px-8 py-7 max-w-[1140px] mx-auto" hidden>
+
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-5 reveal">
+          <div>
+            <h1 class="font-display font-700 text-2xl sm:text-3xl tracking-tight">Approvvigionamento</h1>
+            <p class="text-muted text-sm mt-1.5 max-w-2xl"><span class="inline-block font-mono text-[10px] uppercase tracking-wider bg-line-2 text-muted px-1.5 py-0.5 rounded mr-1.5 align-middle">demo</span>quando una distinta è pronta, il sistema sa già cosa comprare: raggruppa il materiale tra più commesse, scala il magazzino e chiede i preventivi ai fornitori giusti. Tu scegli e ordini.</p>
+          </div>
+        </div>
+
+        <!-- come funziona: 3 passi -->
+        <div class="reveal grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+          <div class="bg-surface border border-line rounded-lg p-4 flex gap-3" style="border-radius:8px">
+            <span class="h-7 w-7 grid place-items-center rounded-full bg-accent-soft text-accent font-mono text-[13px] font-700 shrink-0">1</span>
+            <div><div class="text-sm font-600">Raggruppa il fabbisogno</div><p class="text-[12px] text-muted mt-0.5">Somma lo stesso materiale su più commesse, per comprare fogli e barre interi senza sprechi.</p></div>
+          </div>
+          <div class="bg-surface border border-line rounded-lg p-4 flex gap-3" style="border-radius:8px">
+            <span class="h-7 w-7 grid place-items-center rounded-full bg-accent-soft text-accent font-mono text-[13px] font-700 shrink-0">2</span>
+            <div><div class="text-sm font-600">Scala il magazzino</div><p class="text-[12px] text-muted mt-0.5">Toglie ciò che hai già a stock: compri solo quello che manca davvero.</p></div>
+          </div>
+          <div class="bg-surface border border-line rounded-lg p-4 flex gap-3" style="border-radius:8px">
+            <span class="h-7 w-7 grid place-items-center rounded-full bg-accent-soft text-accent font-mono text-[13px] font-700 shrink-0">3</span>
+            <div><div class="text-sm font-600">Chiede le offerte</div><p class="text-[12px] text-muted mt-0.5">Manda la richiesta ai fornitori giusti e ti mostra la migliore per prezzo o consegna.</p></div>
+          </div>
+        </div>
+
+        <!-- cosa comprare -->
+        <div class="reveal bg-surface border border-line rounded-lg overflow-hidden mb-6" style="border-radius:8px">
+          <div class="px-4 py-3 border-b border-line bg-surface-2 flex items-center justify-between">
+            <span class="font-display font-600">Cosa comprare · fabbisogno aggregato</span>
+            <span class="font-mono text-[11px] text-muted">su 4 commesse</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm min-w-[820px]">
+              <thead><tr class="border-b border-line font-mono text-[10px] uppercase tracking-wider text-muted text-left">
+                <th class="px-4 py-2.5 font-500">Materiale</th>
+                <th class="px-3 py-2.5 font-500">Commesse</th>
+                <th class="px-3 py-2.5 font-500 text-right">Serve</th>
+                <th class="px-3 py-2.5 font-500">A magazzino</th>
+                <th class="px-3 py-2.5 font-500">Da acquistare</th>
+                <th class="px-3 py-2.5 font-500">Fornitori</th>
+              </tr></thead>
+              <tbody id="rdoBody" class="divide-y divide-line"><!-- injected --></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- richiesta d'offerta -->
+        <div class="reveal bg-surface border border-line rounded-lg p-5" style="border-radius:8px">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-1">
+            <div>
+              <div class="font-mono text-[10px] uppercase tracking-wider text-accent mb-0.5">Passo 3 · richiesta d'offerta</div>
+              <h3 class="font-display font-600">Lamiera INOX 6 mm · 3 fornitori</h3>
+            </div>
+            <div class="inline-flex bg-surface-2 border border-line rounded-md p-0.5 font-mono text-[11px]">
+              <button id="rdoPrezzo" class="rdo-mode px-3 py-1 rounded bg-ink text-bg" data-mode="prezzo">Prezzo</button>
+              <button id="rdoConsegna" class="rdo-mode px-3 py-1 rounded text-muted" data-mode="consegna">Consegna</button>
+            </div>
+          </div>
+          <p class="text-[12px] text-muted mb-4 max-w-2xl">La richiesta parte in automatico ai 3 fornitori. Ti evidenziamo l'offerta migliore secondo la priorità scelta (prezzo o consegna); agli altri parte una risposta di cortesia. Tu confermi con un clic.</p>
+          <div id="rdoGate" class="mb-4"><!-- injected: blocco anti-errore --></div>
+          <div id="offerteBody" class="space-y-2.5"><!-- injected --></div>
+          <div class="mt-4 flex flex-wrap items-center gap-3">
+            <button id="rdoConfirm" onclick="toast('RDO inviata · risposte automatiche ai fornitori non selezionati (demo)')" class="inline-flex items-center gap-2 h-10 px-4 bg-accent text-white rounded-md text-sm font-500 hover:brightness-95"><i class="bi bi-send"></i> Conferma e ordina</button>
+            <span class="font-mono text-[11px] text-muted"><i class="bi bi-robot"></i> ai fornitori non scelti risponde da solo: «grazie, già approvvigionato»</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- =============================================== -->
+      <!-- VIEW: SAL / AVANZAMENTO (Modulo F)               -->
+      <!-- =============================================== -->
+      <section data-view="sal" class="view px-4 sm:px-6 lg:px-8 py-7 max-w-[1080px] mx-auto" hidden>
+
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-1 reveal">
+          <div>
+            <h1 class="font-display font-700 text-2xl sm:text-3xl tracking-tight">Avanzamento commesse (SAL)</h1>
+            <p class="text-muted text-sm mt-1.5 max-w-2xl"><span class="inline-block font-mono text-[10px] uppercase tracking-wider bg-line-2 text-muted px-1.5 py-0.5 rounded mr-1.5 align-middle">demo</span>lo stato di avanzamento è <span class="text-ink font-600">un report interno</span>: il sistema lo tiene aggiornato e prepara la comunicazione, ma <span class="text-ink font-600">al cliente non parte niente senza la tua conferma</span>. Dati simulati.</p>
+          </div>
+          <span class="inline-flex items-center gap-2 font-mono text-[11px] text-muted bg-surface border border-line rounded-md px-3 py-1.5"><i class="bi bi-tablet-landscape"></i> ottimizzato per iPad</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 mt-5 items-start">
+
+          <!-- left: commesse steppers -->
+          <div class="space-y-3">
+            <!-- card builder injected -->
+            <div id="salList" class="space-y-3"></div>
+
+            <!-- resoconto per cliente -->
+            <div class="bg-surface-2 border border-line rounded-lg p-4 flex flex-wrap items-center gap-3" style="border-radius:8px">
+              <span class="h-8 w-8 grid place-items-center rounded bg-steel-soft text-steel shrink-0"><i class="bi bi-people"></i></span>
+              <div class="min-w-0 flex-1 max-sm:basis-full">
+                <div class="text-sm font-600">Resoconto per cliente</div>
+                <div class="text-[12px] text-muted">Lauretti ha 2 commesse aperte: un unico riepilogo con il trend, invece di due mail separate.</div>
+              </div>
+              <button onclick="toast('Riepilogo cliente generato per Lauretti (demo)')" class="font-mono text-[11px] text-steel hover:underline whitespace-nowrap">genera riepilogo</button>
+            </div>
+          </div>
+
+          <!-- right: email preview (sticky) -->
+          <div class="lg:sticky lg:top-20">
+            <div class="ticks bg-surface border border-line rounded-lg overflow-hidden" style="border-radius:8px">
+              <div class="px-4 py-2.5 border-b border-line bg-surface-2 flex items-center gap-2">
+                <i class="bi bi-envelope text-muted"></i>
+                <span class="font-mono text-[11px] uppercase tracking-wider text-muted">Anteprima comunicazione</span>
+                <span id="salTargetTag" class="ml-auto font-mono text-[10px] bg-accent-soft text-accent px-1.5 py-0.5 rounded">P001</span>
+              </div>
+              <div class="p-4 text-[13px] leading-relaxed">
+                <div class="font-mono text-[11px] text-muted mb-1">A: <span id="mailTo" class="text-ink">acquisti@lauretti-automazioni.it</span></div>
+                <div class="font-mono text-[11px] text-muted mb-3 pb-3 border-b border-line">Oggetto: <span id="mailSubj" class="text-ink">Avanzamento ordine OA.568/2026 — 35%</span></div>
+                <p class="mb-2">Gentile <span id="mailClient" class="font-600">Lauretti Automazioni</span>,</p>
+                <p id="mailBody1" class="mb-2">le confermiamo lo stato di avanzamento della commessa <span id="mailOrder" class="font-mono">OA.568/2026</span> (<span id="mailObj">console operatore</span>):</p>
+                <div id="mailLateNote" class="mb-2 p-2.5 bg-warn-soft border border-warn/30 rounded-md text-[12px] text-ink/80 flex gap-2" style="border-radius:6px" hidden>
+                  <i class="bi bi-clock-history text-warn"></i>
+                  <span>Ci scusiamo: prevediamo <span class="font-600">2 giorni</span> di ritardo. Abbiamo già pianificato il recupero, la nuova data è indicata qui sotto.</span>
+                </div>
+                <div class="my-3 p-3 bg-surface-2 border border-line rounded-md flex items-center gap-3" style="border-radius:6px">
+                  <span id="mailPct" class="font-mono font-700 text-2xl text-accent">35%</span>
+                  <div class="flex-1">
+                    <div class="h-2 rounded bg-line-2 overflow-hidden"><span id="mailBar" class="block h-full bg-accent" style="width:35%"></span></div>
+                    <div class="text-[11px] text-muted mt-1"><span id="mailDateLbl">Consegna prevista</span>: <span id="mailDate" class="font-mono text-ink">3 lug 2026</span></div>
+                  </div>
+                </div>
+                <p class="text-muted">Restiamo a disposizione. Un cordiale saluto,<br><span class="text-ink font-600">Meccanica Rossi S.r.l. — lavorazioni di precisione</span></p>
+                <div class="mt-3 pt-3 border-t border-line flex items-center gap-2 font-mono text-[11px] text-muted">
+                  <i class="bi bi-paperclip"></i> <span id="mailAttach" class="text-ink">SAL_OA.568-2026.pdf</span> · logo e colori aziendali
+                </div>
+              </div>
+              <div class="p-4 border-t border-line flex items-center gap-2">
+                <button id="sendMail" class="flex-1 h-10 inline-flex items-center justify-center gap-2 bg-accent text-white rounded-md text-sm font-500 hover:brightness-95"><i class="bi bi-send"></i> Invia comunicazione</button>
+                <button class="h-10 w-10 grid place-items-center border border-line rounded-md text-muted hover:bg-surface-2" title="WhatsApp (in arrivo)" onclick="toast('Canale WhatsApp in roadmap')"><i class="bi bi-whatsapp"></i></button>
+              </div>
+            </div>
+            <p class="text-[11px] text-muted mt-2 font-mono text-center">i recapiti arrivano dal gestionale · invio su tua conferma</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- =============================================== -->
+      <!-- VIEW: PREVENTIVATORE (Modulo E)                  -->
+      <!-- =============================================== -->
+      <!-- =============================================== -->
+      <!-- VIEW: PREVENTIVATORE (lista + editor)            -->
+      <!-- Ricalca l'editor vero: una pagina sola con       -->
+      <!-- testata, i due caricamenti, i ricarichi e la     -->
+      <!-- tabella righe col pannello di dettaglio.         -->
+      <!-- =============================================== -->
+      <section data-view="preventivo" class="view px-4 sm:px-6 lg:px-8 py-7 max-w-[1240px] mx-auto" hidden>
+
+        <!-- ============ LISTA PREVENTIVI ============ -->
+        <div id="prevList">
+          <div class="reveal flex flex-wrap items-center gap-3 mb-5">
+            <h1 class="font-display font-700 text-2xl sm:text-3xl tracking-tight">Preventivi</h1>
+            <span class="font-mono text-[10px] uppercase tracking-wider bg-line-2 text-muted px-1.5 py-0.5 rounded">demo</span>
+            <div class="ml-auto flex items-center gap-2">
+              <button onclick="goto('impostazioni')" class="h-9 px-3.5 inline-flex items-center gap-2 border border-line rounded-md text-sm text-muted bg-surface-2 hover:text-ink hover:brightness-95"><i class="bi bi-sliders"></i> Impostazioni</button>
+              <button onclick="openPreventivo('PRV-0042')" class="h-9 px-4 inline-flex items-center gap-2 bg-accent text-white rounded-md text-sm font-500 hover:brightness-95"><i class="bi bi-plus-lg"></i> Nuovo preventivo</button>
+            </div>
+          </div>
+
+          <div class="reveal bg-surface border border-line rounded-lg" style="border-radius:8px">
+            <button onclick="openPreventivo('PRV-0042')" class="w-full text-left flex items-center border-b border-line hover:bg-surface-2">
+              <span class="flex flex-wrap sm:flex-nowrap items-center gap-x-4 gap-y-1 px-4 py-3 flex-1 min-w-0">
+                <span class="font-mono font-700 w-32 max-sm:w-auto shrink-0">PRV-26-0042</span>
+                <span class="flex-1 text-sm truncate max-sm:order-last max-sm:basis-full">Lauretti Automazioni Industriali</span>
+                <span class="text-[11px] font-mono uppercase tracking-wider text-muted">bozza</span>
+                <span class="hidden sm:flex items-baseline justify-end gap-1.5 w-[5.5rem] shrink-0"><span class="text-[9px] uppercase tracking-wider text-faint font-mono">creato</span><span class="text-xs text-muted font-mono">11/06</span></span>
+                <span class="hidden sm:flex items-baseline justify-end gap-1.5 w-[5.5rem] shrink-0"><span class="text-[9px] uppercase tracking-wider text-faint font-mono">modif.</span><span class="text-xs text-muted font-mono">12/06</span></span>
+                <span class="font-mono text-sm w-28 text-right max-sm:ml-auto">€ 1.506,75</span>
+              </span>
+              <span class="max-sm:hidden flex items-center gap-1.5 pr-3 pl-1 shrink-0">
+                <span class="h-7 px-2 inline-flex items-center gap-1 text-[11px] font-mono border border-line rounded text-muted"><i class="bi bi-files"></i> duplica</span>
+                <span class="h-7 px-2 inline-flex items-center gap-1 text-[11px] font-mono border border-line rounded text-muted"><i class="bi bi-trash"></i> elimina</span>
+              </span>
+            </button>
+            <button onclick="openPreventivo('PRV-0041')" class="w-full text-left flex items-center border-b border-line hover:bg-surface-2">
+              <span class="flex flex-wrap sm:flex-nowrap items-center gap-x-4 gap-y-1 px-4 py-3 flex-1 min-w-0">
+                <span class="font-mono font-700 w-32 max-sm:w-auto shrink-0">PRV-26-0041</span>
+                <span class="flex-1 text-sm truncate max-sm:order-last max-sm:basis-full">Vesta Robotics S.p.A.</span>
+                <span class="text-[11px] font-mono uppercase tracking-wider text-muted">inviato</span>
+                <span class="hidden sm:flex items-baseline justify-end gap-1.5 w-[5.5rem] shrink-0"><span class="text-[9px] uppercase tracking-wider text-faint font-mono">creato</span><span class="text-xs text-muted font-mono">08/06</span></span>
+                <span class="hidden sm:flex items-baseline justify-end gap-1.5 w-[5.5rem] shrink-0"><span class="text-[9px] uppercase tracking-wider text-faint font-mono">modif.</span><span class="text-xs text-muted font-mono">09/06</span></span>
+                <span class="font-mono text-sm w-28 text-right max-sm:ml-auto">€ 4.850,00</span>
+              </span>
+              <span class="max-sm:hidden flex items-center gap-1.5 pr-3 pl-1 shrink-0">
+                <span class="h-7 px-2 inline-flex items-center gap-1 text-[11px] font-mono border border-line rounded text-muted"><i class="bi bi-files"></i> duplica</span>
+                <span class="h-7 px-2 inline-flex items-center gap-1 text-[11px] font-mono border border-line rounded text-muted"><i class="bi bi-trash"></i> elimina</span>
+              </span>
+            </button>
+            <button onclick="openPreventivo('PRV-0039')" class="w-full text-left flex items-center border-b border-line hover:bg-surface-2">
+              <span class="flex flex-wrap sm:flex-nowrap items-center gap-x-4 gap-y-1 px-4 py-3 flex-1 min-w-0">
+                <span class="font-mono font-700 w-32 max-sm:w-auto shrink-0">PRV-26-0039</span>
+                <span class="flex-1 text-sm truncate max-sm:order-last max-sm:basis-full">Caleido Packaging S.r.l.</span>
+                <span class="text-[11px] font-mono uppercase tracking-wider text-muted">accettato</span>
+                <span class="hidden sm:flex items-baseline justify-end gap-1.5 w-[5.5rem] shrink-0"><span class="text-[9px] uppercase tracking-wider text-faint font-mono">creato</span><span class="text-xs text-muted font-mono">03/06</span></span>
+                <span class="hidden sm:flex items-baseline justify-end gap-1.5 w-[5.5rem] shrink-0"><span class="text-[9px] uppercase tracking-wider text-faint font-mono">modif.</span><span class="text-xs text-muted font-mono">05/06</span></span>
+                <span class="font-mono text-sm w-28 text-right max-sm:ml-auto">€ 2.310,00</span>
+              </span>
+              <span class="max-sm:hidden flex items-center gap-1.5 pr-3 pl-1 shrink-0">
+                <span class="h-7 px-2 inline-flex items-center gap-1 text-[11px] font-mono border border-line rounded text-muted"><i class="bi bi-files"></i> duplica</span>
+                <span class="h-7 px-2 inline-flex items-center gap-1 text-[11px] font-mono border border-line rounded text-muted"><i class="bi bi-trash"></i> elimina</span>
+              </span>
+            </button>
+            <button onclick="openPreventivo('PRV-0037')" class="w-full text-left flex items-center hover:bg-surface-2">
+              <span class="flex flex-wrap sm:flex-nowrap items-center gap-x-4 gap-y-1 px-4 py-3 flex-1 min-w-0">
+                <span class="font-mono font-700 w-32 max-sm:w-auto shrink-0">PRV-26-0037</span>
+                <span class="flex-1 text-sm truncate max-sm:order-last max-sm:basis-full">Sigma Riduttori S.r.l.</span>
+                <span class="text-[11px] font-mono uppercase tracking-wider text-muted">accettato</span>
+                <span class="hidden sm:flex items-baseline justify-end gap-1.5 w-[5.5rem] shrink-0"><span class="text-[9px] uppercase tracking-wider text-faint font-mono">creato</span><span class="text-xs text-muted font-mono">29/05</span></span>
+                <span class="hidden sm:flex items-baseline justify-end gap-1.5 w-[5.5rem] shrink-0"><span class="text-[9px] uppercase tracking-wider text-faint font-mono">modif.</span><span class="text-xs text-muted font-mono">30/05</span></span>
+                <span class="font-mono text-sm w-28 text-right max-sm:ml-auto">€ 980,00</span>
+              </span>
+              <span class="max-sm:hidden flex items-center gap-1.5 pr-3 pl-1 shrink-0">
+                <span class="h-7 px-2 inline-flex items-center gap-1 text-[11px] font-mono border border-line rounded text-muted"><i class="bi bi-files"></i> duplica</span>
+                <span class="h-7 px-2 inline-flex items-center gap-1 text-[11px] font-mono border border-line rounded text-muted"><i class="bi bi-trash"></i> elimina</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ============ EDITOR ============ -->
+        <div id="prevDetail" hidden>
+
+          <div class="flex items-center gap-3 mb-4 flex-wrap">
+            <button onclick="backToPreventivi()" class="text-sm text-muted hover:text-ink font-mono inline-flex items-center gap-1.5"><i class="bi bi-arrow-left"></i> Preventivi</button>
+            <span class="font-mono font-700 text-lg" id="prevDetailTitle">PRV-26-0042</span>
+            <span class="text-[11px] bg-warn-soft text-warn px-2 py-0.5 rounded">modifiche non salvate</span>
+            <div class="ml-auto flex items-center gap-2 flex-wrap">
+              <button onclick="toast('Elimina preventivo (demo)')" class="h-9 px-3 border border-line rounded-md text-sm text-muted bg-surface-2 hover:text-danger hover:border-danger"><i class="bi bi-trash"></i> Elimina</button>
+              <button onclick="toast('Excel generato nel formato del gestionale (demo)')" class="h-9 px-4 inline-flex items-center gap-2 bg-accent text-white rounded-md text-sm font-500 hover:brightness-95"><i class="bi bi-download"></i> Esporta per il gestionale</button>
+              <button onclick="toast('Preventivo salvato (demo)')" class="h-9 px-4 inline-flex items-center gap-2 bg-ink text-white rounded-md text-sm font-500"><i class="bi bi-circle-fill text-[8px]"></i> Salva preventivo</button>
+            </div>
+          </div>
+
+          <!-- Testata -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-5 bg-surface border border-line rounded-lg p-4" style="border-radius:8px">
+            <div class="text-xs text-muted flex flex-col gap-1">
+              <div class="flex items-center justify-between gap-2">
+                <span>Cliente</span>
+                <span class="text-accent text-[11px] font-mono inline-flex items-center gap-1"><i class="bi bi-plus-lg"></i> nuovo</span>
+              </div>
+              <input value="Lauretti Automazioni Industriali" readonly class="h-9 border border-line rounded-md bg-surface-2 text-sm px-2" aria-label="Cliente" />
+            </div>
+            <label class="text-xs text-muted flex flex-col gap-1">Codice cliente gestionale
+              <input value="0023" readonly class="h-9 border border-line rounded-md bg-surface-2 text-sm px-2 font-mono" />
+            </label>
+            <label class="text-xs text-muted flex flex-col gap-1">
+              <span class="flex items-center gap-1.5">Ricarico cliente % <span class="text-[10px] text-steel" title="Porta la stessa percentuale su taglio e piega di tutto il preventivo">laser e piega</span></span>
+              <input value="60" readonly class="h-9 border border-line rounded-md bg-surface-2 text-sm px-2 font-mono" />
+            </label>
+            <label class="text-xs text-muted flex flex-col gap-1">Stato
+              <select class="h-9 border border-line rounded-md bg-surface-2 text-sm px-2"><option>bozza</option><option>inviato</option></select>
+            </label>
+          </div>
+
+          <!-- 1) pezzi (PDF + STEP)   2) distinta cliente -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+            <div class="bg-surface border border-line rounded-lg p-4 flex flex-col" style="border-radius:8px">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="w-5 h-5 shrink-0 rounded-full bg-accent-soft text-accent text-[11px] font-700 inline-flex items-center justify-center">1</span>
+                <i class="bi bi-box text-muted"></i>
+                <h2 class="font-display font-600 text-sm">Carica pezzi (PDF + STEP)</h2>
+              </div>
+              <label onclick="toast('Trascina qui i file (demo)')" class="flex-1 flex flex-col items-center justify-center gap-1 border border-dashed border-line-strong rounded-lg p-4 text-sm bg-surface-2 cursor-pointer hover:brightness-95" style="border-radius:10px">
+                <span class="text-accent font-mono inline-flex items-center gap-1.5"><i class="bi bi-upload"></i> carica pezzi (PDF + STEP)</span>
+                <span class="text-[11px] text-muted text-center">trascina qui PDF e STEP insieme — si abbinano per nome file; la geometria dello STEP guida la stima e dà peso e taglio laser</span>
+              </label>
+              <!-- riepilogo del caricamento: resta a video, non è un toast -->
+              <div class="mt-2 border border-line rounded-lg bg-surface overflow-hidden text-[12px]">
+                <div class="flex items-center gap-2 px-3 py-2 bg-surface-2 border-b border-line">
+                  <i class="bi bi-exclamation-triangle text-danger text-[12px]"></i>
+                  <span class="font-mono text-ink">13 file · 7 pezzi · 6 righe in tabella · 1 non letto</span>
+                  <span class="flex-1"></span>
+                  <span class="text-muted"><i class="bi bi-x-lg text-[12px]"></i></span>
+                </div>
+                <div class="px-3 py-1.5 text-muted border-b border-line-2">1 file lasciato fuori: non è né PDF né STEP.</div>
+                <div class="bg-danger-soft/25 px-3 py-2.5">
+                  <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                    <span class="inline-flex items-center gap-1.5 text-danger font-500"><i class="bi bi-exclamation-triangle text-[12px]"></i> 1 non letto</span>
+                    <span class="text-muted">questo disegno non è diventato riga</span>
+                    <span class="flex-1"></span>
+                    <button onclick="toast('Rilancio solo il pezzo non letto (demo)')" class="h-7 px-3 bg-danger text-white rounded-md text-xs font-500 hover:brightness-95">Riprova 1 non letto</button>
+                  </div>
+                  <ul class="space-y-0.5">
+                    <li class="flex items-baseline gap-2"><span class="font-mono text-ink shrink-0">P001.00.431.00</span><span class="text-muted truncate min-w-0">il cartiglio non si legge</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-surface border border-line rounded-lg p-4 flex flex-col" style="border-radius:8px">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="w-5 h-5 shrink-0 rounded-full bg-accent-soft text-accent text-[11px] font-700 inline-flex items-center justify-center">2</span>
+                <i class="bi bi-list-ol text-muted"></i>
+                <h2 class="font-display font-600 text-sm">Carica distinta cliente</h2>
+              </div>
+              <label onclick="toast('Carica la distinta (demo)')" class="flex-1 flex flex-col items-center justify-center gap-1 border border-dashed border-line-strong rounded-lg p-4 text-sm bg-surface-2 cursor-pointer hover:brightness-95" style="border-radius:10px">
+                <span class="text-accent font-mono inline-flex items-center gap-1.5"><i class="bi bi-upload"></i> carica distinta (PDF/foto)</span>
+                <span class="text-[11px] text-muted text-center">legge codici e quantità e le abbina ai disegni</span>
+              </label>
+              <div class="mt-2 border border-line rounded-lg bg-surface overflow-hidden text-[12px]">
+                <div class="flex items-center gap-2 px-3 py-2 bg-surface-2 border-b border-line">
+                  <i class="bi bi-check-lg text-ok text-[12px]"></i>
+                  <span class="font-mono text-ink">ordine-lauretti-568.pdf · 13 codici · 6 abbinati</span>
+                </div>
+                <div class="px-3 py-2 text-muted">
+                  Quantità e <span class="text-ink font-600">sequenza</span> prese dal documento del cliente. Il
+                  <span class="font-mono text-ink">P001.00.392.00</span> compariva su due commesse: quantità sommate a 25.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ricarichi -->
+          <div class="mb-5 bg-surface border border-line rounded-lg p-4" style="border-radius:8px">
+            <div class="flex items-baseline gap-2 mb-3">
+              <h2 class="font-display font-600 text-sm">Ricarichi</h2>
+              <span class="text-[11px] text-muted">%, validi per tutte le righe · vuoto = a costo · l'anteprima si aggiorna mentre scrivi</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+              <label class="flex flex-col gap-1"><span class="text-[10px] uppercase tracking-wide text-muted font-mono">Materiale</span><input value="15" readonly class="h-9 border border-line rounded-md bg-surface-2 text-sm px-2 font-mono" /></label>
+              <label class="flex flex-col gap-1"><span class="text-[10px] uppercase tracking-wide text-muted font-mono">Tornio</span><input value="25" readonly class="h-9 border border-line rounded-md bg-surface-2 text-sm px-2 font-mono" /></label>
+              <label class="flex flex-col gap-1"><span class="text-[10px] uppercase tracking-wide text-muted font-mono">Fresa</span><input value="25" readonly class="h-9 border border-line rounded-md bg-surface-2 text-sm px-2 font-mono" /></label>
+              <label class="flex flex-col gap-1"><span class="text-[10px] uppercase tracking-wide text-muted font-mono">Taglio laser</span><input value="60" readonly class="h-9 border border-line rounded-md bg-surface-2 text-sm px-2 font-mono" /></label>
+              <label class="flex flex-col gap-1"><span class="text-[10px] uppercase tracking-wide text-muted font-mono">Piega</span><input value="60" readonly class="h-9 border border-line rounded-md bg-surface-2 text-sm px-2 font-mono" /></label>
+              <label class="flex flex-col gap-1"><span class="text-[10px] uppercase tracking-wide text-muted font-mono">Saldatura</span><input value="25" readonly class="h-9 border border-line rounded-md bg-surface-2 text-sm px-2 font-mono" /></label>
+              <label class="flex flex-col gap-1"><span class="text-[10px] uppercase tracking-wide text-muted font-mono">Taglio sega</span><input value="25" readonly class="h-9 border border-line rounded-md bg-surface-2 text-sm px-2 font-mono" /></label>
+            </div>
+          </div>
+
+          <!-- Sommario + filtro per stato -->
+          <div class="flex items-center gap-2 flex-wrap mt-6 mb-2">
+            <span class="font-600 text-sm mr-1">6 righe</span>
+            <span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-ok-soft text-ok"><span class="w-2 h-2 rounded-full bg-current opacity-70"></span> 5 pronte</span>
+            <span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-danger-soft text-danger font-600"><span class="w-2 h-2 rounded-full bg-current opacity-70"></span> 0 da completare</span>
+            <span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-warn-soft text-warn"><span class="w-2 h-2 rounded-full bg-current opacity-70"></span> 1 vuote</span>
+          </div>
+
+          <!-- Tabella righe -->
+          <div class="border border-line rounded-lg overflow-hidden bg-surface">
+            <div class="overflow-x-auto">
+              <div class="md:min-w-[990px]">
+                <div class="riga-grid riga-head bg-surface-2 text-[10.5px] uppercase tracking-wide text-muted">
+                  <div></div>
+                  <div class="text-center py-2">St.</div>
+                  <div class="px-2 py-2">Articolo</div>
+                  <div class="px-2 py-2">Descrizione</div>
+                  <div class="text-center py-2">Q.tà</div>
+                  <div class="px-2 py-2">Materiale</div>
+                  <div class="text-center py-2">Peso kg</div>
+                  <div class="text-right px-2 py-2">Prezzo un.</div>
+                  <div class="text-right px-2 py-2">Imponibile</div>
+                  <div></div>
+                </div>
+                <div id="righeBody"><!-- injected --></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <button onclick="toast('Riga aggiunta (demo)')" class="h-9 px-4 border border-line rounded-md text-sm hover:brightness-95">+ Aggiungi riga</button>
+          </div>
+
+          <div class="mt-5 flex items-center justify-end gap-3 flex-wrap">
+            <span class="text-[12px] text-warn">1 riga vuota: compilala o eliminala, l'export la blocca</span>
+            <span class="text-sm">Totale imponibile: <b class="font-mono text-lg">€ 1.506,75</b></span>
+            <button onclick="toast('Preventivo salvato (demo)')" class="h-9 px-4 inline-flex items-center gap-2 bg-ink text-white rounded-md text-sm font-500"><i class="bi bi-circle-fill text-[8px]"></i> Salva preventivo</button>
+          </div>
+
+          <p class="text-[12px] text-muted mt-4 font-mono">⚠ valori dimostrativi · da tarare sui prezzi veri della tua officina</p>
+        </div><!-- /prevDetail -->
+      </section>
+
+      <!-- =============================================== -->
+      <!-- VIEW: IMPOSTAZIONI PREVENTIVATORE (hub)          -->
+      <!-- =============================================== -->
+      <section data-view="impostazioni" class="view px-4 sm:px-6 lg:px-8 py-6 max-w-[1080px] mx-auto" hidden>
+        <div class="reveal flex items-center gap-2 flex-wrap mb-5">
+          <button onclick="goto('preventivo')" class="inline-flex items-center gap-2 h-8 px-3 border border-line rounded-md text-sm text-muted bg-surface-2 hover:text-ink hover:brightness-95"><i class="bi bi-arrow-left"></i> Torna al preventivatore</button>
+          <h1 class="font-display font-600 text-lg ml-1">Impostazioni preventivatore</h1>
+        </div>
+
+        <div class="reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+          <button onclick="toast('Reparti: costi orari e avviamento (demo)')" class="group bg-surface border border-line rounded-lg p-4 flex items-start gap-3 text-left hover:border-accent" style="border-radius:10px">
+            <span class="w-10 h-10 shrink-0 rounded-md bg-accent-soft text-accent inline-flex items-center justify-center"><i class="bi bi-diagram-3 text-lg"></i></span>
+            <span class="flex flex-col min-w-0"><span class="font-display font-600 text-sm">Reparti</span><span class="text-[11.5px] text-muted">Costi orari, avviamento, ricarico</span></span>
+          </button>
+          <button onclick="toast('Materiali: €/kg e densità (demo)')" class="group bg-surface border border-line rounded-lg p-4 flex items-start gap-3 text-left hover:border-accent" style="border-radius:10px">
+            <span class="w-10 h-10 shrink-0 rounded-md bg-accent-soft text-accent inline-flex items-center justify-center"><i class="bi bi-boxes text-lg"></i></span>
+            <span class="flex flex-col min-w-0"><span class="font-display font-600 text-sm">Materiali</span><span class="text-[11.5px] text-muted">€/kg, densità, flag lamiera</span></span>
+          </button>
+          <button onclick="toast('Parametri della macchina da taglio (demo)')" class="group bg-surface border border-line rounded-lg p-4 flex items-start gap-3 text-left hover:border-accent" style="border-radius:10px">
+            <span class="w-10 h-10 shrink-0 rounded-md bg-accent-soft text-accent inline-flex items-center justify-center"><i class="bi bi-sliders text-lg"></i></span>
+            <span class="flex flex-col min-w-0"><span class="font-display font-600 text-sm">Parametri laser</span><span class="text-[11.5px] text-muted">Avanzamento e perforazione della tua macchina</span></span>
+          </button>
+          <button onclick="goto('regole')" class="group bg-surface border border-accent/40 rounded-lg p-4 flex items-start gap-3 text-left hover:border-accent" style="border-radius:10px">
+            <span class="w-10 h-10 shrink-0 rounded-md bg-accent-soft text-accent inline-flex items-center justify-center"><i class="bi bi-book text-lg"></i></span>
+            <span class="flex flex-col min-w-0"><span class="font-display font-600 text-sm inline-flex items-center gap-1.5">Regole e istruzioni (bibbia) <i class="bi bi-arrow-right text-[12px] text-muted"></i></span><span class="text-[11.5px] text-muted">pezzi con dati fissi e istruzioni a parole</span></span>
+          </button>
+        </div>
+
+        <div class="reveal bg-surface border border-line rounded-lg p-5" style="border-radius:8px">
+          <h2 class="font-display font-600 text-base mb-1">Lettura disegni</h2>
+          <p class="text-[12px] text-muted mb-3">Quale motore legge i cartigli. Si cambia senza toccare niente altro.</p>
+          <div class="flex flex-wrap items-end gap-3">
+            <label class="text-[11px] text-muted flex flex-col gap-1">Modello
+              <select class="h-9 border border-line rounded-md bg-surface-2 text-sm px-2 w-64"><option>equilibrato (consigliato)</option><option>più accurato, più lento</option><option>più veloce, più economico</option></select>
+            </label>
+            <button onclick="toast('Impostazione salvata (demo)')" class="h-9 px-3 bg-ink text-white rounded-md text-xs font-500">Salva</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =============================================== -->
+      <!-- VIEW: REGOLE E ISTRUZIONI (la bibbia)            -->
+      <!-- Due schede sullo STESSO record: i valori fissi   -->
+      <!-- (Regole) e le parole per l'AI (Istruzioni).      -->
+      <!-- =============================================== -->
+      <section data-view="regole" class="view px-4 sm:px-6 lg:px-8 py-6 max-w-[1080px] mx-auto" hidden>
+        <div class="reveal flex items-center gap-2 flex-wrap mb-4">
+          <button onclick="goto('impostazioni')" class="inline-flex items-center gap-2 h-8 px-3 border border-line rounded-md text-sm text-muted bg-surface-2 hover:text-ink hover:brightness-95"><i class="bi bi-arrow-left"></i> Impostazioni</button>
+          <span class="text-[12px] text-muted">Quello che il preventivatore sa già: i pezzi con i dati giusti, e le parole con cui ragionare sugli altri</span>
+        </div>
+
+        <div class="reveal flex items-center gap-2 flex-wrap mb-4">
+          <button id="tabRegole" onclick="setBibbia('regole')" class="h-9 px-4 rounded-md text-sm font-500 inline-flex items-center gap-2 bg-ink text-white"><i class="bi bi-book text-[14px]"></i> Regole <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-white/25 text-white">3</span></button>
+          <button id="tabIstruzioni" onclick="setBibbia('istruzioni')" class="h-9 px-4 rounded-md text-sm font-500 inline-flex items-center gap-2 border border-line text-muted bg-surface-2 hover:text-ink"><i class="bi bi-chat-left-text text-[14px]"></i> Istruzioni <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-steel-soft text-steel">2</span></button>
+          <span id="bibbiaHint" class="text-[11px] text-muted ml-1">quanto costa un pezzo preciso: valori fissi, applicati per codice</span>
+        </div>
+
+        <!-- ---------- SCHEDA REGOLE ---------- -->
+        <div id="schedaRegole" class="reveal bg-surface border border-line rounded-lg overflow-hidden" style="border-radius:8px">
+          <div class="px-4 py-3 border-b border-line bg-surface-2 flex flex-wrap items-center gap-2">
+            <h2 class="font-display font-600 text-sm">Regole (bibbia)</h2>
+            <span class="text-[11px] text-muted">3 attive · i pezzi che il preventivatore sa già fare</span>
+            <span class="flex-1"></span>
+            <input placeholder="Cerca regola…" class="h-8 border border-line rounded-md bg-surface text-sm px-2 w-44" />
+            <button onclick="toast('Nuova regola (demo)')" class="h-8 px-3 inline-flex items-center gap-1.5 bg-accent text-white rounded-md text-xs font-500"><i class="bi bi-plus-lg"></i> Aggiungi</button>
+          </div>
+          <div class="p-3 space-y-2">
+            <div class="regola-grid regola-head px-3 pb-1 text-[10px] uppercase tracking-wider font-mono text-faint">
+              <span>Se il codice</span><span>Quando</span><span>Allora applica</span><span>E dice all'AI</span><span></span>
+            </div>
+
+            <div onclick="toast('Pannello della regola (demo)')" class="regola-grid bg-surface-2 border border-line rounded-lg px-3 py-2.5 cursor-pointer hover:border-steel" style="border-radius:8px">
+              <div class="min-w-0">
+                <div class="font-mono text-sm text-ink truncate">P001.00.334.00</div>
+                <div class="text-[11px] text-muted truncate">Perno cilindro Ø20</div>
+              </div>
+              <div class="flex flex-wrap gap-1">
+                <span class="text-[10px] px-1.5 py-0.5 rounded-full border border-line text-muted whitespace-nowrap">è identico</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded-full border border-accent/40 text-accent whitespace-nowrap">o stessa forma</span>
+              </div>
+              <div class="text-[12px] text-muted min-w-0 truncate">Tondo INOX Ø20 · 1 lavorazione · 0,691 kg</div>
+              <div class="min-w-0 flex"><span class="text-[12px] text-steel flex items-center gap-1.5 min-w-0"><i class="bi bi-chat-left-text text-[11px] shrink-0"></i><span class="truncate">il perno lo facciamo sempre dal trafilato, niente barra rettificata</span></span></div>
+              <span class="text-[11px] text-muted inline-flex items-center gap-1 whitespace-nowrap pl-1">Modifica <i class="bi bi-arrow-right text-[11px]"></i></span>
+            </div>
+
+            <div onclick="toast('Pannello della regola (demo)')" class="regola-grid bg-surface-2 border border-line rounded-lg px-3 py-2.5 cursor-pointer hover:border-steel" style="border-radius:8px">
+              <div class="min-w-0">
+                <div class="font-mono text-sm text-ink truncate">ITAPACK</div>
+                <div class="text-[11px] text-muted truncate">Staffe della famiglia Itapack</div>
+              </div>
+              <div class="flex flex-wrap gap-1">
+                <span class="text-[10px] px-1.5 py-0.5 rounded-full border border-line text-muted whitespace-nowrap">è contenuto</span>
+              </div>
+              <div class="text-[12px] text-muted min-w-0 truncate">€4,20</div>
+              <div class="min-w-0"><span class="text-[12px] text-faint">niente</span></div>
+              <span class="text-[11px] text-muted inline-flex items-center gap-1 whitespace-nowrap pl-1">Modifica <i class="bi bi-arrow-right text-[11px]"></i></span>
+            </div>
+
+            <div onclick="toast('Pannello della regola (demo)')" class="regola-grid bg-surface-2 border border-line rounded-lg px-3 py-2.5 cursor-pointer hover:border-steel" style="border-radius:8px">
+              <div class="min-w-0">
+                <div class="font-mono text-sm text-ink truncate">26-337</div>
+                <div class="text-[11px] text-muted truncate">Attacco cilindro dal pieno</div>
+              </div>
+              <div class="flex flex-wrap gap-1">
+                <span class="text-[10px] px-1.5 py-0.5 rounded-full border border-line text-muted whitespace-nowrap">è identico</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded-full border border-accent/40 text-accent whitespace-nowrap">o stessa forma</span>
+              </div>
+              <div class="text-[12px] text-muted min-w-0 truncate"><span class="text-faint">niente: istruisce e basta</span></div>
+              <div class="min-w-0 flex"><span class="text-[12px] text-steel flex items-center gap-1.5 min-w-0"><i class="bi bi-chat-left-text text-[11px] shrink-0"></i><span class="truncate">esce dal pieno: niente saldatura, e il taglio contalo al secondo</span></span></div>
+              <span class="text-[11px] text-muted inline-flex items-center gap-1 whitespace-nowrap pl-1">Modifica <i class="bi bi-arrow-right text-[11px]"></i></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- SCHEDA ISTRUZIONI ---------- -->
+        <div id="schedaIstruzioni" class="reveal max-w-3xl flex flex-col gap-5" hidden>
+          <div class="bg-surface-2 border border-line rounded-lg px-4 py-3 text-[12px] text-muted flex items-center gap-2 flex-wrap" style="border-radius:8px">
+            <i class="bi bi-arrow-down-up text-steel"></i>
+            <span>Il sistema legge in quest'ordine: <b class="text-ink font-500">prompt di fabbrica</b> → <b class="text-ink font-500">le tue istruzioni generali</b> → <b class="text-ink font-500">l'istruzione sul pezzo</b>. In caso di contrasto vince l'ultima.</span>
+          </div>
+
+          <!-- livello 1 -->
+          <section>
+            <div class="flex items-start gap-3">
+              <span class="w-7 h-7 shrink-0 rounded-full border border-line bg-surface-2 text-muted font-mono text-[12px] inline-flex items-center justify-center mt-0.5">1</span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-baseline gap-2 flex-wrap"><h2 class="font-display font-600 text-base">Prompt di fabbrica</h2><span class="text-[11px] text-muted">lo scriviamo noi</span></div>
+                <p class="text-[12px] text-muted mt-1 mb-3">Chi è il sistema e come deve leggere un disegno. È roba tecnica, di norma non si tocca: tutto quello che scrivi ai livelli 2 e 3 arriva dopo e vince su questo.</p>
+                <button onclick="toast('Editor del prompt di fabbrica (demo)')" class="h-9 px-3 border border-line rounded-md text-sm bg-surface-2 hover:brightness-95 inline-flex items-center gap-2"><i class="bi bi-pencil"></i> Apri e modifica</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- livello 2 -->
+          <section class="border-t border-line pt-5">
+            <div class="flex items-start gap-3">
+              <span class="w-7 h-7 shrink-0 rounded-full border border-line bg-surface-2 text-muted font-mono text-[12px] inline-flex items-center justify-center mt-0.5">2</span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-baseline gap-2 flex-wrap"><h2 class="font-display font-600 text-base">Le tue istruzioni generali</h2><span class="text-[11px] text-muted">4 attive · valgono su ogni disegno</span></div>
+                <p class="text-[12px] text-muted mt-1 mb-3">Le cose che valgono sempre, non su un pezzo solo. Una card per istruzione: una frase corta, come la diresti a un collega.</p>
+                <div class="flex flex-col gap-2">
+                  <div class="bg-surface-2 border border-line rounded-lg p-3 flex items-start gap-3" style="border-radius:8px">
+                    <span class="w-6 h-6 shrink-0 rounded-full bg-accent-soft text-accent text-[11px] font-mono inline-flex items-center justify-center mt-1">1</span>
+                    <textarea rows="2" class="flex-1 border border-line rounded-md bg-surface text-sm px-2.5 py-2 leading-relaxed resize-y">Quando ci sono filettature da fare, conta 2 minuti di tornio a filettatura.</textarea>
+                    <div class="flex flex-col items-end gap-1.5 shrink-0">
+                      <button class="h-8 px-3 bg-ink text-white rounded-md text-xs font-500 opacity-30" disabled>Salva</button>
+                      <button onclick="toast('Istruzione tolta (demo)')" class="h-7 px-2 border border-line rounded text-[11px] text-muted hover:text-danger hover:border-danger">togli</button>
+                    </div>
+                  </div>
+                  <div class="bg-surface-2 border border-line rounded-lg p-3 flex items-start gap-3" style="border-radius:8px">
+                    <span class="w-6 h-6 shrink-0 rounded-full bg-accent-soft text-accent text-[11px] font-mono inline-flex items-center justify-center mt-1">2</span>
+                    <textarea rows="2" class="flex-1 border border-line rounded-md bg-surface text-sm px-2.5 py-2 leading-relaxed resize-y">Per prenderlo in morsa aggiungi 5 mm di sovrametallo per lato.</textarea>
+                    <div class="flex flex-col items-end gap-1.5 shrink-0">
+                      <button class="h-8 px-3 bg-ink text-white rounded-md text-xs font-500 opacity-30" disabled>Salva</button>
+                      <button onclick="toast('Istruzione tolta (demo)')" class="h-7 px-2 border border-line rounded text-[11px] text-muted hover:text-danger hover:border-danger">togli</button>
+                    </div>
+                  </div>
+                  <div class="bg-surface-2 border border-line rounded-lg p-3 flex items-start gap-3" style="border-radius:8px">
+                    <span class="w-6 h-6 shrink-0 rounded-full bg-accent-soft text-accent text-[11px] font-mono inline-flex items-center justify-center mt-1">3</span>
+                    <textarea rows="2" class="flex-1 border border-line rounded-md bg-surface text-sm px-2.5 py-2 leading-relaxed resize-y">Su un pezzo di lamiera dimostrato dal 3D non si fresa.</textarea>
+                    <div class="flex flex-col items-end gap-1.5 shrink-0">
+                      <button class="h-8 px-3 bg-ink text-white rounded-md text-xs font-500 opacity-30" disabled>Salva</button>
+                      <button onclick="toast('Istruzione tolta (demo)')" class="h-7 px-2 border border-line rounded text-[11px] text-muted hover:text-danger hover:border-danger">togli</button>
+                    </div>
+                  </div>
+                  <div class="bg-surface-2 border border-line rounded-lg p-3 flex items-start gap-3" style="border-radius:8px">
+                    <span class="w-6 h-6 shrink-0 rounded-full bg-accent-soft text-accent text-[11px] font-mono inline-flex items-center justify-center mt-1">4</span>
+                    <textarea rows="2" class="flex-1 border border-line rounded-md bg-surface text-sm px-2.5 py-2 leading-relaxed resize-y">L'attrezzaggio si conta una volta per reparto, non su ogni pezzo.</textarea>
+                    <div class="flex flex-col items-end gap-1.5 shrink-0">
+                      <button class="h-8 px-3 bg-ink text-white rounded-md text-xs font-500 opacity-30" disabled>Salva</button>
+                      <button onclick="toast('Istruzione tolta (demo)')" class="h-7 px-2 border border-line rounded text-[11px] text-muted hover:text-danger hover:border-danger">togli</button>
+                    </div>
+                  </div>
+                  <!-- card vuota per aggiungere: stesso aspetto delle altre -->
+                  <div class="border border-dashed border-line-2 rounded-lg p-3 flex items-start gap-3" style="border-radius:8px">
+                    <span class="w-6 h-6 shrink-0 rounded-full border border-dashed border-line-2 text-muted inline-flex items-center justify-center mt-1"><i class="bi bi-plus-lg text-[12px]"></i></span>
+                    <div class="flex-1 min-w-0 flex flex-col gap-2">
+                      <textarea rows="2" placeholder="Scrivi una cosa sola, come la diresti a un collega. Es: quando trovi un foro filettato M6 aggiungi 2 minuti di fresa." class="border border-line rounded-md bg-surface text-sm px-2.5 py-2 leading-relaxed resize-y w-full"></textarea>
+                      <button onclick="toast('Istruzione aggiunta (demo)')" class="h-8 px-3 bg-accent text-white rounded-md text-xs font-500 self-start">Aggiungi istruzione</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- livello 3 -->
+          <section class="border-t border-line pt-5">
+            <div class="flex items-start gap-3">
+              <span class="w-7 h-7 shrink-0 rounded-full border border-line bg-surface-2 text-muted font-mono text-[12px] inline-flex items-center justify-center mt-0.5">3</span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-baseline gap-2 flex-wrap">
+                  <h2 class="font-display font-600 text-base">Istruzioni sul pezzo</h2>
+                  <span class="text-[11px] text-muted">2 scritte · vincono su tutto</span>
+                  <span class="ml-auto"><button onclick="toast('Nuova istruzione (demo)')" class="h-8 px-3 inline-flex items-center gap-1.5 bg-accent text-white rounded-md text-xs font-500"><i class="bi bi-plus-lg"></i> Aggiungi</button></span>
+                </div>
+                <p class="text-[12px] text-muted mt-1 mb-3">Il discorso su un pezzo preciso, e sui pezzi con la stessa forma. Di solito si scrivono dalla riga del preventivo, col bottone &ldquo;Istruzioni per l'AI&rdquo;.</p>
+                <input placeholder="Cerca istruzione…" class="h-8 border border-line rounded-md bg-surface-2 text-sm px-2 w-full mb-2" />
+                <div class="flex flex-col gap-2">
+                  <div onclick="toast('Pannello della regola (demo)')" class="bg-surface-2 border border-line rounded-lg px-3 py-2.5 cursor-pointer hover:border-steel flex items-start gap-3" style="border-radius:8px">
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-2 mb-0.5">
+                        <span class="font-mono text-[11px] text-faint">P001.00.334.00</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded-full border border-accent/40 text-accent">e i pezzi con la stessa forma</span>
+                      </div>
+                      <p class="text-[13px] text-ink leading-relaxed">il perno lo facciamo sempre dal trafilato, niente barra rettificata</p>
+                    </div>
+                    <span class="text-[11px] text-muted inline-flex items-center gap-1 whitespace-nowrap shrink-0 pt-1">Modifica <i class="bi bi-arrow-right text-[11px]"></i></span>
+                  </div>
+                  <div onclick="toast('Pannello della regola (demo)')" class="bg-surface-2 border border-line rounded-lg px-3 py-2.5 cursor-pointer hover:border-steel flex items-start gap-3" style="border-radius:8px">
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-2 mb-0.5">
+                        <span class="font-mono text-[11px] text-faint">26-337</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded-full border border-accent/40 text-accent">e i pezzi con la stessa forma</span>
+                      </div>
+                      <p class="text-[13px] text-ink leading-relaxed">esce dal pieno: niente saldatura, e il taglio contalo al secondo</p>
+                    </div>
+                    <span class="text-[11px] text-muted inline-flex items-center gap-1 whitespace-nowrap shrink-0 pt-1">Modifica <i class="bi bi-arrow-right text-[11px]"></i></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+
+      <!-- =============================================== -->
+      <!-- VIEW: AUTOMAZIONI (pannello di controllo)        -->
+      <!-- =============================================== -->
+      <section data-view="automazioni" class="view px-4 sm:px-6 lg:px-8 py-7 max-w-[920px] mx-auto" hidden>
+        <div class="reveal mb-5">
+          <h1 class="font-display font-700 text-2xl sm:text-3xl tracking-tight">Automazioni</h1>
+          <p class="text-muted text-sm mt-1.5 max-w-2xl"><span class="inline-block font-mono text-[10px] uppercase tracking-wider bg-line-2 text-muted px-1.5 py-0.5 rounded mr-1.5 align-middle">demo</span>esempio dimostrativo del pannello automazioni. Dati simulati: è un'anteprima, non il prodotto finale, e potrà cambiare.</p>
+        </div>
+
+        <!-- modalità manuale -->
+        <div class="reveal ticks bg-ink text-bg rounded-lg p-5 mb-6 flex flex-wrap items-center gap-4" style="border-radius:8px">
+          <span class="h-10 w-10 grid place-items-center rounded bg-bg/10 text-accent shrink-0"><i class="bi bi-hand-index-thumb text-lg"></i></span>
+          <div class="min-w-0 flex-1 max-sm:basis-full">
+            <div class="font-display font-600">Modalità manuale</div>
+            <div class="text-bg/70 text-[13px]">«Sono rientrato, questa commessa la seguo io.» Sospende tutte le automazioni in un clic, senza perdere nulla.</div>
+          </div>
+          <button onclick="masterManual()" class="h-10 px-4 inline-flex items-center gap-2 bg-bg text-ink rounded-md text-sm font-600 hover:bg-bg/90"><i class="bi bi-pause-circle"></i> Sospendi tutto</button>
+        </div>
+
+        <!-- toggles -->
+        <div id="autoList" class="reveal bg-surface border border-line rounded-lg divide-y divide-line overflow-hidden" style="border-radius:8px"><!-- injected --></div>
+
+        <p class="text-[12px] text-muted mt-4 font-mono"><i class="bi bi-flag"></i> checkpoint durante la fornitura: le logiche restano mappate, puoi cambiare passo lungo il percorso.</p>
+      </section>
+
+      <!-- =============================================== -->
+      <!-- VIEW: GESTIONALE (integrazione ERP)             -->
+      <!-- =============================================== -->
+      <section data-view="gestionale" class="view px-4 sm:px-6 lg:px-8 py-7 max-w-[1080px] mx-auto" hidden>
+        <div class="reveal mb-5">
+          <h1 class="font-display font-700 text-2xl sm:text-3xl tracking-tight">Gestionale</h1>
+          <p class="text-muted text-sm mt-1.5 max-w-2xl"><span class="inline-block font-mono text-[10px] uppercase tracking-wider bg-line-2 text-muted px-1.5 py-0.5 rounded mr-1.5 align-middle">demo</span>esempio dimostrativo dell'integrazione con il gestionale. Dati simulati: è un'anteprima, non il prodotto finale, e potrà cambiare.</p>
+        </div>
+
+        <!-- status connessione -->
+        <div class="reveal ticks bg-surface border border-line rounded-lg p-5 mb-5 flex flex-wrap items-center gap-4" style="border-radius:8px">
+          <span class="h-11 w-11 grid place-items-center rounded-lg bg-ok-soft text-ok shrink-0"><i class="bi bi-plug-fill text-xl"></i></span>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-display font-700 text-lg">Gestionale aziendale</span>
+              <span class="font-mono text-[10px] bg-ok-soft text-ok px-1.5 py-0.5 rounded uppercase tracking-wider"><span class="inline-block h-1.5 w-1.5 rounded-full bg-ok mr-1 align-middle"></span>collegato</span>
+            </div>
+            <div class="text-[13px] text-muted mt-0.5">Ultima sincronizzazione <span class="text-ink font-600">4 minuti fa</span> · automatica ogni 15′</div>
+          </div>
+          <button onclick="toast('Sincronizzazione avviata (demo)')" class="ml-auto h-10 px-4 inline-flex items-center gap-2 bg-ink text-white rounded-md text-sm font-500 hover:bg-ink/90"><i class="bi bi-arrow-repeat"></i> Forza sincronizzazione</button>
+        </div>
+
+        <!-- KPI sync -->
+        <div class="reveal grid grid-cols-3 gap-3 sm:gap-4 mb-6">
+          <div class="ticks bg-surface border border-line rounded-lg p-4" style="border-radius:8px">
+            <div class="font-mono text-[10px] uppercase tracking-wider text-muted">Ordini sincronizzati</div>
+            <div class="mt-2 font-mono font-700 text-3xl">4</div>
+            <div class="text-[11px] font-mono text-muted mt-1">oggi</div>
+          </div>
+          <div class="ticks bg-surface border border-line rounded-lg p-4" style="border-radius:8px">
+            <div class="font-mono text-[10px] uppercase tracking-wider text-muted">Commesse mappate</div>
+            <div class="mt-2 font-mono font-700 text-3xl">7</div>
+            <div class="text-[11px] font-mono text-muted mt-1">su 7 aperte</div>
+          </div>
+          <div class="ticks bg-surface border border-line rounded-lg p-4" style="border-radius:8px">
+            <div class="font-mono text-[10px] uppercase tracking-wider text-muted">Tempi rientrati (QR)</div>
+            <div class="mt-2 font-mono font-700 text-3xl text-accent">12</div>
+            <div class="text-[11px] font-mono text-muted mt-1">consuntivo pezzi</div>
+          </div>
+        </div>
+
+        <!-- flusso dati -->
+        <div class="reveal grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div class="bg-surface border border-line rounded-lg p-5" style="border-radius:8px">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="h-7 w-7 grid place-items-center rounded bg-accent-soft text-accent"><i class="bi bi-box-arrow-up-right"></i></span>
+              <h3 class="font-display font-600">Da Calibro → Gestionale</h3>
+            </div>
+            <ul class="space-y-2 text-[13px]">
+              <li class="flex gap-2"><i class="bi bi-check-circle-fill text-ok"></i> Righe d'ordine dalle distinte grezzi</li>
+              <li class="flex gap-2"><i class="bi bi-check-circle-fill text-ok"></i> RDO e conferme ai fornitori</li>
+              <li class="flex gap-2"><i class="bi bi-check-circle-fill text-ok"></i> Avanzamenti SAL e comunicazioni cliente</li>
+            </ul>
+          </div>
+          <div class="bg-surface border border-line rounded-lg p-5" style="border-radius:8px">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="h-7 w-7 grid place-items-center rounded bg-steel-soft text-steel"><i class="bi bi-box-arrow-in-down-left"></i></span>
+              <h3 class="font-display font-600">Dal Gestionale → Calibro</h3>
+            </div>
+            <ul class="space-y-2 text-[13px]">
+              <li class="flex gap-2"><i class="bi bi-check-circle-fill text-ok"></i> Anagrafiche clienti e fornitori</li>
+              <li class="flex gap-2"><i class="bi bi-check-circle-fill text-ok"></i> Ordini cliente e conferme</li>
+              <li class="flex gap-2"><i class="bi bi-check-circle-fill text-ok"></i> Tempi reali dai QR sparati in officina</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- registro sync -->
+        <div class="reveal bg-surface border border-line rounded-lg overflow-hidden" style="border-radius:8px">
+          <div class="px-4 py-3 border-b border-line bg-surface-2 flex items-center justify-between">
+            <span class="font-display font-600">Registro sincronizzazioni</span>
+            <span class="font-mono text-[11px] text-muted">ultime 24 ore</span>
+          </div>
+          <ul class="divide-y divide-line text-[13px]">
+            <li class="flex items-center gap-3 px-4 py-2.5"><span class="font-mono text-[10px] text-faint w-10 shrink-0">09:41</span><i class="bi bi-arrow-up-right text-accent"></i><span class="flex-1">Distinta grezzi <span class="font-mono">P001</span> → 13 righe d'ordine scritte sul gestionale</span><span class="font-mono text-[10px] text-ok">ok</span></li>
+            <li class="flex items-center gap-3 px-4 py-2.5"><span class="font-mono text-[10px] text-faint w-10 shrink-0">08:55</span><i class="bi bi-arrow-up-right text-accent"></i><span class="flex-1">SAL <span class="font-mono">P002</span> 72% → registrato sulla commessa</span><span class="font-mono text-[10px] text-ok">ok</span></li>
+            <li class="flex items-center gap-3 px-4 py-2.5"><span class="font-mono text-[10px] text-faint w-10 shrink-0">08:12</span><i class="bi bi-arrow-down-left text-steel"></i><span class="flex-1">4 ordini cliente importati dal gestionale</span><span class="font-mono text-[10px] text-ok">ok</span></li>
+            <li class="flex items-center gap-3 px-4 py-2.5"><span class="font-mono text-[10px] text-faint w-10 shrink-0">ieri</span><i class="bi bi-arrow-down-left text-steel"></i><span class="flex-1">Tempi da QR: 12 pezzi consuntivati (perno 334, asta 336…)</span><span class="font-mono text-[10px] text-ok">ok</span></li>
+          </ul>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+</div>
+
+<!-- toast -->
+<div id="toast" class="toast fixed bottom-5 left-1/2 -translate-x-1/2 translate-y-24 opacity-0 z-50 bg-ink text-bg px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 text-sm max-w-[90vw]">
+  <i class="bi bi-check-circle-fill text-ok"></i><span id="toastMsg">ok</span>
+</div>
+
+<!-- ===================== CORE SCRIPT (no deps) ===================== -->
+<script>
+const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- view router ---------- */
+const crumbMap = { dashboard:'Dashboard', commessa:'Commessa P001', anomalie:'Controllo anomalie', approvv:'Approvvigionamento', sal:'Avanzamento SAL', preventivo:'Preventivatore', impostazioni:'Impostazioni preventivatore', regole:'Regole e istruzioni', automazioni:'Automazioni', gestionale:'Gestionale' };
+const revealedViews = new Set();  // ogni vista si anima solo alla prima apertura, non a ogni click
+function goto(view){
+  document.querySelectorAll('.view').forEach(v => v.hidden = (v.dataset.view !== view));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.go === view));
+  const c = document.getElementById('crumb'); if(c) c.textContent = crumbMap[view] || '—';
+  document.querySelector('main').scrollTo?.(0,0);
+  window.scrollTo({top:0, behavior: REDUCE ? 'auto' : 'smooth'});
+  closeNav();
+  if(view === 'sal') buildSAL();
+  if(view === 'approvv') buildRDO();
+  if(view === 'automazioni') buildAuto();
+  if(view === 'preventivo' && document.getElementById('prevList')){ document.getElementById('prevList').hidden=false; document.getElementById('prevDetail').hidden=true; rigaAperta=-1; simileAperto=-1; }
+  if(view === 'regole') setBibbia('regole');
+  if(!revealedViews.has(view)){ revealedViews.add(view); runReveals(); }
+}
+document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => goto(b.dataset.go)));
+
+/* ---------- mobile nav ---------- */
+const sidebar = document.getElementById('sidebar'), backdrop = document.getElementById('backdrop');
+function openNav(){ sidebar.classList.remove('-translate-x-full'); backdrop.hidden=false; }
+function closeNav(){ if(window.innerWidth < 1024){ sidebar.classList.add('-translate-x-full'); backdrop.hidden=true; } }
+document.getElementById('openNav').addEventListener('click', openNav);
+document.getElementById('closeNav').addEventListener('click', closeNav);
+backdrop.addEventListener('click', closeNav);
+
+/* ---------- toast ---------- */
+let toastT;
+function toast(msg){
+  const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = msg;
+  t.style.transform = 'translateX(-50%) translateY(0)'; t.style.opacity = '1';
+  clearTimeout(toastT); toastT = setTimeout(()=>{ t.style.transform='translateX(-50%) translateY(6rem)'; t.style.opacity='0'; }, 2600);
+}
+
+/* ================= DATA: commessa P001 ================= */
+const LAV = {
+  torno:{l:'tornio',c:'var(--color-torno)'}, fresa:{l:'fresa',c:'var(--color-fresa)'},
+  laser:{l:'laser',c:'var(--color-laser)'}, piega:{l:'piega',c:'var(--color-piega)'},
+  saldatura:{l:'saldatura',c:'var(--color-saldatura)'}, taglio:{l:'taglio',c:'var(--color-taglio)'}
+};
+function chip(k){ const v=LAV[k]; return `<span class="inline-flex items-center gap-1 font-mono text-[10px] px-1.5 py-0.5 rounded" style="color:${v.c};background:color-mix(in srgb, ${v.c} 12%, white)">${v.l}</span>`; }
+
+const PARTS = [
+  {cod:208, nome:'Piatto sostegno asta cam follower', lav:['taglio','saldatura'], grezzo:'Barra FE trafilato 30×30 · L=70', mat:'FE · zincatura', q:4, stato:'ok'},
+  {cod:209, nome:'Attacco asta sgancio 1', lav:['fresa'], grezzo:'Barra FE trafilato 30×30 · L=80', mat:'FE · zincatura', q:4, stato:'ok'},
+  {cod:332, nome:'Staffa superiore su pattino', lav:['laser','piega','saldatura'], grezzo:'Lamiera nera FE 6 mm', mat:'FE · zincatura', q:4, stato:'ok'},
+  {cod:333, nome:'Staffa cilindro inferiore di sgancio', lav:['laser','piega'], grezzo:'Lamiera nera FE 6 mm', mat:'FE · zincatura', q:4, stato:'warn', nota:'q.tà 6 a disegno'},
+  {cod:334, nome:'Perno cilindro', lav:['torno'], grezzo:'Tondo FE trafilato Ø20', mat:'FE · zincatura', q:8, stato:'ok'},
+  {cod:335, nome:'Staffa sostegno cilindro inferiore', lav:['laser','piega','saldatura'], grezzo:'Lamiera FE 6 mm', mat:'FE · zincatura', q:8, stato:'ok'},
+  {cod:336, nome:'Asta collegamento cam follower', lav:['torno'], grezzo:'Tondo INOX Ø20', mat:'INOX', q:8, stato:'ok'},
+  {cod:337, nome:'Attacco cilindro superiore', lav:['fresa'], grezzo:'Barra FE trafilato 60×20 · L=54', mat:'FE · zincatura', q:4, stato:'warn', nota:'campo materiale vuoto a disegno'},
+  {cod:392, nome:'Supporto monitor', lav:['laser','piega'], grezzo:'Lamiera DD11 decapata 2 mm', mat:'DD11 · vern. RAL 9005', q:5, stato:'warn', nota:'cartiglio: "sostegno tastiera"'},
+  {cod:393, nome:'Porta tastiera', lav:['laser','piega'], grezzo:'Lamiera DD11 decapata 2 mm', mat:'DD11 · vern. RAL 9005', q:5, stato:'ok'},
+  {cod:431, nome:'Staffa sostegno gruppo sganciatore', lav:['laser','piega'], grezzo:'Lamiera 6 mm', mat:'INOX a ordine / FE a disegno', q:4, stato:'err', nota:'conflitto materiale'},
+  {cod:432, nome:'Staffa 2 sostegno gruppo sganciatore', lav:['laser','piega'], grezzo:'Lamiera 6 mm', mat:'INOX a ordine / FE a disegno', q:4, stato:'err', nota:'conflitto materiale'},
+  {cod:438, nome:'Piastrina', lav:['taglio'], grezzo:'Peraluman 5083 · 8 mm', mat:'Alluminio', q:8, stato:'warn', nota:'campo descrizione vuoto a disegno'},
+];
+
+const STATO = {
+  ok:  '<span class="inline-flex items-center gap-1 font-mono text-[10px] text-ok"><i class="bi bi-check-circle-fill"></i> ok</span>',
+  warn:'<span class="inline-flex items-center gap-1 font-mono text-[10px] text-warn"><i class="bi bi-exclamation-triangle-fill"></i> verifica</span>',
+  err: '<span class="inline-flex items-center gap-1 font-mono text-[10px] text-danger"><i class="bi bi-exclamation-octagon-fill"></i> conflitto</span>',
+};
+
+function renderGrezzi(filter='all'){
+  const body = document.getElementById('grezziBody');
+  body.innerHTML = PARTS.filter(p => filter==='all' || p.lav.includes(filter)).map(p => `
+    <tr class="hover:bg-surface-2 ${p.stato==='err'?'bg-danger-soft/40':''}">
+      <td class="px-4 py-2.5 font-mono font-700">${p.cod}</td>
+      <td class="px-3 py-2.5">
+        <div class="font-500">${p.nome}</div>
+        ${p.nota?`<div class="text-[11px] text-${p.stato==='err'?'danger':'warn'} font-mono">${p.nota}</div>`:''}
+      </td>
+      <td class="px-3 py-2.5"><div class="flex flex-wrap gap-1">${p.lav.map(chip).join('')}</div></td>
+      <td class="px-3 py-2.5 font-mono text-[12px]">${p.grezzo}</td>
+      <td class="px-3 py-2.5 text-[12px]">${p.mat}</td>
+      <td class="px-3 py-2.5 text-right font-mono font-600">${p.q}</td>
+      <td class="px-3 py-2.5 text-center">${STATO[p.stato]}</td>
+    </tr>`).join('');
+}
+
+const AGG = [
+  {g:'Tondo FE trafilato Ø20 · zincato', d:'pezzo 334 · taglio in barra', q:'8 pz · ~ 1,8 m', c:'torno'},
+  {g:'Tondo INOX Ø20', d:'pezzo 336', q:'8 pz · ~ 1,6 m', c:'torno'},
+  {g:'Barra FE 30×30 trafilato', d:'pezzi 208, 209', q:'8 pz · ~ 0,9 m', c:'fresa'},
+  {g:'Barra FE 60×20 trafilato', d:'pezzo 337', q:'4 pz · ~ 0,3 m', c:'fresa'},
+  {g:'Lamiera nera FE 6 mm', d:'pezzi 332, 333, 335 (+431/432 da chiarire)', q:'≈ 1,9 m²', c:'laser'},
+  {g:'Lamiera DD11 decapata 2 mm', d:'pezzi 392, 393', q:'≈ 0,8 m²', c:'laser'},
+  {g:'Peraluman 5083 · 8 mm', d:'pezzo 438', q:'≈ 0,2 m²', c:'taglio'},
+];
+function renderAgg(){
+  document.getElementById('aggBody').innerHTML = AGG.map(a => `
+    <li class="flex items-center gap-3 py-1.5 border-b border-line last:border-0">
+      <span class="h-7 w-1.5 rounded-full shrink-0" style="background:${LAV[a.c].c}"></span>
+      <div class="min-w-0 flex-1">
+        <div class="font-500 text-[13px] truncate">${a.g}</div>
+        <div class="font-mono text-[11px] text-muted truncate">${a.d}</div>
+      </div>
+      <span class="font-mono text-[12px] font-600 text-steel whitespace-nowrap">${a.q}</span>
+    </li>`).join('');
+}
+
+const LAMIERA = [
+  {cod:392, nome:'Supporto monitor', s:'2 mm', mat:'DD11', k:0.42, pieghe:'2 × 90° · R int 2', ing:'220 × 160', sv:'248 × 160'},
+  {cod:393, nome:'Porta tastiera', s:'2 mm', mat:'DD11', k:0.42, pieghe:'3 × 90° · R int 2', ing:'300 × 120', sv:'342 × 120'},
+  {cod:332, nome:'Staffa superiore su pattino', s:'6 mm', mat:'FE', k:0.38, pieghe:'1 × 90° · R int 6', ing:'90 × 70', sv:'104 × 70'},
+  {cod:335, nome:'Staffa sostegno cilindro inf.', s:'6 mm', mat:'FE', k:0.38, pieghe:'2 × 90° · R int 6', ing:'120 × 80', sv:'148 × 80'},
+];
+function renderLamiera(){
+  document.getElementById('lamieraBody').innerHTML = LAMIERA.map(p => `
+    <div class="bg-surface border border-line rounded-lg p-4" style="border-radius:8px">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2"><span class="font-mono font-700">${p.cod}</span><span class="text-sm font-500">${p.nome}</span></div>
+        ${chip('piega')}
+      </div>
+      <!-- mini drawing -->
+      <svg viewBox="0 0 240 80" class="w-full h-16 mb-3" aria-hidden="true">
+        <rect x="20" y="30" width="200" height="22" fill="none" stroke="var(--color-steel)" stroke-width="1.4"/>
+        <line x1="90" y1="26" x2="90" y2="56" stroke="var(--color-accent)" stroke-width="1.2" stroke-dasharray="3 2"/>
+        <line x1="150" y1="26" x2="150" y2="56" stroke="var(--color-accent)" stroke-width="1.2" stroke-dasharray="3 2"/>
+        <line x1="20" y1="66" x2="220" y2="66" stroke="var(--color-line-strong)" stroke-width="1"/>
+        <path d="M20 63 l0 6 M220 63 l0 6" stroke="var(--color-line-strong)" stroke-width="1"/>
+        <text x="120" y="76" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="var(--color-muted)">sviluppo ${p.sv}</text>
+      </svg>
+      <dl class="grid grid-cols-2 gap-y-1.5 font-mono text-[12px]">
+        <dt class="text-muted">spessore</dt><dd class="text-right">${p.s}</dd>
+        <dt class="text-muted">materiale</dt><dd class="text-right">${p.mat}</dd>
+        <dt class="text-muted">pieghe</dt><dd class="text-right">${p.pieghe}</dd>
+        <dt class="text-muted">fattore k</dt><dd class="text-right text-accent font-700">${p.k}</dd>
+        <dt class="text-muted">ingombro</dt><dd class="text-right">${p.ing}</dd>
+        <dt class="text-ink font-600">sviluppo piano</dt><dd class="text-right text-ink font-700">${p.sv} mm</dd>
+      </dl>
+    </div>`).join('');
+}
+
+const COMM = [
+  {pos:1, nome:'Vite TCEI M8 × 20', norma:'ISO 4762', q:16, forn:'Bossard'},
+  {pos:2, nome:'Vite TSPEI M6 × 16', norma:'ISO 10642', q:8, forn:'Bossard'},
+  {pos:3, nome:'Rondella piana Ø8', norma:'UNI 6592', q:24, forn:'Bossard'},
+  {pos:4, nome:'Dado autobloccante M8', norma:'ISO 7040', q:8, forn:'Bossard'},
+  {pos:5, nome:'Cilindro pneumatico Ø20 · corsa 50', norma:'—', q:4, forn:'Camozzi'},
+  {pos:6, nome:'Grano con punta M8 × 10', norma:'UNI 5927', q:8, forn:'Bossard'},
+];
+function renderComm(){
+  document.getElementById('commBody').innerHTML = COMM.map(c => `
+    <tr class="hover:bg-surface-2">
+      <td class="px-4 py-2.5 font-mono font-700 text-steel">${String(c.pos).padStart(2,'0')}</td>
+      <td class="px-3 py-2.5 font-500">${c.nome}</td>
+      <td class="px-3 py-2.5 font-mono text-[12px] text-muted">${c.norma}</td>
+      <td class="px-3 py-2.5 text-right font-mono font-600">${c.q}</td>
+      <td class="px-3 py-2.5 text-[12px]">${c.forn}</td>
+    </tr>`).join('');
+}
+
+/* ---------- scomposizione simulation ---------- */
+const btnScompon = document.getElementById('btnScompon');
+btnScompon.addEventListener('click', () => {
+  const steps = [...document.querySelectorAll('#steps [data-step]')];
+  btnScompon.disabled = true; btnScompon.classList.add('opacity-60');
+  btnScompon.innerHTML = '<i class="bi bi-arrow-repeat"></i> Elaborazione…';
+
+  const finish = () => {
+    document.getElementById('ingest').hidden = true;
+    document.getElementById('results').hidden = false;
+    renderGrezzi('all'); renderAgg(); renderLamiera(); renderComm();
+    runReveals();
+    toast('Scomposizione completata · 6 anomalie rilevate');
+  };
+
+  if(REDUCE){ steps.forEach(markDone); finish(); return; }
+
+  let i = 0;
+  const tick = () => {
+    if(i > 0) markDone(steps[i-1]);
+    if(i < steps.length){
+      const s = steps[i];
+      s.classList.add('scanning','border-accent');
+      s.querySelector('.step-ico').classList.remove('text-faint','border-line');
+      s.querySelector('.step-ico').classList.add('text-accent','border-accent');
+      s.querySelector('.step-state').className = 'step-state bi bi-three-dots text-accent';
+      i++; setTimeout(tick, 760);
+    } else { setTimeout(finish, 350); }
+  };
+  tick();
+});
+function markDone(s){
+  s.classList.remove('scanning','border-accent');
+  s.classList.add('border-ok/40');
+  const ico = s.querySelector('.step-ico');
+  ico.classList.remove('text-faint','border-line','text-accent','border-accent');
+  ico.classList.add('text-ok','border-ok/50');
+  s.querySelector('.step-state').className = 'step-state bi bi-check-lg text-ok';
+}
+
+/* ---------- distinta tabs ---------- */
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(x => { x.classList.remove('tab-active'); x.classList.add('text-muted','border-transparent'); });
+  t.classList.add('tab-active'); t.classList.remove('text-muted','border-transparent');
+  document.querySelectorAll('[data-panel]').forEach(p => p.hidden = (p.dataset.panel !== t.dataset.tab));
+}));
+
+/* ---------- lavorazione filter ---------- */
+document.querySelectorAll('.lav-filter').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.lav-filter').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  renderGrezzi(b.dataset.lav);
+}));
+
+/* ================= ANOMALIE (Modulo D) ================= */
+const ANOM = [
+  { id:'mat', sev:'err', cod:'431 · 432', tit:'Conflitto di materiale', desc:'Sull\'inox la zincatura non ha senso: due materiali, due costi, due processi.',
+    a:{l:'Cartiglio disegno', v:'Lamiera FE zincata 6 mm'}, b:{l:'Ordine Lauretti', v:'Acciaio INOX 6 mm'} },
+  { id:'qty', sev:'warn', cod:'333', tit:'Quantità non coincidente', desc:'Staffa cilindro inferiore di sgancio.',
+    a:{l:'Disegno', v:'Q.tà 6'}, b:{l:'Ordine', v:'Q.tà 4'} },
+  { id:'desc', sev:'warn', cod:'392', tit:'Descrizione errata nel cartiglio', desc:'Geometria e ordine indicano il supporto monitor.',
+    a:{l:'Cartiglio disegno', v:'"sostegno tastiera"'}, b:{l:'Ordine / geometria', v:'Supporto monitor'} },
+  { id:'empty337', sev:'warn', cod:'337', tit:'Campo materiale vuoto a disegno', desc:'Il dato esiste solo nell\'ordine: va riportato sul cartiglio.',
+    a:{l:'Cartiglio', v:'— (vuoto)'}, b:{l:'Ordine', v:'FE trafilato 60×20 · zincato'} },
+  { id:'empty438', sev:'warn', cod:'438', tit:'Campo descrizione vuoto a disegno', desc:'Piastrina in alluminio Peraluman 5083.',
+    a:{l:'Cartiglio', v:'— (vuoto)'}, b:{l:'Ordine', v:'Peraluman 5083 · 8 mm'} },
+  { id:'dup', sev:'warn', cod:'392 · 393', tit:'Doppia riga negli ordini', desc:'Comparivano due volte (una come "lamiera decapata"), su due commesse interne.',
+    a:{l:'Ordine Lauretti', v:'2 righe duplicate'}, b:{l:'Proposta sistema', v:'Consolidare in 1 riga'} },
+];
+let anomState = {}; ANOM.forEach(a => anomState[a.id] = false);
+
+const sevDot = { err:'bg-danger', warn:'bg-warn' };
+function renderAnom(filter='all'){
+  const list = document.getElementById('anomList');
+  const items = ANOM.filter(a => filter==='all' || (filter==='open' && !anomState[a.id]) || (filter==='done' && anomState[a.id]));
+  list.innerHTML = items.map(a => {
+    const chosen = anomState[a.id];          // false | 'a' | 'b'
+    const done = !!chosen;
+    const src = (k) => {
+      const s = a[k], sel = chosen===k;
+      return `
+      <button onclick="resolveAnom('${a.id}','${k}')" aria-pressed="${sel}"
+        class="anom-src group text-left rounded-lg p-3 flex items-start gap-2.5 transition border ${sel?'border-accent bg-accent-soft/60':'border-line bg-surface-2 hover:border-accent hover:bg-accent-soft/40'}" style="border-radius:8px">
+        <span class="mt-0.5 h-4 w-4 rounded-full border-2 grid place-items-center shrink-0 ${sel?'border-accent':'border-line-strong group-hover:border-accent'}">
+          <span class="h-1.5 w-1.5 rounded-full bg-accent ${sel?'':'opacity-0 group-hover:opacity-100'}"></span>
+        </span>
+        <span class="min-w-0">
+          <span class="block font-mono text-[10px] uppercase tracking-wider text-muted">${s.l}</span>
+          <span class="block font-mono text-[15px] font-700 text-ink mt-0.5 break-words leading-snug">${s.v}</span>
+        </span>
+      </button>`;
+    };
+    return `
+    <article class="bg-surface border ${done?'border-ok/40':'border-line'} rounded-lg overflow-hidden" style="border-radius:8px">
+      <div class="flex items-start gap-3 px-4 sm:px-5 py-4">
+        <span class="h-7 w-7 grid place-items-center rounded-full ${done?'bg-ok':sevDot[a.sev]} text-white shrink-0 mt-0.5">
+          <i class="bi ${done?'bi-check-lg':(a.sev==='err'?'bi-exclamation-octagon-fill':'bi-exclamation-triangle-fill')} text-sm"></i></span>
+        <div class="min-w-0 flex-1">
+          <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <h3 class="font-display font-600">${a.tit}</h3>
+            <span class="font-mono text-[11px] text-muted">pezzi ${a.cod}</span>
+            ${done?'<span class="font-mono text-[10px] bg-ok-soft text-ok px-1.5 py-0.5 rounded">risolta</span>':''}
+          </div>
+          <p class="text-[13px] text-muted mt-0.5">${a.desc}</p>
+
+          ${done?'':'<div class="font-mono text-[10px] text-faint mt-3 mb-1.5 flex items-center gap-1"><i class="bi bi-hand-index-thumb"></i> tocca la fonte corretta per registrarla</div>'}
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 ${done?'mt-3':''}">
+            ${src('a')}
+            ${src('b')}
+          </div>
+        </div>
+      </div>
+      ${done ? `
+        <div class="px-4 sm:px-5 py-2.5 border-t border-line bg-ok-soft/40 flex items-center gap-2 text-[12px] text-ok font-mono">
+          <i class="bi bi-check-circle-fill"></i> registrato: <span class="text-ink font-600">${a[chosen].v}</span> · tracciato chi ha deciso
+          <button class="ml-auto text-muted hover:text-ink" onclick="undoAnom('${a.id}')">annulla</button>
+        </div>` : ''}
+    </article>`;
+  }).join('');
+  if(items.length===0) list.innerHTML = '<p class="text-center text-muted text-sm py-10 font-mono">nessuna anomalia in questo filtro</p>';
+}
+function curAnomFilter(){ return document.querySelector('.anom-filter.active')?.dataset.filter || 'all'; }
+function resolveAnom(id, how){
+  anomState[id] = how;            // 'a' = disegno · 'b' = ordine
+  updateAnomCount();
+  renderAnom(curAnomFilter());
+  const a = ANOM.find(x=>x.id===id);
+  toast('Decisione registrata: ' + a[how].v);
+}
+function undoAnom(id){ anomState[id]=false; updateAnomCount(); renderAnom(curAnomFilter()); }
+function updateAnomCount(){
+  const open = ANOM.filter(a => !anomState[a.id]).length;
+  document.getElementById('openCount').textContent = open;
+  const nav = document.getElementById('navAnomalie');
+  if(open===0){ nav.textContent='0'; nav.className='ml-auto font-mono text-[10px] bg-ok-soft text-ok px-1.5 py-0.5 rounded'; }
+  else { nav.textContent=open; nav.className='ml-auto font-mono text-[10px] bg-danger-soft text-danger px-1.5 py-0.5 rounded'; }
+  document.getElementById('anomDone').hidden = (open!==0);
+}
+document.querySelectorAll('.anom-filter').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.anom-filter').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  renderAnom(b.dataset.filter);
+}));
+
+/* ================= SAL (Modulo F) ================= */
+const COMMESSE = [
+  {cod:'P001', obj:'console operatore', order:'OA.568/2026', client:'Lauretti Automazioni', mail:'acquisti@lauretti-automazioni.it', pct:35, date:'3 lug 2026', prio:2},
+  {cod:'P002', obj:'gruppo trasporto a nastro', order:'OA.611/2026', client:'Vesta Robotics', mail:'ordini@vestarobotics.it', pct:72, date:'27 giu 2026', prio:1},
+  {cod:'C-2412', obj:'telaio quadro comandi', order:'OA.540/2026', client:'Lauretti Automazioni', mail:'acquisti@lauretti-automazioni.it', pct:90, date:'20 giu 2026', prio:3},
+  {cod:'P004', obj:'supporto sensori', order:'OA.629/2026', client:'Caleido Packaging', mail:'tecnico@caleidopackaging.it', pct:30, date:'10 lug 2026', prio:1, late:true},
+  {cod:'C-2415', obj:'flangia riduttore', order:'OA.598/2026', client:'Sigma Riduttori', mail:'acquisti@sigmariduttori.it', pct:55, date:'4 lug 2026', prio:2},
+];
+let salTarget = 'P001', salSent = {};
+function buildSAL(){
+  document.getElementById('salList').innerHTML = COMMESSE.map(c => `
+    <div class="sal-card bg-surface border ${c.cod===salTarget?'border-accent':'border-line'} rounded-lg p-4 cursor-pointer transition" data-cod="${c.cod}" style="border-radius:8px" onclick="pickSAL('${c.cod}')">
+      <div class="flex items-center gap-3">
+        <span class="font-mono font-700">${c.cod}</span>
+        <span class="font-mono text-[10px] bg-line-2 text-muted px-1.5 py-0.5 rounded whitespace-nowrap" title="priorità">P${c.prio}</span>
+        <div class="min-w-0 flex-1">
+          <div class="text-sm font-500 truncate capitalize">${c.obj}</div>
+          <div class="text-[12px] text-muted truncate">${c.client} · ${c.order}</div>
+        </div>
+        ${c.late?'<span class="font-mono text-[10px] bg-warn-soft text-warn px-1.5 py-0.5 rounded whitespace-nowrap"><i class="bi bi-clock-history"></i> ritardo</span>':''}
+        ${salSent[c.cod]?'<span class="font-mono text-[10px] bg-ok-soft text-ok px-1.5 py-0.5 rounded whitespace-nowrap"><i class="bi bi-check-lg"></i> inviata</span>':''}
+        <span class="sal-val font-mono font-700 text-lg w-12 text-right">${c.pct}%</span>
+      </div>
+      <input type="range" min="0" max="100" value="${c.pct}" class="w-full mt-3" oninput="setSAL('${c.cod}', this.value)" onclick="event.stopPropagation()" aria-label="Avanzamento ${c.cod}" />
+    </div>`).join('');
+  refreshMail();
+}
+function setSAL(cod, val){
+  const c = COMMESSE.find(x=>x.cod===cod); c.pct = +val;
+  const card = document.querySelector(`.sal-card[data-cod="${cod}"]`);
+  card.querySelector('.sal-val').textContent = val + '%';
+  if(salTarget !== cod) pickSAL(cod, true);
+  else refreshMail();
+}
+function pickSAL(cod, keepRange){
+  salTarget = cod;
+  document.querySelectorAll('.sal-card').forEach(el => {
+    el.classList.toggle('border-accent', el.dataset.cod===cod);
+    el.classList.toggle('border-line', el.dataset.cod!==cod);
+  });
+  refreshMail();
+}
+function refreshMail(){
+  const c = COMMESSE.find(x=>x.cod===salTarget); if(!c) return;
+  const late = !!c.late;
+  document.getElementById('salTargetTag').textContent = c.cod;
+  document.getElementById('mailTo').textContent = c.mail;
+  document.getElementById('mailSubj').textContent = late
+    ? `Aggiornamento consegna ordine ${c.order} — ${c.pct}% (ritardo)`
+    : `Avanzamento ordine ${c.order} — ${c.pct}%`;
+  document.getElementById('mailClient').textContent = c.client;
+  document.getElementById('mailBody1').innerHTML = late
+    ? `dobbiamo segnalarle uno slittamento sulla commessa <span class="font-mono">${c.order}</span> (${c.obj}):`
+    : `le confermiamo lo stato di avanzamento della commessa <span class="font-mono">${c.order}</span> (${c.obj}):`;
+  document.getElementById('mailLateNote').hidden = !late;
+  document.getElementById('mailDateLbl').textContent = late ? 'Nuova consegna prevista' : 'Consegna prevista';
+  document.getElementById('mailPct').textContent = c.pct + '%';
+  document.getElementById('mailBar').style.width = c.pct + '%';
+  document.getElementById('mailDate').textContent = c.date;
+  document.getElementById('mailAttach').textContent = 'SAL_' + c.order.replace(/\//g,'-') + '.pdf';
+}
+document.getElementById('sendMail').addEventListener('click', () => {
+  salSent[salTarget] = true; buildSAL();
+  toast('Comunicazione inviata a ' + (COMMESSE.find(x=>x.cod===salTarget).client));
+});
+
+/* ================= APPROVVIGIONAMENTO (RDO) ================= */
+const RDO_MAT = [
+  {mat:'Lamiera FE nera 6 mm',          c:'laser',  comm:'P001 · C-2412', fab:'≈ 2,3 m²', stock:'—',             buy:'1 foglio 1,5×3,0',          forn:['Marcegaglia','Ferriera Lazio','Tecnolamiere']},
+  {mat:'Lamiera INOX 6 mm',             c:'laser',  comm:'P001 (431/432)', fab:'≈ 0,9 m²', stock:'—',            buy:'1 foglio 1,0×2,0',          forn:['Acciai Inox Sud','Inoxmare','Tecnolamiere']},
+  {mat:'Lamiera DD11 decapata 2 mm',    c:'laser',  comm:'P001 · P004',   fab:'≈ 1,1 m²', stock:'2 fogli a stock', buy:'nessun acquisto',         forn:[]},
+  {mat:'Tondo INOX Ø20',                c:'torno',  comm:'P001',          fab:'≈ 1,6 m',  stock:'—',             buy:'1 barra 3 m',               forn:['Rodacciai','Inoxmare']},
+  {mat:'Peraluman 5083 · 8 mm',         c:'taglio', comm:'P001 · P002',   fab:'≈ 0,2 m²', stock:'—',             buy:'in accumulo · sotto minimo', forn:['Alulux','Metra']},
+];
+function buildRDO(){
+  renderRdoGate();
+  document.getElementById('rdoBody').innerHTML = RDO_MAT.map(m => `
+    <tr class="hover:bg-surface-2">
+      <td class="px-4 py-3"><div class="flex items-center gap-2"><span class="h-6 w-1.5 rounded-full shrink-0" style="background:${LAV[m.c].c}"></span><span class="font-500">${m.mat}</span></div></td>
+      <td class="px-3 py-3 font-mono text-[12px] text-muted">${m.comm}</td>
+      <td class="px-3 py-3 text-right font-mono">${m.fab}</td>
+      <td class="px-3 py-3 text-[12px] ${m.stock==='—'?'text-faint':'text-ok'}">${m.stock}</td>
+      <td class="px-3 py-3 text-[12px] font-500">${m.buy}</td>
+      <td class="px-3 py-3">${m.forn.length ? m.forn.map(f=>`<span class="inline-block font-mono text-[10px] bg-surface-2 border border-line rounded px-1.5 py-0.5 mr-1 mb-1 whitespace-nowrap">${f}</span>`).join('') : '<span class="font-mono text-[11px] text-ok"><i class="bi bi-check-circle"></i> già a magazzino</span>'}</td>
+    </tr>`).join('');
+  renderOfferte(rdoMode);
+}
+/* gate anti-errore: la RDO INOX resta bloccata finché il conflitto materiale 431/432 non è deciso */
+function renderRdoGate(){
+  const gate = document.getElementById('rdoGate');
+  const btn = document.getElementById('rdoConfirm');
+  const blocked = !anomState['mat'];
+  if(blocked){
+    gate.innerHTML = `<div class="flex flex-wrap items-center gap-3 rounded-md border border-danger/40 bg-danger-soft px-3 py-2.5" style="border-radius:7px">
+      <span class="h-7 w-7 grid place-items-center rounded-full bg-danger text-white shrink-0"><i class="bi bi-shield-exclamation"></i></span>
+      <div class="min-w-0 flex-1 max-sm:basis-full text-[12px] leading-snug"><span class="font-600 text-danger">Ordine in pausa.</span> <span class="text-ink">Pezzi 431/432: il materiale non coincide col disegno (INOX a ordine, FE a disegno).</span> <span class="text-muted">Lo teniamo fermo finché non decidi tu: così l'errore non arriva al fornitore.</span></div>
+      <button onclick="goto('anomalie')" class="font-mono text-[11px] px-2.5 py-1.5 rounded bg-ink text-bg whitespace-nowrap">Vai alle anomalie <i class="bi bi-arrow-right"></i></button>
+    </div>`;
+    if(btn){ btn.disabled = true; btn.classList.add('opacity-40','pointer-events-none'); btn.innerHTML = '<i class="bi bi-lock-fill"></i> Ordine bloccato'; }
+  } else {
+    gate.innerHTML = `<div class="flex flex-wrap items-center gap-3 rounded-md border border-ok/40 bg-ok-soft px-3 py-2.5" style="border-radius:7px">
+      <span class="h-7 w-7 grid place-items-center rounded-full bg-ok text-white shrink-0"><i class="bi bi-shield-check"></i></span>
+      <div class="min-w-0 flex-1 text-[12px] leading-snug"><span class="font-600 text-ok">Materiale verificato.</span> <span class="text-ink">Pezzi 431/432 confermati.</span> <span class="text-muted">La richiesta d'offerta può partire.</span></div>
+    </div>`;
+    if(btn){ btn.disabled = false; btn.classList.remove('opacity-40','pointer-events-none'); btn.innerHTML = '<i class="bi bi-send"></i> Conferma e ordina'; }
+  }
+}
+const OFFERTE = [
+  {forn:'Acciai Inox Sud', prezzo:412, gg:5},
+  {forn:'Inoxmare',        prezzo:389, gg:8},
+  {forn:'Tecnolamiere',    prezzo:435, gg:2},
+];
+let rdoMode = 'prezzo';
+function renderOfferte(mode){
+  rdoMode = mode;
+  const winner = [...OFFERTE].sort((a,b)=> mode==='prezzo' ? a.prezzo-b.prezzo : a.gg-b.gg)[0].forn;
+  document.getElementById('offerteBody').innerHTML = OFFERTE.map(o => {
+    const win = o.forn===winner;
+    return `
+    <div class="flex items-center gap-3 p-3 border rounded-md ${win?'border-accent bg-accent-soft/50':'border-line bg-surface-2'}" style="border-radius:7px">
+      <span class="h-8 w-8 grid place-items-center rounded-full shrink-0 font-mono text-[11px] ${win?'bg-accent text-white':'bg-surface border border-line text-muted'}">${o.forn.slice(0,2).toUpperCase()}</span>
+      <div class="min-w-0 flex-1">
+        <div class="text-sm font-600">${o.forn}</div>
+        <div class="font-mono text-[11px] text-muted">€ ${o.prezzo.toFixed(2)} · consegna ${o.gg} gg</div>
+      </div>
+      ${win
+        ? '<span class="font-mono text-[10px] bg-accent text-white px-2 py-1 rounded whitespace-nowrap"><i class="bi bi-trophy"></i> scelto</span>'
+        : '<span class="font-mono text-[10px] text-muted whitespace-nowrap"><i class="bi bi-reply"></i> auto-reply</span>'}
+    </div>`;
+  }).join('');
+}
+document.querySelectorAll('.rdo-mode').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.rdo-mode').forEach(x => { x.classList.remove('bg-ink','text-bg'); x.classList.add('text-muted'); });
+  b.classList.add('bg-ink','text-bg'); b.classList.remove('text-muted');
+  renderOfferte(b.dataset.mode);
+}));
+
+/* ================= AUTOMAZIONI (pannello) ================= */
+const AUTOS = [
+  {id:'scomp',   ico:'bi-cpu',         t:'Scomposizione & distinte',        d:'Legge i disegni, classifica le lavorazioni, genera la distinta grezzi.', on:true},
+  {id:'geom',    ico:'bi-box',         t:'Misure dal 3D',                   d:'Volume, peso, spessore, perimetro, fori e pieghe letti dal file 3D.',    on:true},
+  {id:'taglio',  ico:'bi-lightning-charge', t:'Tempo di taglio dai parametri macchina', d:'Perimetro ÷ avanzamento + sfondamenti: calcolato, non stimato.', on:true},
+  {id:'regole',  ico:'bi-journal-text',t:'Regole e istruzioni dell\'officina', d:'Su un codice noto usa i tuoi numeri e salta la stima.',               on:true},
+  {id:'distinta',ico:'bi-list-ol',     t:'Distinta del cliente',            d:'Legge codici e quantità e rimette le righe nella sua sequenza.',         on:true},
+  {id:'lamiera', ico:'bi-rulers',      t:'Sviluppo lamiera (fattore k)',    d:'Calcola lo spianato dal 3D con il tuo Excel dei fattori k.',            on:true},
+  {id:'marca',   ico:'bi-upc-scan',    t:'Marcatura PDF & QR · Gestionale', d:'Timbra il cartiglio e genera i QR per il consuntivo dei tempi.',         on:true},
+  {id:'rdo',     ico:'bi-truck',       t:'Approvvigionamento & RDO',        d:'Cumula le commesse, scala il magazzino, manda le richieste d\'offerta.', on:true},
+  {id:'export',  ico:'bi-file-earmark-spreadsheet', t:'Export al gestionale', d:'Genera il file d\'importazione coi tuoi codici articolo.',            on:true},
+  {id:'sal',     ico:'bi-broadcast',   t:'Report di avanzamento (SAL)',     d:'Prepara il PDF brandizzato; l\'invio al cliente parte su tua conferma.', on:true},
+];
+function buildAuto(){
+  document.getElementById('autoList').innerHTML = AUTOS.map(a => `
+    <div class="flex items-center gap-4 p-4">
+      <span class="h-9 w-9 grid place-items-center rounded shrink-0 ${a.on?'bg-accent-soft text-accent':'bg-surface-2 text-faint'}"><i class="bi ${a.ico}"></i></span>
+      <div class="min-w-0 flex-1">
+        <div class="text-sm font-600">${a.t}</div>
+        <div class="text-[12px] text-muted">${a.d}</div>
+      </div>
+      <button role="switch" aria-checked="${a.on}" onclick="toggleAuto('${a.id}')" aria-label="${a.t}" class="relative h-6 w-11 rounded-full transition shrink-0 ${a.on?'bg-accent':'bg-line-strong'}">
+        <span class="absolute top-0.5 ${a.on?'left-[22px]':'left-0.5'} h-5 w-5 rounded-full bg-white shadow transition-all"></span>
+      </button>
+    </div>`).join('');
+}
+function toggleAuto(id){
+  const a = AUTOS.find(x=>x.id===id); if(!a) return;
+  a.on = !a.on; buildAuto();
+  toast((a.on?'Attivata · ':'Sospesa · ') + a.t);
+}
+function masterManual(){
+  AUTOS.forEach(a => a.on = false); buildAuto();
+  toast('Tutte le automazioni sospese · controllo manuale');
+}
+
+/* ================= reveal on enter ================= */
+function runReveals(){
+  if(REDUCE) return;
+  const els = document.querySelectorAll('.view:not([hidden]) .reveal');
+  els.forEach((el,i) => {
+    el.style.opacity = '0'; el.style.transform = 'translateY(10px)';
+    el.style.transition = 'opacity .5s ease, transform .5s cubic-bezier(.2,.8,.2,1)';
+    setTimeout(()=>{ el.style.opacity='1'; el.style.transform='none'; }, 40 + i*55);
+  });
+}
+
+/* ================= KPI dashboard con sparkline ================= */
+function spark(data, color){
+  const w=120,h=32,max=Math.max(...data),min=Math.min(...data),rng=(max-min)||1;
+  const pts=data.map((v,i)=>[(i/(data.length-1))*w, h-3-((v-min)/rng)*(h-6)]);
+  const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area=line+` L ${w} ${h} L 0 ${h} Z`;
+  const id='sk'+Math.round(pts[0][1]*100+data[0]);
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" class="w-full h-8">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity="0.16"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+    <path d="${area}" fill="url(#${id})"/>
+    <path d="${line}" fill="none" stroke="${color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+const KPI=[
+  {lab:'Tempo per commessa', val:"11′", sub:'da ~2h 10′ · scomposizione+distinte', delta:'−91%', dcls:'text-ok', data:[130,120,96,70,52,40,22,11], color:'var(--color-accent)'},
+  {lab:'Anomalie intercettate', val:'23', sub:'prima dell\'ordine ai fornitori', delta:'+6', dcls:'text-ok', data:[8,10,9,14,16,19,21,23], color:'var(--color-steel)'},
+  {lab:'Errore evitato (stima)', val:'€ 8.940', sub:'materiale sbagliato non ordinato', delta:'', dcls:'', data:[2,3,3,5,6,7,8,9], color:'var(--color-ok)'},
+  {lab:'Da approvvigionare', val:'€ 14.280', sub:'distinte pronte per gli acquisti', delta:'', dcls:'', data:[6,7,9,8,11,10,13,14], color:'var(--color-warn)'},
+];
+document.getElementById('kpiRow').innerHTML = KPI.map(k=>`
+  <article class="bg-surface border border-line rounded-lg p-4 relative overflow-hidden" style="border-radius:8px">
+    <span class="absolute top-0 left-0 h-[3px] w-10" style="background:${k.color}"></span>
+    <div class="flex items-center justify-between pt-1">
+      <span class="font-mono text-[10px] uppercase tracking-wider text-muted">${k.lab}</span>
+      ${k.delta?`<span class="font-mono text-[10px] ${k.dcls}">${k.delta}</span>`:''}
+    </div>
+    <div class="mt-2 font-mono font-700 text-3xl leading-none text-ink">${k.val}</div>
+    <div class="mt-2 -mx-0.5">${spark(k.data,k.color)}</div>
+    <div class="mt-1 text-[11px] font-mono text-faint truncate">${k.sub}</div>
+  </article>`).join('');
+
+/* ================= PREVENTIVATORE =================
+   Ricalca l'editor vero: una pagina sola (testata → caricamenti → ricarichi →
+   tabella righe) e, sotto ogni riga, il pannello del prezzo voce per voce.
+   Due soli badge, come nell'originale: "stima AI" e "da pezzo simile".
+   Una riga che viene da una regola non ha badge: i valori sono già i tuoi.     */
+
+const RIGHE = [
+  {
+    art: "P001.00.334.00", desc: "Perno cilindro", q: "10", mat: "Tondo INOX Ø20",
+    peso: "0,691", prezzo: "27,10", imp: "271,00", stato: "pronta",
+    geom: "vol 21.716 mm³ · pezzo pieno",
+    lav: [{ rep: "tornio", tempo: "24", avv: true, costo: "18,75", ric: "25", tot: "23,44" }],
+    matVoce: { costo: "3,18", ric: "15", tot: "3,66" },
+    costo: "21,93", ricEuro: "5,17", auto: "27,10", round: ["27,50", "28", "30"],
+  },
+  {
+    art: "P001.00.332.00", desc: "Staffa superiore su pattino", q: "20", mat: "Lamiera FE 6 mm",
+    peso: "2,340", prezzo: "15,07", imp: "301,40", stato: "pronta", stima: true,
+    stimaMotivo: "taglio laser, 2 pieghe, saldatura sul profilo",
+    geom: "vol 298.700 mm³ · sp 6 mm · perim 862 mm · 5 fori · 2 pieghe",
+    lav: [
+      { rep: "laser", tempo: "0:29", avv: true, costo: "0,74", ric: "60", tot: "1,18" },
+      { rep: "piega", tempo: "2", avv: true, costo: "1,83", ric: "60", tot: "2,93" },
+      { rep: "saldatura", tempo: "6", avv: true, costo: "4,88", ric: "25", tot: "6,10" },
+    ],
+    matVoce: { costo: "3,04", ric: "60", tot: "4,86" },
+    costo: "10,49", ricEuro: "4,58", auto: "15,07", round: ["15,50", "16", "20"],
+  },
+  {
+    art: "P001.00.208.00", desc: "Piatto sostegno asta cam follower", q: "20",
+    mat: "Barra FE trafilato 30×30", peso: "0,485", prezzo: "10,42", imp: "208,40",
+    stato: "pronta", stima: true, stimaMotivo: "taglio a misura e saldatura di testa",
+    suggerimento: { chiave: "26-208", pct: 81 },
+    geom: "vol 63.000 mm³ · pezzo pieno",
+    lav: [
+      { rep: "taglio", tempo: "2", avv: true, costo: "1,46", ric: "25", tot: "1,83" },
+      { rep: "saldatura", tempo: "8", avv: true, costo: "6,38", ric: "25", tot: "7,98" },
+    ],
+    matVoce: { costo: "0,53", ric: "15", tot: "0,61" },
+    costo: "8,37", ricEuro: "2,05", auto: "10,42", round: ["10,50", "11", "15"],
+  },
+  {
+    art: "P001.00.337.00", desc: "Attacco cilindro superiore", q: "20",
+    mat: "Barra FE trafilato 60×20", peso: "1,120", prezzo: "26,26", imp: "525,20",
+    stato: "pronta", simile: { chiave: "26-337", pct: 92, conf: "alta" },
+    geom: "vol 145.500 mm³ · pezzo pieno",
+    impronta: "60×20×90 mm · pieno · 4 fori",
+    lav: [{ rep: "fresa", tempo: "26", avv: true, costo: "19,88", ric: "25", tot: "24,85" }],
+    matVoce: { costo: "1,23", ric: "15", tot: "1,41" },
+    costo: "21,11", ricEuro: "5,15", auto: "26,26", round: ["26,50", "27", "30"],
+  },
+  {
+    art: "P001.00.392.00", desc: "Staffa supporto monitor", q: "25", mat: "Lamiera FE 2 mm",
+    peso: "1,092", prezzo: "8,03", imp: "200,75", stato: "pronta", stima: true,
+    stimaMotivo: "taglio laser del profilo e 4 pieghe a 90°",
+    geom: "vol 139.101 mm³ · sp 2 mm · perim 1.284 mm · 3 fori · 4 pieghe",
+    lav: [
+      { rep: "laser", tempo: "0:20", avv: true, costo: "0,53", ric: "60", tot: "0,85", calcolo: true },
+      { rep: "piega", tempo: "4", avv: true, costo: "3,07", ric: "60", tot: "4,91" },
+    ],
+    matVoce: { costo: "1,42", ric: "60", tot: "2,27" },
+    costo: "5,02", ricEuro: "3,01", auto: "8,03", round: ["8,50", "9", "10"],
+  },
+  {
+    art: "P001.00.438.00-R1", desc: "Piastrina alluminio", q: "5", mat: "", peso: "0,214",
+    prezzo: null, imp: null, stato: "vuota", stima: true,
+    codiceGestionale: "P001.00.438.00",
+    geom: "vol 79.400 mm³ · sp 8 mm · perim 320 mm · 2 fori",
+    lav: [{ rep: "laser", tempo: "0:20", avv: true, costo: "0,53", ric: "60", tot: "0,85" }],
+    matVoce: { costo: "0,00", ric: "15", tot: "0,00" },
+    costo: "0,53", ricEuro: "0,32", auto: "0,85", round: ["1", "5"],
+  },
+];
+
+/* stato riga: striscia + pallino, come nell'originale */
+const ST = {
+  pronta:       { stripe: "bg-ok",     cls: "bg-ok text-white",     ico: "bi-check-lg" },
+  daCompletare: { stripe: "bg-danger", cls: "bg-danger text-white", ico: "bi-exclamation-lg" },
+  vuota:        { stripe: "bg-warn",   cls: "bg-warn text-white",   ico: "bi-dash-lg" },
+};
+const REP = {
+  tornio: { l: "Tornio", c: "var(--color-torno)" }, fresa: { l: "Fresa", c: "var(--color-fresa)" },
+  laser: { l: "Taglio laser", c: "var(--color-laser)" }, piega: { l: "Piega", c: "var(--color-piega)" },
+  saldatura: { l: "Saldatura", c: "var(--color-saldatura)" }, taglio: { l: "Taglio sega", c: "var(--color-taglio)" },
+};
+
+let rigaAperta = -1;    // indice della riga col pannello aperto
+let simileAperto = -1;  // indice della riga col pannello "da pezzo simile" aperto
+
+/* Cella "auto ma forzabile": tratteggiata quando è calcolata, ambra quando l'hai scritta tu. */
+function cella(v, opts = {}) {
+  const { forzato = false, big = false, wide = false } = opts;
+  const size = big ? "w-[104px] h-9 text-[15px] font-700" : wide ? "w-24 h-8 text-[12.5px]" : "w-20 h-8 text-[12.5px]";
+  const stile = forzato ? "border-warn bg-warn-soft text-warn font-600" : "border-dashed border-line-2 bg-surface text-ink";
+  return `<span class="inline-flex items-center gap-1 justify-end">
+    ${forzato ? '<span class="text-warn" title="Torna al calcolo automatico"><i class="bi bi-arrow-counterclockwise text-[12px]"></i></span>' : ""}
+    <span class="border rounded-md px-2 font-mono text-right inline-flex items-center justify-end ${size} ${stile}">${v}</span>
+  </span>`;
+}
+
+/* Il calcolo del taglio: perimetro ÷ avanzamento + sfondamenti, dai parametri della TUA macchina. */
+function calcolatore() {
+  return `
+  <div class="border-b border-line-2 bg-surface pl-[26px] pr-3 pb-3 pt-1">
+    <div class="flex flex-wrap items-end gap-2.5">
+      <span class="w-full text-[10px] uppercase tracking-wide font-mono text-muted inline-flex items-center gap-1">
+        <i class="bi bi-calculator text-[11px]"></i> Calcola dal taglio (parametri della tua macchina)
+        <span class="text-steel normal-case tracking-normal">· pre-compilato da STEP</span>
+      </span>
+      <label class="flex flex-col gap-0.5"><span class="text-[10px] text-muted">materiale</span>
+        <span class="border border-line rounded h-8 px-2 bg-surface-2 text-sm inline-flex items-center">Ferro</span></label>
+      <label class="flex flex-col gap-0.5"><span class="text-[10px] text-muted">spessore mm</span>
+        <span class="border border-line rounded h-8 px-2 bg-surface-2 text-sm inline-flex items-center">2</span></label>
+      <label class="flex flex-col gap-0.5"><span class="text-[10px] text-muted">perimetro mm</span>
+        <span class="border border-line rounded h-8 px-2 bg-surface-2 text-sm w-24 inline-flex items-center font-mono">1284</span></label>
+      <label class="flex flex-col gap-0.5"><span class="text-[10px] text-muted">n. sfondamenti</span>
+        <span class="border border-line rounded h-8 px-2 bg-surface-2 text-sm w-20 inline-flex items-center font-mono">3</span></label>
+      <div class="flex items-center h-8 text-xs">
+        <span class="font-mono"><b class="text-accent">0:20</b> <span class="text-muted">(taglio 0:19 + sfond. 0:01)</span></span>
+      </div>
+      <button onclick="toast('Tempo impostato sulla lavorazione (demo)')" class="h-8 px-3 bg-ink text-white rounded-md text-xs font-500">Imposta tempo</button>
+    </div>
+  </div>`;
+}
+
+/* Pannello della riga: officina a sinistra, costo/ricarico/totale a destra. */
+function pannello(r) {
+  const voci = r.lav.map((l) => {
+    const rep = REP[l.rep] || REP.taglio;
+    return `
+    <div class="zona-grid border-b border-line-2">
+      <div class="flex items-center gap-2 flex-wrap px-2.5 py-2 min-h-[52px]">
+        <span class="w-2 h-2 rounded-[2px] shrink-0" style="background:${rep.c}"></span>
+        <span class="border border-line rounded-md px-2 h-8 text-sm bg-surface w-[190px] inline-flex items-center justify-between">${rep.l} <i class="bi bi-chevron-down text-[10px] text-faint"></i></span>
+        <span class="border border-line rounded-md px-2 h-8 text-sm bg-surface w-20 inline-flex items-center justify-end font-mono">${l.tempo}</span>
+        <span class="text-[11px] text-muted">${l.rep === "laser" ? "min:sec" : "min"}</span>
+        <label class="text-xs flex items-center gap-1.5 text-muted select-none" title="Aggiungi il costo di avviamento del reparto, diviso per la quantità">
+          <input type="checkbox" ${l.avv ? "checked" : ""} onclick="return false" /> avviamento
+        </label>
+        ${l.rep === "laser" ? `<span class="font-mono text-[11px] text-steel inline-flex items-center gap-1"><i class="bi bi-calculator text-[11px]"></i> calcolo <i class="bi bi-chevron-${l.calcolo ? "up" : "down"} text-[10px]"></i></span>` : ""}
+      </div>
+      <div class="money">${cella(l.costo)}</div>
+      <div class="money"><span class="inline-flex items-center gap-1"><span class="border border-line rounded-md px-2 h-8 text-[12.5px] font-mono text-right bg-surface w-14 inline-flex items-center justify-end">${l.ric}</span><span class="text-[11px] text-muted font-mono">%</span></span></div>
+      <div class="money">${cella(l.tot, { wide: true })}</div>
+      <div class="money-x"><i class="bi bi-x-lg text-[12px] text-muted"></i></div>
+    </div>
+    ${l.calcolo ? calcolatore() : ""}`;
+  }).join("");
+
+  return `
+  <div class="bg-surface-2 border-t border-dashed border-line px-4 py-3 pl-5 space-y-3">
+    ${r.stima ? `<div class="flex items-start gap-2 text-[12px] text-steel">
+      <span class="bg-steel text-white rounded text-[10px] px-1.5 py-0.5 uppercase tracking-wide shrink-0">stima AI</span>
+      <span class="text-muted">lavorazioni stimate · da verificare${r.stimaMotivo ? " — " + r.stimaMotivo : ""}</span></div>` : ""}
+    ${r.stato === "vuota" ? `<div class="text-[12.5px] text-warn inline-flex items-center gap-1.5"><i class="bi bi-exclamation-triangle"></i> Manca il materiale: scegli il materiale (o forza il &ldquo;Costo mat.&rdquo;). La stima resta valida.</div>` : ""}
+
+    <!-- toolbar: geometria a sinistra, U.M. / istruzioni / elimina a destra -->
+    <div class="flex items-center gap-2 flex-wrap text-[11px]">
+      <span class="bg-steel-soft text-steel rounded text-[10px] px-1.5 py-0.5 uppercase tracking-wide font-mono inline-flex items-center gap-1"><i class="bi bi-box text-[11px]"></i> geometria STEP</span>
+      <span class="text-muted font-mono">${r.geom}</span>
+      <span class="flex-1"></span>
+      <label class="flex items-center gap-1.5"><span class="text-[10px] uppercase tracking-wide text-muted font-mono">U.M.</span>
+        <span class="border border-line rounded-md px-1 h-7 text-xs bg-surface w-16 inline-flex items-center justify-between">NR <i class="bi bi-chevron-down text-[9px] text-faint"></i></span></label>
+      <button onclick="event.stopPropagation();toast('Istruzioni per l\\'AI su questo pezzo (demo)')" class="h-7 px-2.5 border border-line rounded-md text-xs bg-surface text-muted hover:text-steel hover:border-steel inline-flex items-center gap-1" title="Cosa deve fare il sistema su questo pezzo, e i valori da fissare"><i class="bi bi-chat-left-text text-[11px]"></i> Istruzioni per l'AI</button>
+      <button onclick="event.stopPropagation();toast('Elimina riga (demo)')" class="h-7 px-2.5 border border-line rounded-md text-xs bg-surface text-muted hover:text-danger hover:border-danger">Elimina riga</button>
+    </div>
+
+    <!-- voci: lavorazioni, poi materiale -->
+    <div class="border border-line-2 rounded-lg overflow-hidden bg-surface">
+      <div class="zona-grid zona-head border-b border-line-2">
+        <div class="px-2.5 py-2 font-mono text-[10px] uppercase tracking-wider text-muted flex items-center">Lavorazioni</div>
+        <div class="money !min-h-0 py-2 font-mono text-[10px] uppercase tracking-wider text-muted">costo €</div>
+        <div class="money !min-h-0 py-2 font-mono text-[10px] uppercase tracking-wider text-muted">ric. %</div>
+        <div class="money !min-h-0 py-2 font-mono text-[10px] uppercase tracking-wider text-muted">totale €</div>
+        <div class="money-x !min-h-0 py-2"></div>
+      </div>
+      ${voci}
+      <div class="border-b border-line-2 px-2.5 py-2">
+        <span class="text-accent text-xs font-mono border border-line rounded-md px-2.5 py-1 bg-surface inline-flex items-center gap-1"><i class="bi bi-plus-lg"></i> aggiungi lavorazione</span>
+      </div>
+      <div class="zona-grid">
+        <div class="flex items-center gap-2 flex-wrap px-2.5 py-2 min-h-[52px]">
+          <span class="w-2 h-2 rounded-[2px] shrink-0 bg-steel"></span>
+          <span class="text-sm">Materiale</span>
+          ${r.mat
+            ? `<span class="bg-steel-soft text-steel rounded text-[10px] px-1.5 py-0.5 uppercase tracking-wide font-mono">${r.mat}</span>`
+            : `<span class="text-[11px] text-muted">(scegli il materiale nella riga sopra)</span>`}
+          <span class="inline-flex items-center gap-1.5 ml-1.5">
+            <span class="border ${r.mat ? "border-line bg-surface" : "border-danger bg-danger-soft"} rounded-md px-2 h-8 text-[12.5px] font-mono text-right w-20 inline-flex items-center justify-end">${r.peso}</span>
+            <span class="text-xs text-muted">kg</span>
+          </span>
+        </div>
+        <div class="money">${cella(r.matVoce.costo)}</div>
+        <div class="money"><span class="inline-flex items-center gap-1"><span class="border border-line rounded-md px-2 h-8 text-[12.5px] font-mono text-right bg-surface w-14 inline-flex items-center justify-end">${r.matVoce.ric}</span><span class="text-[11px] text-muted font-mono">%</span></span></div>
+        <div class="money">${cella(r.matVoce.tot, { wide: true })}</div>
+        <div class="money-x"></div>
+      </div>
+    </div>
+
+    <!-- barra totale -->
+    <div class="flex items-center gap-3 flex-wrap bg-surface border border-line-2 rounded-lg px-3.5 py-2.5">
+      <span class="font-mono text-xs text-muted">costo <b class="text-ink text-[13px]">€ ${r.costo}</b> · ricarico € ${r.ricEuro}</span>
+      <span class="flex-1"></span>
+      <span class="font-mono text-[10px] uppercase tracking-wider text-muted" title="Forza il prezzo unitario finale: ignora calcolo e ricarichi">Prezzo € / pz</span>
+      ${cella(r.auto, { big: true })}
+      <span class="inline-flex items-center gap-1.5 flex-wrap">
+        <span class="text-[11px] text-muted">arrotonda:</span>
+        ${r.round.map((v) => `<span class="font-mono text-[11px] border border-line rounded-full px-2.5 py-0.5 text-steel bg-surface-2">€ ${v}</span>`).join("")}
+      </span>
+    </div>
+
+    <div class="flex gap-4 flex-wrap text-[11px] text-muted">
+      <span class="inline-flex items-center gap-1.5"><span class="w-6 h-4 rounded border border-dashed border-line-2 bg-surface"></span> calcolato in automatico (modificabile)</span>
+      <span class="inline-flex items-center gap-1.5"><span class="w-6 h-4 rounded border border-warn bg-warn-soft"></span> forzato a mano · ↺ torna all'auto</span>
+      <span>% vuota = default del preventivo</span>
+    </div>
+  </div>`;
+}
+
+function renderRighe() {
+  const b = document.getElementById("righeBody");
+  if (!b) return;
+  b.innerHTML = RIGHE.map((r, i) => {
+    const st = ST[r.stato];
+    const aperta = rigaAperta === i;
+    return `
+    <div class="border-t border-line-2 first:border-t-0">
+      <div class="riga-grid min-h-[60px] ${aperta ? "bg-accent-soft/30" : ""}" onclick="toggleRiga(${i})" style="cursor:pointer">
+        <div class="self-stretch ${st.stripe}"></div>
+        <div class="flex justify-center"><span class="w-5 h-5 rounded-full inline-flex items-center justify-center ${st.cls}"><i class="bi ${st.ico} text-[11px]"></i></span></div>
+        <div class="px-1">
+          <span class="border border-line rounded-md h-9 px-2 bg-surface font-mono text-[12.5px] flex items-center truncate">${r.art}</span>
+          ${r.codiceGestionale ? `<span class="block font-mono text-[10px] text-muted leading-tight" title="Nel gestionale il codice va senza il suffisso di revisione">nel gestionale:<br>${r.codiceGestionale}</span>` : ""}
+        </div>
+        <div class="px-1">
+          ${r.simile
+            ? `<button onclick="event.stopPropagation();toggleSimile(${i})" class="inline-flex items-center gap-1 rounded text-[10px] px-1.5 py-0.5 font-mono uppercase tracking-wide mb-0.5 text-white" style="background:var(--color-viola)">da pezzo simile: ${r.simile.chiave} (${r.simile.pct}%)</button>`
+            : r.stima
+              ? `<span class="inline-block bg-steel-soft text-steel rounded text-[10px] px-1 font-mono uppercase tracking-wide mb-0.5">stima AI</span>`
+              : ""}
+          <span class="border border-line rounded-md h-9 px-2 bg-surface text-[13px] flex items-center truncate">${r.desc}</span>
+        </div>
+        <div class="px-1"><span class="border border-line rounded-md h-9 px-2 bg-surface text-[13px] flex items-center justify-center">${r.q}</span></div>
+        <div class="px-1"><span class="border ${r.mat ? "border-line" : "border-warn"} rounded-md h-9 px-2 bg-surface-2 text-[12.5px] flex items-center justify-between">${r.mat || "—"} <i class="bi bi-chevron-down text-[10px] text-faint"></i></span></div>
+        <div class="px-1"><span class="border border-line rounded-md h-9 px-2 bg-surface text-[12.5px] font-mono flex items-center justify-center">${r.peso}</span></div>
+        <div class="px-1 text-right font-mono text-[12.5px]">${r.prezzo ? `<span class="text-accent font-700">€ ${r.prezzo}</span>` : '<span class="text-faint">€ —</span>'}</div>
+        <div class="px-1 text-right font-mono text-[12.5px]">${r.imp ? `<span class="font-700">€ ${r.imp}</span>` : '<span class="text-faint">€ —</span>'}</div>
+        <div class="flex justify-center text-muted"><i class="bi bi-chevron-${aperta ? "down" : "right"} text-[12px]"></i></div>
+      </div>
+
+      ${r.simile && simileAperto === i ? `
+      <div class="border-t border-dashed px-4 py-3 pl-5 space-y-2.5" style="border-color:var(--color-viola);background:color-mix(in srgb, var(--color-viola-soft) 55%, white)">
+        <div class="flex items-start gap-2 text-[12px]" style="color:var(--color-viola)">
+          <span class="text-white rounded text-[10px] px-1.5 py-0.5 uppercase tracking-wide shrink-0" style="background:var(--color-viola)">da pezzo simile</span>
+          <span class="text-muted">precompilata dalla regola <b class="text-ink font-mono">${r.simile.chiave}</b> — ${r.simile.pct}% di somiglianza (quasi identico)</span>
+        </div>
+        <div class="text-[11px] text-muted font-mono">Impronta di questo pezzo: ${r.impronta}</div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="event.stopPropagation();toast('Riga confermata (demo)')" class="h-7 px-3 text-white rounded-md text-xs font-500" style="background:var(--color-viola)">Conferma</button>
+          <button onclick="event.stopPropagation();toggleSimile(${i})" class="h-7 px-3 border border-line text-muted rounded-md text-xs bg-surface-2">Modifica a mano</button>
+          <span class="text-[11px] text-muted">i campi sono modificabili qui sotto</span>
+        </div>
+      </div>` : ""}
+
+      ${r.suggerimento ? `
+      <div class="border-t border-dashed px-4 py-2.5 pl-5 flex items-center gap-2 flex-wrap" style="border-color:color-mix(in srgb, var(--color-viola) 50%, white);background:color-mix(in srgb, var(--color-viola-soft) 28%, white)">
+        <span class="text-[12px] text-muted">
+          <i class="bi bi-lightbulb mr-1" style="color:var(--color-viola)"></i>
+          somiglia al pezzo <b class="text-ink font-mono">${r.suggerimento.chiave}</b> (${r.suggerimento.pct}%), che ha una regola. Non l'ho applicata: la somiglianza non basta da sola.
+        </span>
+        <span class="flex-1"></span>
+        <button onclick="event.stopPropagation();toast('Regola applicata alla riga (demo)')" class="h-7 px-3 text-white rounded-md text-xs font-500" style="background:var(--color-viola)">Applica quella regola</button>
+        <button onclick="event.stopPropagation();toast('Lasciata com\\'è (demo)')" class="h-7 px-3 border border-line text-muted rounded-md text-xs bg-surface-2">No, lascia così</button>
+      </div>` : ""}
+
+      ${aperta ? pannello(r) : ""}
+    </div>`;
+  }).join("");
+}
+function toggleRiga(i) { rigaAperta = rigaAperta === i ? -1 : i; renderRighe(); }
+function toggleSimile(i) { simileAperto = simileAperto === i ? -1 : i; renderRighe(); }
+
+/* lista ⇄ editor */
+function openPreventivo(id) {
+  document.getElementById("prevList").hidden = true;
+  document.getElementById("prevDetail").hidden = false;
+  const t = document.getElementById("prevDetailTitle");
+  if (t) t.textContent = id ? id.replace("PRV-", "PRV-26-") : "PRV-26-0042";
+  renderRighe();
+  window.scrollTo({ top: 0, behavior: REDUCE ? "auto" : "smooth" });
+}
+function backToPreventivi() {
+  document.getElementById("prevDetail").hidden = true;
+  document.getElementById("prevList").hidden = false;
+  rigaAperta = -1; simileAperto = -1;
+  window.scrollTo({ top: 0, behavior: REDUCE ? "auto" : "smooth" });
+}
+
+/* bibbia: due schede sullo stesso record */
+function setBibbia(quale) {
+  const reg = quale === "regole";
+  document.getElementById("schedaRegole").hidden = !reg;
+  document.getElementById("schedaIstruzioni").hidden = reg;
+  const attiva = "h-9 px-4 rounded-md text-sm font-500 inline-flex items-center gap-2 bg-ink text-white";
+  const spenta = "h-9 px-4 rounded-md text-sm font-500 inline-flex items-center gap-2 border border-line text-muted bg-surface-2 hover:text-ink";
+  document.getElementById("tabRegole").className = reg ? attiva : spenta;
+  document.getElementById("tabIstruzioni").className = reg ? spenta : attiva;
+  document.getElementById("tabRegole").querySelector("span").className = reg ? "text-[10px] px-1.5 py-0.5 rounded-full bg-white/25 text-white" : "text-[10px] px-1.5 py-0.5 rounded-full bg-steel-soft text-steel";
+  document.getElementById("tabIstruzioni").querySelector("span").className = reg ? "text-[10px] px-1.5 py-0.5 rounded-full bg-steel-soft text-steel" : "text-[10px] px-1.5 py-0.5 rounded-full bg-white/25 text-white";
+  document.getElementById("bibbiaHint").textContent = reg
+    ? "quanto costa un pezzo preciso: valori fissi, applicati per codice"
+    : "come ragionare: le parole che arrivano al motore di stima";
+}
+
+/* deep-link per vista via hash: #anomalie, #approvv, #preventivo… (comodo per link diretti e screenshot) */
+function applyHash(){
+  const h = (location.hash || '').replace('#','');
+  if(h && crumbMap[h]) goto(h);
+  else if(h === 'commessa-run'){ goto('commessa'); const b = document.getElementById('btnScompon'); if(b) b.click(); }
+  /* stati del preventivatore, comodi per link diretti e screenshot */
+  else if(h === 'prev-editor'){ goto('preventivo'); rigaAperta = -1; openPreventivo('PRV-0042'); }
+  else if(h === 'prev-riga'){   goto('preventivo'); rigaAperta = 4; openPreventivo('PRV-0042'); }
+  else if(h === 'prev-simile'){ goto('preventivo'); rigaAperta = -1; simileAperto = 3; openPreventivo('PRV-0042'); }
+  else if(h === 'regole-istruzioni'){ goto('regole'); setBibbia('istruzioni'); }
+}
+window.addEventListener('hashchange', applyHash);
+
+/* init */
+renderAnom('all'); updateAnomCount(); revealedViews.add('dashboard'); runReveals();
+applyHash();
+</script>
+
+<!-- ===================== MOTION (subtle scroll reveals) ===================== -->
+<script type="module">
+  try {
+    if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const { inView } = await import("https://cdn.jsdelivr.net/npm/motion@12.23.12/+esm");
+      // hint d'angolo: leggera enfasi delle tacche cartiglio quando entrano in vista
+      inView("[data-view='commessa'] .ticks", (el) => {
+        el.animate([{ opacity:.6 },{ opacity:1 }], { duration:500, easing:'ease-out' });
+      });
+    }
+  } catch(e){ /* offline: la demo resta pienamente funzionante */ }
+</script>
+
+</body>
+</html>

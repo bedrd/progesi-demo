@@ -1,0 +1,946 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commesse · demo per Andrea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style type="text/tailwindcss">
+  @theme {
+    --color-calce: #F3F4F1;
+    --color-cobalto: #1D3FBF;
+    --color-cobalto-scuro: #15309A;
+    --color-cobalto-chiaro: #A9B8EE;
+    --color-cobalto-velo: #E8ECFA;
+    --color-giallo: #F2B705;
+    --color-giallo-velo: #FDF4D3;
+    --color-ambra: #7A5600;
+    --color-inchiostro: #1B1F24;
+    --color-grigio: #5D6470;
+    --color-linea: #E2E4DF;
+    --color-ok: #2E8B57;
+    --color-ok-velo: #E3F2EA;
+    --font-display: "Manrope", sans-serif;
+    --font-body: "IBM Plex Sans", sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+  }
+</style>
+<style>
+  @layer theme, base, components, utilities;
+  html, body { height: 100%; }
+  body { overflow: hidden; margin: 0; background: #F3F4F1; color: #1B1F24; font-family: "IBM Plex Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+  button:not(:disabled), [role="button"]:not(:disabled), a[href], label[for], select, summary, tr.clic, input[type="checkbox"], input[type="range"] { cursor: pointer; }
+  :disabled { cursor: not-allowed; }
+  :focus-visible { outline: 2px solid #1D3FBF; outline-offset: 2px; border-radius: 6px; }
+
+  #app { display: flex; height: 100dvh; overflow: hidden; flex-direction: column; }
+  @media (min-width: 1024px) {
+    #app { display: grid; grid-template-columns: 252px 1fr; grid-template-rows: 100%; }
+  }
+  #app > *, #vista, #colonna { min-height: 0; }
+
+  #sidebar { display: none; }
+  @media (min-width: 1024px) { #sidebar { display: flex; } }
+  body.menu-aperto #sidebar { display: flex; position: fixed; top: 0; bottom: 0; left: 0; width: 272px; z-index: 40; box-shadow: 0 10px 40px rgba(0,0,0,.18); }
+  #velo-menu { display: none; }
+  body.menu-aperto #velo-menu { display: block; }
+
+  #modale { display: none; }
+  body.modale-aperta #modale { display: flex; }
+
+  /* componenti in un layer: cosi' le utility di Tailwind (hidden, lg:hidden...) vincono */
+  @layer components {
+  .num { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .card { background: #fff; border: 1px solid #E2E4DF; border-radius: 20px; box-shadow: 0 1px 2px rgba(27,31,36,.04), 0 12px 28px -14px rgba(27,31,36,.14); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 10px; font-weight: 600; font-size: .875rem; padding: .55rem .95rem; transition: background-color .15s, border-color .15s, transform .1s; white-space: nowrap; }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: .45; }
+  .btn-pri { background: #1D3FBF; color: #fff; }
+  .btn-pri:hover { background: #15309A; }
+  .btn-sec { background: #fff; color: #1B1F24; border: 1px solid #D5D8D1; }
+  .btn-sec:hover { border-color: #1B1F24; }
+  .btn-gh { color: #1D3FBF; padding-left: .5rem; padding-right: .5rem; }
+  .btn-gh:hover { background: #E8ECFA; }
+  .chip { display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px; font-size: .75rem; font-weight: 600; padding: .15rem .6rem; white-space: nowrap; }
+  .c-ok { background: #E3F2EA; color: #1F6B41; }
+  .c-ko { background: #FDF4D3; color: #7A5600; }
+  .c-at { background: #EEF0EC; color: #5D6470; }
+  .c-bl { background: #E8ECFA; color: #1D3FBF; }
+  .c-pieno { background: #1D3FBF; color: #fff; }
+  .seg { display: inline-flex; background: #E9EBE6; border-radius: 10px; padding: 3px; gap: 2px; }
+  .seg button { border-radius: 8px; padding: .35rem .75rem; font-size: .8125rem; font-weight: 600; color: #5D6470; }
+  .seg button[aria-pressed="true"] { background: #fff; color: #1B1F24; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+
+  .tab-t { width: 100%; border-collapse: collapse; font-size: .875rem; }
+  .tab-t th { text-align: left; font-weight: 500; color: #5D6470; font-size: .75rem; padding: .6rem .75rem; border-bottom: 1px solid #E2E4DF; white-space: nowrap; }
+  .tab-t td { padding: .7rem .75rem; border-bottom: 1px solid #EEF0EC; vertical-align: middle; }
+  .tab-t tr:last-child td { border-bottom: 0; }
+  .tab-t tr.clic:hover td { background: #F7F8F5; }
+  .tab-t .r { text-align: right; }
+  .tab-t th:first-child, .tab-t td:first-child { padding-left: 1.5rem; }
+  .tab-t th:last-child, .tab-t td:last-child { padding-right: 1.5rem; }
+  .tab-t tr.sel td { background: #E8ECFA; }
+  .tab-t tr.sel td:first-child { box-shadow: inset 3px 0 0 #1D3FBF; }
+
+  .nav-i { display: flex; align-items: center; gap: .7rem; padding: .5rem .7rem; border-radius: 9px; font-size: .9rem; font-weight: 500; color: #3A4049; width: 100%; text-align: left; }
+  .nav-i:hover { background: #F0F1ED; }
+  .nav-i[aria-current="page"] { background: #E8ECFA; color: #1D3FBF; font-weight: 600; }
+  .nav-i .bi { font-size: 1.05rem; }
+  .badge { margin-left: auto; background: #F2B705; color: #1B1F24; font-size: .75rem; font-weight: 700; border-radius: 999px; min-width: 1.25rem; padding: 0 .4rem; text-align: center; }
+
+  /* la firma: ordinato / consegnato / fatturato, in una barra sola */
+  .tribar { position: relative; height: 10px; }
+  .tribar > span { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 999px; }
+  .tb-tot { background: #E2E4DF; }
+  .tb-a { background: #A9B8EE; }
+  .tb-b { background: #1D3FBF; }
+  .tb-over { background: repeating-linear-gradient(-45deg, #F2B705 0 4px, #F8D35A 4px 8px); border-radius: 0 999px 999px 0 !important; }
+  .tb-prev { width: 2px; top: -4px !important; bottom: -4px !important; background: #1B1F24; border-radius: 1px !important; }
+  .legenda { display: flex; flex-wrap: wrap; gap: .4rem 1rem; font-size: .75rem; color: #5D6470; }
+  .legenda i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: .35rem; vertical-align: -1px; }
+
+  .in-num { width: 7.5rem; text-align: right; border: 1px solid #D5D8D1; border-radius: 8px; padding: .3rem .5rem; background: #fff; font-family: "IBM Plex Mono", monospace; font-size: .85rem; }
+  .in-num:hover { border-color: #1B1F24; }
+  .in-num.vuoto { background: #FDF4D3; border-color: #F2B705; }
+
+  .unita { aspect-ratio: 1; border-radius: 8px; font-size: .75rem; font-weight: 600; display: flex; align-items: center; justify-content: center; border: 2px solid transparent; font-family: "IBM Plex Mono", monospace; }
+  .u-libera { background: #fff; border-color: #E2E4DF; color: #5D6470; }
+  .u-trattativa { background: #E8ECFA; color: #1D3FBF; }
+  .u-compromesso { background: #1D3FBF; color: #fff; }
+  .unita[aria-pressed="true"] { outline: 3px solid #F2B705; outline-offset: 1px; }
+
+  .entra { animation: entra .35s ease-out; }
+  @keyframes entra { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+  .lampo { animation: lampo 1.6s ease-out; }
+  @keyframes lampo { 0% { background: #FDF4D3; } 100% { background: transparent; } }
+  .gira { animation: gira 1s linear infinite; display: inline-block; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+  .scan { position: absolute; left: 8%; right: 8%; height: 3px; background: #F2B705; box-shadow: 0 0 18px #F2B705; animation: scan 1.4s ease-in-out infinite alternate; }
+  @keyframes scan { from { top: 18%; } to { top: 80%; } }
+
+  #toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; transition: all .25s; z-index: 70; pointer-events: none; }
+  #toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+  .scroll-x { position: relative; overflow-x: auto; -webkit-overflow-scrolling: touch; } /* relative: le etichette sr-only (absolute) restano dentro il ritaglio */
+  .carta { background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 12px 32px rgba(27,31,36,.08); border-radius: 6px; }
+
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ APPLICAZIONE ============ -->
+<div id="app">
+  <aside id="sidebar" class="flex-col bg-white border-r border-linea h-full" aria-label="Menu principale">
+    <div class="px-5 h-16 flex items-center gap-2.5 border-b border-linea shrink-0">
+      <span class="w-8 h-8 rounded-lg bg-cobalto text-white flex items-center justify-center"><i class="bi bi-bricks"></i></span>
+      <div class="leading-tight">
+        <p class="font-display font-extrabold">Commesse</p>
+        <p class="text-xs text-grigio">demo · dati inventati</p>
+      </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-5" id="nav"></nav>
+    <div class="p-3 border-t border-linea shrink-0">
+      <div class="flex items-center gap-3 px-2 py-2">
+        <span id="avatar" class="w-9 h-9 rounded-full bg-inchiostro text-white text-sm font-semibold flex items-center justify-center">AP</span>
+        <div class="leading-tight text-sm"><p class="font-semibold" id="utente-nome">Andrea Pregnolato</p><p class="text-grigio text-xs" id="utente-ruolo">Direttore operativo</p></div>
+      </div>
+    </div>
+  </aside>
+  <div id="velo-menu" class="fixed inset-0 bg-inchiostro/40 z-30" data-a="chiudi-menu"></div>
+
+  <div id="colonna" class="flex flex-col h-full">
+    <header class="h-16 shrink-0 bg-white/80 backdrop-blur border-b border-linea flex items-center gap-3 px-4 sm:px-6">
+      <button class="lg:hidden btn btn-sec !px-2.5" data-a="menu" aria-label="Apri il menu"><i class="bi bi-list text-lg"></i></button>
+      <h2 id="titolo" class="font-display font-bold text-base sm:text-lg truncate"></h2>
+      <div class="ml-auto flex items-center gap-2 sm:gap-3">
+        <div class="seg hidden sm:inline-flex" role="group" aria-label="Chi sta usando il gestionale">
+          <button data-a="ruolo" data-v="direzione">Direzione</button>
+          <button data-a="ruolo" data-v="pm">Project manager</button>
+        </div>
+        <button class="btn btn-pri" data-a="bolla"><i class="bi bi-camera"></i><span class="hidden md:inline">Fotografa una bolla</span></button>
+      </div>
+    </header>
+    <div class="sm:hidden bg-white border-b border-linea px-4 py-2 flex items-center gap-2 text-xs text-grigio shrink-0">
+      Stai usando come:
+      <div class="seg" role="group" aria-label="Chi sta usando il gestionale">
+        <button data-a="ruolo" data-v="direzione">Direzione</button>
+        <button data-a="ruolo" data-v="pm">PM</button>
+      </div>
+    </div>
+    <main id="vista" class="flex-1 overflow-y-auto"></main>
+  </div>
+</div>
+
+<div id="modale" class="fixed inset-0 z-50 bg-inchiostro/50 items-center justify-center sm:p-4" role="dialog" aria-modal="true"></div>
+<div id="toast" role="status" aria-live="polite"><div class="bg-inchiostro text-white text-sm rounded-xl px-4 py-3 shadow-xl flex items-center gap-2 max-w-[90vw]"><i class="bi bi-check2-circle text-giallo"></i><span id="toast-t"></span></div></div>
+
+<script>
+/* ---------- utilità ---------- */
+const $ = s => document.querySelector(s);
+const eur = n => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0, useGrouping: 'always' }).format(Math.round(n));
+const nf = (n, d = 0) => new Intl.NumberFormat('it-IT', { maximumFractionDigits: d, useGrouping: 'always' }).format(n);
+const clamp = (x, lo = 0, hi = 1) => Math.max(lo, Math.min(hi, x));
+const r100 = x => Math.round(x / 100) * 100;
+const sum = (a, f) => a.reduce((t, x) => t + f(x), 0);
+const pc = (a, b) => b ? Math.round(a / b * 100) : 0;
+const SOGLIA_ACQUISTI = 50000; // esempio: la soglia vera la decide Andrea
+const OGGI = new Date();
+const giorno = n => { const x = new Date(OGGI); x.setDate(x.getDate() + n); return x; };
+const dmy = n => giorno(n).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+const dm = n => giorno(n).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' });
+const ANNO = OGGI.getFullYear();
+const MESE = OGGI.toLocaleDateString('it-IT', { month: 'long' });
+const MESE_PRIMA = giorno(-OGGI.getDate()).toLocaleDateString('it-IT', { month: 'long' });
+
+function tribar(tot, a, b, prev) {
+  const max = Math.max(tot, a, prev || 0) || 1;
+  const w = x => (x / max * 100).toFixed(2) + '%';
+  const over = Math.max(a, prev || 0) - tot;
+  return `<div class="tribar" role="img" aria-label="${nf(pc(a, tot))}% e ${nf(pc(b, tot))}% del totale">
+    <span class="tb-tot" style="width:${w(tot)}"></span>
+    <span class="tb-a" style="width:${w(Math.min(a, tot))}"></span>
+    <span class="tb-b" style="width:${w(Math.min(b, tot))}"></span>
+    ${over > 0 ? `<span class="tb-over" style="left:${w(tot)};width:${w(over)}"></span>` : ''}
+    ${prev ? `<span class="tb-prev" style="left:calc(${w(prev)} - 1px)"></span>` : ''}
+  </div>`;
+}
+const legendaBudget = `<div class="legenda"><span><i style="background:#E2E4DF"></i>budget</span><span><i style="background:#A9B8EE"></i>impegnato</span><span><i style="background:#1D3FBF"></i>autorizzato (SAL)</span><span><i style="background:#1B1F24;width:2px"></i>previsione a finire</span><span><i style="background:#F2B705"></i>oltre budget</span></div>`;
+const legendaOrdine = `<div class="legenda"><span><i style="background:#E2E4DF"></i>ordinato</span><span><i style="background:#A9B8EE"></i>consegnato</span><span><i style="background:#1D3FBF"></i>fatturato</span></div>`;
+
+/* ---------- dati finti ---------- */
+const VOCI_I = [['Demolizioni e scavi', .05], ['Strutture in c.a.', .19], ['Murature e tramezze', .08], ['Impianto idrico e termico', .14], ['Impianto elettrico', .09], ['Serramenti', .11], ['Pavimenti e rivestimenti', .12], ['Cappotto e facciate', .10], ['Finiture e tinteggiature', .06], ['Sistemazioni esterne', .06]];
+const VOCI_R = [['Demolizioni e smaltimenti', .08], ['Murature e tramezze', .10], ['Impianto idrico e termico', .20], ['Impianto elettrico', .14], ['Pavimenti e rivestimenti', .22], ['Serramenti', .14], ['Finiture e tinteggiature', .12]];
+
+const CANTIERI = [
+  { id: 'I-07', nome: 'Residenza ex Manifattura', luogo: 'Verona, Borgo Roma', bu: 'imm', pm: 'Luca Benedetti', avanz: 38, budget: 6800000, unita: 42, dev: { 3: .09, 5: .04, 1: -.02 }, agg: `${dm(-12)} alle 18:04` },
+  { id: 'I-09', nome: 'Corte San Michele', luogo: 'San Michele Extra', bu: 'imm', pm: 'Sara Tommasi', avanz: 12, budget: 2950000, unita: 18, dev: { 0: .06 }, agg: `${dm(-3)} alle 09:12` },
+  { id: 'R-24', nome: 'Casa Bertoldi', luogo: 'Verona, via Mazzini', bu: 'ris', pm: 'Marco Rizzi', avanz: 62, budget: 148000, dev: { 2: .03 }, agg: `${dm(-4)} alle 17:30` },
+  { id: 'R-27', nome: 'Villa Zanetti', luogo: 'San Martino Buon Albergo', bu: 'ris', pm: 'Luca Benedetti', avanz: 28, budget: 312000, dev: { 4: .12 }, agg: `${dm(-14)} alle 12:40` },
+  { id: 'R-31', nome: 'Bagno e cucina Lonardi', luogo: 'Verona, Borgo Trento', bu: 'ris', pm: 'Marco Rizzi', avanz: 85, budget: 46500, dev: {}, agg: `${dm(-1)} alle 19:02` },
+];
+function creaLav(c) {
+  const voci = c.bu === 'imm' ? VOCI_I : VOCI_R, n = voci.length, a = c.avanz / 100;
+  c.lav = voci.map(([voce, q], i) => {
+    const b = r100(c.budget * q), dev = c.dev[i] || 0;
+    const fatto = clamp(a * 1.9 - i / n * 0.95);
+    const imp = fatto > 0 ? clamp(fatto + 0.4) : (i < n * 0.6 && a > 0 ? 0.3 : 0);
+    const impE = r100(b * imp * (1 + dev * 0.7));
+    return { voce, budget: b, imp: impE, aut: Math.min(impE, r100(b * fatto * (1 + dev * 0.4))), prev: r100(b * (1 + dev)) };
+  });
+  c.storico = [];
+}
+CANTIERI.forEach(creaLav);
+const cant = id => CANTIERI.find(c => c.id === id);
+const totC = c => ({ b: sum(c.lav, v => v.budget), i: sum(c.lav, v => v.imp), a: sum(c.lav, v => v.aut), p: sum(c.lav, v => v.prev) });
+
+const ORDINI = [
+  { id: 'ODA-2026-0142', forn: 'Gres Nordest srl', cant: 'I-07', voce: 'Pavimenti e rivestimenti', data: dmy(-33), righe: [
+      { d: 'Gres porcellanato 60x60 grigio cemento', um: 'mq', ord: 840, cons: 520, fatt: 520, p: 24.5 },
+      { d: 'Adesivo cementizio C2TE S1', um: 'sacchi', ord: 300, cons: 180, fatt: 180, p: 11.8 },
+      { d: 'Profilo di finitura in alluminio 10 mm', um: 'ml', ord: 260, cons: 260, fatt: 0, p: 6.2 }],
+    bolle: [{ n: 'DDT 1102', data: dmy(-20), chi: 'Luca Benedetti' }, { n: 'DDT 1149', data: dmy(-7), chi: 'Luca Benedetti' }], anomalie: [] },
+  { id: 'ODA-2026-0151', forn: 'Cls Veneta Forniture', cant: 'I-07', voce: 'Strutture in c.a.', data: dmy(-117), righe: [
+      { d: 'Calcestruzzo C25/30 XC2 S4', um: 'mc', ord: 620, cons: 610, fatt: 540, p: 118 },
+      { d: 'Acciaio B450C in barre', um: 'kg', ord: 48000, cons: 48000, fatt: 48000, p: 0.98 }],
+    bolle: [{ n: '14 DDT', data: 'dal ' + dmy(-117), chi: 'Luca Benedetti' }], anomalie: [] },
+  { id: 'ODA-2026-0156', forn: 'Serramenti Valdadige', cant: 'I-07', voce: 'Serramenti', data: dmy(-2), stato: 'approvazione', righe: [
+      { d: 'Finestra PVC 2 ante 120x140', um: 'pz', ord: 96, cons: 0, fatt: 0, p: 640 },
+      { d: 'Portafinestra PVC 2 ante 140x240', um: 'pz', ord: 58, cons: 0, fatt: 0, p: 1080 }],
+    bolle: [], anomalie: [] },
+  { id: 'ODA-2026-0160', forn: 'Termoidraulica Berica', cant: 'R-24', voce: 'Impianto idrico e termico', data: dmy(-27), righe: [
+      { d: 'Collettore complanare 8 vie', um: 'pz', ord: 2, cons: 2, fatt: 2, p: 186 },
+      { d: 'Tubo multistrato 16x2', um: 'ml', ord: 400, cons: 300, fatt: 300, p: 2.4 },
+      { d: 'Caldaia a condensazione 25 kW', um: 'pz', ord: 1, cons: 1, fatt: 0, p: 1890 }],
+    bolle: [{ n: 'DDT 5521', data: dmy(-19), chi: 'Marco Rizzi' }], anomalie: [] },
+  { id: 'ODA-2026-0163', forn: 'Gres Nordest srl', cant: 'R-27', voce: 'Pavimenti e rivestimenti', data: dmy(-10), righe: [
+      { d: 'Parquet rovere spazzolato 14 mm', um: 'mq', ord: 180, cons: 0, fatt: 0, p: 58 }],
+    bolle: [], anomalie: [] },
+  { id: 'ODA-2026-0138', forn: 'Edilmateriali Lessini', cant: 'R-31', voce: 'Murature e tramezze', data: dmy(-69), righe: [
+      { d: 'Lastra in cartongesso idrorepellente 12,5 mm', um: 'mq', ord: 90, cons: 90, fatt: 90, p: 7.9 },
+      { d: 'Profili, guide e montanti', um: 'ml', ord: 220, cons: 220, fatt: 220, p: 1.6 }],
+    bolle: [{ n: 'DDT 778', data: dmy(-62), chi: 'Marco Rizzi' }], anomalie: [] },
+];
+const ordine = id => ORDINI.find(o => o.id === id);
+const valO = (o, k) => sum(o.righe, r => r[k] * r.p);
+function statoO(o) {
+  if (o.stato === 'approvazione') return ['ko', 'Da approvare'];
+  const ord = valO(o, 'ord'), cons = valO(o, 'cons'), fatt = valO(o, 'fatt');
+  if (fatt >= ord) return ['ok', 'Chiuso'];
+  if (cons >= ord) return ['pieno', 'Consegnato'];
+  if (cons > 0) return ['bl', 'In consegna'];
+  return ['at', 'Inviato'];
+}
+
+const SAL = [
+  { id: 'SAL-I07-03', sub: 'Impianti Rossato srl', cant: 'I-07', voce: 'Impianto idrico e termico', n: 3, data: dmy(-4), importo: 38400, fatt: { n: 'FT 412/2026', imp: 38400 } },
+  { id: 'SAL-I07-02', sub: 'Facciate Moro snc', cant: 'I-07', voce: 'Cappotto e facciate', n: 2, data: dmy(-4), importo: 52000, fatt: { n: 'FT 88/2026', imp: 54600, extra: 'Noleggio ponteggio supplementare, ' + MESE_PRIMA } },
+  { id: 'FT-2210', sub: 'Noleggi Quadrante srl', cant: 'I-07', voce: 'Strutture in c.a.', n: null, data: dmy(-2), importo: null, senzaSal: true, fatt: { n: 'FT 2210/2026', imp: 3150, extra: 'Noleggio gru a torre, 7 giorni' } },
+  { id: 'SAL-R24-04', sub: 'Elettrica Gardesana', cant: 'R-24', voce: 'Impianto elettrico', n: 4, data: dmy(-3), importo: 9850, fatt: null },
+  { id: 'SAL-R27-01', sub: 'Demolizioni Bonomi', cant: 'R-27', voce: 'Demolizioni e smaltimenti', n: 1, data: dmy(-4), importo: 14200, fatt: { n: 'FT 1021/2026', imp: 14200 } },
+  { id: 'SAL-I09-02', sub: 'Scavi Adige Movimento Terra', cant: 'I-09', voce: 'Demolizioni e scavi', n: 2, data: dmy(-4), importo: 61300, fatt: { n: 'FT 57/2026', imp: 61300 } },
+  { id: 'SAL-R31-03', sub: 'Posa Zenari', cant: 'R-31', voce: 'Pavimenti e rivestimenti', n: 3, data: dmy(-5), importo: 6900, fatt: { n: 'FT 64/2026', imp: 6900 } },
+];
+const CONTRATTI = [
+  { id: 'C1', sub: 'Carpenterie Valpantena', cant: 'I-07', voce: 'Strutture in c.a.', importo: 980000, gia: 742000 },
+  { id: 'C2', sub: 'Cartongessi Scaligeri', cant: 'R-27', voce: 'Murature e tramezze', importo: 27400, gia: 6800 },
+];
+function esito(s) {
+  if (s.risolto) return ['ok', s.risolto];
+  if (s.senzaSal) return ['ko', 'Manca il SAL'];
+  if (!s.fatt) return ['at', 'In attesa di fattura'];
+  if (s.fatt.imp === s.importo) return ['ok', 'Combacia'];
+  return ['ko', 'Differenza ' + eur(s.fatt.imp - s.importo)];
+}
+
+const FASI = ['Nuovo contatto', 'Sopralluogo', 'Preventivo inviato', 'Contratto firmato', 'Scelta finiture', 'Al project manager'];
+const CLIENTI = [
+  { id: 1, nome: 'Luisa Ferro', lav: 'Bagno', luogo: 'Verona, San Zeno', val: 27500, comm: 'Elena Mazzi', fase: 0, gg: 2 },
+  { id: 2, nome: 'Paola Venturini', lav: 'Bagno e cucina', luogo: 'Verona, via Cantore', val: 38000, comm: 'Davide Corsi', fase: 0, gg: 1 },
+  { id: 3, nome: 'Roberto e Chiara Dalla Valle', lav: 'Villetta, ristrutturazione completa', luogo: 'Bussolengo', val: 185000, comm: 'Elena Mazzi', fase: 1, gg: 4 },
+  { id: 4, nome: 'Famiglia Castagna', lav: 'Appartamento 90 mq', luogo: 'Verona, Borgo Venezia', val: 0, comm: 'Davide Corsi', fase: 2, gg: 3, prev: true },
+  { id: 5, nome: 'Giorgio Pasetto', lav: 'Attico', luogo: 'Verona, Valdonega', val: 142000, comm: 'Elena Mazzi', fase: 3, gg: 6 },
+  { id: 6, nome: 'Studio dentistico Righetti', lav: 'Studio medico', luogo: 'Villafranca', val: 64000, comm: 'Davide Corsi', fase: 4, gg: 9 },
+  { id: 7, nome: 'Anna Bertoldi', lav: 'Appartamento 120 mq', luogo: 'Verona, via Mazzini', val: 189000, comm: 'Elena Mazzi', fase: 5, cantiere: 'R-24' },
+  { id: 8, nome: 'Maria Lonardi', lav: 'Bagno e cucina', luogo: 'Verona, Borgo Trento', val: 59800, comm: 'Davide Corsi', fase: 5, cantiere: 'R-31' },
+];
+
+const APPUNTI = `sopralluogo ${giorno(-6).getDate()}/${giorno(-6).getMonth() + 1} castagna borgo venezia, 3° piano NO ascensore!!
+- demolire tutti i pavimenti ~85mq + massetto
+- bagno: via vasca, doccia filo pav 90x120, sanitari sospesi, rivestimento h220 circa 24mq
+- cucina: spostare attacchi acqua su parete opposta (3m)
+- elettrico tutto da rifare, quadro nuovo, ~45 punti
+- pav gres effetto legno 20x120 ovunque tranne bagno
+- 6 finestre pvc + 1 portafinestra balcone
+- tinteggiatura tutto 2 mani
+- macerie: montacarichi, niente ascensore`;
+const PREV = [
+  { cap: 'Opere preliminari e demolizioni', voci: [
+    ['Allestimento cantiere e montacarichi a cavalletto per piano terzo senza ascensore', 'a corpo', 1, null],
+    ['Demolizione di pavimenti e sottofondi esistenti, compreso carico e trasporto a discarica', 'mq', 85, 22],
+    ['Rimozione di vasca, sanitari e rivestimenti del bagno', 'a corpo', 1, 380],
+    ['Oneri di discarica e smaltimento macerie', 'a corpo', 1, 950]] },
+  { cap: 'Massetti e pavimenti', voci: [
+    ['Massetto in sabbia e cemento, spessore medio 5 cm', 'mq', 85, 19],
+    ['Fornitura e posa di gres porcellanato effetto legno 20x120, posa a correre', 'mq', 72, 68]] },
+  { cap: 'Bagno', voci: [
+    ['Piatto doccia filo pavimento 90x120 con scarico lineare', 'cad', 1, 1150],
+    ['Sanitari sospesi, vaso e bidet, con cassetta a incasso', 'cad', 2, 520],
+    ['Rivestimento pareti in gres fino a 220 cm di altezza', 'mq', 24, 74],
+    ['Pavimento del bagno in gres, posa compresa', 'mq', 13, 70]] },
+  { cap: 'Impianti', voci: [
+    ['Spostamento attacchi idrici e scarichi della cucina sulla parete opposta, circa 3 m', 'a corpo', 1, 980],
+    ['Rifacimento completo dell\'impianto elettrico secondo norma CEI 64-8', 'punti', 45, 85],
+    ['Quadro elettrico nuovo con interruttori differenziali', 'cad', 1, 890]] },
+  { cap: 'Serramenti', voci: [
+    ['Finestra in PVC bianco con vetrocamera basso emissiva', 'cad', 6, 690],
+    ['Portafinestra in PVC per il balcone', 'cad', 1, 1180]] },
+  { cap: 'Finiture', voci: [
+    ['Tinteggiatura di pareti e soffitti, due mani di idropittura traspirante', 'mq', 290, 9.5]] },
+];
+const VOCI_PREV = PREV.flatMap(c => c.voci);
+const imponibilePrev = () => sum(VOCI_PREV, v => v[2] * (v[3] || 0));
+CLIENTI[3].val = r100(imponibilePrev());
+
+const NOMI = ['Federica Lonardi', 'Matteo e Sara Girelli', 'Paolo Zocca', 'Elisa Brunelli', 'Stefano Marchi', 'Giulia e Andrea Perbellini', 'Nicola Tosi', 'Chiara Furlani', 'Marco Begnoni', 'Silvia Residori', 'Davide e Anna Ferrarini', 'Laura Cordioli', 'Simone Gaiga', 'Valentina Bonizzato', 'Alberto Sartori', 'Irene Dal Forno', 'Luca e Marta Speri', 'Francesca Vantini', 'Enrico Pighi', 'Martina Castellani'];
+const DOCS = ['Contratto preliminare firmato', 'Fideiussione D.Lgs. 122/2005', 'Capitolato e finiture firmate', 'Stato avanzamento per la banca', 'Perizia della banca', 'Delibera del mutuo'];
+const TIPI = [['Bilocale', 58], ['Trilocale', 84], ['Quadrilocale', 112]];
+const UNITA = Array.from({ length: 42 }, (_, i) => {
+  const scala = 'ABC'[Math.floor(i / 14)], k = i % 14, h = (i * 7 + 3) % 10;
+  const stato = h < 4 ? 'compromesso' : h < 6 ? 'trattativa' : 'libera';
+  const [tipo, mq] = TIPI[k % 3];
+  const varianti = [];
+  if (stato === 'compromesso' && i % 3 === 0) varianti.push({ d: 'Spostamento della parete tra cucina e soggiorno', imp: 3200, stato: 'Accettata' });
+  if (stato === 'compromesso' && i % 2 === 1) varianti.push({ d: 'Predisposizione climatizzazione in tre stanze', imp: 1850, stato: 'Da preventivare' });
+  if (stato === 'trattativa' && i % 2 === 0) varianti.push({ d: 'Doccia al posto della vasca nel secondo bagno', imp: 900, stato: 'Da preventivare' });
+  return {
+    id: `${scala}-${String(k + 1).padStart(2, '0')}`, scala, piano: Math.floor(k / 3), tipo, mq, stato,
+    prezzo: r100(mq * 3150 + Math.floor(k / 3) * 8000),
+    cliente: stato === 'libera' ? null : NOMI[i % NOMI.length],
+    varianti, docs: DOCS.map((_, j) => stato === 'compromesso' && j < 2 + (i % 4)),
+  };
+});
+
+/* ---------- stato ---------- */
+const S = { view: 'home', param: null, ruolo: 'direzione', bu: 'tutti', tab: 'budget', filtroO: 'tutti', filtroSal: 'controllo', unita: null, salSel: 'SAL-I07-02', prevFatto: false, bollaFatta: false, bolla: 0, bollaQ: [160, 40, 120] };
+
+/* ---------- eccezioni: cosa deve guardare una persona ---------- */
+function eccezioni() {
+  const l = [];
+  SAL.forEach(s => { if (esito(s)[0] === 'ko') l.push({ ico: 'bi-receipt', tipo: s.senzaSal ? 'Fattura senza SAL' : 'Fattura diversa dal SAL', testo: s.senzaSal ? `${s.sub}: ${eur(s.fatt.imp)}, nessun SAL autorizzato` : `${s.sub}: fattura ${eur(s.fatt.imp)}, SAL ${eur(s.importo)}`, cant: s.cant, go: ['sal', s.id] }); });
+  ORDINI.forEach(o => {
+    if (o.stato === 'approvazione') l.push({ ico: 'bi-cart-check', tipo: 'Ordine sopra soglia', testo: `${o.forn}: ${eur(valO(o, 'ord'))}, serve l'ok degli acquisti`, cant: o.cant, go: ['ordine', o.id] });
+    o.anomalie.forEach(a => l.push({ ico: 'bi-truck', tipo: 'Bolla con righe fuori ordine', testo: a, cant: o.cant, go: ['ordine', o.id] }));
+  });
+  CANTIERI.forEach(c => c.lav.forEach(v => { if (v.prev > v.budget * 1.05) l.push({ ico: 'bi-graph-up-arrow', tipo: 'Previsione oltre budget', testo: `${v.voce}: +${eur(v.prev - v.budget)} (+${pc(v.prev - v.budget, v.budget)}%)`, cant: c.id, go: ['cantiere', c.id] }); }));
+  return l;
+}
+
+/* ---------- navigazione ---------- */
+const NAV = [
+  ['', [['home', 'bi-house', 'Home']]],
+  ['Commerciale', [['clienti', 'bi-people', 'Clienti'], ['preventivi', 'bi-file-earmark-text', 'Preventivi']]],
+  ['Cantieri', [['cantieri', 'bi-building', 'Cantieri'], ['ordini', 'bi-truck', 'Ordini ai fornitori']]],
+  ['Amministrazione', [['sal', 'bi-receipt', 'SAL e fatture']]],
+];
+function renderNav() {
+  const cur = { cantiere: 'cantieri', ordine: 'ordini' }[S.view] || S.view;
+  const badge = { ordini: ORDINI.filter(o => o.stato === 'approvazione' || o.anomalie.length).length, sal: SAL.filter(s => esito(s)[0] === 'ko').length };
+  $('#nav').innerHTML = NAV.map(([g, items]) => `<div>${g ? `<p class="px-3 mb-1.5 text-xs font-semibold uppercase tracking-wider text-grigio">${g}</p>` : ''}
+    <ul class="space-y-0.5">${items.map(([v, ico, t]) => `<li><button class="nav-i" data-a="vai" data-v="${v}" ${cur === v ? 'aria-current="page"' : ''}><i class="bi ${ico}"></i>${t}${badge[v] ? `<span class="badge" aria-label="${badge[v]} da guardare">${badge[v]}</span>` : ''}</button></li>`).join('')}</ul></div>`).join('');
+  document.querySelectorAll('[data-a="ruolo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.ruolo));
+  const pm = S.ruolo === 'pm';
+  $('#avatar').textContent = pm ? 'LB' : 'AP';
+  $('#utente-nome').textContent = pm ? 'Luca Benedetti' : 'Andrea Pregnolato';
+  $('#utente-ruolo').textContent = pm ? 'Project manager' : 'Direttore operativo';
+}
+const TITOLI = { home: 'Home', clienti: 'Clienti', preventivi: 'Preventivi', cantieri: 'Cantieri', ordini: 'Ordini ai fornitori', sal: 'SAL e fatture' };
+
+function vai(view, param = null) {
+  S.view = view; S.param = param;
+  if (view === 'cantiere' && S.lastCant !== param) { S.tab = 'budget'; S.unita = null; S.lastCant = param; }
+  if (view === 'sal' && param) { S.salSel = param; S.filtroSal = 'controllo'; }
+  document.body.classList.remove('menu-aperto');
+  render(true);
+  $('#vista').scrollTop = 0;
+}
+function render(nuovaPagina) {
+  renderNav();
+  const v = S.view;
+  $('#titolo').innerHTML = v === 'cantiere' ? `<button class="text-grigio hover:text-inchiostro" data-a="vai" data-v="cantieri">Cantieri</button> <span class="text-grigio">/</span> ${S.param}`
+    : v === 'ordine' ? `<button class="text-grigio hover:text-inchiostro" data-a="vai" data-v="ordini">Ordini</button> <span class="text-grigio">/</span> <span class="num text-[0.95em]">${S.param}</span>`
+    : TITOLI[v];
+  $('#vista').innerHTML = `<div class="px-4 sm:px-6 lg:px-10 py-6 lg:py-8 pb-24 ${nuovaPagina ? 'entra' : ''}">${VISTE[v]()}</div>`;
+}
+const prova = t => `<p class="mb-5 text-sm text-ambra bg-giallo-velo border border-giallo/40 rounded-xl px-3.5 py-2.5 flex gap-2"><i class="bi bi-hand-index"></i><span><strong>Prova:</strong> ${t}</span></p>`;
+const kpi = (label, val, sub = '', cls = '') => `<div class="card p-6"><p class="text-sm text-grigio">${label}</p><p class="font-display font-bold tabular-nums whitespace-nowrap leading-none mt-3 text-[2.25rem] xl:text-[2.75rem] ${cls}">${val}</p>${sub ? `<p class="text-sm mt-2.5">${sub}</p>` : ''}</div>`;
+const testata = (tit, sotto) => `<div class="mb-6"><h1 class="font-display font-extrabold text-[1.75rem] sm:text-[2rem] leading-tight">${tit}</h1><p class="text-grigio mt-1">${sotto}</p></div>`;
+const chipBu = bu => bu === 'imm' ? '<span class="chip c-bl">Immobiliare</span>' : '<span class="chip c-at">Ristrutturazione</span>';
+
+/* ---------- viste ---------- */
+const VISTE = {
+  home() { return S.ruolo === 'pm' ? homePM() : homeDirezione(); },
+
+  cantieri() {
+    const lista = CANTIERI.filter(c => S.bu === 'tutti' || c.bu === S.bu);
+    return `${testata('Cantieri', `${lista.length} cantieri attivi. Budget, impegnato e SAL di ognuno in una barra.`)}${prova('apri <strong>I-07</strong>: è un cantiere immobiliare oltre il 35%, quindi si gestisce anche unità per unità.')}
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-5">${segBu()}${legendaBudget}</div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">${lista.map(c => {
+      const t = totC(c), sc = t.p - t.b;
+      return `<button class="card p-6 text-left hover:border-inchiostro transition-colors" data-a="vai" data-v="cantiere" data-p="${c.id}">
+        <div class="flex items-center justify-between"><span class="num text-xs text-grigio">${c.id}</span>${chipBu(c.bu)}</div>
+        <p class="font-display font-bold text-lg mt-2">${c.nome}</p>
+        <p class="text-sm text-grigio">${c.luogo} · PM ${c.pm}</p>
+        <div class="mt-4 flex items-baseline justify-between text-sm"><span class="text-grigio">Avanzamento</span><span class="num">${c.avanz}%</span></div>
+        <div class="h-1.5 bg-linea rounded-full mt-1.5"><div class="h-full bg-inchiostro rounded-full" style="width:${c.avanz}%"></div></div>
+        <div class="mt-5">${tribar(t.b, t.i, t.a, t.p)}</div>
+        <div class="mt-3 flex items-center justify-between text-sm"><span class="num">${eur(t.b)}</span>${sc > 0 ? `<span class="chip c-ko">+${eur(sc)} a finire</span>` : `<span class="chip c-ok">nel budget</span>`}</div>
+      </button>`; }).join('')}</div>`;
+  },
+
+  cantiere() {
+    const c = cant(S.param), t = totC(c);
+    const tabs = [['budget', 'Budget e previsione'], ['ordini', 'Ordini'], ['sal', 'SAL'], ...(c.bu === 'imm' ? [['unita', `Unità (${c.unita})`]] : [])];
+    const corpo = { budget: () => tabBudget(c), ordini: () => tabellaOrdini(ORDINI.filter(o => o.cant === c.id)), sal: () => tabellaSal(SAL.filter(s => s.cant === c.id)), unita: () => tabUnita(c) }[S.tab]();
+    return `<div class="flex flex-wrap items-start justify-between gap-4 mb-5">
+      <div><div class="flex items-center gap-2"><span class="num text-sm text-grigio">${c.id}</span>${chipBu(c.bu)}</div>
+        <h1 class="font-display font-extrabold text-2xl sm:text-3xl mt-1">${c.nome}</h1>
+        <p class="text-grigio text-sm mt-1">${c.luogo} · PM ${c.pm}${c.unita ? ` · ${c.unita} unità` : ''}</p></div>
+      <div class="w-full sm:w-64"><div class="flex justify-between text-sm"><span class="text-grigio">Avanzamento lavori</span><span class="num">${c.avanz}%</span></div>
+        <div class="h-2 bg-linea rounded-full mt-1.5"><div class="h-full bg-inchiostro rounded-full" style="width:${c.avanz}%"></div></div></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      ${kpi('Budget lavori', eur(t.b))}${kpi('Impegnato', eur(t.i), `<span class="text-grigio">${pc(t.i, t.b)}% del budget</span>`)}
+      ${kpi('Autorizzato con SAL', eur(t.a), `<span class="text-grigio">${pc(t.a, t.b)}% del budget</span>`)}
+      ${kpi('Previsione a finire', eur(t.p), t.p > t.b ? `<span class="text-ambra font-semibold">+${eur(t.p - t.b)} sul budget</span>` : `<span class="text-ok font-semibold">dentro il budget</span>`)}
+    </div>
+    <div class="scroll-x border-b border-linea mb-5"><div class="flex gap-1 min-w-max" role="tablist">${tabs.map(([k, l]) => `<button role="tab" aria-selected="${S.tab === k}" data-a="tab" data-v="${k}" class="px-3.5 py-2.5 text-sm font-semibold border-b-2 ${S.tab === k ? 'border-cobalto text-cobalto' : 'border-transparent text-grigio hover:text-inchiostro'}">${l}</button>`).join('')}</div></div>
+    ${corpo}`;
+  },
+
+  ordini() {
+    const f = { tutti: () => true, consegna: o => valO(o, 'cons') < valO(o, 'ord'), fattura: o => valO(o, 'fatt') < valO(o, 'cons'), anomalie: o => o.stato === 'approvazione' || o.anomalie.length }[S.filtroO];
+    const lista = ORDINI.filter(f);
+    return `${testata('Ordini ai fornitori', 'Ordinato, consegnato e fatturato si aggiornano da soli con bolle e fatture.')}${prova('premi <strong>Fotografa una bolla</strong> in alto: guarda poi come cambia la barra di ODA-2026-0142.')}
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+      <div class="seg scroll-x max-w-full" role="group" aria-label="Filtra gli ordini">${[['tutti', 'Tutti'], ['consegna', 'Da consegnare'], ['fattura', 'Da fatturare'], ['anomalie', 'Da guardare']].map(([k, l]) => `<button data-a="filtro-o" data-v="${k}" aria-pressed="${S.filtroO === k}">${l}</button>`).join('')}</div>
+      ${legendaOrdine}</div>
+    ${tabellaOrdini(lista)}
+    <p class="text-xs text-grigio mt-3">Gli ordini sopra ${eur(SOGLIA_ACQUISTI)} passano dall'ufficio acquisti prima di partire. La soglia è un esempio: la decidete voi.</p>`;
+  },
+
+  ordine() {
+    const o = ordine(S.param), [cls, st] = statoO(o), c = cant(o.cant);
+    return `<div class="flex flex-wrap items-start justify-between gap-4 mb-6">
+      <div><p class="num text-sm text-grigio">${o.id}</p><h1 class="font-display font-extrabold text-2xl sm:text-3xl mt-1">${o.forn}</h1>
+        <p class="text-sm text-grigio mt-1">${c.id} ${c.nome} · ${o.voce} · emesso il ${o.data}</p></div>
+      <div class="flex items-center gap-2"><span class="chip c-${cls}">${st}</span>${o.stato === 'approvazione' ? `<button class="btn btn-pri" data-a="approva" data-v="${o.id}"><i class="bi bi-check2"></i>Approva e invia</button>` : `<button class="btn btn-sec" data-a="bolla"><i class="bi bi-camera"></i>Registra una bolla</button>`}</div>
+    </div>
+    ${o.stato === 'approvazione' ? `<div class="card p-6 mb-5 border-giallo bg-giallo-velo text-sm flex gap-3"><i class="bi bi-cart-check text-ambra text-lg"></i><p><strong>${eur(valO(o, 'ord'))} supera la soglia di ${eur(SOGLIA_ACQUISTI)}.</strong> Il PM l'ha preparato, ora serve l'ok dell'ufficio acquisti. Il fornitore lo riceve solo dopo.</p></div>` : ''}
+    ${o.anomalie.map(a => `<div class="card p-6 mb-5 border-giallo bg-giallo-velo text-sm flex flex-wrap gap-3 items-center"><i class="bi bi-exclamation-triangle text-ambra text-lg"></i><p class="flex-1 min-w-[200px]">${a}</p>
+      <button class="btn btn-sec" data-a="anomalia" data-v="aggiungi">Aggiungi all'ordine</button><button class="btn btn-sec" data-a="anomalia" data-v="contesta">Contesta al fornitore</button></div>`).join('')}
+    <div class="grid grid-cols-1 2xl:grid-cols-[minmax(0,1fr)_320px] gap-5">
+      <div class="card"><div class="px-6 py-4 border-b border-linea flex flex-wrap justify-between items-center gap-2"><p class="font-semibold">Righe dell'ordine</p>${legendaOrdine}</div>
+        <div class="scroll-x"><table class="tab-t min-w-[640px]"><thead><tr><th>Articolo</th><th class="r">Ordinato</th><th class="r">Consegnato</th><th class="r">Da consegnare</th><th class="r">Fatturato</th><th style="width:150px"></th></tr></thead><tbody>
+        ${o.righe.map(r => `<tr class="${r.nuova ? 'lampo' : ''}"><td><p class="font-medium">${r.d}</p><p class="text-xs text-grigio num">${nf(r.p, 2)} €/${r.um}</p></td>
+          <td class="r num">${nf(r.ord)} ${r.um}</td><td class="r num">${nf(r.cons)}</td><td class="r num ${r.ord - r.cons > 0 ? '' : 'text-grigio'}">${nf(Math.max(0, r.ord - r.cons))}</td><td class="r num">${nf(r.fatt)}</td>
+          <td>${tribar(r.ord, r.cons, r.fatt)}</td></tr>`).join('')}
+        </tbody></table></div>
+        <div class="p-4 border-t border-linea grid grid-cols-3 gap-2 text-sm"><div><p class="text-grigio text-xs">Ordinato</p><p class="num">${eur(valO(o, 'ord'))}</p></div><div><p class="text-grigio text-xs">Consegnato</p><p class="num">${eur(valO(o, 'cons'))}</p></div><div><p class="text-grigio text-xs">Fatturato</p><p class="num">${eur(valO(o, 'fatt'))}</p></div></div>
+      </div>
+      <div class="card p-6 self-start"><p class="font-semibold mb-3">Bolle collegate</p>
+        ${o.bolle.length ? `<ul class="space-y-3">${o.bolle.slice().reverse().map(b => `<li class="flex gap-3 items-center ${b.nuova ? 'lampo rounded-lg' : ''}"><span class="w-10 h-12 rounded bg-calce border border-linea flex items-center justify-center text-grigio"><i class="bi bi-file-earmark-image"></i></span><div class="text-sm"><p class="font-medium">${b.n}</p><p class="text-xs text-grigio">${b.data} · foto di ${b.chi}</p></div></li>`).join('')}</ul>` : '<p class="text-sm text-grigio">Ancora nessuna consegna.</p>'}
+      </div>
+    </div>`;
+  },
+
+  sal() {
+    const conFatt = SAL.filter(s => s.fatt), ok = SAL.filter(s => esito(s)[0] === 'ok'), ko = SAL.filter(s => esito(s)[0] === 'ko'), att = SAL.filter(s => !s.fatt);
+    const lista = S.filtroSal === 'controllo' ? SAL.filter(s => esito(s)[0] !== 'ok') : SAL;
+    const sel = SAL.find(s => s.id === S.salSel);
+    return `${testata('SAL e fatture', 'Le fatture che combaciano con il SAL si archiviano da sole. Qui resta solo quello che non torna.')}${prova(S.ruolo === 'pm' ? 'premi <strong>Autorizza un SAL</strong>: niente stampa e firma, parte al fornitore e all\'amministrazione insieme.' : 'apri la riga di <strong>Facciate Moro</strong>: la fattura ha 2.600 € in più del SAL autorizzato.')}
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+      ${kpi('Fatture arrivate', conFatt.length)}${kpi('Combaciano, archiviate da sole', ok.length, '', 'text-ok')}
+      ${kpi('Da guardare', ko.length, '', ko.length ? 'text-ambra' : '')}${kpi('SAL in attesa di fattura', att.length)}
+    </div>
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <div class="seg" role="group" aria-label="Filtra">${[['controllo', 'Da gestire'], ['tutte', 'Tutte']].map(([k, l]) => `<button data-a="filtro-sal" data-v="${k}" aria-pressed="${S.filtroSal === k}">${l}</button>`).join('')}</div>
+      <button class="btn btn-pri" data-a="apri-sal"><i class="bi bi-pen"></i>Autorizza un SAL</button>
+    </div>
+    <div class="grid grid-cols-1 2xl:grid-cols-[minmax(0,1fr)_420px] gap-5">
+      <div class="2xl:order-2">${sel ? dettaglioSal(sel) : ''}</div>
+      <div class="2xl:order-1">${tabellaSal(lista, true)}${S.filtroSal === 'controllo' && ok.length ? `<p class="text-xs text-grigio mt-3"><i class="bi bi-check2-all text-ok"></i> ${ok.length} fatture combaciano con il SAL e non chiedono niente a nessuno. Le vedi in "Tutte".</p>` : ''}</div>
+    </div>`;
+  },
+
+  clienti() {
+    return `${testata('Clienti', 'Ristrutturazioni, dal primo contatto al passaggio al project manager.')}${prova('premi <strong>Avanza</strong> sulla card di Giorgio Pasetto fino in fondo: quando passa al project manager nasce il cantiere con il suo budget.')}
+    <div class="scroll-x -mx-4 sm:mx-0 px-4 sm:px-0 pb-2"><div class="flex gap-3 min-w-max">${FASI.map((f, i) => {
+      const cs = CLIENTI.filter(c => c.fase === i);
+      return `<section class="w-[264px] shrink-0 bg-[#E9EBE6] rounded-xl p-2.5" aria-label="${f}">
+        <div class="flex items-center justify-between px-1.5 pb-2.5 pt-0.5"><h3 class="text-sm font-semibold">${f}</h3><span class="text-xs text-grigio num">${cs.length} · ${eur(sum(cs, c => c.val))}</span></div>
+        <div class="space-y-2.5">${cs.map(c => `<article class="card p-3.5 ${c.nuovo ? 'entra' : ''}">
+          <p class="font-semibold leading-snug">${c.nome}</p><p class="text-sm text-grigio">${c.lav}</p><p class="text-xs text-grigio mt-0.5">${c.luogo}</p>
+          <div class="flex items-center justify-between mt-3"><span class="num text-sm">${eur(c.val)}</span><span class="text-xs text-grigio">${c.comm.split(' ')[0]}${c.gg != null ? ` · ${c.gg} gg` : ''}</span></div>
+          ${c.prev ? `<button class="btn btn-gh mt-2 !px-0 text-sm" data-a="vai" data-v="preventivi"><i class="bi bi-file-earmark-text"></i>Apri il preventivo</button>` : ''}
+          ${i < FASI.length - 1 ? `<button class="btn btn-sec w-full mt-3 !py-1.5 text-[0.8rem]" data-a="avanza" data-v="${c.id}">Avanza a "${FASI[i + 1]}" <i class="bi bi-arrow-right"></i></button>` : `<button class="btn btn-gh mt-2 !px-0 text-sm" data-a="vai" data-v="cantiere" data-p="${c.cantiere}"><i class="bi bi-building"></i>Cantiere ${c.cantiere}</button>`}
+        </article>`).join('')}</div></section>`; }).join('')}</div></div>`;
+  },
+
+  preventivi() {
+    return `${testata('Preventivi', 'Dagli appunti del sopralluogo al preventivo in bella. I prezzi restano vostri.')}${prova('premi <strong>Sistema il preventivo</strong>. Poi metti tu il prezzo che manca: il totale si aggiorna.')}
+    <div class="grid grid-cols-1 lg:grid-cols-[360px_minmax(0,1fr)] gap-5 items-start">
+      <div class="card p-6 lg:sticky lg:top-0">
+        <p class="num text-xs text-grigio">P-2026-071</p><p class="font-display font-bold text-lg">Famiglia Castagna</p><p class="text-sm text-grigio">Appartamento 90 mq, Borgo Venezia · Davide Corsi</p>
+        <label for="appunti" class="block text-sm font-semibold mt-4 mb-1.5">Appunti del sopralluogo</label>
+        <textarea id="appunti" rows="11" class="w-full rounded-xl border border-linea bg-calce p-3 text-[0.82rem] num leading-relaxed">${APPUNTI}</textarea>
+        <p class="text-xs text-grigio mt-2">Scritti al volo, anche dal telefono. Va bene così.</p>
+        <button class="btn btn-pri w-full mt-4" data-a="genera"><i class="bi bi-magic"></i>${S.prevFatto ? 'Rifai il preventivo' : 'Sistema il preventivo'}</button>
+      </div>
+      <div id="doc-prev">${S.prevFatto ? docPreventivo(false) : `<div class="card p-10 text-center text-grigio"><i class="bi bi-file-earmark-text text-4xl"></i><p class="mt-3 max-w-sm mx-auto">Qui esce il preventivo in bella: capitoli, voci con la descrizione tecnica, quantità e prezzi dal vostro listino.</p></div>`}</div>
+    </div>`;
+  },
+};
+
+function segBu() {
+  return `<div class="seg" role="group" aria-label="Business unit">${[['tutti', 'Tutto'], ['ris', 'Ristrutturazioni'], ['imm', 'Immobiliare']].map(([k, l]) => `<button data-a="bu" data-v="${k}" aria-pressed="${S.bu === k}">${l}</button>`).join('')}</div>`;
+}
+
+function homeDirezione() {
+  const cs = CANTIERI.filter(c => S.bu === 'tutti' || c.bu === S.bu);
+  const t = cs.reduce((a, c) => { const x = totC(c); return { b: a.b + x.b, i: a.i + x.i, a: a.a + x.a, p: a.p + x.p }; }, { b: 0, i: 0, a: 0, p: 0 });
+  const ecc = eccezioni().filter(e => S.bu === 'tutti' || cant(e.cant).bu === S.bu);
+  const pipe = CLIENTI.filter(c => c.fase >= 1 && c.fase <= 2);
+  return `${prova('passa in alto a <strong>Project manager</strong> per vedere la stessa app con gli occhi di chi è in cantiere.')}
+  <div class="flex flex-wrap items-end justify-between gap-3 mb-5">
+    <div><h1 class="font-display font-extrabold text-2xl sm:text-3xl">Buongiorno Andrea</h1><p class="text-grigio mt-1">${ecc.length ? `${ecc.length} cose da guardare. Il resto procede da solo.` : 'Niente da guardare oggi.'}</p></div>${segBu()}</div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+    ${kpi('Budget lavori attivi', eur(t.b), `<span class="text-grigio">${cs.length} cantieri</span>`)}
+    ${kpi('Impegnato', eur(t.i), `<span class="text-grigio">contratti e ordini, ${pc(t.i, t.b)}%</span>`)}
+    ${kpi('Autorizzato con SAL', eur(t.a), `<span class="text-grigio">${pc(t.a, t.b)}% del budget</span>`)}
+    ${kpi('Previsione a finire', eur(t.p), t.p > t.b ? `<span class="text-ambra font-semibold">+${eur(t.p - t.b)} sul budget</span>` : `<span class="text-ok font-semibold">dentro il budget</span>`)}
+  </div>
+  <div class="grid grid-cols-1 2xl:grid-cols-[minmax(0,1fr)_420px] gap-5">
+    <div class="space-y-5 2xl:order-2">
+      <div class="card"><div class="px-6 py-4 border-b border-linea flex items-center gap-2"><i class="bi bi-flag text-ambra"></i><p class="font-semibold">Da guardare</p><span class="badge">${ecc.length}</span></div>
+        <ul class="p-3 grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-1 gap-2">${ecc.map(e => `<li><button class="w-full h-full text-left px-4 py-3 rounded-xl bg-calce hover:bg-cobalto-velo transition-colors flex gap-3" data-a="vai" data-v="${e.go[0]}" data-p="${e.go[1]}">
+          <i class="bi ${e.ico} text-grigio mt-0.5"></i><span class="flex-1 min-w-0"><span class="block text-xs text-grigio">${e.tipo} · <span class="num">${e.cant}</span></span><span class="block text-sm">${e.testo}</span></span><i class="bi bi-chevron-right text-grigio text-xs mt-1.5"></i></button></li>`).join('') || '<li class="p-4 text-sm text-grigio">Tutto in ordine.</li>'}</ul></div>
+      <div class="card p-6"><p class="font-semibold mb-3">Commerciale ristrutturazioni</p>
+        <div class="grid grid-cols-2 gap-3 text-sm"><div><p class="text-grigio text-xs">In trattativa</p><p class="num text-lg">${eur(sum(pipe, c => c.val))}</p></div><div><p class="text-grigio text-xs">Firmati, in partenza</p><p class="num text-lg">${eur(sum(CLIENTI.filter(c => c.fase >= 3 && c.fase <= 4), c => c.val))}</p></div></div>
+        <button class="btn btn-gh mt-2 !px-0" data-a="vai" data-v="clienti">Apri la pipeline <i class="bi bi-arrow-right"></i></button></div>
+    </div>
+    <div class="card 2xl:order-1">
+      <div class="px-6 py-4 border-b border-linea flex flex-wrap gap-2 justify-between items-center"><p class="font-semibold">Cantieri</p>${legendaBudget}</div>
+      <div class="scroll-x"><table class="tab-t min-w-[620px]"><thead><tr><th>Cantiere</th><th class="r">Avanz.</th><th style="width:34%">Budget, impegnato, SAL</th><th class="r">Previsione</th><th class="r">Scostamento</th></tr></thead><tbody>
+      ${cs.map(c => { const x = totC(c), d = x.p - x.b; return `<tr class="clic" data-a="vai" data-v="cantiere" data-p="${c.id}" tabindex="0">
+        <td><p class="font-medium">${c.nome}</p><p class="text-xs text-grigio"><span class="num">${c.id}</span> · ${c.pm}</p></td><td class="r num">${c.avanz}%</td>
+        <td>${tribar(x.b, x.i, x.a, x.p)}</td><td class="r num">${eur(x.p)}</td><td class="r">${d > 0 ? `<span class="chip c-ko num">+${eur(d)}</span>` : `<span class="chip c-ok num">${eur(d)}</span>`}</td></tr>`; }).join('')}
+      </tbody></table></div>
+    </div>
+  </div>`;
+}
+
+function homePM() {
+  const miei = CANTIERI.filter(c => c.pm === 'Luca Benedetti');
+  const salFatti = CONTRATTI.every(c => c.fatto);
+  const prevFatta = cant('I-07').storico.length > 0;
+  const task = (n, fatto, tit, desc, btn) => `<li class="card p-6 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-4 ${fatto ? 'opacity-70' : ''}">
+    <span class="num shrink-0 w-10 h-10 rounded-xl ${fatto ? 'bg-ok text-white' : 'bg-cobalto-velo text-cobalto'} flex items-center justify-center text-lg">${fatto ? '<i class="bi bi-check2"></i>' : n}</span>
+    <div class="flex-1"><p class="font-display font-bold text-lg ${fatto ? 'line-through decoration-1' : ''}">${tit}</p><p class="text-sm text-grigio">${desc}</p></div>${fatto ? '<span class="chip c-ok">Fatto</span>' : btn}</li>`;
+  return `${prova('sono le tre cose che un PM fa ogni giorno. Falle tutte e tre: la lista si spunta da sola.')}
+  <h1 class="font-display font-extrabold text-2xl sm:text-3xl">Buongiorno Luca</h1>
+  <p class="text-grigio mt-1 mb-5">Oggi ti servono tre cose. Anche dal telefono.</p>
+  <ol class="space-y-3 mb-8">
+    ${task(1, S.bollaFatta, 'Fotografa la bolla di stamattina', 'Gres Nordest ha scaricato a I-07. Foto, controlli, confermi: 40 secondi.', '<button class="btn btn-pri" data-a="bolla"><i class="bi bi-camera"></i>Fotografa</button>')}
+    ${task(2, salFatti, `Autorizza i SAL di ${MESE}`, `${CONTRATTI.filter(c => !c.fatto).map(c => c.sub).join(' e ')} ${CONTRATTI.filter(c => !c.fatto).length > 1 ? 'aspettano' : 'aspetta'} il SAL. Niente stampa e firma.`, '<button class="btn btn-pri" data-a="apri-sal"><i class="bi bi-pen"></i>Autorizza</button>')}
+    ${task(3, prevFatta, 'Aggiorna la previsione a finire di I-07', `L'ultimo aggiornamento è del ${cant('I-07').agg}. Cambi solo i numeri che sono cambiati.`, '<button class="btn btn-pri" data-a="vai" data-v="cantiere" data-p="I-07">Aggiorna</button>')}
+  </ol>
+  <h2 class="font-display font-bold text-lg mb-3">I tuoi cantieri</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">${miei.map(c => { const t = totC(c); return `<button class="card p-6 text-left hover:border-inchiostro" data-a="vai" data-v="cantiere" data-p="${c.id}">
+    <div class="flex justify-between items-center"><span class="num text-xs text-grigio">${c.id}</span>${chipBu(c.bu)}</div><p class="font-display font-bold text-lg mt-1">${c.nome}</p>
+    <div class="mt-4">${tribar(t.b, t.i, t.a, t.p)}</div><div class="mt-2 flex justify-between text-sm text-grigio"><span>${c.avanz}% dei lavori</span><span class="num">${eur(t.b)}</span></div></button>`; }).join('')}</div>`;
+}
+
+function tabBudget(c) {
+  const t = totC(c);
+  return `${prova('cambia una <strong>previsione a finire</strong> e premi Invio. Si salva subito e la direzione vede lo stesso numero: non esistono altre versioni.')}
+  <div class="grid grid-cols-1 2xl:grid-cols-[minmax(0,1fr)_320px] gap-5">
+    <div class="card">
+      <div class="px-6 py-4 border-b border-linea flex flex-wrap gap-2 justify-between items-center"><p class="text-sm"><i class="bi bi-file-earmark-check text-cobalto"></i> <strong>Versione unica.</strong> <span class="text-grigio">Ultima modifica: ${c.storico[0] ? `${c.storico[0].chi}, adesso` : `${c.pm}, ${c.agg}`}</span></p>${legendaBudget}</div>
+      <div class="scroll-x"><table class="tab-t min-w-[860px]"><thead><tr><th>Lavorazione</th><th class="r">Budget</th><th class="r">Impegnato</th><th class="r">Autorizzato</th><th class="r">Previsione a finire</th><th class="r">Scostamento</th><th style="width:150px"></th></tr></thead><tbody>
+      ${c.lav.map((v, i) => { const d = v.prev - v.budget; return `<tr id="riga-${i}">
+        <td class="font-medium">${v.voce}</td><td class="r num">${eur(v.budget)}</td><td class="r num">${eur(v.imp)}</td><td class="r num">${eur(v.aut)}</td>
+        <td class="r"><label class="sr-only" for="prev-${i}">Previsione ${v.voce}</label><input id="prev-${i}" class="in-num" inputmode="numeric" value="${nf(v.prev)}" data-prev="${c.id}|${i}"></td>
+        <td class="r">${d > v.budget * .05 ? `<span class="chip c-ko num">+${eur(d)}</span>` : `<span class="num text-sm ${d > 0 ? 'text-ambra' : 'text-grigio'}">${d > 0 ? '+' : ''}${eur(d)}</span>`}</td>
+        <td>${tribar(v.budget, v.imp, v.aut, v.prev)}</td></tr>`; }).join('')}
+      <tr class="font-semibold bg-calce"><td>Totale</td><td class="r num">${eur(t.b)}</td><td class="r num">${eur(t.i)}</td><td class="r num">${eur(t.a)}</td><td class="r num">${eur(t.p)}</td><td class="r num ${t.p > t.b ? 'text-ambra' : ''}">${t.p > t.b ? '+' : ''}${eur(t.p - t.b)}</td><td>${tribar(t.b, t.i, t.a, t.p)}</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card p-6 self-start"><p class="font-semibold mb-3">Chi ha cambiato cosa</p>
+      <ul class="space-y-3 text-sm">${[...c.storico, { chi: c.pm, quando: c.agg, testo: 'Aggiornamento mensile delle previsioni' }, { chi: 'Andrea Pregnolato', quando: 'apertura commessa', testo: `Budget assegnato: ${eur(t.b)}` }].map((s, i) => `<li class="flex gap-2.5 ${i === 0 && c.storico.length ? 'lampo rounded-lg' : ''}"><span class="w-1.5 h-1.5 rounded-full bg-cobalto mt-2 shrink-0"></span><div><p>${s.testo}</p><p class="text-xs text-grigio">${s.chi} · ${s.quando}</p></div></li>`).join('')}</ul>
+      <p class="text-xs text-grigio mt-4 pt-3 border-t border-linea">Il budget lo assegna la direzione. Il PM aggiorna solo la previsione: il suo potere di spesa resta quello.</p></div>
+  </div>`;
+}
+
+function tabUnita(c) {
+  if (c.avanz < 35) return `<div class="card p-8 text-center"><i class="bi bi-grid grid-cols-1-3x3-gap text-3xl text-grigio"></i><p class="font-semibold mt-3">Per ora si gestisce come cantiere unico</p><p class="text-sm text-grigio mt-1 max-w-md mx-auto">Siamo al ${c.avanz}%. Verso il 35% di avanzamento si apre la gestione per unità: trattative, varianti dei clienti e documenti per le banche.</p></div>`;
+  const cnt = s => UNITA.filter(u => u.stato === s).length;
+  const u = UNITA.find(x => x.id === S.unita);
+  return `${prova('tocca un\'unità blu: vedi cliente, varianti richieste e i documenti che chiede la sua banca.')}
+  <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_380px] gap-5">
+    <div class="card p-6">
+      <div class="flex flex-wrap gap-2 mb-4">${[['libera', 'Libera'], ['trattativa', 'In trattativa'], ['compromesso', 'Compromesso']].map(([k, l]) => `<span class="unita u-${k} !aspect-auto px-3 py-1.5">${l} · ${cnt(k)}</span>`).join('')}</div>
+      ${['A', 'B', 'C'].map(sc => `<p class="text-xs font-semibold text-grigio mb-2 mt-4 first:mt-0">Scala ${sc}</p><div class="grid grid-cols-7 sm:grid-cols-[repeat(14,minmax(0,1fr))] gap-1.5">
+        ${UNITA.filter(x => x.scala === sc).map(x => `<button class="unita u-${x.stato}" data-a="unita" data-v="${x.id}" aria-pressed="${S.unita === x.id}" aria-label="Unità ${x.id}, ${x.stato}">${x.id.slice(2)}</button>`).join('')}</div>`).join('')}
+    </div>
+    <div>${u ? dettaglioUnita(u) : `<div class="card p-6 text-sm text-grigio text-center"><i class="bi bi-hand-index text-2xl"></i><p class="mt-2">Scegli un'unità per vederne la scheda.</p></div>`}</div>
+  </div>`;
+}
+function dettaglioUnita(u) {
+  return `<div class="card entra">
+    <div class="px-6 py-4 border-b border-linea"><div class="flex justify-between items-center"><p class="font-display font-bold text-lg">Unità ${u.id}</p><span class="chip ${u.stato === 'compromesso' ? 'c-pieno' : u.stato === 'trattativa' ? 'c-bl' : 'c-at'}">${u.stato[0].toUpperCase() + u.stato.slice(1)}</span></div>
+      <p class="text-sm text-grigio">${u.tipo}, ${u.mq} mq, piano ${u.piano === 0 ? 'terra' : u.piano} · <span class="num">${eur(u.prezzo)}</span></p>
+      ${u.cliente ? `<p class="text-sm mt-2"><i class="bi bi-person text-grigio"></i> ${u.cliente}</p>` : ''}</div>
+    ${u.cliente ? `<div class="px-6 py-4 border-b border-linea"><p class="text-sm font-semibold mb-2">Varianti richieste</p>
+      ${u.varianti.length ? `<ul class="space-y-2">${u.varianti.map((v, i) => `<li class="text-sm flex flex-wrap items-center gap-2"><span class="flex-1 min-w-[160px]">${v.d}</span><span class="num">${eur(v.imp)}</span>
+        ${v.stato === 'Da preventivare' ? `<button class="btn btn-sec !py-1 !px-2.5 text-xs" data-a="variante" data-v="${u.id}|${i}">Manda il preventivo</button>` : `<span class="chip ${v.stato === 'Accettata' ? 'c-ok' : 'c-bl'}">${v.stato}</span>`}</li>`).join('')}</ul>` : '<p class="text-sm text-grigio">Nessuna variante per ora.</p>'}</div>` : ''}
+    ${u.stato === 'compromesso' ? `<div class="p-4"><p class="text-sm font-semibold mb-2">Documenti per la banca del cliente</p><ul class="space-y-1.5">${DOCS.map((d, j) => `<li><label class="flex items-center gap-2.5 text-sm cursor-pointer"><input type="checkbox" class="w-4 h-4 accent-[#1D3FBF]" data-doc="${u.id}|${j}" ${u.docs[j] ? 'checked' : ''}><span class="${u.docs[j] ? 'text-grigio line-through' : ''}">${d}</span></label></li>`).join('')}</ul>
+      <p class="text-xs text-grigio mt-3">${u.docs.filter(Boolean).length} su ${DOCS.length} pronti.</p></div>`
+    : `<div class="p-4 text-sm text-grigio">${u.stato === 'libera' ? 'Unità ancora in vendita.' : 'I documenti per la banca si aprono con il compromesso.'}</div>`}
+  </div>`;
+}
+
+function tabellaOrdini(lista) {
+  if (!lista.length) return '<div class="card p-6 text-sm text-grigio text-center">Nessun ordine qui.</div>';
+  return `<div class="card scroll-x"><table class="tab-t min-w-[760px]"><thead><tr><th>Ordine</th><th>Fornitore</th><th>Cantiere</th><th class="r">Importo</th><th style="width:22%">Ordinato, consegnato, fatturato</th><th>Stato</th></tr></thead><tbody>
+  ${lista.map(o => { const [cls, st] = statoO(o); return `<tr class="clic ${o.agg ? 'lampo' : ''}" data-a="vai" data-v="ordine" data-p="${o.id}" tabindex="0">
+    <td class="num text-sm">${o.id}</td><td><p class="font-medium">${o.forn}</p><p class="text-xs text-grigio">${o.voce}</p></td><td class="num text-sm">${o.cant}</td>
+    <td class="r num">${eur(valO(o, 'ord'))}</td><td>${tribar(valO(o, 'ord'), valO(o, 'cons'), valO(o, 'fatt'))}</td>
+    <td><span class="chip c-${cls}">${st}</span>${o.anomalie.length ? ' <span class="chip c-ko"><i class="bi bi-exclamation-triangle"></i>bolla</span>' : ''}</td></tr>`; }).join('')}
+  </tbody></table></div>`;
+}
+
+function tabellaSal(lista, selezionabile) {
+  if (!lista.length) return '<div class="card p-6 text-sm text-grigio text-center">Niente da gestire. Tutte le fatture combaciano.</div>';
+  return `<div class="card scroll-x"><table class="tab-t min-w-[700px]"><thead><tr><th>Subappaltatore</th><th>Cantiere</th><th class="r">SAL autorizzato</th><th class="r">Fattura</th><th>Esito</th><th></th></tr></thead><tbody>
+  ${lista.map(s => { const [cls0, t] = esito(s), cls = s.risolto ? 'bl' : cls0; return `<tr class="${selezionabile ? 'clic' : ''} ${s.nuovo ? 'lampo' : ''} ${S.salSel === s.id && selezionabile ? 'sel' : ''}" ${selezionabile ? `data-a="sal-sel" data-v="${s.id}" tabindex="0"` : ''}>
+    <td><p class="font-medium">${s.sub}</p><p class="text-xs text-grigio">${s.n ? `SAL n. ${s.n} del ${s.data}` : `ricevuta il ${s.data}`}</p></td><td class="num text-sm">${s.cant}</td>
+    <td class="r num">${s.importo != null ? eur(s.importo) : '<span class="text-grigio">nessuno</span>'}</td><td class="r num">${s.fatt ? eur(s.fatt.imp) : '<span class="text-grigio">non arrivata</span>'}</td>
+    <td><span class="chip c-${cls}">${cls === 'ok' ? '<i class="bi bi-check2"></i>' : cls === 'ko' ? '<i class="bi bi-exclamation-triangle"></i>' : ''}${t}</span></td>
+    <td class="r">${!s.fatt ? `<button class="btn btn-gh text-xs" data-a="simula-fatt" data-v="${s.id}">Simula l'arrivo della fattura</button>` : ''}</td></tr>`; }).join('')}
+  </tbody></table></div>`;
+}
+
+function dettaglioSal(s) {
+  const [cls0, t] = esito(s), c = cant(s.cant), cls = s.risolto ? 'bl' : cls0;
+  const riga = (l, a, b, evid) => `<div class="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-3 py-2 border-b border-[#EEF0EC] text-sm ${evid ? 'bg-giallo-velo -mx-6 px-6' : ''}"><span class="min-w-0 [overflow-wrap:anywhere]">${l}</span><span class="num w-[5.5rem] text-right">${a}</span><span class="num w-[5.5rem] text-right">${b}</span></div>`;
+  let corpo;
+  if (!s.fatt) corpo = `<p class="text-sm text-grigio">Il SAL è autorizzato e già inviato a ${s.sub}. Quando arriva la fattura il confronto parte da solo.</p>`;
+  else {
+    const diff = s.senzaSal ? 0 : s.fatt.imp - s.importo;
+    corpo = `<div class="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-3 text-xs text-grigio pb-1"><span></span><span class="w-[5.5rem] text-right">SAL</span><span class="w-[5.5rem] text-right">Fattura</span></div>
+    ${s.senzaSal ? riga(s.fatt.extra, '–', eur(s.fatt.imp), true) : riga(s.voce, eur(s.importo), eur(s.fatt.imp - diff))}
+    ${diff ? riga(s.fatt.extra, '–', eur(diff), true) : ''}
+    <div class="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-3 pt-2 text-sm font-semibold"><span>Totale</span><span class="num w-[5.5rem] text-right">${s.importo != null ? eur(s.importo) : '–'}</span><span class="num w-[5.5rem] text-right">${eur(s.fatt.imp)}</span></div>`;
+  }
+  const azioni = cls !== 'ko' ? '' : s.senzaSal
+    ? `<p class="text-sm mt-4">${s.sub} ha fatturato un noleggio che nessun PM ha autorizzato.</p><div class="flex flex-wrap gap-2 mt-3"><button class="btn btn-pri" data-a="risolvi" data-v="${s.id}|pm">Chiedi a ${c.pm.split(' ')[0]} di autorizzarlo</button><button class="btn btn-sec" data-a="risolvi" data-v="${s.id}|contesta">Contesta la fattura</button></div>`
+    : `<p class="text-sm mt-4">La fattura ha una riga che nel SAL non c'è. Decidi tu, il sistema non paga niente da solo.</p><div class="flex flex-wrap gap-2 mt-3"><button class="btn btn-pri" data-a="risolvi" data-v="${s.id}|nc">Chiedi nota di credito</button><button class="btn btn-sec" data-a="risolvi" data-v="${s.id}|accetta">Accetta e aggiorna il SAL</button></div>`;
+  return `<div class="card p-6 entra 2xl:sticky 2xl:top-0">
+    <div class="flex justify-between items-start gap-2 mb-3"><div><p class="font-display font-bold text-lg">${s.sub}</p><p class="text-xs text-grigio">${c.id} ${c.nome}${s.fatt ? ` · ${s.fatt.n}` : ''}</p></div><span class="chip c-${cls}">${t}</span></div>
+    ${corpo}${azioni}</div>`;
+}
+
+function docPreventivo(anima) {
+  let k = 0;
+  const d = () => anima ? 'entra' : '';
+  const imp = imponibilePrev(), iva = imp * .10;
+  return `<div class="carta p-5 sm:p-8 text-[0.9rem]">
+    <div class="flex flex-wrap justify-between gap-4 pb-5 border-b-2 border-inchiostro ${d(0)}">
+      <div><p class="font-display font-extrabold text-xl">Preventivo P-2026-071</p><p class="text-grigio text-sm">Verona, ${OGGI.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })} · valido 30 giorni</p></div>
+      <div class="text-sm sm:text-right"><p class="text-grigio text-xs">Spett.le</p><p class="font-semibold">Famiglia Castagna</p><p>Verona, Borgo Venezia</p></div></div>
+    <p class="mt-5 ${d(1)}"><strong>Oggetto:</strong> ristrutturazione di un appartamento di circa 90 mq al terzo piano, senza ascensore.</p>
+    ${PREV.map((cap, ci) => `<div class="mt-6 ${d(ci + 2)}"><p class="font-display font-bold text-cobalto">${ci + 1}. ${cap.cap}</p>
+      <div class="scroll-x"><table class="tab-t mt-1 min-w-[560px]"><tbody>${cap.voci.map((v, vi) => { const i = k++; return `<tr>
+        <td class="num text-xs text-grigio align-top pt-3 w-10">${ci + 1}.${vi + 1}</td><td>${v[0]}</td><td class="r num text-sm whitespace-nowrap">${nf(v[2])} ${v[1]}</td>
+        <td class="r"><label class="sr-only" for="pz-${i}">Prezzo unitario</label><input id="pz-${i}" class="in-num !w-24 ${v[3] == null ? 'vuoto' : ''}" inputmode="decimal" placeholder="da inserire" value="${v[3] == null ? '' : nf(v[3], 2)}" data-prezzo="${i}"></td>
+        <td class="r num w-28" id="imp-${i}">${v[3] == null ? '<span class="text-ambra text-xs">manca il prezzo</span>' : eur(v[2] * v[3])}</td></tr>`; }).join('')}</tbody></table></div></div>`).join('')}
+    <div class="mt-8 ml-auto max-w-xs text-sm space-y-1.5 ${d(9)}">
+      <div class="flex justify-between"><span>Imponibile</span><span class="num" id="p-imp">${eur(imp)}</span></div>
+      <div class="flex justify-between text-grigio"><span>IVA 10% (manutenzione straordinaria)</span><span class="num" id="p-iva">${eur(iva)}</span></div>
+      <div class="flex justify-between font-bold text-base pt-2 border-t border-inchiostro"><span>Totale</span><span class="num" id="p-tot">${eur(imp + iva)}</span></div></div>
+    <p class="mt-8 text-xs text-grigio ${d(10)}">Prezzi da listino interno ${ANNO}. Le voci in giallo non hanno un prezzo a listino: le completa chi firma il preventivo. Pagamenti a stato di avanzamento lavori, come da contratto.</p>
+  </div>
+  <div class="flex flex-wrap gap-2 mt-4 ${d(11)}"><button class="btn btn-sec" data-a="pdf"><i class="bi bi-file-earmark-pdf"></i>Esporta in PDF</button><button class="btn btn-sec" data-a="manda-prev"><i class="bi bi-send"></i>Manda al cliente</button></div>`;
+}
+
+/* ---------- bolla da cantiere (vista telefono) ---------- */
+const SVG_BOLLA = `<svg viewBox="0 0 220 290" class="w-[72%] max-w-[230px] -rotate-[4deg] drop-shadow-xl" aria-hidden="true">
+  <rect width="220" height="290" rx="3" fill="#FBFAF6"/><rect x="14" y="14" width="80" height="12" rx="2" fill="#1B1F24"/>
+  <text x="120" y="24" font-size="9" font-family="IBM Plex Mono" fill="#1B1F24">DDT n. 1187</text><text x="120" y="36" font-size="7" font-family="IBM Plex Mono" fill="#5D6470">${dmy(0)}</text>
+  <text x="14" y="46" font-size="8" font-family="IBM Plex Sans" fill="#1B1F24" font-weight="600">GRES NORDEST SRL</text>
+  <text x="14" y="58" font-size="6.5" font-family="IBM Plex Sans" fill="#5D6470">Dest.: cantiere Borgo Roma, Verona</text><text x="14" y="68" font-size="6.5" font-family="IBM Plex Sans" fill="#5D6470">Rif. ordine ODA-2026-0142</text>
+  <line x1="14" y1="82" x2="206" y2="82" stroke="#1B1F24"/>
+  ${[0, 1, 2].map(i => `<rect x="14" y="${94 + i * 22}" width="${[120, 96, 104][i]}" height="6" rx="2" fill="#B9BDB4"/><rect x="176" y="${94 + i * 22}" width="30" height="6" rx="2" fill="#1B1F24"/>`).join('')}
+  <line x1="14" y1="166" x2="206" y2="166" stroke="#E2E4DF"/><path d="M120 236c10-14 22 8 34-6s18 10 30-4" stroke="#1D3FBF" stroke-width="1.6" fill="none"/><text x="120" y="256" font-size="6" fill="#5D6470" font-family="IBM Plex Sans">firma per ricevuta</text>
+</svg>`;
+function renderBolla() {
+  const o = ordine('ODA-2026-0142');
+  const passi = [
+    () => `<div class="flex-1 bg-[#20242A] relative flex items-center justify-center overflow-hidden">${SVG_BOLLA}
+        <div class="absolute inset-8 border-2 border-white/60 rounded-2xl pointer-events-none" style="clip-path:polygon(0 0,18% 0,18% 2px,82% 2px,82% 0,100% 0,100% 18%,calc(100% - 2px) 18%,calc(100% - 2px) 82%,100% 82%,100% 100%,82% 100%,82% calc(100% - 2px),18% calc(100% - 2px),18% 100%,0 100%,0 82%,2px 82%,2px 18%,0 18%)"></div>
+        <p class="absolute top-4 inset-x-0 text-center text-white/80 text-sm">Inquadra la bolla intera. Va bene anche storta.</p></div>
+      <div class="bg-[#20242A] pb-8 pt-4 flex justify-center"><button class="w-[72px] h-[72px] rounded-full border-4 border-white flex items-center justify-center" data-a="bolla-scatta" aria-label="Scatta la foto"><span class="w-14 h-14 rounded-full bg-white"></span></button></div>`,
+    () => `<div class="flex-1 bg-[#20242A] relative flex items-center justify-center overflow-hidden">${SVG_BOLLA}<div class="scan"></div></div>
+      <div class="p-5 space-y-2.5 text-sm" id="lettura"><p class="font-semibold"><i class="bi bi-arrow-repeat gira"></i> Leggo la bolla…</p></div>`,
+    () => `<div class="flex-1 overflow-y-auto p-4 space-y-3">
+        <div class="rounded-xl bg-calce p-3 text-sm"><p class="font-semibold">Gres Nordest srl · DDT 1187</p><p class="text-grigio text-xs">${dmy(0)} · cantiere I-07</p>
+          <p class="mt-2 chip c-ok"><i class="bi bi-link-45deg"></i>Collegata a ODA-2026-0142</p></div>
+        <p class="text-xs text-grigio">Controlla le quantità. Se una è sbagliata la correggi qui.</p>
+        ${[[0, o.righe[0]], [1, o.righe[1]]].map(([i, r]) => `<div class="rounded-xl border border-linea p-3"><p class="text-sm font-medium">${r.d}</p>
+          <div class="flex items-center gap-2 mt-2"><input class="in-num !w-20" inputmode="numeric" value="${S.bollaQ[i]}" data-bq="${i}" aria-label="Quantità consegnata"><span class="text-sm">${r.um}</span><i class="bi bi-check-circle-fill text-ok ml-auto"></i></div>
+          <p class="text-xs text-grigio mt-1.5">Ordinati ${nf(r.ord)}, arrivati prima ${nf(r.cons)}. Ne mancheranno <span id="resta-${i}">${nf(Math.max(0, r.ord - r.cons - S.bollaQ[i]))}</span>.</p></div>`).join('')}
+        <div class="rounded-xl border-2 border-giallo bg-giallo-velo p-3"><p class="text-sm font-medium">Battiscopa in gres 8 cm</p><p class="text-sm num mt-1">120 ml</p>
+          <p class="text-xs text-ambra mt-1.5"><i class="bi bi-exclamation-triangle"></i> Non è nell'ordine. La registro e lo segnalo all'ufficio acquisti.</p></div>
+      </div>
+      <div class="p-4 border-t border-linea"><button class="btn btn-pri w-full !py-3" data-a="bolla-conferma">Conferma la bolla</button></div>`,
+    () => `<div class="flex-1 flex flex-col items-center justify-center text-center p-6">
+        <span class="w-16 h-16 rounded-full bg-ok text-white text-3xl flex items-center justify-center entra"><i class="bi bi-check2"></i></span>
+        <p class="font-display font-bold text-xl mt-4">Bolla registrata</p>
+        <p class="text-sm text-grigio mt-2">L'ordine è aggiornato e la foto è archiviata nel cantiere I-07. La riga fuori ordine è già nella lista di chi deve guardarla.</p>
+        <p class="num text-xs text-grigio mt-4">tempo impiegato: 38 secondi</p></div>
+      <div class="p-4 border-t border-linea space-y-2"><button class="btn btn-pri w-full" data-a="vai" data-v="ordine" data-p="ODA-2026-0142">Vedi l'ordine</button><button class="btn btn-sec w-full" data-a="chiudi-modale">Chiudi</button></div>`,
+  ];
+  $('#modale').innerHTML = `<div class="bg-white w-full h-full sm:w-[370px] sm:h-[720px] sm:max-h-[94dvh] sm:rounded-[42px] sm:border-[10px] sm:border-inchiostro overflow-hidden flex flex-col entra" aria-label="Registra una bolla dal telefono">
+    <div class="h-14 shrink-0 flex items-center justify-between px-4 border-b border-linea"><button class="w-9 h-9 rounded-full hover:bg-calce" data-a="chiudi-modale" aria-label="Chiudi"><i class="bi bi-x-lg"></i></button><p class="font-semibold text-sm">Nuova bolla · I-07</p><span class="w-9"></span></div>
+    ${passi[S.bolla]()}</div>`;
+}
+function apriModale() { document.body.classList.add('modale-aperta'); }
+function chiudiModale() { document.body.classList.remove('modale-aperta'); $('#modale').innerHTML = ''; }
+
+function renderSalModale() {
+  const libero = CONTRATTI.filter(c => !c.fatto);
+  const c = CONTRATTI.find(x => x.id === S.salC) || libero[0] || CONTRATTI[0];
+  S.salC = c.id;
+  const min = Math.ceil(c.gia / c.importo * 100);
+  if (!S.salPerc || S.salPerc < min) S.salPerc = Math.min(100, min + 8);
+  const lordo = Math.max(0, c.importo * S.salPerc / 100 - c.gia), rit = lordo * .05;
+  $('#modale').innerHTML = `<div class="bg-white w-full sm:max-w-lg h-full sm:h-auto sm:rounded-2xl overflow-y-auto entra">
+    <div class="p-5 border-b border-linea flex justify-between items-center"><p class="font-display font-bold text-lg">Autorizza un SAL</p><button class="w-9 h-9 rounded-full hover:bg-calce" data-a="chiudi-modale" aria-label="Chiudi"><i class="bi bi-x-lg"></i></button></div>
+    <div class="p-5 space-y-5">
+      <div><label for="sal-c" class="text-sm font-semibold">Contratto</label>
+        <select id="sal-c" class="mt-1.5 w-full rounded-xl border border-linea p-2.5 bg-white">${CONTRATTI.map(x => `<option value="${x.id}" ${x.id === c.id ? 'selected' : ''} ${x.fatto ? 'disabled' : ''}>${x.sub} · ${x.cant} ${x.voce}${x.fatto ? ' (già fatto)' : ''}</option>`).join('')}</select></div>
+      <div class="grid grid-cols-2 gap-3 text-sm"><div class="rounded-xl bg-calce p-3"><p class="text-xs text-grigio">Importo del contratto</p><p class="num">${eur(c.importo)}</p></div><div class="rounded-xl bg-calce p-3"><p class="text-xs text-grigio">Già autorizzato</p><p class="num">${eur(c.gia)} · ${pc(c.gia, c.importo)}%</p></div></div>
+      <div><label for="sal-p" class="text-sm font-semibold flex justify-between"><span>Avanzamento a oggi</span><span class="num" id="sal-pv">${S.salPerc}%</span></label>
+        <input id="sal-p" type="range" min="${min}" max="100" value="${S.salPerc}" class="w-full mt-2 accent-[#1D3FBF]"></div>
+      <div class="rounded-xl border border-linea p-4 text-sm space-y-1.5">
+        <div class="flex justify-between"><span>Lavori di questo SAL</span><span class="num" id="sal-l">${eur(lordo)}</span></div>
+        <div class="flex justify-between text-grigio"><span>Ritenuta a garanzia 5%</span><span class="num" id="sal-r">−${eur(rit)}</span></div>
+        <div class="flex justify-between font-semibold pt-1.5 border-t border-linea"><span>Da fatturare</span><span class="num" id="sal-f">${eur(lordo - rit)}</span></div></div>
+      <p class="text-xs text-grigio">Parte a ${c.sub} e all'amministrazione nello stesso momento. Quando arriva la fattura, il confronto lo fa il sistema.</p>
+      <button class="btn btn-pri w-full !py-3" data-a="sal-ok" ${lordo <= 0 ? 'disabled' : ''}>Autorizza e invia</button>
+    </div></div>`;
+}
+
+/* ---------- azioni ---------- */
+let toastT;
+function toast(msg) { $('#toast-t').textContent = msg; $('#toast').classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => $('#toast').classList.remove('on'), 3600); }
+const parseNum = s => parseFloat(String(s).replace(/\./g, '').replace(',', '.'));
+
+const AZ = {
+  menu: () => document.body.classList.add('menu-aperto'),
+  'chiudi-menu': () => document.body.classList.remove('menu-aperto'),
+  vai: (v, el) => { chiudiModale(); vai(v, el.dataset.p || null); },
+  ruolo: v => { S.ruolo = v; S.bu = 'tutti'; render(); },
+  bu: v => { S.bu = v; render(); },
+  tab: v => { S.tab = v; render(); },
+  unita: v => { S.unita = v; render(); },
+  variante: v => { const [id, i] = v.split('|'); const u = UNITA.find(x => x.id === id); u.varianti[i].stato = 'Inviata al cliente'; toast(`Preventivo della variante inviato a ${u.cliente}.`); render(); },
+  'filtro-o': v => { S.filtroO = v; render(); },
+  'filtro-sal': v => { S.filtroSal = v; render(); },
+  'sal-sel': v => { S.salSel = v; render(); },
+  risolvi: v => {
+    const [id, how] = v.split('|'), s = SAL.find(x => x.id === id);
+    if (how === 'nc') { s.risolto = 'Nota di credito chiesta'; toast(`Richiesta di nota di credito inviata a ${s.sub}.`); }
+    if (how === 'accetta') { s.importo = s.fatt.imp; s.risolto = 'Differenza accettata'; toast('SAL aggiornato. La fattura ora combacia.'); }
+    if (how === 'pm') { s.risolto = 'Mandata al PM'; toast(`${cant(s.cant).pm} ha ricevuto la richiesta di autorizzazione.`); }
+    if (how === 'contesta') { s.risolto = 'Contestata'; toast(`Contestazione inviata a ${s.sub}.`); }
+    render();
+  },
+  'simula-fatt': (v, el, e) => {
+    e.stopPropagation();
+    const s = SAL.find(x => x.id === v);
+    s.fatt = { n: `FT ${300 + Math.floor(Math.random() * 600)}/${ANNO}`, imp: s.importo };
+    SAL.forEach(x => x.nuovo = false); s.nuovo = true; S.salSel = s.id;
+    toast(`Fattura di ${s.sub} arrivata: combacia con il SAL, archiviata.`); render();
+  },
+  approva: v => { const o = ordine(v); delete o.stato; toast(`Ordine approvato e inviato a ${o.forn}.`); render(); },
+  anomalia: v => {
+    const o = ordine(S.param);
+    if (v === 'aggiungi') { o.righe.push({ d: 'Battiscopa in gres 8 cm', um: 'ml', ord: 120, cons: 120, fatt: 0, p: 4.9, nuova: true }); toast('Riga aggiunta all\'ordine con il prezzo di listino.'); }
+    else toast('Segnalazione inviata a Gres Nordest: il battiscopa torna indietro o viene stornato.');
+    o.anomalie = []; render();
+  },
+  bolla: () => { S.bolla = S.bollaFatta ? 3 : 0; renderBolla(); apriModale(); },
+  'bolla-scatta': () => {
+    S.bolla = 1; renderBolla();
+    const passi = ['Fornitore: Gres Nordest srl', 'Ordine ODA-2026-0142 trovato', '3 righe lette, 1 fuori ordine'];
+    passi.forEach((p, i) => setTimeout(() => { const el = $('#lettura'); if (el) el.insertAdjacentHTML('beforeend', `<p class="entra"><i class="bi bi-check2 text-ok"></i> ${p}</p>`); }, 450 * (i + 1)));
+    setTimeout(() => { if (S.bolla === 1 && document.body.classList.contains('modale-aperta')) { S.bolla = 2; renderBolla(); } }, 1900);
+  },
+  'bolla-conferma': () => {
+    const o = ordine('ODA-2026-0142');
+    o.righe[0].cons += S.bollaQ[0]; o.righe[1].cons += S.bollaQ[1];
+    o.bolle.forEach(b => b.nuova = false);
+    o.bolle.push({ n: 'DDT 1187', data: dmy(0), chi: 'Luca Benedetti', nuova: true });
+    o.anomalie = ['Bolla DDT 1187: battiscopa in gres 8 cm, 120 ml, non è nell\'ordine.'];
+    o.agg = true; S.bollaFatta = true; S.bolla = 3; renderBolla(); render();
+  },
+  'chiudi-modale': () => chiudiModale(),
+  'apri-sal': () => { S.salPerc = 0; S.salC = null; renderSalModale(); apriModale(); },
+  'sal-ok': () => {
+    const c = CONTRATTI.find(x => x.id === S.salC);
+    const lordo = c.importo * S.salPerc / 100 - c.gia, daF = r100(lordo * .95);
+    const n = Math.floor(c.gia / c.importo * 10) + 1;
+    SAL.forEach(x => x.nuovo = false);
+    SAL.unshift({ id: `SAL-${c.cant.replace('-', '')}-N${n}`, sub: c.sub, cant: c.cant, voce: c.voce, n, data: dmy(0), importo: daF, fatt: null, nuovo: true });
+    c.gia += lordo; c.fatto = true; S.salSel = SAL[0].id;
+    chiudiModale(); toast(`SAL inviato a ${c.sub} e all'amministrazione.`); render();
+  },
+  avanza: v => {
+    const c = CLIENTI.find(x => x.id == v); c.fase++; c.gg = 0; CLIENTI.forEach(x => x.nuovo = false); c.nuovo = true;
+    if (c.fase === FASI.length - 1 && !c.cantiere) {
+      const id = 'R-' + (32 + CANTIERI.filter(x => x.bu === 'ris').length - 3);
+      const nc = { id, nome: c.lav + ' ' + c.nome.split(' ').slice(-1)[0], luogo: c.luogo, bu: 'ris', pm: 'Marco Rizzi', avanz: 0, budget: r100(c.val * .78), dev: {}, agg: 'oggi' };
+      creaLav(nc); CANTIERI.push(nc); c.cantiere = id;
+      toast(`Passato a Marco Rizzi: nasce il cantiere ${id} con un budget di ${eur(nc.budget)}.`);
+    } else toast(`${c.nome}: ${FASI[c.fase].toLowerCase()}.`);
+    render();
+  },
+  genera: () => {
+    const box = $('#doc-prev');
+    box.innerHTML = `<div class="card p-8"><p class="font-semibold"><i class="bi bi-arrow-repeat gira"></i> Sistemo voci, capitoli e descrizioni…</p><ul class="mt-4 space-y-2 text-sm text-grigio" id="gen-l"></ul></div>`;
+    ['8 lavorazioni riconosciute negli appunti', 'Divise in 6 capitoli', `Prezzi presi dal listino ${ANNO}`, '1 voce senza prezzo a listino'].forEach((t, i) => setTimeout(() => { const l = $('#gen-l'); if (l) l.insertAdjacentHTML('beforeend', `<li class="entra"><i class="bi bi-check2 text-ok"></i> ${t}</li>`); }, 350 * (i + 1)));
+    setTimeout(() => { S.prevFatto = true; if (S.view === 'preventivi') { $('#doc-prev').innerHTML = docPreventivo(true); const b = document.querySelector('[data-a="genera"]'); if (b) b.innerHTML = '<i class="bi bi-magic"></i>Rifai il preventivo'; } }, 1700);
+  },
+  pdf: () => toast('Nella versione vera esce il PDF con la vostra carta intestata.'),
+  'manda-prev': () => {
+    if (VOCI_PREV.some(v => v[3] == null)) { toast('Prima metti il prezzo che manca (la voce in giallo).'); document.querySelector('.in-num.vuoto')?.focus(); return; }
+    CLIENTI[3].val = r100(imponibilePrev()); toast(`Preventivo inviato alla famiglia Castagna: ${eur(imponibilePrev() * 1.1)} IVA compresa.`);
+  },
+};
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]');
+  if (!el || el.disabled) return;
+  AZ[el.dataset.a]?.(el.dataset.v, el, e);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if (document.body.classList.contains('modale-aperta')) chiudiModale(); else document.body.classList.remove('menu-aperto'); }
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('tr[data-a]')) { e.preventDefault(); e.target.click(); }
+});
+$('#modale').addEventListener('click', e => { if (e.target.id === 'modale') chiudiModale(); });
+
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.prev) {
+    const [cid, i] = t.dataset.prev.split('|'), c = cant(cid), v = c.lav[i], nuovo = parseNum(t.value);
+    if (!isFinite(nuovo) || nuovo < 0) { t.value = nf(v.prev); return; }
+    if (nuovo === v.prev) return;
+    c.storico.unshift({ chi: S.ruolo === 'pm' ? 'Luca Benedetti' : 'Andrea Pregnolato', quando: 'adesso', testo: `${v.voce}: previsione da ${eur(v.prev)} a ${eur(nuovo)}` });
+    v.prev = nuovo; render(); toast('Salvato. La direzione vede già il nuovo numero.');
+  }
+  if (t.dataset.doc) { const [id, j] = t.dataset.doc.split('|'); UNITA.find(x => x.id === id).docs[j] = t.checked; render(); }
+  if (t.id === 'sal-c') { S.salC = t.value; S.salPerc = 0; renderSalModale(); }
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.dataset.prezzo != null) {
+    const v = VOCI_PREV[t.dataset.prezzo], p = parseNum(t.value);
+    v[3] = isFinite(p) && t.value.trim() !== '' ? p : null;
+    t.classList.toggle('vuoto', v[3] == null);
+    $('#imp-' + t.dataset.prezzo).innerHTML = v[3] == null ? '<span class="text-ambra text-xs">manca il prezzo</span>' : eur(v[2] * v[3]);
+    const imp = imponibilePrev(); $('#p-imp').textContent = eur(imp); $('#p-iva').textContent = eur(imp * .1); $('#p-tot').textContent = eur(imp * 1.1);
+  }
+  if (t.dataset.bq != null) {
+    const i = +t.dataset.bq, q = parseNum(t.value), r = ordine('ODA-2026-0142').righe[i];
+    if (isFinite(q) && q >= 0) { S.bollaQ[i] = q; $('#resta-' + i).textContent = nf(Math.max(0, r.ord - r.cons - q)); }
+  }
+  if (t.id === 'sal-p') {
+    S.salPerc = +t.value; const c = CONTRATTI.find(x => x.id === S.salC), l = Math.max(0, c.importo * S.salPerc / 100 - c.gia);
+    $('#sal-pv').textContent = S.salPerc + '%'; $('#sal-l').textContent = eur(l); $('#sal-r').textContent = '−' + eur(l * .05); $('#sal-f').textContent = eur(l * .95);
+    document.querySelector('[data-a="sal-ok"]').disabled = l <= 0;
+  }
+});
+
+/* controllo dei dati finti: l'esito va in console */
+function check() {
+  const esiti = [];
+  const a = (cond, msg) => { console.assert(cond, msg); esiti.push(!!cond); };
+  CANTIERI.forEach(c => {
+    const t = totC(c);
+    a(Math.abs(t.b - c.budget) <= c.lav.length * 100, `${c.id}: la somma delle lavorazioni (${t.b}) non torna con il budget (${c.budget})`);
+    c.lav.forEach(v => a(v.aut <= v.imp, `${c.id} ${v.voce}: autorizzato oltre l'impegnato`));
+  });
+  ORDINI.forEach(o => o.righe.forEach(r => a(r.fatt <= r.cons && r.cons <= r.ord, `${o.id} ${r.d}: fatturato ≤ consegnato ≤ ordinato non torna`)));
+  a(UNITA.length === cant('I-07').unita, 'le unità di I-07 non sono quante ne dichiara il cantiere');
+  CLIENTI.filter(c => c.fase === FASI.length - 1).forEach(c => a(cant(c.cantiere), `${c.nome}: passato al PM senza cantiere`));
+  CLIENTI.filter(c => c.fase < FASI.length - 1).forEach(c => a(!c.cantiere, `${c.nome}: ha già un cantiere prima di passare al PM`));
+  CLIENTI.filter(c => c.cantiere).forEach(c => { const q = cant(c.cantiere).budget / c.val; a(q >= .6 && q <= .85, `${c.cantiere}: costi al ${Math.round(q * 100)}% del contratto, fuori dal 60-85%`); });
+  a(eccezioni().length === eccezioni().filter(e => cant(e.cant)).length, 'una eccezione punta a un cantiere che non esiste');
+  const ok = esiti.filter(Boolean).length;
+  console.log(`[check] ${ok}/${esiti.length} controlli sui dati: ${ok === esiti.length ? 'dati coerenti' : 'dati incoerenti'}`);
+  return ok === esiti.length;
+}
+render(true);
+check();
+</script>
+</body>
+</html>

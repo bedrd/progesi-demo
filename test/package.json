@@ -1,0 +1,13 @@
+{
+  "name": "progesi-demo-test",
+  "private": true,
+  "description": "Giri di prova automatici della demo Progesi (Chrome headless)",
+  "scripts": {
+    "test": "node giro.js && node sala-test.js && node amm-test.js",
+    "giro": "node giro.js",
+    "sala": "node sala-test.js",
+    "amm": "node amm-test.js",
+    "verifica": "node verifica.js"
+  },
+  "dependencies": { "puppeteer-core": "23.11.1" }
+}
