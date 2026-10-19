@@ -178,11 +178,11 @@ npm test
 
 - **Sito**: Netlify, team "BD Media", progetto `progesi-demo-b376` (https://progesi-demo-b376.netlify.app). Un secondo progetto, `progesi-demo-vetro-ba3d`, mostra la stessa versione ed è da tenere o cancellare.
 - **Cosa si pubblica**: `netlify.toml` copia solo `progesi.html` in `dist/index.html` e aggiunge `X-Robots-Tag: noindex`. Transcript, PDF e demo dominicis non vanno online.
-- **Oggi** si pubblica a mano dal PC di Bedr, con la CLI di Netlify:
+- **Oggi** si pubblica a mano dal PC di Bedr, con la CLI di Netlify (da Git Bash, Mac o Linux):
   ```bash
-  npx netlify-cli deploy --prod --site 04760a10-b90e-47f4-8bde-aa7a3cbb6757
+  mkdir -p dist && cp progesi.html dist/index.html
+  npx netlify-cli deploy --prod --no-build --dir dist --site 04760a10-b90e-47f4-8bde-aa7a3cbb6757
   ```
-  Con `netlify.toml`, la CLI esegue il build e pubblica `dist`.
 - **Consigliato**: collegare il progetto Netlify a questo repo GitHub (Netlify → Project configuration → Build & deploy → Link repository). Così ogni push su `main` aggiorna il sito da solo.
 
 ## 11. Limiti noti e cose aperte
