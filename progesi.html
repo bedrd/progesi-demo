@@ -219,14 +219,14 @@
   .scena svg { display: block; width: 100%; height: auto; }
   .badge-ag { position: absolute; transform: translate(-50%, -100%); display: flex; flex-direction: column; align-items: center; gap: 3px; z-index: 1; }
   .badge-ag.attivo { z-index: 3; }
-  .badge-ag .nome { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,.96); border: 1px solid #E2E2E2; border-radius: 3px; padding: 2px 7px; font-size: 11px; font-weight: 700; color: #303030; box-shadow: 0 2px 6px rgba(48,48,48,.10); white-space: nowrap; transition: border-color .15s; }
-  .badge-ag .nome:hover { border-color: #303030; }
-  .badge-ag.sel .nome { border-color: #303030; box-shadow: 0 0 0 2px rgba(48,48,48,.18); }
+  .badge-ag .nome { display: inline-flex; align-items: center; gap: 4px; background: none; border: 0; border-radius: 2px; padding: 1px 2px; font-size: 11px; font-weight: 700; color: #303030; text-shadow: 0 0 2px #fff, 0 0 3px #fff, 0 0 6px rgba(255,255,255,.95); white-space: nowrap; cursor: pointer; }
+  .badge-ag .nome:hover .testo { color: #DD0000; }
+  .badge-ag.sel .testo { text-decoration: underline 2px #303030; text-underline-offset: 3px; }
   .badge-ag .punto { width: 7px; height: 7px; border-radius: 99px; flex: none; position: relative; }
   .badge-ag.attivo .punto::after { content: ""; position: absolute; inset: -3px; border-radius: 99px; border: 1.5px solid currentColor; animation: anello 1.4s ease-out infinite; }
   @keyframes anello { from { transform: scale(.6); opacity: 1; } to { transform: scale(1.8); opacity: 0; } }
-  .fumetto { background: #fff; border: 1px solid #E2E2E2; border-radius: 3px; padding: 4px 8px; font-size: 11px; line-height: 1.3; max-width: 210px; width: max-content; text-align: left; color: #303030; box-shadow: 0 6px 16px -6px rgba(48,48,48,.28); animation: pop .25s ease-out; }
-  .fumetto b { font-weight: 700; }
+  .fumetto { background: rgba(48,48,48,.92); color: #fff; border: 0; border-radius: 3px; padding: 3px 7px; font-size: 11px; line-height: 1.3; max-width: 200px; width: max-content; text-align: left; box-shadow: 0 4px 12px -6px rgba(0,0,0,.4); animation: pop .25s ease-out; }
+  .fumetto b { font-weight: 700; color: #fff; }
   .slot-f { display: contents; }
   /* sala per stanze: la scena si mette a fuoco sulla stanza scelta, gli agenti di fuori si spengono */
   .scena-vista { overflow: hidden; border-radius: 4px; }
@@ -234,13 +234,17 @@
   @media (prefers-reduced-motion: reduce) { .scena { transition: none; } }
   .badge-ag { transition: opacity .3s; }
   .badge-ag.spento, .badge-ag.fuori { opacity: .32; }
-  .badge-ag .conta { font-size: 10px; font-weight: 700; color: #fff; background: #B45309; border-radius: 99px; padding: 0 5px; line-height: 15px; margin-left: 1px; }
-  .stanza { position: absolute; transform: translate(-50%, -50%); z-index: 2; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.94); border: 1px solid #D6D6D6; border-radius: 3px; padding: 3px 9px; font-family: Ubuntu, sans-serif; font-weight: 500; font-size: 12px; color: #303030; white-space: nowrap; transition: border-color .15s, opacity .3s; }
-  .stanza:hover, .stanza.sel { border-color: #303030; }
-  .stanza.sel { box-shadow: 0 0 0 2px rgba(48,48,48,.18); }
-  .stanza .per-voi { font-family: Lato, sans-serif; font-weight: 700; font-size: 11px; color: #B45309; }
-  .stanza.spenta { opacity: .45; }
-  @media (max-width: 1023px) { .stanza { font-size: 10px; padding: 2px 6px; } .stanza .per-voi { font-size: 10px; } }
+  @media (min-width: 768px) { .badge-ag .nome:has(.conta) .punto { display: none; } }
+  .badge-ag .conta { display: inline-flex; align-items: center; justify-content: center; min-width: 15px; height: 15px; padding: 0 4px; font-size: 10px; font-weight: 700; color: #fff; background: #DD0000; border-radius: 99px; line-height: 1; text-shadow: none; box-shadow: 0 0 0 1.5px rgba(255,255,255,.9); }
+  .conta-leg { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; font-size: 9px; font-weight: 700; color: #fff; background: #DD0000; border-radius: 99px; }
+  /* nome del reparto stampato sul tappeto: stessa prospettiva del pavimento, misura che segue la scena */
+  .scena { container-type: inline-size; }
+  .stanza { position: absolute; z-index: 2; transform-origin: 0 0; transform: matrix(.866, -.5, .866, .5, 0, 0) translateY(-100%); display: inline-flex; align-items: center; gap: .45em; padding: .1em .15em; background: none; border: 0; font-family: Ubuntu, sans-serif; font-weight: 700; font-size: 1.5cqw; line-height: 1; letter-spacing: .08em; text-transform: uppercase; color: #DD0000; white-space: nowrap; cursor: pointer; transition: opacity .3s, color .15s; }
+  .stanza .nome-st { border-bottom: .12em solid transparent; padding-bottom: .06em; }
+  .stanza:hover .nome-st { border-bottom-color: rgba(221,0,0,.35); }
+  .stanza.sel .nome-st { border-bottom-color: #DD0000; }
+  .stanza .n-st { display: inline-flex; align-items: center; justify-content: center; min-width: 1.5em; height: 1.5em; padding: 0 .3em; border-radius: 99px; background: #DD0000; color: #fff; font-family: Lato, sans-serif; font-size: .72em; letter-spacing: 0; }
+  .stanza.spenta, .stanza.fuori { opacity: .38; }
   @media (max-width: 767px) { .stanza { display: none; } }
   .fumetto { pointer-events: none; }
   @keyframes pop { from { opacity: 0; transform: translateY(4px) scale(.96); } to { opacity: 1; transform: none; } }
@@ -1994,10 +1998,10 @@ Object.assign(FORM, {
    quindi quello che approvate qui risulta fatto anche là, e viceversa. */
 const SALA = (() => {
   const REP = [
-    { id: 'comm', nome: 'Commerciale', colore: '#4A6378' },
-    { id: 'cont', nome: 'Contabilità', colore: '#2E7D4F' },
-    { id: 'oper', nome: 'Operatività', colore: '#8A5A2B' },
-    { id: 'rh', nome: 'Risorse umane', colore: '#6B5B8A' },
+    { id: 'comm', nome: 'Commerciale', colore: '#DD0000' },
+    { id: 'cont', nome: 'Contabilità', colore: '#303030' },
+    { id: 'oper', nome: 'Operatività', colore: '#A3160F' },
+    { id: 'rh', nome: 'Risorse umane', colore: '#E0645C' },
   ];
   const FONTI = { sdi: ['SdI (tramite intermediario)', 'bi-send-check'], ord: ['Preventivi e ordini', 'bi-kanban'], sto: ['Storico dei lavori', 'bi-graph-up-arrow'], cli: ['Schede cliente', 'bi-person-vcard'], con: ['Contratti', 'bi-arrow-repeat'], mail: ['Casella dell\'ufficio', 'bi-envelope'], fatt: ['Fatture', 'bi-receipt'], banca: ['Estratto conto', 'bi-bank'], forn: ['Ordini fornitori', 'bi-truck'], agenda: ['Agenda dei tecnici', 'bi-calendar-week'], doc: ['Archivio documenti', 'bi-folder2-open'], timb: ['Timbratore', 'bi-clock-history'] };
   const AG = [
@@ -2137,23 +2141,62 @@ const SALA = (() => {
     ZONE = REP.map((r, i) => { const x0 = X0 + i * (zw + gap), membri = AG.filter(a => a.rep === r.id), righe = Math.max(1, membri.length), passo = righe <= 2 ? 3.6 : 2.9, y0 = righe <= 2 ? 7.4 : 6.9;
       membri.forEach((a, k) => { a.x = x0 + zw / 2; a.y = y0 + k * passo; });
       return { r, x0, x1: x0 + zw, y0: y0 - 1.9, y1: y0 + (righe - 1) * passo + 1.4 }; });
+    // il fuoco guarda le postazioni; i tappeti hanno tutti la stessa lunghezza
+    const ya = Math.min(...ZONE.map(z => z.y0)), yb = Math.max(...ZONE.map(z => z.y1));
+    ZONE.forEach(z => { z.fy0 = z.y0; z.fy1 = z.y1; z.y0 = ya; z.y1 = yb; });
     COORD.x = 8.1; COORD.y = 2.75;
   }
+  // persone: carnagioni, capelli e vestiti diversi, in toni naturali e neutri
+  const PELLE = ['#E9C6A4', '#C8996F', '#F2D4BA', '#A97A58', '#DDB28C'], CAPELLI = ['#2B2420', '#5B3B28', '#1E1E1E', '#8A6A48', '#3E2C22', '#B39070'];
+  const ABITI = ['#3A3A3A', '#ECE8E1', '#5A5A5A', '#FFFFFF', '#2E2E2E', '#D9D6D0', '#46403C', '#F4F1EC', '#3A3A3A', '#E6E1D8', '#505050'];
+  const SCHERMO = ['#D8DFE4', '#F6F8FA'];
+  const ellisse = (x, y, z, r, fill) => { const [cx, cy] = P(x, y, z); return `<ellipse cx="${f1(cx)}" cy="${f1(cy)}" rx="${f1(r * C * SC * 1.414)}" ry="${f1(r * 0.5 * SC * 1.414)}" fill="${fill}"/>`; };
+  function sedia(x, y, c, schienale = true) {
+    // base a stella vista come un disco, pistone, seduta e schienale nel colore del reparto
+    let s = ellisse(x, y, 0.02, 0.3, '#2A2A2A') + cubo(x - 0.035, y - 0.035, 0.02, 0.07, 0.07, 0.33, '#2A2A2A') + cubo(x - 0.3, y - 0.27, 0.35, 0.6, 0.56, 0.08, c);
+    return { base: s, schienale: schienale ? cubo(x - 0.28, y + 0.25, 0.47, 0.56, 0.07, 0.6, c) + cubo(x - 0.025, y + 0.27, 0.4, 0.05, 0.04, 0.1, '#2A2A2A') : '' };
+  }
+  function persona(a, i, x, y) {
+    const [tx, ty] = P(x, y, 0.44), sy = ty - 0.74 * SC, ab = ABITI[i % ABITI.length], pe = PELLE[i % PELLE.length], ca = CAPELLI[(i * 2 + 1) % CAPELLI.length], r = 0.165 * SC, hy = sy - 3.2 - r, lunghi = [1, 4, 6, 9].includes(i);
+    const mano = (wx, wy) => P(wx, wy, 0.78);
+    const [m1x, m1y] = mano(x - 0.16, y - 0.62), [m2x, m2y] = mano(x + 0.2, y - 0.62);
+    let s = `<path d="M${f1(tx - 8)} ${f1(sy + 4)} L${f1(m1x)} ${f1(m1y)}" stroke="${shade(ab, -.12)}" stroke-width="3.4" stroke-linecap="round"/><path d="M${f1(tx + 8)} ${f1(sy + 4)} L${f1(m2x)} ${f1(m2y)}" stroke="${shade(ab, -.12)}" stroke-width="3.4" stroke-linecap="round"/>`;
+    s += `<circle cx="${f1(m1x)}" cy="${f1(m1y)}" r="1.9" fill="${pe}"/><circle cx="${f1(m2x)}" cy="${f1(m2y)}" r="1.9" fill="${pe}"/>`;
+    s += `<path d="M${f1(tx - 7)} ${f1(ty)} L${f1(tx - 9.6)} ${f1(sy + 5)} Q${f1(tx - 10.4)} ${f1(sy)} ${f1(tx - 5.5)} ${f1(sy - 0.6)} L${f1(tx + 5.5)} ${f1(sy - 0.6)} Q${f1(tx + 10.4)} ${f1(sy)} ${f1(tx + 9.6)} ${f1(sy + 5)} L${f1(tx + 7)} ${f1(ty)} Z" fill="${ab}" stroke="${shade(ab, -.18)}" stroke-width="0.6"/>`;
+    s += `<path d="M${f1(tx + 1)} ${f1(sy - 0.4)} L${f1(tx + 5.5)} ${f1(sy - 0.6)} Q${f1(tx + 10.4)} ${f1(sy)} ${f1(tx + 9.6)} ${f1(sy + 5)} L${f1(tx + 7)} ${f1(ty)} L${f1(tx + 1)} ${f1(ty)} Z" fill="#000" opacity="0.07"/>`;
+    s += `<rect x="${f1(tx - 2.1)}" y="${f1(sy - 3.6)}" width="4.2" height="4.4" rx="1.2" fill="${shade(pe, -.08)}"/>`;
+    if (lunghi) s += `<path d="M${f1(tx - r - 0.6)} ${f1(hy)} L${f1(tx - r + 0.4)} ${f1(sy + 3.5)} L${f1(tx + r - 0.4)} ${f1(sy + 3.5)} L${f1(tx + r + 0.6)} ${f1(hy)} Z" fill="${ca}"/>`;
+    s += `<circle cx="${f1(tx)}" cy="${f1(hy)}" r="${f1(r)}" fill="${pe}"/><path d="M${f1(tx - r - 0.5)} ${f1(hy + 1.2)} A${f1(r + 0.5)} ${f1(r + 0.5)} 0 1 1 ${f1(tx + r + 0.5)} ${f1(hy + 1.2)} Q${f1(tx)} ${f1(hy + (lunghi ? 4.2 : 2.6))} ${f1(tx - r - 0.5)} ${f1(hy + 1.2)} Z" fill="${ca}"/>`;
+    s += `<ellipse cx="${f1(tx + r * 0.92)}" cy="${f1(hy + 1.4)}" rx="1.3" ry="1.8" fill="${shade(pe, -.06)}"/>`;
+    return { s, hy };
+  }
   function postazione(a) {
-    const { x, y } = a, dx = x - 1.1, dy = y - 1.55, c = col(a);
-    let s = '<g>' + cubo(dx, dy, 0, 2.2, 1.1, 0.74, '#E4D5BC') + cubo(dx + 0.1, dy + 0.1, 0, 0.12, 0.9, 0.7, '#C2AE8E') + cubo(dx + 1.98, dy + 0.1, 0, 0.12, 0.9, 0.7, '#C2AE8E');
-    s += cubo(x - 0.48, dy + 0.18, 0.74, 0.96, 0.1, 0.6, '#2B2F33');
-    s += `<polygon id="schermo-${a.id}" points="${pts([P(x - 0.42, dy + 0.28, 0.8), P(x + 0.42, dy + 0.28, 0.8), P(x + 0.42, dy + 0.28, 1.28), P(x - 0.42, dy + 0.28, 1.28)])}" fill="${shade(c, .35)}"/>`;
-    s += cubo(x - 0.08, dy + 0.3, 0.74, 0.16, 0.16, 0.08, '#2B2F33') + cubo(x - 0.3, dy + 0.62, 0.74, 0.6, 0.22, 0.03, '#F4F1EC');
-    s += cubo(x - 0.32, y - 0.05, 0.34, 0.64, 0.6, 0.1, '#3C3A3B') + cubo(x - 0.04, y + 0.2, 0, 0.08, 0.08, 0.34, '#2A2829');
-    const [bx, by] = P(x, y + 0.25, 0.95), [hx, hy] = P(x, y + 0.25, 1.52), r = 0.2 * SC;
-    s += `<ellipse cx="${f1(bx)}" cy="${f1(by)}" rx="${f1(0.31 * SC)}" ry="${f1(0.4 * SC)}" fill="${c}"/><ellipse cx="${f1(bx)}" cy="${f1(by - 0.28 * SC)}" rx="${f1(0.33 * SC)}" ry="${f1(0.14 * SC)}" fill="${shade(c, .14)}"/>`;
-    s += `<circle cx="${f1(hx)}" cy="${f1(hy)}" r="${f1(r)}" fill="#E5C4A2"/><path d="M${f1(hx - r)} ${f1(hy)} a${f1(r)} ${f1(r)} 0 0 1 ${f1(2 * r)} 0 z" fill="#3A2E2A"/>`;
-    return s + `<rect x="${f1(bx - 0.5 * SC)}" y="${f1(hy - 0.4 * SC)}" width="${SC}" height="${f1(1.3 * SC)}" fill="transparent" data-a="sala-ag" data-v="${a.id}" style="cursor:pointer"><title>${a.nome}</title></rect></g>`;
+    const { x, y } = a, dx = x - 1.1, dy = y - 1.55, c = col(a), i = AG.indexOf(a);
+    // scrivania: piano bianco panna, fianchi sottili antracite
+    let s = '<g>' + cubo(dx + 0.12, dy + 0.12, 0, 0.05, 0.86, 0.7, '#3A3A3A') + cubo(dx + 2.03, dy + 0.12, 0, 0.05, 0.86, 0.7, '#3A3A3A') + cubo(dx + 0.12, dy + 0.12, 0.58, 1.96, 0.03, 0.08, '#3A3A3A');
+    s += cubo(dx, dy, 0.7, 2.2, 1.1, 0.045, '#F7F5F1');
+    // monitor sottile con l'interfaccia di Progesi
+    s += cubo(x - 0.22, dy + 0.12, 0.745, 0.44, 0.22, 0.02, '#3A3A3A') + cubo(x - 0.035, dy + 0.19, 0.765, 0.07, 0.04, 0.14, '#3A3A3A');
+    s += cubo(x - 0.5, dy + 0.2, 0.88, 1.0, 0.04, 0.6, '#1F2124');
+    const ys = dy + 0.24, q = (x0, x1, z0, z1) => pts([P(x0, ys, z0), P(x1, ys, z0), P(x1, ys, z1), P(x0, ys, z1)]);
+    s += `<polygon id="schermo-${a.id}" points="${q(x - 0.46, x + 0.46, 0.92, 1.44)}" fill="${SCHERMO[0]}"/>`;
+    s += `<polygon points="${q(x - 0.46, x + 0.46, 1.38, 1.44)}" fill="#DD0000"/>`;
+    [[1.3, 0.62], [1.22, 0.4], [1.14, 0.52], [1.06, 0.3]].forEach(([z, w]) => { s += `<polygon points="${q(x - 0.4, x - 0.4 + w, z - 0.03, z)}" fill="#AEB6BD"/>`; });
+    s += `<polygon points="${q(x + 0.16, x + 0.4, 0.98, 1.3)}" fill="#C9D0D6"/>`;
+    // tastiera, mouse e un oggetto sulla scrivania
+    s += cubo(x - 0.32, dy + 0.6, 0.745, 0.64, 0.2, 0.025, '#FFFFFF') + cubo(x + 0.44, dy + 0.66, 0.745, 0.1, 0.14, 0.03, '#FFFFFF');
+    s += i % 2 ? cubo(dx + 1.72, dy + 0.22, 0.745, 0.3, 0.4, 0.04, '#DD0000') + cubo(dx + 1.74, dy + 0.24, 0.785, 0.26, 0.36, 0.015, '#F7F5F1') : cubo(dx + 0.3, dy + 0.28, 0.745, 0.13, 0.13, 0.14, '#FFFFFF') + cubo(dx + 0.31, dy + 0.29, 0.885, 0.11, 0.11, 0.005, '#6B4A33');
+    // sedia, persona, schienale davanti
+    const se = sedia(x, y + 0.25, shade(c, 0)), pr = persona(a, i, x, y + 0.25);
+    s += se.base + pr.s + se.schienale;
+    const [bx] = P(x, y + 0.25, 0.95);
+    return s + `<rect x="${f1(bx - 0.5 * SC)}" y="${f1(pr.hy - 0.3 * SC)}" width="${SC}" height="${f1(1.3 * SC)}" fill="transparent" data-a="sala-ag" data-v="${a.id}" style="cursor:pointer"><title>${a.nome}</title></rect></g>`;
   }
   function pianta(x, y, alta = 1) {
-    let s = cubo(x - 0.28, y - 0.28, 0, 0.56, 0.56, 0.5, '#C9774E');
-    [[0, 0, 1.05, 0.42, '#5E8C4F'], [-0.18, 0.1, 0.85, 0.3, '#6E9E5C'], [0.2, -0.05, 0.9, 0.3, '#4F7A42'], [0, 0, 1.45 * alta, 0.3, '#7AAE68']].forEach(([ox, oy, z, rr, c]) => { const [cx, cy] = P(x + ox, y + oy, z); s += `<circle cx="${f1(cx)}" cy="${f1(cy)}" r="${f1(rr * SC)}" fill="${c}"/>`; });
+    // vaso antracite, foglie lunghe in verdi naturali
+    let s = cubo(x - 0.24, y - 0.24, 0, 0.48, 0.48, 0.46, '#3A3A3A') + cubo(x - 0.2, y - 0.2, 0.46, 0.4, 0.4, 0.005, '#4A3A2E');
+    const [bx, by] = P(x, y, 0.48), h = 1.05 * alta * SC;
+    [[-34, 0.62, '#3E6B45'], [32, 0.6, '#3E6B45'], [-14, 0.9, '#4F7F52'], [14, 0.86, '#4F7F52'], [-58, 0.5, '#5E9160'], [56, 0.48, '#5E9160'], [0, 1, '#5A8A5B']].forEach(([ang, l, c]) => { const ry = h * l / 2; s += `<ellipse cx="${f1(bx)}" cy="${f1(by - ry)}" rx="${f1(ry * 0.26)}" ry="${f1(ry)}" fill="${c}" transform="rotate(${ang} ${f1(bx)} ${f1(by)})"/>`; });
     return s;
   }
   function finestra(asse, a0, a1) {
@@ -2172,7 +2215,7 @@ const SALA = (() => {
     let s = poly([P(BX0 - .1, 0, BZ1 - BH - .1), P(BX0 + BW + .1, 0, BZ1 - BH - .1), P(BX0 + BW + .1, 0, BZ1 + .1), P(BX0 - .1, 0, BZ1 + .1)], '#15181A') + poly([P(BX0, 0, BZ1 - BH), P(BX0 + BW, 0, BZ1 - BH), P(BX0 + BW, 0, BZ1), P(BX0, 0, BZ1)], '#23282B');
     const cw = (BW - 0.7) / 3;
     const celle = LAVAGNA.map(([t, v], i) => { const u = 0.35 + (i % 3) * cw, w = 1.2 + Math.floor(i / 3) * 1.15; return `<text x="${u}" y="${w}" font-size="0.21" fill="#A9B0B3" font-family="Lato">${t}</text><text id="k-${i}" x="${u}" y="${w + 0.58}" font-size="0.46" fill="#FFFFFF" font-family="Ubuntu" font-weight="500">${v()}</text>`; }).join('');
-    return s + `<g transform="${suParete(BX0, BZ1)}"><text x="0.35" y="0.55" font-size="0.26" fill="#F0A8A8" font-family="Ubuntu" font-weight="500">Oggi da Progesi</text><circle cx="${BW - 0.5}" cy="0.47" r="0.07" fill="#5BC48A"/><text x="${BW - 0.62}" y="0.55" font-size="0.2" fill="#A9B0B3" text-anchor="end" font-family="Lato">dal vivo</text><line x1="0.35" y1="0.75" x2="${BW - 0.35}" y2="0.75" stroke="#3A4044" stroke-width="0.02"/>${celle}</g>`;
+    return s + `<g transform="${suParete(BX0, BZ1)}"><rect x="0.35" y="0.26" width="0.06" height="0.34" fill="#DD0000"/><text x="0.5" y="0.55" font-size="0.26" fill="#FFFFFF" font-family="Ubuntu" font-weight="500">Oggi da Progesi</text><circle cx="${BW - 0.5}" cy="0.47" r="0.07" fill="#5BC48A"/><text x="${BW - 0.62}" y="0.55" font-size="0.2" fill="#A9B0B3" text-anchor="end" font-family="Lato">dal vivo</text><line x1="0.35" y1="0.75" x2="${BW - 0.35}" y2="0.75" stroke="#3A4044" stroke-width="0.02"/>${celle}</g>`;
   }
   let SVG = '';
   function scena() {
@@ -2180,27 +2223,34 @@ const SALA = (() => {
     disponi();
     const L = [], add = (k, svg) => L.push({ k, svg });
     let s = `<defs><linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D3E3EA"/><stop offset="1" stop-color="#EFF4F2"/></linearGradient></defs>`;
-    s += poly([P(0, D, 0), P(W, D, 0), P(W, D, -0.35), P(0, D, -0.35)], '#CDBB9F') + poly([P(W, 0, 0), P(W, D, 0), P(W, D, -0.35), P(W, 0, -0.35)], '#B9A487') + poly([P(0, 0), P(W, 0), P(W, D), P(0, D)], '#EBDEC7');
-    for (let j = 1; j < D; j++) s += linea(P(0, j), P(W, j), '#DDCDB1', 0.8);
-    s += poly([P(0, 0), P(W, 0), P(W, 0, H), P(0, 0, H)], '#F3EEE6') + poly([P(0, 0), P(0, D), P(0, D, H), P(0, 0, H)], '#E8E1D6');
-    s += poly([P(0, 0, 0), P(W, 0, 0), P(W, 0, 0.18), P(0, 0, 0.18)], '#E2D9CC') + poly([P(0, 0, 0), P(0, D, 0), P(0, D, 0.18), P(0, 0, 0.18)], '#DAD0C3');
-    s += poly([P(-0.3, -0.3, H), P(W, -0.3, H), P(W, 0, H), P(0, 0, H)], '#D7CEC2') + poly([P(-0.3, -0.3, H), P(0, 0, H), P(0, D, H), P(-0.3, D, H)], '#CFC5B8');
+    s += poly([P(0, D, 0), P(W, D, 0), P(W, D, -0.35), P(0, D, -0.35)], '#D6CBBB') + poly([P(W, 0, 0), P(W, D, 0), P(W, D, -0.35), P(W, 0, -0.35)], '#C4B7A5') + poly([P(0, 0), P(W, 0), P(W, D), P(0, D)], '#EFE9E0');
+    for (let j = 1; j < D; j++) s += linea(P(0, j), P(W, j), '#E4DCCF', 0.8);
+    for (let k = 0; k < D; k++) for (let i = (k % 2) * 1.5 + 1.5; i < W; i += 3) s += linea(P(i, k), P(i, k + 1), '#E7E0D4', 0.6);
+    s += poly([P(0, 0), P(W, 0), P(W, 0, H), P(0, 0, H)], '#F8F6F2') + poly([P(0, 0), P(0, D), P(0, D, H), P(0, 0, H)], '#EFECE6');
+    s += poly([P(0, 0, 0), P(W, 0, 0), P(W, 0, 0.18), P(0, 0, 0.18)], '#E4E0D9') + poly([P(0, 0, 0), P(0, D, 0), P(0, D, 0.18), P(0, 0, 0.18)], '#DCD7CF');
+    s += poly([P(-0.3, -0.3, H), P(W, -0.3, H), P(W, 0, H), P(0, 0, H)], '#DEDAD3') + poly([P(-0.3, -0.3, H), P(0, 0, H), P(0, D, H), P(-0.3, D, H)], '#D4CFC7');
     s += finestra('x', 1.2, 4.8) + finestra('x', 6.4, 9.8) + finestra('x', 20.4, 21.7) + finestra('y', 1.6, 4.6) + finestra('y', 6.2, 9.2) + finestra('y', 10.8, 13.8) + '<g id="lavagna">' + lavagna() + '</g>';
     const [ox, oy] = P(BX0 - 0.9, 0, 4.2);
     s += `<circle cx="${f1(ox)}" cy="${f1(oy)}" r="13" fill="#FFFFFF" stroke="#CFC6BA" stroke-width="2"/><line id="lancetta-h" x1="${f1(ox)}" y1="${f1(oy)}" x2="${f1(ox)}" y2="${f1(oy - 6)}" stroke="#303030" stroke-width="2" stroke-linecap="round"/><line id="lancetta-m" x1="${f1(ox)}" y1="${f1(oy)}" x2="${f1(ox)}" y2="${f1(oy - 9.5)}" stroke="#303030" stroke-width="1.3" stroke-linecap="round"/>`;
-    ZONE.forEach(z => { s += poly([P(z.x0, z.y0), P(z.x1, z.y0), P(z.x1, z.y1), P(z.x0, z.y1)], rgba(z.r.colore, 0.08), `stroke="${rgba(z.r.colore, 0.22)}" stroke-width="1"`);
-    });
-    s += poly([P(5.6, 0.15), P(10.6, 0.15), P(10.6, 4.2), P(5.6, 4.2)], '#F1E7D6') + `<text transform="${suPavimento(5.8, 4.0)}" font-size="0.3" letter-spacing="0.06" fill="#8E7F70" font-family="Ubuntu" font-weight="500">REGIA</text>`;
-    const g = 'fill="rgba(196,219,228,0.28)" stroke="rgba(110,135,148,0.55)" stroke-width="1.2"', gh = 2.7;
+    // tappeti: grigio chiarissimo con un bordo tessuto; il nome del reparto è stampato sopra, sul lato est (vedi stanze())
+    const tappeto = (x0, y0, x1, y1) => poly([P(x0, y0), P(x1, y0), P(x1, y1), P(x0, y1)], '#E2DFDA', 'stroke="#D3CFC8" stroke-width="1"') + poly([P(x0 + .18, y0 + .18), P(x1 - .18, y0 + .18), P(x1 - .18, y1 - .18), P(x0 + .18, y1 - .18)], 'none', 'stroke="#ECEAE6" stroke-width="1.3"');
+    ZONE.forEach(z => { s += tappeto(z.x0, z.y0, z.x1, z.y1); });
+    s += tappeto(5.6, 0.15, 10.6, 4.2) + `<text transform="matrix(${f1(C * SC)} ${f1(-0.5 * SC)} ${f1(C * SC)} ${f1(0.5 * SC)} ${f1(P(10.32, 2.8)[0])} ${f1(P(10.32, 2.8)[1])})" font-size="0.42" letter-spacing="0.08" fill="#DD0000" font-family="Ubuntu" font-weight="700">REGIA</text>`;
+    const g = 'fill="rgba(214,226,232,0.24)" stroke="rgba(120,130,138,0.5)" stroke-width="1.2"', gh = 2.7;
     add(5.7, `<polygon points="${pts([P(5.6, 0.15), P(5.6, 4.2), P(5.6, 4.2, gh), P(5.6, 0.15, gh)])}" ${g}/>`);
     add(14.8, `<polygon points="${pts([P(10.6, 0.15), P(10.6, 4.2), P(10.6, 4.2, gh), P(10.6, 0.15, gh)])}" ${g}/>`);
     add(15, `<polygon points="${pts([P(5.6, 4.2), P(10.6, 4.2), P(10.6, 4.2, gh), P(5.6, 4.2, gh)])}" ${g}/>` + [6.85, 8.1, 9.35].map(x => linea(P(x, 4.2), P(x, 4.2, gh), 'rgba(110,135,148,0.45)', 1)).join(''));
     AG.forEach(a => add(a.x + a.y, postazione(a)));
-    const piante = [[0.9, 0.9], [11.2, 0.9, 0.8], [21.0, 1.0], [0.9, 14.1], [21.0, 14.1]];
+    { const z = ZONE.find(q => q.r.id === 'rh'), cx = (z.x0 + z.x1) / 2 - 0.35, cy = z.y1 - 3.2, c = z.r.colore;
+      const s1 = sedia(cx - 0.95, cy, c, false), s2 = sedia(cx + 0.95, cy, c, false);
+      add(cx - 0.95 + cy, s1.base + cubo(cx - 1.3, cy - 0.27, 0.43, 0.08, 0.56, 0.42, c));
+      add(cx + cy, cubo(cx - 0.05, cy - 0.05, 0, 0.1, 0.1, 0.68, '#3A3A3A') + ellisse(cx, cy, 0.02, 0.28, '#3A3A3A') + cubo(cx - 0.5, cy - 0.5, 0.68, 1.0, 1.0, 0.045, '#F7F5F1'));
+      add(cx + 0.95 + cy, s2.base + cubo(cx + 1.22, cy - 0.27, 0.43, 0.08, 0.56, 0.42, c)); }
+    const piante = [[0.9, 0.9], [11.2, 0.9, 0.8], [21.0, 1.0], [0.9, 14.1], [21.55, 14.55, 0.9]];
     ZONE.slice(0, -1).forEach(z => piante.push([z.x1 + 0.3, z.y0 - 0.4, 0.85]));
     piante.forEach(([x, y, h]) => add(x + y, pianta(x, y, h || 1)));
-    add(0.3 + 9.4, cubo(0.25, 6.2, 0.5, 0.25, 3.2, 0.55, '#8E9A93') + cubo(0.25, 6.2, 0, 1.0, 3.2, 0.5, '#9CA8A1') + cubo(0.5, 6.2, 0.5, 0.75, 0.25, 0.25, '#8E9A93') + cubo(0.5, 9.15, 0.5, 0.75, 0.25, 0.25, '#8E9A93'));
-    add(1.5 + 3.4, cubo(0.4, 2.2, 0, 0.9, 1.6, 1.6, '#D9D3C9') + cubo(0.55, 2.4, 1.6, 0.6, 0.6, 0.5, '#C9DCE3'));
+    add(0.3 + 9.4, cubo(0.25, 6.2, 0.45, 0.25, 3.2, 0.55, '#424242') + cubo(0.25, 6.2, 0, 1.0, 3.2, 0.45, '#4A4A4A') + cubo(0.5, 6.95, 0.45, 0.13, 0.6, 0.42, '#DD0000') + cubo(0.5, 8.4, 0.45, 0.13, 0.6, 0.42, '#DD0000') + cubo(0.5, 6.2, 0.45, 0.75, 0.22, 0.24, '#424242') + cubo(0.5, 9.18, 0.45, 0.75, 0.22, 0.24, '#424242'));
+    add(1.5 + 3.4, cubo(0.4, 2.2, 0, 0.9, 1.6, 1.6, '#EDEBE7') + cubo(0.55, 2.4, 1.6, 0.6, 0.6, 0.3, '#3A3A3A') + cubo(0.6, 2.45, 1.9, 0.5, 0.4, 0.02, '#FFFFFF'));
     L.sort((a, b) => a.k - b.k);
     s += L.map(o => o.svg).join('') + '<g id="docs"></g>';
     SVG = `<svg viewBox="0 0 ${VBW} ${VBH}" role="img" aria-label="Ufficio di Progesi con gli agenti AI alle loro postazioni">${s}</svg>`;
@@ -2210,13 +2260,13 @@ const SALA = (() => {
   /* ---------- pezzi dell'interfaccia ---------- */
   const quando = t => { const m = Math.round((Date.now() - t) / 60000); return m < 1 ? 'adesso' : m === 1 ? '1 minuto fa' : m < 60 ? `${m} minuti fa` : m < 24 * 60 ? `${Math.floor(m / 60)} h fa` : 'ieri'; };
   const fuocoRep = () => st.stanza || (st.sel && ag(st.sel).rep) || null;
-  const puntoDi = a => (a === COORD ? decisioni().length : nPerVoi(a)) ? '#B45309' : col(a);
+  const puntoDi = a => (a === COORD ? decisioni().length : nPerVoi(a)) ? '#DD0000' : col(a);
   const classiBadge = a => { const f = fuocoRep(); return { attivo: !!st.attivi[a.id], sel: st.sel === a.id, spento: a !== COORD && !mioReparto(a), fuori: !!f && a !== COORD && a.rep !== f }; };
   function badges() {
     return AG.map(a => { const [px, py] = P(a.x, a.y + 0.25, 2.05), f = st.fumetti[a.id], c = classiBadge(a), punto = puntoDi(a);
       return `<div class="badge-ag ${Object.keys(c).filter(k => c[k]).join(' ')}" data-ag="${a.id}" style="left:${(px / VBW * 100).toFixed(2)}%;top:${(py / VBH * 100).toFixed(2)}%"><div class="slot-f">${f ? `<div class="fumetto">${f}</div>` : ''}</div><button class="nome" data-a="sala-ag" data-v="${a.id}" aria-label="${a.nome}"><span class="punto" style="background:${punto};color:${punto}"></span><span class="testo">${testoBadge(a)}</span></button></div>`; }).join('');
   }
-  const testoBadge = a => { if (a === COORD) { const n = decisioni().length; return `${a.nome} <span class="font-normal text-grigio">· ${n ? `aspetta voi (${n})` : 'tutto deciso'}</span>`; } const k = nPerVoi(a); return `${a.nome}${k ? `<span class="conta" title="${k} per voi">${k}</span>` : ''}`; };
+  const testoBadge = a => { const k = a === COORD ? decisioni().length : nPerVoi(a); return `${a.nome}${k ? `<span class="conta" title="${k} per voi">${k}</span>` : ''}`; };
   function aggiornaBadges() {
     const box = $('#badges'); if (!box) return;
     if (box.children.length !== AG.length) { box.innerHTML = badges(); return; }
@@ -2226,15 +2276,16 @@ const SALA = (() => {
       if (slot.innerHTML !== html) slot.innerHTML = html;
       const t = el.querySelector('.testo'), h = testoBadge(a); if (t.innerHTML !== h) t.innerHTML = h; el.querySelector('.punto').style.background = puntoDi(a); });
   }
-  // le stanze: etichetta sul pavimento, cliccabile, con quante decisioni aspettano voi
+  // le stanze: il nome del reparto è stampato sul tappeto, lato est, e segue la prospettiva del pavimento.
+  // È un pulsante: cliccandolo la stanza va a fuoco. Accanto, il numerino delle decisioni che aspettano voi.
   function stanze() {
-    return ZONE.map(z => { const [px, py] = P((z.x0 + z.x1) / 2, z.y1 + 0.8, 0), n = sum(AG.filter(a => a.rep === z.r.id), nPerVoi), mio = mioReparto({ rep: z.r.id });
-      return `<button class="stanza ${fuocoRep() === z.r.id ? 'sel' : ''} ${mio ? '' : 'spenta'}" data-a="sala-stanza" data-v="${z.r.id}" style="left:${(px / VBW * 100).toFixed(2)}%;top:${(py / VBH * 100).toFixed(2)}%" aria-label="Stanza ${z.r.nome}${n ? `, ${n} per voi` : ''}"><span class="w-2 h-2 rounded-full" style="background:${z.r.colore}"></span>${z.r.nome}${n ? `<span class="per-voi">· ${n} per voi</span>` : ''}</button>`; }).join('');
+    return ZONE.map(z => { const [px, py] = P(z.x1 - 0.3, z.y1 - 0.9, 0), n = sum(AG.filter(a => a.rep === z.r.id), nPerVoi), mio = mioReparto({ rep: z.r.id });
+      return `<button class="stanza ${fuocoRep() === z.r.id ? 'sel' : fuocoRep() ? 'fuori' : ''} ${mio ? '' : 'spenta'}" data-a="sala-stanza" data-v="${z.r.id}" style="left:${(px / VBW * 100).toFixed(2)}%;top:${(py / VBH * 100).toFixed(2)}%" aria-label="Stanza ${z.r.nome}${n ? `, ${n} per voi` : ''}"><span class="nome-st">${z.r.nome}</span>${n ? `<span class="n-st" aria-hidden="true">${n}</span>` : ''}</button>`; }).join('');
   }
   // fuoco: la stanza scelta va al centro della scena, ingrandita
   function zoomTarget() {
     const f = fuocoRep(), z = f && ZONE.find(x => x.r.id === f); if (!z) return 'none';
-    const [cx, cy] = P((z.x0 + z.x1) / 2, (z.y0 + z.y1) / 2, 1), k = 1.55, px = cx / VBW * 100, py = cy / VBH * 100;
+    const [cx, cy] = P((z.x0 + z.x1) / 2, (z.fy0 + z.fy1) / 2, 1), k = 1.55, px = cx / VBW * 100, py = cy / VBH * 100;
     return `translate(${(-k * (px - 50)).toFixed(2)}%, ${(-k * (py - 50)).toFixed(2)}%) scale(${k})`;
   }
   function zooma() { const t = zoomTarget(), e = document.getElementById('scena'); if (e && e.style.transform !== t) e.style.transform = t; st.zoomDa = t; }
@@ -2313,10 +2364,10 @@ const SALA = (() => {
           </div>
           <div class="scena-vista"><div class="scena" id="scena" style="transform:${st.zoomDa}">${SVG}<div id="stanze">${stanze()}</div><div id="badges">${badges()}</div></div></div>
         </div>
-        <p class="text-xs text-grigio mt-2 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#B45309]"></span>aspetta voi</span><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-ok pulsa"></span>al lavoro adesso</span><span class="hidden md:inline"><i class="bi bi-hand-index"></i> Clicca una stanza o un agente per metterlo a fuoco.</span>${fuocoRep() ? '<button class="underline underline-offset-2" data-a="sala-chiudi">Torna a tutto l\'ufficio</button>' : ''}</p>
+        <p class="text-xs text-grigio mt-2 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><span class="conta-leg">2</span>decisioni che aspettano voi</span><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-ok pulsa"></span>al lavoro adesso</span><span class="hidden md:inline"><i class="bi bi-hand-index"></i> Clicca una stanza o un agente per metterlo a fuoco.</span>${fuocoRep() ? '<button class="underline underline-offset-2" data-a="sala-chiudi">Torna a tutto l\'ufficio</button>' : ''}</p>
         <div class="mt-4"><div class="flex items-center gap-2 mb-2"><p class="font-bold text-sm">Cosa hanno appena fatto</p><span class="chip ${st.pausa ? 'c-ko' : 'c-ok'}"><span class="w-1.5 h-1.5 rounded-full ${st.pausa ? 'bg-arancio' : 'bg-ok pulsa'}"></span>${st.pausa ? 'in pausa' : 'dal vivo'}</span><span class="text-xs text-grigio ml-auto hidden sm:inline">Clicca per vederlo nel gestionale</span></div><ul id="sala-nastro" class="grid sm:grid-cols-2 2xl:grid-cols-4 gap-2">${nastroHtml()}</ul></div>
         <div class="grid grid-cols-3 gap-2 mt-3">${LAVAGNA.map(([t, v], i) => [0, 1, 5].includes(i) ? `<div class="card px-3 py-2"><p class="text-[11px] text-grigio leading-tight">${t}</p><p id="kf-${i}" class="num font-display font-medium text-lg leading-tight mt-0.5">${v()}</p></div>` : '').join('')}</div>
-        <div class="md:hidden mt-4">${[{ id: null, nome: 'Regia' }, ...REP].map(r => r.id ? `<button class="w-full flex items-center gap-2 text-xs font-bold text-grigio uppercase tracking-wider mt-3 mb-1.5 ${fuocoRep() === r.id ? '!text-inchiostro' : ''}" data-a="sala-stanza" data-v="${r.id}"><span class="w-2 h-2 rounded-full" style="background:${r.colore}"></span>${r.nome}${(() => { const k = sum(AG.filter(a => a.rep === r.id), nPerVoi); return k ? `<span class="normal-case tracking-normal text-[#B45309]">· ${k} per voi</span>` : ''; })()}<i class="bi bi-chevron-right ml-auto"></i></button>` : `<p class="text-xs font-bold text-grigio uppercase tracking-wider mt-3 mb-1.5">${r.nome}</p><div class="grid grid-cols-2 gap-1.5">${AG.filter(a => a.rep === r.id).map(a => `<button class="text-left rounded bg-white border border-linea px-2.5 py-2 text-sm flex items-center gap-2 ${st.sel === a.id ? '!border-inchiostro' : ''}" data-a="sala-ag" data-v="${a.id}"><span class="w-2 h-2 rounded-full flex-none" style="background:${col(a)}"></span><span class="font-bold leading-tight">${a.nome}</span><span class="ml-auto text-xs text-grigio num" title="cose fatte oggi">${a === COORD ? `${decisioni().length} da decidere` : `${st.az[a.id]} oggi`}</span></button>`).join('')}</div>`).join('')}</div>
+        <div class="md:hidden mt-4">${[{ id: null, nome: 'Regia' }, ...REP].map(r => r.id ? `<button class="w-full flex items-center gap-2 text-xs font-bold text-grigio uppercase tracking-wider mt-3 mb-1.5 ${fuocoRep() === r.id ? '!text-inchiostro' : ''}" data-a="sala-stanza" data-v="${r.id}"><span class="w-2 h-2 rounded-full" style="background:${r.colore}"></span>${r.nome}${(() => { const k = sum(AG.filter(a => a.rep === r.id), nPerVoi); return k ? `<span class="normal-case tracking-normal text-petrolio">· ${k} per voi</span>` : ''; })()}<i class="bi bi-chevron-right ml-auto"></i></button>` : `<p class="text-xs font-bold text-grigio uppercase tracking-wider mt-3 mb-1.5">${r.nome}</p><div class="grid grid-cols-2 gap-1.5">${AG.filter(a => a.rep === r.id).map(a => `<button class="text-left rounded bg-white border border-linea px-2.5 py-2 text-sm flex items-center gap-2 ${st.sel === a.id ? '!border-inchiostro' : ''}" data-a="sala-ag" data-v="${a.id}"><span class="w-2 h-2 rounded-full flex-none" style="background:${col(a)}"></span><span class="font-bold leading-tight">${a.nome}</span><span class="ml-auto text-xs text-grigio num" title="cose fatte oggi">${a === COORD ? `${decisioni().length} da decidere` : `${st.az[a.id]} oggi`}</span></button>`).join('')}</div>`).join('')}</div>
         <details class="mt-3"><summary class="text-xs text-grigio cursor-pointer">Come si calcolano questi numeri</summary><ul class="grid md:grid-cols-2 gap-x-6 gap-y-1.5 text-xs text-grigio leading-relaxed mt-2"><li><span class="font-bold text-inchiostro">Fatturato e da incassare.</span> Gli stessi del controllo di gestione e degli incassi.</li><li><span class="font-bold text-inchiostro">Lavori aperti.</span> Ordini confermati e in lavorazione nella lavagna degli ordini.</li><li><span class="font-bold text-inchiostro">Decisioni per voi.</span> Le proposte degli agenti che aspettano un ok, nel pannello del Coordinatore.</li><li><span class="font-bold text-inchiostro">Ore risparmiate.</span> Cose fatte oggi da ogni agente × i minuti che servirebbero a mano, stima.</li></ul></details>
       </section>
       <aside id="sala-pannello" class="card overflow-hidden xl:sticky xl:top-0 xl:max-h-[calc(100dvh-8.5rem)] xl:overflow-y-auto">${pannello()}</aside>
@@ -2329,7 +2380,7 @@ const SALA = (() => {
     if (!inSala()) return;
     aggiornaBadges();
     LAVAGNA.forEach(([, v], i) => { const e = document.getElementById('k-' + i), e2 = document.getElementById('kf-' + i); if (e) e.textContent = v(); if (e2) e2.textContent = v(); });
-    AG.forEach(a => { const e = document.getElementById('schermo-' + a.id); if (e) e.setAttribute('fill', st.attivi[a.id] ? shade(col(a), .55) : shade(col(a), .35)); });
+    AG.forEach(a => { const e = document.getElementById('schermo-' + a.id); if (e) e.setAttribute('fill', SCHERMO[st.attivi[a.id] ? 1 : 0]); });
     const f = $('#sala-feed'); if (f) f.innerHTML = feedHtml();
     const nn = $('#sala-nastro'), hn = nastroHtml(); if (nn && nn.innerHTML !== hn) nn.innerHTML = hn;
     const sz = $('#stanze'), hs = stanze(); if (sz && sz.innerHTML !== hs) sz.innerHTML = hs;
