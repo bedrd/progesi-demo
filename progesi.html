@@ -217,7 +217,7 @@
   @media (min-width: 1024px) { body.sala #app { grid-template-columns: 1fr; } }
   .scena { position: relative; }
   .scena svg { display: block; width: 100%; height: auto; }
-  .badge-ag { position: absolute; transform: translate(-50%, -100%); display: flex; flex-direction: column; align-items: center; gap: 3px; z-index: 1; }
+  .badge-ag { position: absolute; transform-origin: 50% 100%; transform: translate(-50%, -100%) scale(calc((1 + (var(--k, 1) - 1) * .25) / var(--k, 1))); display: flex; flex-direction: column; align-items: center; gap: 3px; z-index: 1; }
   .badge-ag.attivo { z-index: 3; }
   .badge-ag .nome { display: inline-flex; align-items: center; gap: 4px; background: none; border: 0; border-radius: 2px; padding: 1px 2px; font-size: 11px; font-weight: 700; color: #303030; text-shadow: 0 0 2px #fff, 0 0 3px #fff, 0 0 6px rgba(255,255,255,.95); white-space: nowrap; cursor: pointer; }
   .badge-ag .nome:hover .testo { color: #DD0000; }
@@ -229,8 +229,20 @@
   .fumetto b { font-weight: 700; color: #fff; }
   .slot-f { display: contents; }
   /* sala per stanze: la scena si mette a fuoco sulla stanza scelta, gli agenti di fuori si spengono */
-  .scena-vista { overflow: hidden; border-radius: 4px; }
-  .scena { transform-origin: 50% 50%; transition: transform .6s cubic-bezier(.22,.8,.3,1); }
+  .scena-vista { position: relative; overflow: hidden; border-radius: 4px; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+  .scena-vista.zoomata { touch-action: none; cursor: grab; }
+  .scena-vista.trascina, .scena-vista.trascina * { cursor: grabbing !important; }
+  .scena-vista svg { -webkit-user-drag: none; }
+  @property --k { syntax: '<number>'; inherits: true; initial-value: 1; }
+  .scena { transform-origin: 50% 50%; transition: transform .6s cubic-bezier(.22,.8,.3,1), --k .6s cubic-bezier(.22,.8,.3,1); }
+  .scena.libera { transition: none; }
+  .zoom-ctrl { position: absolute; right: 10px; bottom: 10px; z-index: 6; display: flex; align-items: center; gap: 2px; padding: 3px; border-radius: 4px; background: rgba(255,255,255,.88); border: 1px solid rgba(48,48,48,.12); box-shadow: 0 4px 14px -8px rgba(48,48,48,.35); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .zoom-ctrl button { width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 3px; color: #303030; font-size: 15px; }
+  .zoom-ctrl button:hover:not(:disabled) { background: rgba(48,48,48,.08); color: #DD0000; }
+  .zoom-ctrl button:disabled { color: #B5B5B5; cursor: default; }
+  .zoom-ctrl #zoom-liv { min-width: 42px; text-align: center; font-size: 12px; font-weight: 700; color: #303030; }
+  .zoom-aiuto { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 7; padding: 8px 14px; border-radius: 4px; background: rgba(48,48,48,.88); color: #fff; font-size: 13px; pointer-events: none; opacity: 0; transition: opacity .25s; white-space: nowrap; }
+  .zoom-aiuto.vedi { opacity: 1; }
   @media (prefers-reduced-motion: reduce) { .scena { transition: none; } }
   .badge-ag { transition: opacity .3s; }
   .badge-ag.spento, .badge-ag.fuori { opacity: .32; }
@@ -253,6 +265,7 @@
     .badge-ag .nome { padding: 3px; border-radius: 99px; gap: 0; }
     .badge-ag .punto { width: 9px; height: 9px; }
   }
+  @media (max-width: 767px) { .scena.vicino .badge-ag .testo { display: inline; } .scena.vicino .badge-ag .nome { padding: 1px 2px; border-radius: 2px; gap: 4px; } .scena.vicino .stanza { display: inline-flex; } .zoom-ctrl button { width: 28px; height: 28px; } }
   .pulsa { animation: pulsa 1.6s ease-in-out infinite; }
   @keyframes pulsa { 50% { opacity: .35; } }
   @media (min-width: 1024px) { .saluto-velo { padding: .75rem 2.5rem 2rem .75rem; margin: -.75rem; background: radial-gradient(ellipse 100% 100% at 0 0, rgba(243,238,230,.97) 60%, rgba(243,238,230,0) 100%); } }
@@ -2028,7 +2041,7 @@ const SALA = (() => {
   const GUARDARE = /^(prev-|rinn-|nc-|inc-dub|inc-acc|inc-sol)/;
   const peso = d => GUARDARE.test(d.id) ? 'guardare' : 'routine';
   const nPerVoi = a => decisioni().filter(d => d.ag === a.id).length;
-  const st = { sel: null, stanza: null, rinviate: [], zoomDa: 'none', aperta: null, pausa: false, feed: [], fumetti: {}, attivi: {}, passo: 0, chat: {}, az: { coord: 9, prev: 3, rich: 2, rinn: 12, fatt: 5, inc: 11, forn: 6, pian: 7, scad: 5, doc: 14, ore: 2 }, avviata: false };
+  const st = { sel: null, stanza: null, rinviate: [], zoomDa: 'none', cam: null, aperta: null, pausa: false, feed: [], fumetti: {}, attivi: {}, passo: 0, chat: {}, az: { coord: 9, prev: 3, rich: 2, rinn: 12, fatt: 5, inc: 11, forn: 6, pian: 7, scad: 5, doc: 14, ore: 2 }, avviata: false };
 
   /* ---------- decisioni, calcolate dallo stato del gestionale ---------- */
   const minus = t => t.charAt(0).toLowerCase() + t.slice(1);
@@ -2282,13 +2295,59 @@ const SALA = (() => {
     return ZONE.map(z => { const [px, py] = P(z.x1 - 0.3, z.y1 - 0.9, 0), n = sum(AG.filter(a => a.rep === z.r.id), nPerVoi), mio = mioReparto({ rep: z.r.id });
       return `<button class="stanza ${fuocoRep() === z.r.id ? 'sel' : fuocoRep() ? 'fuori' : ''} ${mio ? '' : 'spenta'}" data-a="sala-stanza" data-v="${z.r.id}" style="left:${(px / VBW * 100).toFixed(2)}%;top:${(py / VBH * 100).toFixed(2)}%" aria-label="Stanza ${z.r.nome}${n ? `, ${n} per voi` : ''}"><span class="nome-st">${z.r.nome}</span>${n ? `<span class="n-st" aria-hidden="true">${n}</span>` : ''}</button>`; }).join('');
   }
-  // fuoco: la stanza scelta va al centro della scena, ingrandita
-  function zoomTarget() {
-    const f = fuocoRep(), z = f && ZONE.find(x => x.r.id === f); if (!z) return 'none';
+  // telecamera della scena: segue il fuoco su una stanza, oppure zoom e spostamento liberi (st.cam)
+  const KMIN = 1, KMAX = 4;
+  const limita = c => { const k = Math.min(KMAX, Math.max(KMIN, c.k)), m = (k - 1) * 50; return { k, tx: Math.max(-m, Math.min(m, c.tx)), ty: Math.max(-m, Math.min(m, c.ty)) }; };
+  function camFuoco() {
+    const f = fuocoRep(), z = f && ZONE.find(x => x.r.id === f); if (!z) return { k: 1, tx: 0, ty: 0 };
     const [cx, cy] = P((z.x0 + z.x1) / 2, (z.fy0 + z.fy1) / 2, 1), k = 1.55, px = cx / VBW * 100, py = cy / VBH * 100;
-    return `translate(${(-k * (px - 50)).toFixed(2)}%, ${(-k * (py - 50)).toFixed(2)}%) scale(${k})`;
+    return limita({ k, tx: -k * (px - 50), ty: -k * (py - 50) });
   }
-  function zooma() { const t = zoomTarget(), e = document.getElementById('scena'); if (e && e.style.transform !== t) e.style.transform = t; st.zoomDa = t; }
+  const camera = () => st.cam || camFuoco();
+  const trasforma = c => c.k === 1 && !c.tx && !c.ty ? 'none' : `translate(${c.tx.toFixed(2)}%, ${c.ty.toFixed(2)}%) scale(${c.k.toFixed(3)})`;
+  function zoomTarget() { return trasforma(camera()); }
+  // applica la telecamera; "subito" senza animazione, per trascinare e per la rotella
+  function zooma(subito) {
+    const c = camera(), t = trasforma(c), e = document.getElementById('scena'), v = e?.parentElement;
+    if (e) { e.classList.toggle('libera', !!subito); if (e.style.transform !== t) e.style.transform = t; e.style.setProperty('--k', c.k.toFixed(3)); e.classList.toggle('vicino', c.k >= 1.8); }
+    if (v) v.classList.toggle('zoomata', c.k > 1.001);
+    st.zoomDa = t;
+    const l = document.getElementById('zoom-liv'); if (l) l.textContent = Math.round(c.k * 100) + '%';
+    document.querySelectorAll('[data-a="sala-zoom"]').forEach(b => { b.disabled = b.dataset.v === 'piu' ? c.k >= KMAX - .001 : b.dataset.v === 'meno' ? c.k <= KMIN + .001 : c.k <= 1.001 && !st.stanza && !st.sel; });
+  }
+  // zoom tenendo fermo il punto (mx, my), in frazioni della vista
+  function zoomIn(k2, mx = .5, my = .5, subito, da = camera()) {
+    const u = .5 + ((mx - .5) - da.tx / 100) / da.k, v = .5 + ((my - .5) - da.ty / 100) / da.k, k = Math.min(KMAX, Math.max(KMIN, k2));
+    st.cam = limita({ k, tx: 100 * ((mx - .5) - (u - .5) * k), ty: 100 * ((my - .5) - (v - .5) * k) }); zooma(subito);
+  }
+  // gesti sulla scena: trascinare per spostarsi, due dita per lo zoom, Ctrl + rotella (o pizzico sul trackpad)
+  function gestiZoom() {
+    const dita = new Map(); let g = null, bloccaClic = 0, tRot = 0, tAiuto = 0;
+    const vista = e => e.target.closest?.('.scena-vista');
+    const aiuto = t => { const h = document.getElementById('zoom-aiuto'); if (!h) return; h.textContent = t; h.classList.add('vedi'); clearTimeout(tAiuto); tAiuto = setTimeout(() => h.classList.remove('vedi'), 1400); };
+    const fine = () => { document.getElementById('scena')?.classList.remove('libera'); };
+    document.addEventListener('pointerdown', e => { const v = vista(e); if (!v || e.button > 0 || e.target.closest('.zoom-ctrl')) return;
+      dita.set(e.pointerId, { x: e.clientX, y: e.clientY }); const r = v.getBoundingClientRect();
+      if (dita.size === 1) g = { tipo: 'sposta', x0: e.clientX, y0: e.clientY, c0: { ...camera() }, r, v, mosso: false };
+      else if (dita.size === 2) { const [a, b] = [...dita.values()]; g = { tipo: 'pizzico', d0: Math.hypot(a.x - b.x, a.y - b.y) || 1, c0: { ...camera() }, r, v, mosso: true }; } });
+    document.addEventListener('pointermove', e => { if (!g || !dita.has(e.pointerId)) return; dita.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (g.tipo === 'pizzico' && dita.size >= 2) { const [a, b] = [...dita.values()], d = Math.hypot(a.x - b.x, a.y - b.y); zoomIn(g.c0.k * d / g.d0, ((a.x + b.x) / 2 - g.r.left) / g.r.width, ((a.y + b.y) / 2 - g.r.top) / g.r.height, true, g.c0); return; }
+      if (g.tipo !== 'sposta' || g.c0.k <= 1.001) return;
+      const dx = e.clientX - g.x0, dy = e.clientY - g.y0; if (!g.mosso && Math.hypot(dx, dy) < 5) return;
+      if (!g.mosso) { g.mosso = true; try { g.v.setPointerCapture(e.pointerId); } catch (_) {} g.v.classList.add('trascina'); }
+      st.cam = limita({ k: g.c0.k, tx: g.c0.tx + dx / g.r.width * 100, ty: g.c0.ty + dy / g.r.height * 100 }); zooma(true); });
+    const su = e => { if (!dita.has(e.pointerId)) return; dita.delete(e.pointerId); if (g?.mosso) bloccaClic = Date.now(); if (!dita.size) { g?.v.classList.remove('trascina'); g = null; fine(); } else if (g?.tipo === 'pizzico') g = null; };
+    document.addEventListener('pointerup', su); document.addEventListener('pointercancel', su);
+    // dopo un trascinamento il clic non deve aprire l'agente o la stanza sotto il mouse
+    document.addEventListener('click', e => { if (Date.now() - bloccaClic < 300 && vista(e)) { e.stopPropagation(); e.preventDefault(); } }, true);
+    document.addEventListener('wheel', e => { const v = vista(e); if (!v) return;
+      if (!(e.ctrlKey || e.metaKey)) { aiuto(`Per lo zoom: ${/Mac/.test(navigator.platform) ? '⌘' : 'Ctrl'} + rotella, oppure i pulsanti + e −`); return; }
+      e.preventDefault(); const r = v.getBoundingClientRect(); zoomIn(camera().k * Math.exp(-e.deltaY * 0.0022), (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height, true);
+      clearTimeout(tRot); tRot = setTimeout(fine, 160); }, { passive: false });
+    // da tastiera, nella sala: + e − per lo zoom, 0 per tutto l'ufficio
+    document.addEventListener('keydown', e => { if (!inSala() || e.ctrlKey || e.metaKey || e.altKey || e.target.closest?.('input, textarea, select, [contenteditable]') || $('#modale').innerHTML) return;
+      const c = camera(); if (e.key === '+' || e.key === '=') { e.preventDefault(); zoomIn(c.k * 1.4); } else if (e.key === '-' || e.key === '_') { e.preventDefault(); zoomIn(c.k / 1.4); } else if (e.key === '0') { e.preventDefault(); AZIONI['sala-zoom']('tutto'); } });
+  }
   // le decisioni in ordine: prima quelle da guardare, quelle rimandate in fondo
   const ordinate = () => decisioni().map((d, i) => ({ d, i })).sort((x, y) => (st.rinviate.indexOf(x.d.id) + 1 || 0) - (st.rinviate.indexOf(y.d.id) + 1 || 0) || (peso(x.d) === 'guardare' ? 0 : 1) - (peso(y.d) === 'guardare' ? 0 : 1) || x.i - y.i).map(x => x.d);
   const chipPeso = d => peso(d) === 'guardare' ? '<span class="chip c-at !text-[11px]">da guardare</span>' : '<span class="chip c-bl !text-[11px]">di routine</span>';
@@ -2362,9 +2421,11 @@ const SALA = (() => {
               <p class="text-grigio mt-1.5 text-[0.95rem]">Oggi gli agenti hanno fatto <strong class="text-inchiostro">${fatte} cose</strong> e vi hanno risparmiato <strong class="text-inchiostro">${ore} ore</strong>. ${n ? `<strong class="text-inchiostro">${n}</strong> ${pl(n, 'aspetta', 'aspettano')} un vostro ok: ${guard} da guardare, ${n - guard} di routine.` : 'Nessuna decisione in sospeso.'}</p></div>
             <div class="flex flex-wrap items-center gap-2 lg:pointer-events-auto"><span class="chip c-bl !py-1 !px-2.5"><i class="bi bi-geo-alt"></i>Offanengo · ${TEC.length} tecnici, ${ORDINI.filter(o => o.stato === 'assegnato').length} lavori in corso</span><span class="chip ${st.pausa ? 'c-ko' : 'c-ok'} !py-1 !px-2.5"><span class="w-2 h-2 rounded-full ${st.pausa ? 'bg-arancio' : 'bg-ok pulsa'}"></span>${st.pausa ? 'In pausa' : `${AG.length} agenti al lavoro`}</span><button class="btn btn-sec !py-1 !px-2.5" data-a="sala-pausa">${st.pausa ? '<i class="bi bi-play-fill"></i>Riprendi' : '<i class="bi bi-pause-fill"></i>Pausa'}</button></div>
           </div>
-          <div class="scena-vista"><div class="scena" id="scena" style="transform:${st.zoomDa}">${SVG}<div id="stanze">${stanze()}</div><div id="badges">${badges()}</div></div></div>
+          <div class="scena-vista ${camera().k > 1.001 ? 'zoomata' : ''}"><div class="scena ${camera().k >= 1.8 ? 'vicino' : ''}" id="scena" style="transform:${st.zoomDa};--k:${camera().k.toFixed(3)}">${SVG}<div id="stanze">${stanze()}</div><div id="badges">${badges()}</div></div>
+            <div class="zoom-ctrl" role="group" aria-label="Zoom dell'ufficio"><button data-a="sala-zoom" data-v="meno" aria-label="Allontana" title="Allontana (−)"><i class="bi bi-dash-lg"></i></button><span id="zoom-liv" class="num" aria-live="polite">${Math.round(camera().k * 100)}%</span><button data-a="sala-zoom" data-v="piu" aria-label="Avvicina" title="Avvicina (+)"><i class="bi bi-plus-lg"></i></button><button data-a="sala-zoom" data-v="tutto" aria-label="Tutto l'ufficio" title="Tutto l'ufficio (0)"><i class="bi bi-arrows-angle-contract"></i></button></div>
+            <div id="zoom-aiuto" class="zoom-aiuto" aria-hidden="true"></div></div>
         </div>
-        <p class="text-xs text-grigio mt-2 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><span class="conta-leg">2</span>decisioni che aspettano voi</span><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-ok pulsa"></span>al lavoro adesso</span><span class="hidden md:inline"><i class="bi bi-hand-index"></i> Clicca una stanza o un agente per metterlo a fuoco.</span>${fuocoRep() ? '<button class="underline underline-offset-2" data-a="sala-chiudi">Torna a tutto l\'ufficio</button>' : ''}</p>
+        <p class="text-xs text-grigio mt-2 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><span class="conta-leg">2</span>decisioni che aspettano voi</span><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-ok pulsa"></span>al lavoro adesso</span><span class="hidden md:inline"><i class="bi bi-hand-index"></i> Clicca una stanza o un agente per metterlo a fuoco. Zoom con + e −, oppure Ctrl + rotella; trascina per spostarti.</span><span class="md:hidden"><i class="bi bi-arrows-angle-expand"></i> Due dita per avvicinare l'ufficio.</span>${fuocoRep() || (st.cam && st.cam.k > 1.001) ? '<button class="underline underline-offset-2" data-a="sala-zoom" data-v="tutto">Torna a tutto l\'ufficio</button>' : ''}</p>
         <div class="mt-4"><div class="flex items-center gap-2 mb-2"><p class="font-bold text-sm">Cosa hanno appena fatto</p><span class="chip ${st.pausa ? 'c-ko' : 'c-ok'}"><span class="w-1.5 h-1.5 rounded-full ${st.pausa ? 'bg-arancio' : 'bg-ok pulsa'}"></span>${st.pausa ? 'in pausa' : 'dal vivo'}</span><span class="text-xs text-grigio ml-auto hidden sm:inline">Clicca per vederlo nel gestionale</span></div><ul id="sala-nastro" class="grid sm:grid-cols-2 2xl:grid-cols-4 gap-2">${nastroHtml()}</ul></div>
         <div class="grid grid-cols-3 gap-2 mt-3">${LAVAGNA.map(([t, v], i) => [0, 1, 5].includes(i) ? `<div class="card px-3 py-2"><p class="text-[11px] text-grigio leading-tight">${t}</p><p id="kf-${i}" class="num font-display font-medium text-lg leading-tight mt-0.5">${v()}</p></div>` : '').join('')}</div>
         <div class="md:hidden mt-4">${[{ id: null, nome: 'Regia' }, ...REP].map(r => r.id ? `<button class="w-full flex items-center gap-2 text-xs font-bold text-grigio uppercase tracking-wider mt-3 mb-1.5 ${fuocoRep() === r.id ? '!text-inchiostro' : ''}" data-a="sala-stanza" data-v="${r.id}"><span class="w-2 h-2 rounded-full" style="background:${r.colore}"></span>${r.nome}${(() => { const k = sum(AG.filter(a => a.rep === r.id), nPerVoi); return k ? `<span class="normal-case tracking-normal text-petrolio">· ${k} per voi</span>` : ''; })()}<i class="bi bi-chevron-right ml-auto"></i></button>` : `<p class="text-xs font-bold text-grigio uppercase tracking-wider mt-3 mb-1.5">${r.nome}</p><div class="grid grid-cols-2 gap-1.5">${AG.filter(a => a.rep === r.id).map(a => `<button class="text-left rounded bg-white border border-linea px-2.5 py-2 text-sm flex items-center gap-2 ${st.sel === a.id ? '!border-inchiostro' : ''}" data-a="sala-ag" data-v="${a.id}"><span class="w-2 h-2 rounded-full flex-none" style="background:${col(a)}"></span><span class="font-bold leading-tight">${a.nome}</span><span class="ml-auto text-xs text-grigio num" title="cose fatte oggi">${a === COORD ? `${decisioni().length} da decidere` : `${st.az[a.id]} oggi`}</span></button>`).join('')}</div>`).join('')}</div>
@@ -2430,7 +2491,7 @@ const SALA = (() => {
     set('lancetta-h', ((h % 12) + m / 60) / 12 * 2 * Math.PI, 6); set('lancetta-m', m / 60 * 2 * Math.PI, 9.5);
   }
   function avvia() {
-    if (st.avviata) return; st.avviata = true;
+    if (st.avviata) return; st.avviata = true; gestiZoom();
     [[6, 'doc', `Ha messo nella scheda di ${cli(5).nome} il MUD consegnato da Davide.`], [18, 'coord', 'Ha raccolto le decisioni della mattina per la direzione.'], [27, 'inc', 'Ha controllato il conto: nessun movimento nuovo da ieri sera.'],
      [44, 'fatt', `Ha preparato la fattura del lavoro di ${cli(5).nome}: 480 €, aspetta l'ok.`], [63, 'rinn', `Ha trovato ${kDaRivedere().filter(k => k.rin <= 90).length} contratti che si rinnovano sotto prezzo entro 90 giorni.`],
      [95, 'pian', `Ha preparato le proposte di assegnazione per ${ORDINI.filter(o => o.stato === 'confermato').length} lavori confermati.`], [140, 'ore', 'Ha controllato le timbrature di ieri: tutte presenti.'], [1150, 'rich', `Ha aperto la richiesta di ${cli(22).nome}: DVR e piano HACCP, arrivata per telefono.`]]
@@ -2440,8 +2501,11 @@ const SALA = (() => {
   function ridisegna() { if (inSala()) { $('#sala-pannello').innerHTML = pannello(); aggiornaPezzi(); } }
   const AZIONI = {
     'sala-ag': v => { st.sel = st.sel === v && v !== 'coord' ? null : v === 'coord' ? null : v; if (v === 'coord') st.stanza = null; render(); if (window.innerWidth < 1280) setTimeout(() => $('#sala-pannello')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30); },
-    'sala-chiudi': () => { if (st.sel) st.sel = null; else st.stanza = null; render(); },
-    'sala-stanza': v => { st.sel = null; st.stanza = st.stanza === v ? null : v; render(); if (window.innerWidth < 1280 && st.stanza) setTimeout(() => $('#sala-pannello')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30); },
+    'sala-chiudi': () => { if (st.sel) st.sel = null; else { st.stanza = null; st.cam = null; } render(); },
+    'sala-zoom': v => { const c = camera();
+      if (v === 'piu') zoomIn(c.k * 1.4); else if (v === 'meno') zoomIn(c.k / 1.4);
+      else { st.cam = null; if (st.stanza || st.sel) { st.stanza = null; st.sel = null; render(); } else zooma(); } },
+    'sala-stanza': v => { st.sel = null; st.cam = null; st.stanza = st.stanza === v ? null : v; render(); if (window.innerWidth < 1280 && st.stanza) setTimeout(() => $('#sala-pannello')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30); },
     'sala-dopo': v => { st.rinviate = st.rinviate.filter(x => x !== v).concat(v); st.aperta = null; ridisegna(); },
     'sala-apri': v => { st.aperta = st.aperta === v ? null : v; ridisegna(); },
     'sala-decidi': v => { const [id, i] = v.split('|'), d = decisioni().find(x => x.id === id); if (!d) return; const [, fn, esito] = d.scelte[+i]; spegni(); fn(); st.az[d.ag]++; log(d.ag, `${esito} ${+i ? 'Deciso' : 'Approvato'} ${daChi()}.`); fumetto(d.ag, +i ? 'Ricevuto, <b>faccio così</b>' : 'Approvato, <b>parto</b>', 2600); setTimeout(() => documento(COORD, ag(d.ag)), 50); st.aperta = null; render(); },

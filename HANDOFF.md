@@ -215,6 +215,14 @@ Cambiando ruolo si resta sulla pagina se il nuovo ruolo la vede, altrimenti si v
 ## 8. Sala agenti (modulo `SALA`)
 
 - **Scena**: SVG isometrico generato da codice (`scena()`), semi-flat, con la palette del sito Progesi: rosso `#DD0000`, antracite `#303030`/`#3A3A3A`, superfici chiare. Pavimento in legno chiaro, muri bianco panna, tappeti grigio chiarissimo, scrivanie bianche con gambe antracite, monitor sottili con l'interfaccia rossa di Progesi (`postazione()`), sedie da ufficio nel colore del reparto (`sedia()`), persone con carnagioni, capelli e vestiti diversi (`persona()`). I colori dei reparti (`REP`) sono nella famiglia del marchio: Commerciale rosso, Contabilità antracite, Operatività rosso scuro, Risorse umane rosso chiaro. Sopra la scena ci sono i nomi degli agenti come testo pulito, senza box (`badges()`, aggiornati sul posto da `aggiornaBadges()` per non perdere clic e focus), con il numerino rosso delle decisioni che aspettano; i fumetti di lavoro sono scuri e sottili. Su telefono resta il pallino di stato (rosso = aspetta voi).
+- **Zoom libero**: una sola telecamera (`camera()`): segue il fuoco della stanza (`camFuoco()`), oppure è libera (`st.cam`, da 100% a 400%, `limita()` tiene la scena senza buchi ai bordi).
+  - Comandi in basso a destra della scena: −, livello in %, + e "Tutto l'ufficio" (`sala-zoom`).
+  - Ctrl o ⌘ + rotella, o il pizzico sul trackpad, avvicina dove punta il mouse (`zoomIn()`). La rotella da sola fa scorrere la pagina e mostra un aiuto.
+  - Trascinando ci si sposta; dopo un trascinamento il clic non apre l'agente sotto il mouse.
+  - Da tastiera: + e − per lo zoom, 0 per tutto l'ufficio.
+  - Su telefono si usano due dita, e da vicino (`.vicino`, da 180%) tornano i nomi degli agenti e dei reparti.
+  - I nomi degli agenti crescono poco con lo zoom (`--k`, animata con `@property`), le scritte sui tappeti crescono con il pavimento.
+  - Gesti installati una volta in `gestiZoom()`.
 - **Stanze** (`stanze()`): il nome del reparto è **stampato sul tappeto**, sul lato est, con la stessa prospettiva del pavimento (pulsante HTML con `transform: matrix(.866,-.5,.866,.5,0,0)`, misura in `cqw` così segue la scena), in rosso Progesi grassetto, con accanto il numerino rosso delle decisioni per voi. Cliccandolo la stanza va a fuoco (`zoomTarget()`, `zooma()`, transizione di 0,6 secondi), gli agenti e le scritte delle altre stanze si spengono (`.fuori`) e a destra compare la scheda della stanza (`pannelloStanza()`). Le stanze che il ruolo non segue sono spente (`.spento`, `.spenta`). Su telefono le scritte sui tappeti spariscono e si usano i titoli dei reparti nell'elenco sotto.
 - **Riepilogo** in una frase sotto il saluto: cose fatte, ore risparmiate, quante decisioni da guardare e di routine. Sotto la scena: legenda, nastro "Cosa hanno appena fatto" (`nastroHtml()`, le ultime 4, ognuna porta alla pagina del gestionale) e tre numeri (`kf-0`, `kf-1`, `kf-5`); il dettaglio dei calcoli è in "Come si calcolano questi numeri". La lavagna disegnata è decorativa.
 - **Agenti** (`AG`): Coordinatore (regia); Commerciale: Preventivista, Richieste, Rinnovi; Contabilità: Fatturatore, Incassi, Fornitori; Operatività: Pianificatore, Scadenze, Archivista; Risorse umane: Ore e timbrature (modulo opzionale). Ogni agente ha `fa`, `nonFa`, `fonti`, `vista` (pagina del gestionale) e `min` (minuti risparmiati per azione).
@@ -239,6 +247,7 @@ npm test
   - `giro.js`: il giro di presentazione completo (33 controlli);
   - `sala-test.js`: la Sala agenti, con routine e da guardare, stanze a fuoco e nastro (31 controlli);
   - `amm-test.js`: l'amministrazione dal primo all'ultimo passo, più gli aggiornamenti normativi, più barra della demo, benvenuto, parole spiegate, nota di credito, menu, numerini, margini e prezzo consigliato, con le schermate a 1440 e 390 px in `test/shots/` (50 controlli);
+  - `zoom-prova.js`: zoom libero della Sala, con pulsanti, rotella, trascinamento, tastiera e due dita su telefono (17 controlli);
   - `verifica.js`: controlli di layout a 390, 768, 1024, 1280, 1366 e 1440 px, più punti specifici della Sala. Segnala come "NO" anche cose volute:
     - titoli brevi come "Banca" sotto gli 80 px;
     - su telefono la barra delle schede di Contabilità e la matrice dei permessi che scorrono di lato;
