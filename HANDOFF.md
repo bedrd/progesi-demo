@@ -33,6 +33,7 @@ Questo file serve a chi riprende il lavoro, persona o Claude, per avere tutta la
   - **zoom della Sala su tutta la larghezza**: il riquadro dello zoom (`.scena-vista`) è largo quanto la colonna; al 100% la scena resta centrata, avvicinando usa tutto lo spazio;
   - **profilo non tagliato**: nome e ruolo interi, mostrati da 1800 px in su (sotto resta l'avatar); anche la ricerca estesa compare da 1800 px;
   - **pannello della Sala più leggibile**: vetro del pannello più leggero e schede delle decisioni bianche quasi piene, così si staccano dal fondo.
+  - **Home senza vuoti**: nella seconda riga l'altezza la decide la lista "Aspetta qualcuno"; l'ufficio della Sala riempie tutto il suo riquadro come una finestra sull'ufficio (`preserveAspectRatio="xMidYMid slice"`, almeno 260 px). "Da incassare" mostra le 5 fatture aperte più grandi, "Da dove arriva il fatturato" i tre servizi annuali che valgono di più tra i contratti in scheda.
   - **Aperto**: a 1280-1366 px Archivista e Ore e timbrature finiscono sotto il bordo dello schermo nella Sala (si raggiungono scorrendo). C'è già su `main` dopo lo zoom libero.
 - **Rischio da controllare**: le sfocature pesano. Il giorno prima va provato sul portatile della presentazione; chi chiede meno trasparenze, o un browser senza sfocatura, vede superfici piene.
 
