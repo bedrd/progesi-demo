@@ -10,6 +10,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='3' fill='%23DD0000'/%3E%3Cpath d='M10 8h8a6 6 0 0 1 0 12h-4v4h-4z' fill='%23fff'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/light/style.css">
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <style type="text/tailwindcss">
   @theme {
@@ -106,7 +107,7 @@
   .nav-i { display: flex; align-items: center; gap: .7rem; padding: .5rem .7rem; border-radius: 3px; font-size: .9rem; font-weight: 400; color: #4A4A4A; width: 100%; text-align: left; transition: background-color .12s; }
   .nav-i:hover { background: #F1F1F1; }
   .nav-i[aria-current="page"] { background: #FBEAEA; color: #DD0000; font-weight: 700; box-shadow: inset 3px 0 0 #DD0000; }
-  .nav-i .bi { font-size: 1.05rem; }
+  .nav-i .bi, .nav-i .ico { font-size: 1.1rem; }
   #nav .nav-i { white-space: nowrap; }
   .badge { margin-left: auto; background: #B45309; color: #fff; font-size: .75rem; font-weight: 700; border-radius: 3px; min-width: 1.25rem; padding: 0 .35rem; text-align: center; }
   /* numerini calmi: grigi per le cose da fare, arancio solo per quelle urgenti (scadute, scartate, da pagare entro 7 giorni) */
@@ -369,10 +370,10 @@
   .nav-i { border-radius: 12px; padding: .5rem .7rem; font-size: .875rem; color: #3A3A3A; }
   .nav-i:hover { background: rgba(255,255,255,.75); }
   .nav-i[aria-current="page"] { background: #fff; color: #1F1F1F; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 18px -10px rgba(60,0,0,.35), inset 0 1px 0 #fff; }
-  .nav-i[aria-current="page"] > .bi:first-child { color: #DD0000; }
+  .nav-i[aria-current="page"] > .bi:first-child, .nav-i[aria-current="page"] > .ico:first-child { color: #DD0000; }
   .nav-fare { width: 100%; display: flex; align-items: center; gap: .6rem; padding: .4rem .7rem; border-radius: 10px; font-size: .8125rem; color: #4A4A4A; text-align: left; }
   .nav-fare:hover { background: rgba(255,255,255,.75); }
-  .nav-fare .bi { color: #8A8A8A; }
+  .nav-fare .bi, .nav-fare .ico { color: #8A8A8A; }
   #colonna { background: rgba(255,255,255,.55); }
   header { border-bottom-color: rgba(60,0,0,.06) !important; }
   header #titolo { color: #6B6B6B; font-size: .875rem; font-weight: 500; }
@@ -382,6 +383,55 @@
   h1.font-display { font-weight: 500 !important; letter-spacing: -.025em; }
   .kpi-n { font-weight: 300 !important; letter-spacing: -.035em; }
   body.menu-aperto #sidebar { z-index: 55; top: 8px; bottom: 8px; left: 8px; width: auto; border-radius: 26px; border: 1px solid rgba(255,255,255,.9); background: rgba(250,247,247,.97); }
+  /* rifiniture: il rosso pieno resta per l'azione della pagina; nelle righe e nelle schede i pulsanti sono tinti */
+  .btn-pri.\!py-1\.5 { background: rgba(221,0,0,.09); color: #C00000; box-shadow: none; }
+  .btn-pri.\!py-1\.5:hover { background: rgba(221,0,0,.16); }
+  #sala-pannello .btn-pri.\!py-1\.5 { background: linear-gradient(180deg, #F2262B, #CC0000); color: #fff; box-shadow: 0 10px 20px -10px rgba(200,0,0,.75), inset 0 1px 0 rgba(255,255,255,.35); }
+  /* schede dentro la pagina: sottolineate, come nelle app Apple; le pillole restano per i filtri */
+  .seg[role="tablist"] { background: transparent; border: 0; border-bottom: 1px solid rgba(0,0,0,.08); border-radius: 0; padding: 0; gap: 1.4rem; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .seg[role="tablist"] button { border-radius: 0; padding: .55rem .1rem; color: #6B6B6B; background: transparent !important; box-shadow: none !important; font-weight: 500; }
+  .seg[role="tablist"] button:hover { color: #1F1F1F; }
+  .seg[role="tablist"] button[aria-pressed="true"] { color: #1F1F1F; font-weight: 600; box-shadow: inset 0 -2px 0 #DD0000 !important; }
+  .col-k { background: rgba(0,0,0,.035); border: 0; border-radius: 20px; }
+  /* Spotlight: cerca e chiede agli agenti, da ⌘K o dal pulsante flottante */
+  .cerca-pill { display: inline-flex; align-items: center; gap: .5rem; height: 36px; min-width: 250px; padding: 0 .45rem 0 .85rem; border-radius: 999px; background: rgba(0,0,0,.04); box-shadow: inset 0 1px 2px rgba(0,0,0,.08); color: #6B6B6B; font-size: .8125rem; text-align: left; }
+  .cerca-pill:hover { background: rgba(0,0,0,.06); }
+  .tasto-k, .spot-campo kbd { margin-left: auto; font-family: Inter, sans-serif; font-size: 11px; font-weight: 500; color: #6B6B6B; background: rgba(0,0,0,.06); border-radius: 7px; padding: 2px 7px; }
+  .spot-btn { position: fixed; right: 24px; bottom: 24px; z-index: 45; width: 54px; height: 54px; border-radius: 18px; display: grid; place-items: center; font-size: 1.4rem; color: #1F1F1F; background: rgba(255,255,255,.84); border: 1px solid rgba(255,255,255,.95); box-shadow: 0 18px 32px -14px rgba(60,0,0,.6), inset 0 1px 0 #fff; backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%); transition: transform .15s; }
+  .spot-btn:hover { transform: translateY(-2px); }
+  .spot-velo { align-items: flex-start !important; padding-top: 13vh !important; background: rgba(40,0,0,.26) !important; }
+  .spotlight { width: min(640px, 100%); border-radius: 22px; background: rgba(252,250,250,.94); border: 1px solid rgba(255,255,255,.9); box-shadow: 0 40px 80px -30px rgba(40,0,0,.65), inset 0 1px 0 #fff; backdrop-filter: blur(40px) saturate(160%); -webkit-backdrop-filter: blur(40px) saturate(160%); overflow: hidden; }
+  .spot-campo { display: flex; align-items: center; gap: .75rem; padding: 1rem 1.15rem; border-bottom: 1px solid rgba(0,0,0,.06); font-size: 1.2rem; color: #6B6B6B; }
+  .spot-campo input { flex: 1; min-width: 0; background: transparent; outline: none; font-size: 1.1rem; color: #1F1F1F; }
+  .spot-campo input::-webkit-search-cancel-button { display: none; }
+  .spot-ris p.uppercase { text-transform: none; letter-spacing: 0; font-size: .72rem; font-weight: 600; color: #8A8A8A; padding-top: .8rem; }
+  .spot-ris { max-height: 56vh; overflow-y: auto; padding: 4px 6px 10px; }
+  .spot-h { display: flex; align-items: center; gap: .35rem; font-size: .72rem; font-weight: 600; color: #8A8A8A; padding: .8rem .75rem .35rem; }
+  .spot-riga, .spot-ris button.w-full { width: 100%; text-align: left; padding: .55rem .75rem; border-radius: 12px; font-size: .875rem; }
+  .spot-riga:hover, .spot-ris button.w-full:hover, .spot-riga:focus-visible { background: rgba(221,0,0,.07); }
+  /* telefono stile iPhone: barra in basso, pagine della sezione in pillole, titolo piccolo che compare scorrendo, finestre che salgono dal basso */
+  #tabbar, #pagine-tel { display: none; }
+  @media (max-width: 1023px) {
+    #tabbar { display: flex; position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 45; height: 64px; padding: 6px; border-radius: 26px; background: rgba(252,250,250,.86); border: 1px solid rgba(255,255,255,.95); box-shadow: 0 18px 36px -14px rgba(60,0,0,.6), inset 0 1px 0 #fff; backdrop-filter: blur(30px) saturate(170%); -webkit-backdrop-filter: blur(30px) saturate(170%); }
+    .tab-b { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 18px; color: #6B6B6B; font-size: 10px; font-weight: 500; position: relative; }
+    .tab-b > i { font-size: 1.35rem; }
+    .tab-b[aria-current="true"] { color: #DD0000; background: rgba(221,0,0,.07); }
+    .tab-n { position: absolute; top: 3px; left: calc(50% + 6px); min-width: 15px; height: 15px; padding: 0 4px; border-radius: 99px; font-size: 9px; font-weight: 700; line-height: 15px; text-align: center; background: #E4E4E4; color: #3A3A3A; }
+    .tab-n.urg { background: #B45309; color: #fff; }
+    #pagine-tel { display: flex; gap: 6px; overflow-x: auto; padding: 8px 16px 0; scrollbar-width: none; }
+    #pagine-tel:empty { display: none; }
+    #pagine-tel button { flex: none; border-radius: 999px; padding: .4rem .85rem; font-size: .8125rem; font-weight: 500; color: #4A4A4A; background: rgba(0,0,0,.04); }
+    #pagine-tel button[aria-current="page"] { background: #fff; color: #1F1F1F; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 6px 14px -8px rgba(60,0,0,.35); }
+    header [data-a="menu"], #barra-modo { display: none !important; }
+    header #titolo { opacity: 0; transition: opacity .2s; }
+    body.scorso header #titolo { opacity: 1; }
+    .spot-btn { right: 18px; bottom: 86px; width: 48px; height: 48px; border-radius: 16px; font-size: 1.25rem; }
+    .modale-velo:not(.spot-velo) { align-items: flex-end; padding: 0; }
+    .modale-velo:not(.spot-velo) .modale { max-width: none !important; border-radius: 26px 26px 0 0; max-height: 92dvh; overflow-y: auto; animation: foglio .38s cubic-bezier(.2,.8,.2,1); }
+    .modale-velo:not(.spot-velo) .modale::before { content: ''; display: block; width: 38px; height: 5px; border-radius: 99px; background: rgba(0,0,0,.18); margin: 8px auto 0; }
+    .spot-velo { padding: 10px !important; }
+  }
+  @keyframes foglio { from { transform: translateY(100%); } to { transform: none; } }
   /* home: l'ufficio al centro */
   @media (min-width: 1024px) { .saluto-velo { background: radial-gradient(ellipse 100% 100% at 0 0, rgba(255,255,255,.5) 55%, rgba(255,255,255,0) 100%) !important; border-radius: 22px; } }
   .scena-vista { border-radius: 22px; }
@@ -438,7 +488,7 @@
       <span class="sala-marchio items-center gap-2 shrink-0"><span class="w-7 h-7 rounded bg-petrolio text-white flex items-center justify-center text-sm"><i class="bi bi-shield-check"></i></span><span class="font-display font-bold tracking-wide text-petrolio hidden sm:inline">PROGESI</span><span class="text-linea hidden sm:inline">|</span></span>
       <h2 id="titolo" class="font-display font-medium text-base sm:text-lg truncate min-w-0"></h2>
       <div class="ml-auto flex items-center gap-2 shrink-0">
-        <div class="relative hidden 2xl:block" id="cerca-box"><i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-grigio text-sm"></i><input id="cerca-tutto" type="search" class="campo !py-1.5 !pl-8 w-64" placeholder="Cerca clienti, preventivi, fatture" data-cerca-tutto="d" autocomplete="off" aria-label="Cerca in tutto il sistema"><div id="risultati" class="tendina card hidden"></div></div>
+        <div class="relative hidden 2xl:block" id="cerca-box"><button class="cerca-pill" data-a="spotlight" aria-label="Cerca o chiedi agli agenti"><i class="bi bi-search"></i>Cerca o chiedi agli agenti<kbd class="tasto-k">Ctrl K</kbd></button><div id="risultati" class="hidden"></div></div>
         <button class="btn btn-sec !px-2.5 2xl:hidden" data-a="cerca-apri" aria-label="Cerca in tutto il sistema" id="cerca-btn"><i class="bi bi-search"></i></button>
         <div class="relative" id="avvisi-box"><button class="btn btn-sec !px-2.5 relative" data-a="avvisi" aria-label="Avvisi" aria-expanded="false" id="avvisi-btn"><i class="bi bi-bell"></i><span id="avvisi-n" class="badge absolute -top-1.5 -right-1.5 !ml-0 hidden"></span></button><div id="avvisi" class="tendina card hidden"></div></div>
         <div class="hidden xl:flex items-center gap-2 ml-1">
@@ -455,12 +505,15 @@
         <button class="!px-1.5 !text-xs" data-a="modo" data-v="sala"><i class="bi bi-people"></i> Sala agenti</button>
       </div>
     </div>
+    <div id="pagine-tel" aria-label="Pagine della sezione"></div>
     <main id="vista" class="flex-1 overflow-y-auto"></main>
   </div>
 </div>
 
 <div id="modale"></div>
 <div id="glossa" role="tooltip" hidden></div>
+<button id="spot-btn" class="spot-btn" data-a="spotlight" aria-label="Cerca o chiedi agli agenti" title="Cerca o chiedi agli agenti"><i class="bi bi-stars"></i></button>
+<nav id="tabbar" aria-label="Sezioni"></nav>
 <div id="toast" role="status" aria-live="polite"><div class="bg-inchiostro text-white text-sm rounded px-4 py-3 shadow-xl flex items-center gap-2.5 max-w-xl"><i class="bi bi-check2-circle text-[#8FD3A9] text-base"></i><span id="toast-t"></span></div></div>
 
 <script>
@@ -848,6 +901,14 @@ function renderNav() {
     : sezioni.map(z => { const fare = avvisi().filter(e => z.id === 'home' || z.viste.includes(e.go));
       return `<div data-sez="${z.id}" ${z.id === att ? '' : 'hidden'}><p class="nav-titolo">${z.nome}</p><ul class="space-y-0.5">${z.l.map(voce).join('')}</ul>${fare.length ? `<p class="nav-sub">Da fare<span class="badge calmo !ml-0">${fare.length}</span></p><ul class="space-y-0.5">${fare.slice(0, 5).map(e => `<li><button class="nav-fare" data-a="vai" data-v="${e.go}"><i class="bi ${e.ico}"></i><span class="truncate">${e.tit}</span></button></li>`).join('')}</ul>` : ''}</div>`; }).join('') +
       (S.ruolo === 'dir' ? `<p class="px-3 mt-6 text-xs text-grigio leading-relaxed">Le voci senza etichetta sono la proposta base. ${modulo('CRM')} si aggiunge con la proposta con CRM, ${modulo('Opzionale')} si sceglie a parte.</p>` : `<p class="px-3 mt-6 text-xs text-grigio leading-relaxed"><i class="bi bi-person-lock"></i> ${RUOLO[S.ruolo][1]} vede solo le pagine del suo lavoro.</p>`);
+  // telefono: barra in basso con le sezioni, la Sala e il profilo; sotto l'header le pagine della sezione
+  const TAB = { home: 'Controllo', comm: 'Vendite', lav: 'Lavori', amm: 'Ammin.', imp: 'Impost.' };
+  const tab = (az, v, ico, t, cur, n = 0, u = false) => `<button class="tab-b" data-a="${az}" data-v="${v}" ${cur ? 'aria-current="true"' : ''} aria-label="${t}${n ? `, ${n} da guardare` : ''}"><i class="bi ${ico}"></i>${t}${n ? `<span class="tab-n ${u ? 'urg' : ''}">${n}</span>` : ''}</button>`;
+  $('#tabbar').innerHTML = tec ? tab('vai', 'tecnico', 'bi-tools', 'I miei lavori', true) + tab('menu', '', 'bi-person', 'Profilo', false)
+    : sezioni.filter(z => !z.giu).map(z => tab('vai', z.l[0], z.ico, TAB[z.id], S.modo !== 'sala' && z.id === att, sum(z.l, v => badge[v] || 0), z.l.some(v => badge[v] && urgente[v]))).join('') + tab('modo', 'sala', 'bi-people', 'Sala', S.modo === 'sala') + tab('menu', '', 'bi-person', 'Profilo', false);
+  const pag = !tec && S.modo !== 'sala' && sezioni.find(z => z.id === att);
+  $('#pagine-tel').innerHTML = pag && pag.l.length > 1 ? pag.l.map(v => `<button data-a="vai" data-v="${v}" ${S.view === v ? 'aria-current="page"' : ''}>${VOCI[v].t}</button>`).join('') : '';
+  $('#spot-btn').classList.toggle('hidden', tec);
   document.querySelectorAll('[data-a="ruolo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.ruolo));
   document.querySelectorAll('[data-a="modo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.modo));
   document.querySelectorAll('.modo-seg').forEach(x => x.classList.toggle('!hidden', tec));
@@ -1224,6 +1285,18 @@ function cercaTutto(q) {
   add('Fornitori', 'fornitori', FORN.filter(f => has(`${f.forn} ${f.cosa}`)).map(f => riga('vai', 'fornitori', esc(f.forn), `${esc(f.cosa)} · ${eur(f.imp)}`)));
   return `<div class="p-1.5 max-h-[60vh] overflow-y-auto">${gruppi.join('') || `<p class="px-3 py-4 text-sm text-grigio">Niente trovato per "${esc(q)}".</p>`}</div>`;
 }
+/* ---------- Spotlight: le pagine, le cose da cercare, e le domande agli agenti ---------- */
+const spotVuoto = () => { const vai = [['home', 'bi-speedometer2', 'Controllo di gestione'], ['ordini', 'bi-kanban', 'Nuovo preventivo'], ['clienti', 'bi-person-vcard', 'Clienti'], ['contabilita', 'bi-journal-bookmark', 'Contabilità'], ['fatture', 'bi-receipt-cutoff', 'Fatture'], ['impostazioni', 'bi-gear', 'Aggiornamenti normativi']].filter(([v]) => vede(v));
+  return `<p class="spot-h">Prova a cercare</p><div class="flex flex-wrap gap-1.5 px-3 pb-1">${['Trafilerie', 'FT 430', 'Crotti', 'cosa aspetta una decisione?'].map(t => `<button class="chip c-bl !py-1 !px-2.5" data-a="spot-prova" data-v="${t}">${t}</button>`).join('')}</div>
+    <p class="spot-h">Vai a</p>${vai.map(([v, ic, t]) => `<button class="spot-riga flex items-center gap-2.5" data-a="vai-chiudi" data-v="${v}"><i class="bi ${ic} text-grigio"></i>${t}</button>`).join('')}<button class="spot-riga flex items-center gap-2.5" data-a="spot-sala"><i class="bi bi-people text-grigio"></i>Sala agenti</button>`; };
+function chiediAgenti(q) {
+  if (S.ruolo === 'tec') return '';
+  q = q.toLowerCase(); const d = SALA.decisioni(), parole = q.split(/\s+/).filter(w => w.length > 2);
+  const domanda = /\?|cosa|chi |aspett|decid|agent|sala|fare/.test(q), l = domanda ? d : d.filter(x => parole.some(w => x.titolo.toLowerCase().includes(w)));
+  if (!l.length) return '';
+  const g = l.filter(x => SALA.peso(x) === 'guardare').length;
+  return `<p class="spot-h"><i class="bi bi-stars"></i>Gli agenti</p>${domanda ? `<p class="px-3 pb-1.5 text-sm">${l.length} ${pl(l.length, 'decisione aspetta', 'decisioni aspettano')} un vostro ok: ${g} da guardare, ${l.length - g} di routine.</p>` : ''}${l.slice(0, 4).map(x => `<button class="spot-riga" data-a="spot-dec" data-v="${x.id}"><span class="block truncate">${x.titolo}</span><span class="block text-xs text-grigio">${SALA.peso(x) === 'guardare' ? 'da guardare' : 'di routine'} · apri nella Sala</span></button>`).join('')}`;
+}
 function chiudiTendine() { $('#risultati').classList.add('hidden'); $('#avvisi').classList.add('hidden'); $('#avvisi-btn').setAttribute('aria-expanded', 'false'); $('#profilo-menu').classList.add('hidden'); $('#profilo').setAttribute('aria-expanded', 'false'); }
 document.addEventListener('click', e => { if (!e.target.closest?.('#profilo, #profilo-menu')) { $('#profilo-menu')?.classList.add('hidden'); $('#profilo')?.setAttribute('aria-expanded', 'false'); } });
 function scarica(nome, righe) {
@@ -1598,7 +1671,15 @@ const AZ_ = {
   avvisi: () => { const p = $('#avvisi'), aperto = p.classList.contains('hidden'); chiudiTendine(); if (!aperto) return; const l = avvisi();
     p.innerHTML = `<p class="px-4 py-3 border-b border-linea font-bold text-sm">Avvisi</p><ul class="p-1.5 max-h-[60vh] overflow-y-auto">${l.map(e => `<li><button class="w-full text-left px-3 py-2.5 rounded hover:bg-[#F3F3F3] flex gap-3 items-start text-sm" data-a="vai" data-v="${e.go}"><i class="bi ${e.ico} text-petrolio mt-0.5"></i><span><span class="block">${e.tit}</span><span class="block text-xs text-grigio">${e.sub}</span></span></button></li>`).join('') || '<li class="px-3 py-4 text-sm text-grigio">Niente in sospeso.</li>'}</ul>`;
     p.classList.remove('hidden'); $('#avvisi-btn').setAttribute('aria-expanded', 'true'); },
-  'cerca-apri': () => { apriModale('Cerca', `<div class="p-4 sm:p-5"><label class="relative block"><span class="sr-only">Cerca</span><i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-grigio text-sm"></i><input id="cerca-m" type="search" class="campo w-full !pl-8" placeholder="Clienti, preventivi, fatture, fornitori" data-cerca-tutto="m" autocomplete="off"></label><div id="risultati-m" class="mt-2"></div></div>`); $('#cerca-m').focus(); },
+  spotlight: () => { if (S.ruolo === 'tec') return; S.focusPrima = document.activeElement; chiudiTendine(); document.body.classList.remove('menu-aperto');
+    $('#modale').innerHTML = `<div class="modale-velo spot-velo" data-a="spot-fuori"><div class="spotlight entra" role="dialog" aria-modal="true" aria-label="Cerca o chiedi agli agenti"><label class="spot-campo"><i class="bi bi-search"></i><span class="sr-only">Cerca o chiedi agli agenti</span><input id="spot-q" type="search" placeholder="Cerca clienti, fatture, preventivi, o chiedi agli agenti" autocomplete="off" data-cerca-tutto="s"><kbd>esc</kbd></label><div id="spot-ris" class="spot-ris">${spotVuoto()}</div></div></div>`;
+    glossa($('#modale')); $('#spot-q').focus(); },
+  'spot-fuori': (v, el, e) => { if (e.target === el) chiudiModale(); },
+  'spot-prova': v => { const i = $('#spot-q'); i.value = v; i.dispatchEvent(new Event('input', { bubbles: true })); i.focus(); },
+  'spot-dec': v => { chiudiModale(); AZ_.modo('sala'); if (!SALA.decisioni().some(d => d.id === v)) return; SALA.stato.sel = null; SALA.stato.stanza = null; SALA.stato.aperta = v; render(); },
+  'spot-sala': () => { chiudiModale(); AZ_.modo('sala'); },
+  'cerca-apri': () => AZ_.spotlight(),
+  'cerca-apri-vecchio': () => { apriModale('Cerca', `<div class="p-4 sm:p-5"><label class="relative block"><span class="sr-only">Cerca</span><i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-grigio text-sm"></i><input id="cerca-m" type="search" class="campo w-full !pl-8" placeholder="Clienti, preventivi, fatture, fornitori" data-cerca-tutto="m" autocomplete="off"></label><div id="risultati-m" class="mt-2"></div></div>`); $('#cerca-m').focus(); },
   'ris-cli': v => { chiudiModale(); chiudiTendine(); S.cliSel = +v; vai('clienti'); },
   'ris-ord': v => { chiudiModale(); chiudiTendine(); const o = ord(v); S.kf = { tec: '', q: o.num || cli(o.cli).nome }; vai('ordini'); setTimeout(() => $('#kanban')?.scrollIntoView({ block: 'start' }), 50); },
   'nuovo-lavoro': () => apriModale('Nuovo lavoro', formLavoro()),
@@ -1741,6 +1822,8 @@ document.addEventListener('click', e => {
   AZ_[el.dataset.a]?.(el.dataset.v, el, e);
 });
 document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); if ($('#spot-q')) chiudiModale(); else AZ_.spotlight(); return; }
+  if (e.key === 'Enter' && e.target.id === 'spot-q') { e.preventDefault(); $('#spot-ris button[data-a]:not([data-a="spot-prova"])')?.click(); return; }
   if (e.key === 'Escape') { chiudiTendine(); if ($('#modale').innerHTML) chiudiModale(); else if (!(S.modo === 'sala' && SALA.chiudi())) document.body.classList.remove('menu-aperto'); }
   if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('tr[data-a]')) { e.preventDefault(); e.target.click(); }
 });
@@ -1770,6 +1853,7 @@ document.addEventListener('input', e => {
   if (t.dataset.kf === 'q') { S.kf.q = t.value; $('#kanban').innerHTML = kanban(); }
   if (t.dataset.cercaTutto === 'd') { const h = cercaTutto(t.value); $('#risultati').innerHTML = h; $('#risultati').classList.toggle('hidden', !h); }
   if (t.dataset.cercaTutto === 'm') $('#risultati-m').innerHTML = cercaTutto(t.value);
+  if (t.dataset.cercaTutto === 's') { const q = t.value.trim(), a = q.length < 2 ? '' : chiediAgenti(q), c = q.length < 2 ? '' : cercaTutto(q); $('#spot-ris').innerHTML = q.length < 2 ? spotVuoto() : a && c.includes('Niente trovato') ? a : a + c; }
   const k = t.dataset.prev;
   if (k === 'note') S.prev.note = t.value;
   if (k === 'sconto') { S.prev.sconto = Math.min(50, Math.max(0, +t.value || 0)); aggiornaPrev(); }
@@ -2580,6 +2664,14 @@ function check() {
   return ok === esiti.length;
 }
 { const r = new URLSearchParams(location.search).get('ruolo') || location.hash.slice(1), k = { amministrazione: 'amm', direzione: 'dir', responsabile: 'rt', tecnico: 'tec' }[r] || r; if (RUOLO[k]) { S.ruolo = k; S.view = RUOLO[k][3]; } }
+// icone sottili: ogni icona Bootstrap diventa la sua gemella Phosphor light, anche quelle disegnate dopo
+const ICONE = {"arrow-counterclockwise":"arrow-counter-clockwise","arrow-down-right":"arrow-down-right","arrow-left":"arrow-left","arrow-left-right":"arrows-left-right","arrow-repeat":"arrows-clockwise","arrow-right":"arrow-right","arrow-right-circle":"arrow-circle-right","arrow-up-right":"arrow-up-right","bank":"bank","bar-chart":"chart-bar","bell":"bell","box-arrow-up-right":"arrow-square-out","briefcase":"briefcase","calculator":"calculator","calendar-event":"calendar-dot","calendar-week":"calendar-blank","calendar3":"calendar","cash-coin":"coins","chat-left-text":"chat-text","chat-square-text":"chat-centered-text","check2":"check","check2-all":"checks","check2-circle":"check-circle","chevron-expand":"caret-up-down","chevron-right":"caret-right","chevron-left":"caret-left","chevron-up":"caret-up","chevron-down":"caret-down","clock-history":"clock-counter-clockwise","diagram-3":"tree-structure","door-open":"door-open","download":"download-simple","envelope":"envelope-simple","exclamation-triangle":"warning","eye":"eye","eye-slash":"eye-slash","file-earmark-check":"file-text","file-earmark-pdf":"file-pdf","file-earmark-plus":"file-plus","file-earmark-spreadsheet":"file-xls","file-earmark-text":"file-text","files":"files","filetype-xml":"file-code","flag":"flag","floppy":"floppy-disk","folder2-open":"folder-open","funnel":"funnel","gear":"gear-six","geo-alt":"map-pin","graph-up":"chart-line-up","graph-up-arrow":"trend-up","grid-1x2":"squares-four","hand-index":"hand-pointing","inbox":"tray","info-circle":"info","journal-bookmark":"book-bookmark","journal-check":"book-open-text","journal-text":"notebook","kanban":"kanban","lightbulb":"lightbulb","link-45deg":"link","list":"list","paperclip":"paperclip","patch-check":"seal-check","pause-fill":"pause","pencil":"pencil-simple","pencil-square":"note-pencil","people":"users","person":"user","person-badge":"identification-badge","person-check":"user-check","person-lock":"lock-key","person-plus":"user-plus","person-vcard":"address-book","phone":"device-mobile","play-fill":"play","plus-lg":"plus","question-circle":"question","receipt":"receipt","receipt-cutoff":"invoice","robot":"robot","search":"magnifying-glass","send":"paper-plane-tilt","send-check":"paper-plane-tilt","shield-check":"shield-check","shield-lock":"lock-key","sliders":"sliders-horizontal","speedometer2":"gauge","telephone":"phone","tools":"wrench","trash3":"trash","truck":"truck","upload":"upload-simple","wallet2":"wallet","x-circle":"x-circle","x-lg":"x","dash-square":"minus-square","plus-square":"plus-square","stars":"sparkle","house":"house","arrow-up":"arrow-up","dash":"minus","plus":"plus","x":"x","check":"check","command":"command"};
+function sottili(r) { if (!r || !r.querySelectorAll) return; const conv = i => { const n = [...i.classList].find(c => c.startsWith('bi-')); const ph = n && ICONE[n.slice(3)]; if (!ph) return; i.classList.remove('bi', n); i.classList.add('ph-light', 'ph-' + ph, 'ico'); };
+  if (r.matches?.('i.bi')) conv(r); r.querySelectorAll('i.bi').forEach(conv); }
+new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(sottili))).observe(document.body, { childList: true, subtree: true });
+sottili(document.body);
+if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.querySelectorAll('.tasto-k').forEach(k => k.textContent = '⌘K');
+$('#vista').addEventListener('scroll', e => document.body.classList.toggle('scorso', e.target.scrollTop > 56), { passive: true });
 render(true);
 check();
 SALA.avvia();

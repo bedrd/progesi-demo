@@ -103,6 +103,16 @@ const OUT = __dirname + '/shots/amm-';
   ok('numerini grigi, arancio solo se urgente', fac.calmi >= 4 && fac.urg.every(v => ['incassi', 'fatture', 'contabilita'].includes(v)), fac.urg.join(','));
   ok('prezzi e margini: 4 colonne, 8 con i dettagli', fac.colonne === 4 && fac.tutte === 8, `${fac.colonne}/${fac.tutte}`);
   ok('preventivo: prezzo consigliato in una riga', fac.hint.includes('Prezzo consigliato 1.650 €') && fac.hint.includes('Usa 1.650 €'), fac.hint);
+  // tocco Apple: Spotlight, icone sottili, barra in basso sul telefono
+  const ap = await p.evaluate(() => { AZ_.ruolo('dir'); vai('home'); AZ_.spotlight(); AZ_['spot-prova']('Trafilerie'); const ris = document.querySelector('#spot-ris').innerText;
+    AZ_['spot-prova']('cosa aspetta una decisione?'); const ag = document.querySelector('#spot-ris').innerText; const id = document.querySelector('#spot-ris [data-a="spot-dec"]').dataset.v; AZ_['spot-dec'](id);
+    const sala = S.modo === 'sala' && SALA.stato.aperta === id; AZ_.modo('gestionale');
+    return { ris, ag, sala, tab: document.querySelectorAll('#tabbar .tab-b').length }; });
+  await pausa(100); Object.assign(ap, await p.evaluate(() => ({ ph: document.querySelectorAll('i.ph-light').length, bi: document.querySelectorAll('i.bi').length })));
+  ok('Spotlight: cerca clienti, fatture e contratti', ['Trafilerie Adda S.p.A.', 'FT 418', 'Gli agenti'].every(t => ap.ris.includes(t)), ap.ris.slice(0, 80));
+  ok('Spotlight: chiede agli agenti e apre la decisione nella Sala', ap.ag.includes('aspettano un vostro ok') && ap.sala);
+  ok('icone sottili al posto di quelle piene', ap.ph > 30 && ap.bi === 0, `${ap.ph} sottili, ${ap.bi} piene`);
+  ok('telefono: barra in basso con sezioni, Sala e profilo', ap.tab === 6, ap.tab);
   // facile da capire: barra della demo, benvenuto, parole spiegate
   await p.evaluate(() => vai('impostazioni'));
   ok('profilo con i quattro ruoli, nessun ruolo in alto', (await p.$$('#profilo-menu [data-a="ruolo"]')).length === 4 && !(await p.$('header [data-a="ruolo"]')));

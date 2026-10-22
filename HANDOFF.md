@@ -16,6 +16,12 @@ Questo file serve a chi riprende il lavoro, persona o Claude, per avere tutta la
   - la **barra laterale** (`#pannello`): in alto il **profilo**, che apre il menu "Guarda la demo come" con i quattro ruoli (`#profilo-menu`, azione `profilo`); sotto, solo le pagine della sezione scelta e "Da fare" con gli avvisi di quella sezione. Le pagine delle altre sezioni restano nel DOM ma nascoste, così i test le trovano;
   - il **contenuto**, con il titolo piccolo e grigio nell'header e quello grande nella pagina.
   La barra scura della demo è diventata una **pillola** sopra la finestra con Suggerimenti e Guida. Dentro la finestra il rosso è solo un accento: voce attiva bianca rialzata con l'icona rossa, un pulsante principale; numeri grandi in Inter leggero (`.kpi-n`); campi incavati. La scena della Sala si adatta all'altezza dello schermo, così tutti gli agenti stanno nella finestra; le tabelle `.larga` diventano schede sotto i 1400 px e le `.larghissima` sotto i 1480.
+- **Tocco Apple** (dopo la finestra):
+  - **un solo rosso pieno per pagina**: i pulsanti dentro righe e schede (`.btn-pri.!py-1.5`: Assegna, Ha confermato, Emetti fattura, Correggi e rinvia…) sono tinti, rosso chiaro con testo rosso; il pieno resta per l'azione della pagina e per la prossima decisione nella Sala;
+  - **schede sottolineate** (`.seg[role="tablist"]`, cioè quelle di `tabs()`), con la riga rossa sotto quella attiva; le pillole restano per i filtri. Colonne della lavagna più leggere;
+  - **Spotlight**: pulsante flottante in basso a destra, la pillola "Cerca o chiedi agli agenti" nell'header e ⌘K / Ctrl K. Cerca clienti, preventivi, fatture, contratti e fornitori (`cercaTutto`) e chiede agli agenti (`chiediAgenti`): le decisioni che corrispondono, o il riepilogo se è una domanda ("cosa aspetta…?"); un clic apre la decisione nella Sala (`spot-dec`). Invio apre il primo risultato, Esc chiude;
+  - **telefono stile iPhone** (sotto i 1024 px): barra in basso (`#tabbar`) con Controllo, Vendite, Lavori, Ammin., Sala e Profilo (apre il menu con il cambio ruolo); sotto l'header le pagine della sezione in pillole (`#pagine-tel`); il titolo piccolo compare solo scorrendo; le finestre salgono dal basso con la maniglia; niente più hamburger né selettore Gestionale/Sala;
+  - **icone sottili**: Phosphor light al posto di Bootstrap Icons. Nel codice si scrive ancora `bi bi-nome`: all'avvio e a ogni disegno `sottili()` le converte con la mappa `ICONE` (un `MutationObserver`). Un'icona nuova va aggiunta alla mappa, altrimenti resta quella Bootstrap.
 - **Rischio da controllare**: le sfocature pesano. Il giorno prima va provato sul portatile della presentazione; chi chiede meno trasparenze, o un browser senza sfocatura, vede superfici piene.
 
 ## Novità del 19 ottobre (ramo `normativa-in-evidenza`)
@@ -83,7 +89,7 @@ Riepilogo per chi riprende il lavoro dopo questa giornata. I dettagli tecnici so
   - **Giorgio**, direttore commerciale, l'interlocutore delle call;
   - **due soci**, uno dei due segue i tecnici e confronta le ore;
   - **chi fa l'amministrazione** in Zucchetti G1: non è mai stato in call e il nome non lo sappiamo (in demo è "Elena Moretti").
-- **Stato**: la demo copre tutto quello che è stato chiesto nelle due call. Ha passato tre giri di verifica indipendenti più un giro finale, e 114 controlli automatici (vedi §9). I limiti noti sono al §11.
+- **Stato**: la demo copre tutto quello che è stato chiesto nelle due call. Ha passato tre giri di verifica indipendenti più un giro finale, e 118 controlli automatici (vedi §9). I limiti noti sono al §11.
 
 ## 2. File del repo
 
@@ -254,7 +260,7 @@ npm test
 - **Gli script**:
   - `giro.js`: il giro di presentazione completo (33 controlli);
   - `sala-test.js`: la Sala agenti, con routine e da guardare, stanze a fuoco e nastro (31 controlli);
-  - `amm-test.js`: l'amministrazione dal primo all'ultimo passo, più gli aggiornamenti normativi, più barra della demo, benvenuto, parole spiegate, nota di credito, menu, numerini, margini e prezzo consigliato, con le schermate a 1440 e 390 px in `test/shots/` (50 controlli);
+  - `amm-test.js`: l'amministrazione dal primo all'ultimo passo, più gli aggiornamenti normativi, più barra della demo, benvenuto, parole spiegate, nota di credito, menu, numerini, margini, prezzo consigliato, Spotlight, icone sottili e barra del telefono, con le schermate a 1440 e 390 px in `test/shots/` (54 controlli);
   - `verifica.js`: controlli di layout a 390, 768, 1024, 1280, 1366 e 1440 px, più punti specifici della Sala. Segnala come "NO" anche cose volute:
     - titoli brevi come "Banca" sotto gli 80 px;
     - su telefono la barra delle schede di Contabilità e la matrice dei permessi che scorrono di lato;
