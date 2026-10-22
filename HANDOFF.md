@@ -35,6 +35,13 @@ Questo file serve a chi riprende il lavoro, persona o Claude, per avere tutta la
   - **pannello della Sala più leggibile**: vetro del pannello più leggero e schede delle decisioni bianche quasi piene, così si staccano dal fondo.
   - **Home senza vuoti**: nella seconda riga l'altezza la decide la lista "Aspetta qualcuno"; l'ufficio della Sala riempie tutto il suo riquadro come una finestra sull'ufficio (`preserveAspectRatio="xMidYMid slice"`, almeno 260 px). "Da incassare" mostra le 5 fatture aperte più grandi, "Da dove arriva il fatturato" i tre servizi annuali che valgono di più tra i contratti in scheda.
   - **Aggiornamenti normativi riordinati** (Impostazioni e riquadro da Contabilità, `normativaCorpo()`): prima lo stato in verde ("Siete in regola", ultima novità e cosa cambia per voi), accanto chi se ne occupa; poi il registro come linea del tempo e, accanto, i 4 passi brevi di come arriva un aggiornamento; in fondo le regole attive e l'alternativa del gestionale con API.
+  - **Revisione da data analyst e UX** di tutte le pagine:
+    - numeri: un lavoro fissato di sabato o domenica scivola al primo giorno feriale, così compare nel calendario (prima il lavoro di Paolo del sabato spariva); il riquadro del costo delle ore interne spiega le stesse 1.020 ore del numero (ore del file dei collaboratori più quelle dei soci, calcolate); i saldi della banca senza centesimi come gli altri numeri di sintesi;
+    - Contratti: sotto i 1480 px le schede vanno a griglia (prima una riga larga e mezza vuota per contratto) e ogni scheda dice il servizio;
+    - Banca: entrate, uscite e differenza in testa ai movimenti; le colonne "Conto" e "Da dove" compaiono solo se cambiano;
+    - Incassi: prima dell'estratto, "Scadono entro 7 giorni" e "Scadute" al posto di due zeri, e niente colonna vuota;
+    - Pianificazione: carico dei tecnici in una riga, da assegnare sotto, niente vuoti; Ore e timbrature: prima dei file, chi c'è e cosa succede dopo;
+    - margini sotto il 10% (e in perdita) in ambra pieno (`.c-perdita`); in Trattative il riepilogo dei persi parte dal valore perso, non ripete l'84%.
   - **Aperto**: a 1280-1366 px Archivista e Ore e timbrature finiscono sotto il bordo dello schermo nella Sala (si raggiungono scorrendo). C'è già su `main` dopo lo zoom libero.
 - **Rischio da controllare**: le sfocature pesano. Il giorno prima va provato sul portatile della presentazione; chi chiede meno trasparenze, o un browser senza sfocatura, vede superfici piene.
 
