@@ -528,6 +528,26 @@
   #sala-pannello .bg-white, #sala-pannello .bg-white:not(.modale *) { background-color: rgba(255,255,255,.94) !important; }
   #sala-pannello .border-linea { border-color: rgba(120,0,0,.1) !important; }
   #sala-pannello .bg-carta { background-color: rgba(255,255,255,.7) !important; }
+  /* ================= glassmorphism a due livelli =================
+     Livello 1, i contenitori (riquadri, colonne della lavagna, pannelli): vetro grigio chiaro "fumo", come il grigio del logo,
+     semitrasparente e sfocato, con bordo sottile luminoso: si stacca dallo sfondo rosa senza diventare un foglio bianco.
+     Livello 2, le schede dentro (lavori, righe, decisioni, tessere): bianco al 58%, un gradino sopra il fumo, mai bianco pieno. */
+  :root { --fumo: linear-gradient(155deg, rgba(250,249,249,.72) 0%, rgba(238,236,236,.6) 55%, rgba(230,228,229,.56) 100%); --bordo-fumo: rgba(255,255,255,.62); --scheda: rgba(255,255,255,.58); --bordo-scheda: rgba(255,255,255,.8); }
+  .card { background: var(--fumo) !important; border: 1px solid var(--bordo-fumo) !important; border-radius: 28px; backdrop-filter: blur(26px) saturate(160%); -webkit-backdrop-filter: blur(26px) saturate(160%); box-shadow: 0 24px 48px -28px rgba(70,0,0,.55), 0 1px 2px rgba(70,0,0,.06), inset 0 1px 0 rgba(255,255,255,.9), inset 1px 0 0 rgba(255,255,255,.45), inset 0 -1px 0 rgba(255,255,255,.25) !important; }
+  .card .card, #sala-pannello .card { background: var(--scheda) !important; border-color: var(--bordo-scheda) !important; border-radius: 20px; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: 0 8px 18px -12px rgba(70,0,0,.3), inset 0 1px 0 rgba(255,255,255,.9) !important; }
+  .col-k { background: var(--fumo) !important; border: 1px solid var(--bordo-fumo) !important; border-radius: 26px; backdrop-filter: blur(22px) saturate(160%); -webkit-backdrop-filter: blur(22px) saturate(160%); box-shadow: 0 20px 40px -26px rgba(70,0,0,.5), inset 0 1px 0 rgba(255,255,255,.9) !important; }
+  .tess { background: var(--scheda) !important; border: 1px solid var(--bordo-scheda) !important; border-radius: 18px; box-shadow: 0 8px 18px -12px rgba(70,0,0,.32), inset 0 1px 0 rgba(255,255,255,.95) !important; }
+  .tess:hover { background: rgba(255,255,255,.75) !important; }
+  .card .bg-white, .card .bg-white:not(.modale *), .col-k .bg-white { background-color: var(--scheda) !important; }
+  .card .bg-carta { background-color: rgba(255,255,255,.5) !important; }
+  .card .rounded.border, .card .rounded-\[20px\] { border-color: var(--bordo-scheda) !important; }
+  .card .bg-white\/70 { background-color: var(--scheda) !important; }
+  .tab-t tr.clic:hover td, .impila tr.clic:hover { background: rgba(255,255,255,.45); }
+  .impila.larghissima tr { background: var(--scheda) !important; border-color: var(--bordo-scheda) !important; }
+  .card.vetro-scuro { background: linear-gradient(160deg, rgba(44,14,14,.88), rgba(22,8,8,.8)) !important; border-color: rgba(255,255,255,.16) !important; backdrop-filter: blur(26px) saturate(150%); -webkit-backdrop-filter: blur(26px) saturate(150%); }
+  #colonna { background: rgba(255,255,255,.22) !important; }
+  .modale { background: rgba(248,246,246,.9) !important; }
+  @media (prefers-reduced-transparency: reduce) { .card, .col-k { background: #F3F1F1 !important; backdrop-filter: none !important; } .card .card, .tess { background: #fff !important; } }
   /* home: l'ufficio al centro */
   @media (min-width: 1024px) { .saluto-velo { background: radial-gradient(ellipse 100% 100% at 0 0, rgba(255,255,255,.5) 55%, rgba(255,255,255,0) 100%) !important; border-radius: 22px; } }
   .scena-vista { border-radius: 22px; }
@@ -2426,7 +2446,7 @@ const SALA = (() => {
   // una persona seduta, vista di spalle: gambe verso la scrivania, braccia piegate sulla tastiera, spalle, collo, testa con capelli e orecchie
   const PANTALONI = ['#2F3542', '#3A3A3A', '#4A4F5A', '#1F2933', '#5B4636', '#34495E'];
   function persona(a, i, x, y) {
-    const [tx, ty] = P(x, y, 0.44), sy = ty - 0.74 * SC, ab = ABITI[i % ABITI.length], pe = PELLE[i % PELLE.length], ca = CAPELLI[(i * 2 + 1) % CAPELLI.length], r = 0.17 * SC, hy = sy - 3.4 - r, lunghi = [1, 4, 6, 9].includes(i);
+    const [tx, ty] = P(x, y, 0.44), sy = ty - 0.74 * SC, ab = ABITI[i % ABITI.length], pe = PELLE[i % PELLE.length], ca = CAPELLI[(i * 2 + 1) % CAPELLI.length], r = 0.145 * SC, hy = sy - 3 - r, lunghi = [1, 4, 6, 9].includes(i);
     const pa = PANTALONI[i % PANTALONI.length], ma = shade(ab, ab > '#C0' ? -.16 : -.1), pt = q => q.map(f1).join(' ');
     let s = '';
     // gambe: coscia sulla seduta verso la scrivania, ginocchio, stinco giù fino alla scarpa
@@ -2441,11 +2461,28 @@ const SALA = (() => {
     s += `<path d="M${f1(tx)} ${f1(sy + 1)} L${f1(tx)} ${f1(ty - 2)}" stroke="${shade(ab, -.22)}" stroke-width="0.5" opacity="0.6"/>`;
     // collo e colletto
     s += `<rect x="${f1(tx - 2.2)}" y="${f1(sy - 3.8)}" width="4.4" height="4.6" rx="1.3" fill="${shade(pe, -.1)}"/><path d="M${f1(tx - 3.6)} ${f1(sy - 0.3)} Q${f1(tx)} ${f1(sy + 2)} ${f1(tx + 3.6)} ${f1(sy - 0.3)}" fill="none" stroke="${shade(ab, -.25)}" stroke-width="0.9"/>`;
-    if (lunghi) s += `<path d="M${f1(tx - r - 0.6)} ${f1(hy)} L${f1(tx - r + 0.6)} ${f1(sy + 3.2)} Q${f1(tx)} ${f1(sy + 4.4)} ${f1(tx + r - 0.6)} ${f1(sy + 3.2)} L${f1(tx + r + 0.6)} ${f1(hy)} Z" fill="${ca}"/>`;
-    // orecchie, testa, capelli con riflesso
-    s += `<ellipse cx="${f1(tx - r * 0.95)}" cy="${f1(hy + 1.3)}" rx="1.3" ry="1.9" fill="${shade(pe, -.08)}"/><ellipse cx="${f1(tx + r * 0.95)}" cy="${f1(hy + 1.3)}" rx="1.3" ry="1.9" fill="${shade(pe, -.08)}"/>`;
-    s += `<circle cx="${f1(tx)}" cy="${f1(hy)}" r="${f1(r)}" fill="${pe}"/><path d="M${f1(tx - r - 0.5)} ${f1(hy + 1.4)} A${f1(r + 0.5)} ${f1(r + 0.5)} 0 1 1 ${f1(tx + r + 0.5)} ${f1(hy + 1.4)} Q${f1(tx)} ${f1(hy + (lunghi ? 4.6 : 3))} ${f1(tx - r - 0.5)} ${f1(hy + 1.4)} Z" fill="${ca}"/>`;
-    s += `<path d="M${f1(tx - r * 0.5)} ${f1(hy - r * 0.55)} Q${f1(tx)} ${f1(hy - r * 0.85)} ${f1(tx + r * 0.45)} ${f1(hy - r * 0.6)}" fill="none" stroke="#fff" stroke-width="0.9" opacity="0.28" stroke-linecap="round"/>`;
+    // testa di tre quarti: la persona guarda il monitor (in alto a destra), noi vediamo nuca, guancia, orecchio e profilo del naso
+    const pt2 = t => [tx + r * Math.cos(t * Math.PI / 180), hy + r * Math.sin(t * Math.PI / 180)], q2 = (t, k = 1) => { const [x, y] = [tx + r * k * Math.cos(t * Math.PI / 180), hy + r * k * Math.sin(t * Math.PI / 180)]; return `${f1(x)} ${f1(y)}`; };
+    const stile = ['corti', 'coda', 'corti', 'raccolti', 'lunghi', 'corti', 'ricci', 'lunghi', 'corti', 'coda', 'corti'][i % 11], pe2 = shade(pe, -.12);
+    // collo che sale nella testa e mascella sul lato del viso
+    s += `<path d="M${f1(tx - 2)} ${f1(sy - 0.4)} L${f1(tx - 1.6)} ${f1(hy + r * 0.6)} L${f1(tx + 2.6)} ${f1(hy + r * 0.55)} L${f1(tx + 2.4)} ${f1(sy - 0.4)} Z" fill="${pe2}"/>`;
+    // testa
+    s += `<circle cx="${f1(tx)}" cy="${f1(hy)}" r="${f1(r)}" fill="${pe}"/>`;
+    // naso e mento sul profilo verso il monitor
+    s += `<path d="M${q2(-24)} Q${q2(-14, 1.22)} ${q2(-4, 1.02)}" fill="${pe}" stroke="${pe2}" stroke-width="0.5"/><path d="M${q2(28)} Q${q2(40, 1.12)} ${q2(52, 1.02)}" fill="${pe}"/>`;
+    // ombra della guancia e sopracciglio
+    s += `<circle cx="${f1(pt2(-18)[0] - r * 0.24)}" cy="${f1(pt2(-18)[1] + r * 0.1)}" r="0.45" fill="#2A2420" opacity="0.7"/><path d="M${q2(18, 0.78)} Q${q2(26, 0.86)} ${q2(34, 0.8)}" fill="none" stroke="${pe2}" stroke-width="0.45" stroke-linecap="round" opacity="0.8"/>`;
+    // capelli: coprono nuca e testa, lasciano libero il viso (da -60 a 40 gradi)
+    const capelli = stile === 'ricci' ? `<path d="M${q2(40)} A${f1(r)} ${f1(r)} 0 1 1 ${q2(-62)} Q${q2(-30, 0.35)} ${q2(40)} Z" fill="${ca}"/>${[200, 235, 270, 305, 165, 130].map(t => `<circle cx="${f1(pt2(t)[0])}" cy="${f1(pt2(t)[1])}" r="${f1(r * 0.32)}" fill="${ca}"/>`).join('')}`
+      : `<path d="M${q2(42, 1.04)} A${f1(r * 1.06)} ${f1(r * 1.06)} 0 1 1 ${q2(-64, 1.06)} Q${q2(-40, 0.45)} ${q2(-5, 0.35)} Q${q2(20, 0.55)} ${q2(42, 1.04)} Z" fill="${ca}"/>`;
+    s += capelli;
+    if (stile === 'coda') s += `<path d="M${q2(165, 0.9)} Q${f1(tx - r * 1.5)} ${f1(hy + r * 0.6)} ${f1(tx - r * 1.15)} ${f1(hy + r * 1.6)} Q${f1(tx - r * 0.8)} ${f1(hy + r * 0.9)} ${q2(140, 0.9)} Z" fill="${ca}"/>`;
+    if (stile === 'raccolti') s += `<circle cx="${f1(pt2(205)[0])}" cy="${f1(pt2(205)[1])}" r="${f1(r * 0.42)}" fill="${shade(ca, -.08)}"/>`;
+    if (stile === 'lunghi') s += `<path d="M${q2(100, 1.02)} Q${f1(tx - r * 1.1)} ${f1(hy + r * 1.4)} ${f1(tx - r * 0.3)} ${f1(sy + 3)} L${f1(tx + r * 0.5)} ${f1(sy + 2)} Q${f1(tx + r * 0.3)} ${f1(hy + r * 1.1)} ${q2(60, 1.02)} Z" fill="${ca}"/>`;
+    // orecchio sul lato in vista, sopra i capelli
+    s += `<ellipse cx="${f1(tx + r * 0.12)}" cy="${f1(hy + r * 0.14)}" rx="0.95" ry="1.45" fill="${pe}" stroke="${pe2}" stroke-width="0.45"/>`;
+    // riflesso sui capelli
+    s += `<path d="M${q2(225, 0.7)} Q${q2(250, 0.85)} ${q2(285, 0.75)}" fill="none" stroke="#fff" stroke-width="0.9" opacity="0.25" stroke-linecap="round"/>`;
     return { s, hy };
   }
   function postazione(a) {
