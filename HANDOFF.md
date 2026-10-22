@@ -27,6 +27,22 @@ Questo file serve a chi riprende il lavoro, persona o Claude, per avere tutta la
   - **Liquid glass solo sullo strato che si tocca** (`.liquido`: barre, pulsanti, selettori, pillole, con il riflesso sul bordo); i riquadri con i dati restano vetro quasi pieno, come fa Apple.
   - **Home a mosaico pieno**: quattro numeri della stessa altezza, ognuno con il suo grafico (barre del fatturato, arco del margine, una barretta per ordine fornitore, barrette delle ore del mese), poi l'ufficio della Sala accanto ad "Aspetta qualcuno", poi grafico, provenienza del fatturato e da incassare.
   - **Numeri che si adattano** al riquadro (`.kpi-box` con container query): non escono più. Il pulsante flottante di Spotlight copriva i testi in basso a destra ed è stato tolto: la ricerca sta nella barra in alto e con Ctrl K.
+- **Correzioni dopo la prova di Bedr** (ramo `sala-agenti-umani`):
+  - **logo e nome originali** di Progesi, presi dal loro sito progesisrl.it: il logo intero con "Società di ingegneria" nella barra in alto e nelle anteprime di fatture e preventivi (`.logo-progesi`, immagine dentro il file), il marchio come icona della scheda del browser;
+  - **agenti più umani**: gambe con scarpe, braccia piegate con gomito e mani sulla tastiera, spalle, collo con colletto, orecchie, capelli con riflesso; schienale della sedia più basso per vedere la persona (`persona()`, `sedia()`);
+  - **zoom della Sala su tutta la larghezza**: il riquadro dello zoom (`.scena-vista`) è largo quanto la colonna; al 100% la scena resta centrata, avvicinando usa tutto lo spazio;
+  - **profilo non tagliato**: nome e ruolo interi, mostrati da 1800 px in su (sotto resta l'avatar); anche la ricerca estesa compare da 1800 px;
+  - **pannello della Sala più leggibile**: vetro del pannello più leggero e schede delle decisioni bianche quasi piene, così si staccano dal fondo.
+  - **Home senza vuoti**: nella seconda riga l'altezza la decide la lista "Aspetta qualcuno"; l'ufficio della Sala riempie tutto il suo riquadro come una finestra sull'ufficio (`preserveAspectRatio="xMidYMid slice"`, almeno 260 px). "Da incassare" mostra le 5 fatture aperte più grandi, "Da dove arriva il fatturato" i tre servizi annuali che valgono di più tra i contratti in scheda.
+  - **Aggiornamenti normativi riordinati** (Impostazioni e riquadro da Contabilità, `normativaCorpo()`): prima lo stato in verde ("Siete in regola", ultima novità e cosa cambia per voi), accanto chi se ne occupa; poi il registro come linea del tempo e, accanto, i 4 passi brevi di come arriva un aggiornamento; in fondo le regole attive e l'alternativa del gestionale con API.
+  - **Revisione da data analyst e UX** di tutte le pagine:
+    - numeri: un lavoro fissato di sabato o domenica scivola al primo giorno feriale, così compare nel calendario (prima il lavoro di Paolo del sabato spariva); il riquadro del costo delle ore interne spiega le stesse 1.020 ore del numero (ore del file dei collaboratori più quelle dei soci, calcolate); i saldi della banca senza centesimi come gli altri numeri di sintesi;
+    - Contratti: sotto i 1480 px le schede vanno a griglia (prima una riga larga e mezza vuota per contratto) e ogni scheda dice il servizio;
+    - Banca: entrate, uscite e differenza in testa ai movimenti; le colonne "Conto" e "Da dove" compaiono solo se cambiano;
+    - Incassi: prima dell'estratto, "Scadono entro 7 giorni" e "Scadute" al posto di due zeri, e niente colonna vuota;
+    - Pianificazione: carico dei tecnici in una riga, da assegnare sotto, niente vuoti; Ore e timbrature: prima dei file, chi c'è e cosa succede dopo;
+    - margini sotto il 10% (e in perdita) in ambra pieno (`.c-perdita`); in Trattative il riepilogo dei persi parte dal valore perso, non ripete l'84%.
+  - **Aperto**: a 1280-1366 px Archivista e Ore e timbrature finiscono sotto il bordo dello schermo nella Sala (si raggiungono scorrendo). C'è già su `main` dopo lo zoom libero.
 - **Rischio da controllare**: le sfocature pesano. Il giorno prima va provato sul portatile della presentazione; chi chiede meno trasparenze, o un browser senza sfocatura, vede superfici piene.
 
 ## Novità del 19 ottobre (ramo `normativa-in-evidenza`)
