@@ -6,7 +6,7 @@ Regole che non si discutono:
 - La demo è **un solo file**, `progesi.html`. Niente build, niente file nuovi per la demo.
 - All'apertura la console deve stampare `[check] 44/44 controlli sui dati: dati coerenti`.
 - I numeri si calcolano dai dati, non si scrivono a mano. Il registro IVA vendite fa lo stesso totale del fatturato del mese, e la prima nota è in pareggio.
-- Stile a vetro liquido (HANDOFF, novità del 22 ottobre): il rosso `#DD0000` è il colore principale (sfondo, marchio, voce attiva, azioni) con il bianco; pannelli di vetro chiaro, angoli tondi e pillole, carattere Inter. Grafici e barre restano grafite, errori e urgenze in ambra. La scena della Sala agenti usa la palette del marchio (HANDOFF §8).
+- Stile a vetro liquido (HANDOFF, novità del 22 ottobre): il rosso `#DD0000` è il colore principale (sfondo, marchio, voce attiva, azioni) con il bianco; glassmorphism a due livelli (contenitori in vetro fumo sfocato con bordo luminoso, schede dentro bianche al 58%), angoli tondi e pillole, carattere Inter. Grafici e barre restano grafite, errori e urgenze in ambra. La scena della Sala agenti usa la palette del marchio (HANDOFF §8).
 - I testi sono in italiano, e non c'è **mai** il trattino lungo (`—` o `–`). Ogni vista ha la sua riga "Prova:".
 - Nella demo non c'è mai il nome del vecchio gestionale (Zucchetti, G1), né un confronto con lui, neanche nel codice: Progesi se ne vuole staccare.
 - Passando tra Gestionale e Sala agenti non si perde niente: lo stato è uno solo (`S`) e le decisioni della Sala si calcolano da lì.

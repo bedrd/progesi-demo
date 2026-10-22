@@ -43,6 +43,8 @@ Questo file serve a chi riprende il lavoro, persona o Claude, per avere tutta la
     - Pianificazione: carico dei tecnici in una riga, da assegnare sotto, niente vuoti; Ore e timbrature: prima dei file, chi c'è e cosa succede dopo;
     - margini sotto il 10% (e in perdita) in ambra pieno (`.c-perdita`); in Trattative il riepilogo dei persi parte dal valore perso, non ripete l'84%.
   - **Aperto**: a 1280-1366 px Archivista e Ore e timbrature finiscono sotto il bordo dello schermo nella Sala (si raggiungono scorrendo). C'è già su `main` dopo lo zoom libero.
+- **Glassmorphism a due livelli** (ramo `vetro-fumo`): i contenitori (riquadri, colonne della lavagna, pannelli) sono vetro grigio chiaro "fumo", come il grigio del logo, semitrasparente e sfocato (`--fumo`, blur 26 px) con bordo sottile luminoso e angoli da 28 px; le schede dentro (lavori, righe, decisioni, tessere) sono bianco al 58% (`--scheda`), un gradino sopra il fumo ma mai bianco pieno. Prima i contenitori erano quasi trasparenti e le schede dentro troppo bianche. Il fatturato resta in vetro scuro.
+- **Agenti di tre quarti**: la testa è girata verso il monitor, così si vedono guancia, orecchio, naso, occhio e collo; i capelli lasciano libero il viso e cambiano da agente ad agente (corti, coda, raccolti, lunghi, ricci); testa più piccola, in proporzione al corpo (`persona()`).
 - **Rischio da controllare**: le sfocature pesano. Il giorno prima va provato sul portatile della presentazione; chi chiede meno trasparenze, o un browser senza sfocatura, vede superfici piene.
 
 ## Novità del 19 ottobre (ramo `normativa-in-evidenza`)
