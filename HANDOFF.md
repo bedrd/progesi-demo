@@ -27,6 +27,13 @@ Questo file serve a chi riprende il lavoro, persona o Claude, per avere tutta la
   - **Liquid glass solo sullo strato che si tocca** (`.liquido`: barre, pulsanti, selettori, pillole, con il riflesso sul bordo); i riquadri con i dati restano vetro quasi pieno, come fa Apple.
   - **Home a mosaico pieno**: quattro numeri della stessa altezza, ognuno con il suo grafico (barre del fatturato, arco del margine, una barretta per ordine fornitore, barrette delle ore del mese), poi l'ufficio della Sala accanto ad "Aspetta qualcuno", poi grafico, provenienza del fatturato e da incassare.
   - **Numeri che si adattano** al riquadro (`.kpi-box` con container query): non escono più. Il pulsante flottante di Spotlight copriva i testi in basso a destra ed è stato tolto: la ricerca sta nella barra in alto e con Ctrl K.
+- **Correzioni dopo la prova di Bedr** (ramo `sala-agenti-umani`):
+  - **logo e nome originali** di Progesi, presi dal loro sito progesisrl.it: il logo intero con "Società di ingegneria" nella barra in alto e nelle anteprime di fatture e preventivi (`.logo-progesi`, immagine dentro il file), il marchio come icona della scheda del browser;
+  - **agenti più umani**: gambe con scarpe, braccia piegate con gomito e mani sulla tastiera, spalle, collo con colletto, orecchie, capelli con riflesso; schienale della sedia più basso per vedere la persona (`persona()`, `sedia()`);
+  - **zoom della Sala su tutta la larghezza**: il riquadro dello zoom (`.scena-vista`) è largo quanto la colonna; al 100% la scena resta centrata, avvicinando usa tutto lo spazio;
+  - **profilo non tagliato**: nome e ruolo interi, mostrati da 1800 px in su (sotto resta l'avatar); anche la ricerca estesa compare da 1800 px;
+  - **pannello della Sala più leggibile**: vetro del pannello più leggero e schede delle decisioni bianche quasi piene, così si staccano dal fondo.
+  - **Aperto**: a 1280-1366 px Archivista e Ore e timbrature finiscono sotto il bordo dello schermo nella Sala (si raggiungono scorrendo). C'è già su `main` dopo lo zoom libero.
 - **Rischio da controllare**: le sfocature pesano. Il giorno prima va provato sul portatile della presentazione; chi chiede meno trasparenze, o un browser senza sfocatura, vede superfici piene.
 
 ## Novità del 19 ottobre (ramo `normativa-in-evidenza`)
