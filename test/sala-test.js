@@ -23,7 +23,7 @@ const OUT = __dirname + '/shots/sala-';
   const righePrima = await p.evaluate(() => S.prev.righe.length);
   await clic('header [data-a="modo"][data-v="sala"]');
   ok('sala aperta', (await titolo()) === 'Sala agenti' && await p.evaluate(() => !!document.querySelector('#scena svg')));
-  ok('barra laterale nascosta nella sala', await p.evaluate(() => getComputedStyle(document.querySelector('#sidebar')).display === 'none'));
+  ok('pagine del gestionale nascoste nella sala', await p.evaluate(() => document.querySelector('#nav').classList.contains('vuota')));
   const nDec = await p.evaluate(() => SALA.decisioni().length); ok('decisioni in sospeso', nDec >= 5, `${nDec}: ${await p.evaluate(() => SALA.decisioni().map(d => d.id).join(', '))}`);
   ok('11 agenti in sala', await p.evaluate(() => document.querySelectorAll('#badges .badge-ag').length) === 11);
   await pausa(4200); ok('gli agenti lavorano dal vivo', await p.evaluate(() => SALA.stato.passo) >= 1);

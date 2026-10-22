@@ -99,7 +99,7 @@ const OUT = __dirname + '/shots/amm-';
     vai('margini'); const colonne = document.querySelector('#vista table').querySelectorAll('thead th').length; AZ_['marg-dett'](); const tutte = document.querySelector('#vista table').querySelectorAll('thead th').length; AZ_['marg-dett']();
     vai('ordini'); const hint = document.querySelector('#vista [data-a="prev-giusto"]')?.closest('div').innerText.replace(/\s+/g, ' ') || ''; AZ_.ruolo('amm');
     return { vis, chiusa, aperta, calmi, urg, colonne, tutte, hint }; });
-  ok('menu: 5 sezioni nella barra scura, accanto solo le pagine della sezione', fac.chiusa && fac.vis === 1 && fac.aperta === 6, `${fac.vis} > ${fac.aperta}`);
+  ok('menu: 5 sezioni nella pillola in alto, sotto le pagine della sezione', fac.chiusa && fac.vis === 0 && fac.aperta === 6, `${fac.vis} > ${fac.aperta}`);
   ok('numerini grigi, arancio solo se urgente', fac.calmi >= 4 && fac.urg.every(v => ['incassi', 'fatture', 'contabilita'].includes(v)), fac.urg.join(','));
   ok('prezzi e margini: 4 colonne, 8 con i dettagli', fac.colonne === 4 && fac.tutte === 8, `${fac.colonne}/${fac.tutte}`);
   ok('preventivo: prezzo consigliato in una riga', fac.hint.includes('Prezzo consigliato 1.650 €') && fac.hint.includes('Usa 1.650 €'), fac.hint);

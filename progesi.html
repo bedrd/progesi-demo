@@ -441,12 +441,76 @@
     .spot-velo { padding: 10px !important; }
   }
   @keyframes foglio { from { transform: translateY(100%); } to { transform: none; } }
+  /* ================= iOS 26: navigazione in alto, liquid glass sui controlli =================
+     Come fa Apple: il vetro liquido è per lo strato che si tocca (barre, pulsanti, selettori, pillole);
+     i riquadri con i dati restano vetro quasi pieno, per leggere bene. Niente barra laterale, contenuto a tutta larghezza. */
+  #app { display: flex !important; flex-direction: column; }
+  #sidebar, #velo-menu { display: none !important; }
+  .liquido { position: relative; background: linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.34)); border: 0; box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 1px rgba(255,255,255,.35), inset 1px 0 0 rgba(255,255,255,.45), inset -1px 0 0 rgba(255,255,255,.25), 0 0 0 .5px rgba(80,0,0,.08), 0 10px 26px -12px rgba(90,0,0,.45); backdrop-filter: blur(16px) saturate(200%) brightness(1.06); -webkit-backdrop-filter: blur(16px) saturate(200%) brightness(1.06); }
+  .liquido::before { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,255,255,.08) 38%, rgba(255,255,255,0) 62%, rgba(255,255,255,.55)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+  .barra-alta { height: 64px; background: transparent !important; border: 0 !important; }
+  .marchio { display: inline-flex; align-items: center; gap: .5rem; height: 44px; padding: 0 .9rem 0 .35rem; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: .1em; color: #CC0000; flex: none; }
+  .marchio-ico { width: 34px; height: 34px; border-radius: 999px; display: grid; place-items: center; color: #fff; background: linear-gradient(180deg, #FF3B3B, #D10000); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 6px 14px -6px rgba(200,0,0,.8); }
+  .titolo-barra { display: none; font-size: .95rem; color: #1F1F1F; }
+  #rail.sezioni { display: none; width: auto; padding: 4px; gap: 2px; border-radius: 999px; flex-direction: row; align-items: center; flex: none; }
+  @media (min-width: 1024px) { #rail.sezioni { display: flex; } }
+  .rail-b { position: relative; width: auto; height: 40px; padding: 0 .9rem; border-radius: 999px; display: inline-flex; align-items: center; gap: .45rem; color: #3A3A3A; font-size: .875rem; font-weight: 500; background: transparent; box-shadow: none; transition: background-color .2s, color .2s; white-space: nowrap; }
+  .rail-b > .bi, .rail-b > .ico { font-size: 1.15rem; }
+  .rail-b:hover { background: rgba(255,255,255,.5); color: #1F1F1F; }
+  .rail-b[aria-current="true"] { background: #fff; color: #1F1F1F; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 6px 16px -8px rgba(90,0,0,.45), inset 0 1px 0 #fff; }
+  .rail-b[aria-current="true"] > .bi, .rail-b[aria-current="true"] > .ico { color: #DD0000; }
+  .rail-t { display: none; }
+  .rail-b[aria-current="true"] .rail-t { display: inline; }
+  @media (min-width: 1600px) { .rail-t { display: inline; } }
+  .rail-n { position: static; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 99px; font-size: 10px; font-weight: 700; line-height: 18px; text-align: center; background: rgba(0,0,0,.08); color: #3A3A3A; }
+  .rail-n.urg { background: #B45309; color: #fff; }
+  @media (max-width: 1599px) { .rail-b:not([aria-current]) .rail-n { position: absolute; top: 0; right: 0; min-width: 15px; height: 15px; line-height: 15px; font-size: 9px; padding: 0 3px; } }
+  .tondo { width: 44px; height: 44px; border-radius: 999px; display: grid; place-items: center; color: #1F1F1F; font-size: 1.1rem; flex: none; }
+  .tondo:hover { background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.5)); }
+  .cerca-pill { height: 44px; min-width: 210px; background: none; box-shadow: none; }
+  header .seg.liquido { padding: 4px; height: 44px; align-items: center; background: linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.34)); border: 0; }
+  header .seg.liquido button { height: 36px; }
+  .profilo { height: 44px; width: auto; padding: 0 .65rem 0 4px; gap: .55rem; border-radius: 999px; align-items: center; }
+  .profilo:hover, .profilo[aria-expanded="true"] { background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.55)); }
+  #avatar { width: 36px; height: 36px; box-shadow: 0 0 0 2px rgba(255,255,255,.9); }
+  .profilo-menu { position: absolute; left: auto; right: 16px; top: 66px; width: 290px; z-index: 60; }
+  .pagine { display: flex; gap: 8px; padding: 0 1rem 10px; overflow-x: auto; scrollbar-width: none; flex: none; }
+  .pagine.vuota { display: none; }
+  .pagine-sez { display: flex; gap: 8px; }
+  .pagine-sez[hidden] { display: none; }
+  .pagine .nav-i { width: auto; flex: none; height: 40px; padding: 0 .9rem; gap: .5rem; border-radius: 999px; font-size: .875rem; color: #3A3A3A; white-space: nowrap; background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.28)); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 1px rgba(255,255,255,.3), 0 0 0 .5px rgba(80,0,0,.08); backdrop-filter: blur(12px) saturate(180%); -webkit-backdrop-filter: blur(12px) saturate(180%); }
+  .pagine .nav-i:hover { background: rgba(255,255,255,.75); }
+  .pagine .nav-i[aria-current="page"] { background: #fff; color: #1F1F1F; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 6px 16px -8px rgba(90,0,0,.45), inset 0 1px 0 #fff; }
+  .pagine .nav-i .badge { margin-left: .15rem; }
+  /* pulsanti in vetro liquido: il secondario trasparente con il riflesso, il principale rosso lucido */
+  .btn-sec { background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.55)); border: 0; box-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgba(255,255,255,.4), 0 0 0 .5px rgba(80,0,0,.12), 0 6px 14px -8px rgba(90,0,0,.35); backdrop-filter: blur(10px) saturate(180%); -webkit-backdrop-filter: blur(10px) saturate(180%); }
+  .btn-sec:hover { background: #fff; }
+  .btn-pri { background: linear-gradient(180deg, #FF3B3B 0%, #E00000 55%, #C40000 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 6px rgba(110,0,0,.3), 0 10px 22px -10px rgba(200,0,0,.8); }
+  .btn-pri:hover { background: linear-gradient(180deg, #F52E2E, #C80000); }
+  .seg { background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,255,255,.25)); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 0 0 .5px rgba(80,0,0,.08); }
+  .card { border-radius: 26px; }
+  /* numeri grandi che si adattano al riquadro: non escono mai */
+  .kpi-box { container-type: inline-size; }
+  .kpi-box .kpi-n { font-size: clamp(1.3rem, 14.5cqi, 2.4rem) !important; overflow: hidden; text-overflow: ellipsis; }
+  .nav-i, .chip { min-width: 0; }
+  @media (max-width: 1023px) {
+    .barra-alta { height: 56px; }
+    .titolo-barra { display: block; opacity: 0; transition: opacity .2s; }
+    body.scorso .titolo-barra { opacity: 1; }
+    body.scorso .marchio > span:last-child { display: none; }
+    .marchio { height: 40px; }
+    .tondo { width: 40px; height: 40px; }
+    .profilo-menu { position: fixed; left: 10px; right: 10px; top: auto; bottom: 84px; width: auto; }
+    .pagine { padding: 0 12px 8px; }
+  }
+  /* il pulsante flottante copriva i testi in basso a destra: la ricerca sta nella barra in alto e con Ctrl K */
+  .spot-btn { display: none !important; }
   /* home: l'ufficio al centro */
   @media (min-width: 1024px) { .saluto-velo { background: radial-gradient(ellipse 100% 100% at 0 0, rgba(255,255,255,.5) 55%, rgba(255,255,255,0) 100%) !important; border-radius: 22px; } }
   .scena-vista { border-radius: 22px; }
   /* la scena della Sala sta tutta nella finestra: la larghezza segue l'altezza dello schermo */
   @media (min-width: 1024px) { .scena-vista { max-width: calc((100dvh - 250px) * 1.3); margin-inline: auto; } }
-  .ufficio-home svg { display: block; width: 100%; height: auto; pointer-events: none; }
+  .ufficio-home svg { display: block; width: 100%; height: auto; max-height: 100%; pointer-events: none; }
   .pillola { display: inline-flex; align-items: center; gap: .45rem; border-radius: 999px; padding: .4rem .8rem; font-size: .8125rem; font-weight: 600; background: rgba(255,255,255,.82); border: 1px solid rgba(255,255,255,.95); box-shadow: 0 8px 18px -10px rgba(90,0,0,.45), var(--luce); backdrop-filter: blur(14px) saturate(170%); -webkit-backdrop-filter: blur(14px) saturate(170%); color: #1F1F1F; }
   /* chi chiede meno trasparenze, o un browser senza sfocatura, vede superfici piene */
   @media (prefers-reduced-transparency: reduce) {
@@ -472,49 +536,33 @@
   </div>
 </div>
 <div id="app">
-  <aside id="sidebar" class="h-full" aria-label="Menu principale">
-    <div id="rail" aria-label="Sezioni"></div>
-    <div id="pannello">
-      <div class="finestra-top"><span class="semafori" aria-hidden="true"><i></i><i></i><i></i></span><span class="marchio-pic">Progesi</span></div>
-      <div class="relative px-3">
-        <button id="profilo" class="profilo" data-a="profilo" aria-expanded="false" aria-haspopup="menu" aria-label="Chi sta usando il sistema: cambia ruolo"><span id="avatar">GI</span><span class="flex-1 min-w-0 text-left leading-tight"><span class="block font-semibold text-sm truncate" id="utente-nome">Giorgio</span><span class="block text-xs text-grigio truncate" id="utente-ruolo">Direttore commerciale</span></span><i class="bi bi-chevron-expand text-grigio"></i></button>
-        <div id="profilo-menu" class="tendina profilo-menu hidden" role="menu" aria-label="Guarda la demo come">
-          <p class="text-[11px] text-grigio px-2 pt-1.5 pb-1">Guarda la demo come</p>
-          <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="dir"><span class="av">GI</span><span><b>Giorgio</b><small>Direzione</small></span></button>
-          <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="rt"><span class="av">RT</span><span><b>Responsabile tecnico</b><small>Socio, segue i tecnici</small></span></button>
-          <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="amm"><span class="av">EM</span><span><b>Elena Moretti</b><small>Amministrazione</small></span></button>
-          <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="tec"><span class="av">PF</span><span><b>Paolo Ferri</b><small>Tecnico</small></span></button>
-        </div>
-      </div>
-      <nav class="flex-1 overflow-y-auto px-3 py-3" id="nav"></nav>
-    </div>
-  </aside>
-  <div id="velo-menu" class="fixed inset-0 bg-inchiostro/40 z-30" data-a="chiudi-menu"></div>
-
-  <div id="colonna" class="flex flex-col h-full">
-    <header class="relative z-40 h-14 shrink-0 bg-white/80 backdrop-blur border-b border-linea flex items-center gap-3 px-4 sm:px-6">
-      <button class="lg:hidden btn btn-sec !px-2.5" data-a="menu" aria-label="Apri il menu"><i class="bi bi-list text-lg"></i></button>
-      <span class="sala-marchio items-center gap-2 shrink-0"><span class="w-7 h-7 rounded bg-petrolio text-white flex items-center justify-center text-sm"><i class="bi bi-shield-check"></i></span><span class="font-display font-bold tracking-wide text-petrolio hidden sm:inline">PROGESI</span><span class="text-linea hidden sm:inline">|</span></span>
-      <h2 id="titolo" class="font-display font-medium text-base sm:text-lg truncate min-w-0"></h2>
+  <div id="colonna" class="flex flex-col h-full min-h-0">
+    <header class="barra-alta relative z-40 shrink-0 flex items-center gap-2 px-3 sm:px-4">
+      <span class="marchio liquido"><span class="marchio-ico"><i class="bi bi-shield-check"></i></span><span class="hidden sm:inline">PROGESI</span></span>
+      <h2 id="titolo" class="titolo-barra font-display font-medium truncate min-w-0"></h2>
+      <nav id="rail" class="sezioni liquido" aria-label="Sezioni"></nav>
       <div class="ml-auto flex items-center gap-2 shrink-0">
-        <div class="relative hidden 2xl:block" id="cerca-box"><button class="cerca-pill" data-a="spotlight" aria-label="Cerca o chiedi agli agenti"><i class="bi bi-search"></i>Cerca o chiedi agli agenti<kbd class="tasto-k">Ctrl K</kbd></button><div id="risultati" class="hidden"></div></div>
-        <button class="btn btn-sec !px-2.5 2xl:hidden" data-a="cerca-apri" aria-label="Cerca in tutto il sistema" id="cerca-btn"><i class="bi bi-search"></i></button>
-        <div class="relative" id="avvisi-box"><button class="btn btn-sec !px-2.5 relative" data-a="avvisi" aria-label="Avvisi" aria-expanded="false" id="avvisi-btn"><i class="bi bi-bell"></i><span id="avvisi-n" class="badge absolute -top-1.5 -right-1.5 !ml-0 hidden"></span></button><div id="avvisi" class="tendina card hidden"></div></div>
-        <div class="hidden xl:flex items-center gap-2 ml-1">
-          <div class="seg modo-seg" role="group" aria-label="Come vedere il sistema">
+        <div class="relative hidden 2xl:block" id="cerca-box"><button class="cerca-pill liquido" data-a="spotlight" aria-label="Cerca o chiedi agli agenti"><i class="bi bi-search"></i>Cerca o chiedi<kbd class="tasto-k">Ctrl K</kbd></button><div id="risultati" class="hidden"></div></div>
+        <button class="tondo liquido 2xl:hidden" data-a="cerca-apri" aria-label="Cerca o chiedi agli agenti" id="cerca-btn"><i class="bi bi-search"></i></button>
+        <div class="relative" id="avvisi-box"><button class="tondo liquido" data-a="avvisi" aria-label="Avvisi" aria-expanded="false" id="avvisi-btn"><i class="bi bi-bell"></i><span id="avvisi-n" class="badge absolute -top-1 -right-1 !ml-0 hidden"></span></button><div id="avvisi" class="tendina card hidden"></div></div>
+        <div class="hidden lg:flex items-center">
+          <div class="seg modo-seg liquido" role="group" aria-label="Come vedere il sistema">
             <button data-a="modo" data-v="gestionale"><i class="bi bi-grid-1x2"></i> Gestionale</button>
             <button data-a="modo" data-v="sala"><i class="bi bi-people"></i> Sala agenti</button>
           </div>
         </div>
+        <button id="profilo" class="profilo liquido hidden lg:flex" data-a="profilo" aria-expanded="false" aria-haspopup="menu" aria-label="Chi sta usando il sistema: cambia ruolo"><span id="avatar">GI</span><span class="hidden min-[1600px]:block min-w-0 text-left leading-tight"><span class="block font-semibold text-[13px] truncate max-w-[9rem]" id="utente-nome">Giorgio</span><span class="block text-[11px] text-grigio truncate max-w-[9rem]" id="utente-ruolo">Direttore commerciale</span></span><i class="bi bi-chevron-expand text-grigio"></i></button>
       </div>
     </header>
-    <div id="barra-modo" class="xl:hidden shrink-0 bg-white border-b border-linea px-4 sm:px-6 py-2">
-      <div class="seg modo-seg w-full" role="group" aria-label="Come vedere il sistema">
-        <button class="!px-1.5 !text-xs" data-a="modo" data-v="gestionale"><i class="bi bi-grid-1x2"></i> Gestionale</button>
-        <button class="!px-1.5 !text-xs" data-a="modo" data-v="sala"><i class="bi bi-people"></i> Sala agenti</button>
-      </div>
+    <div id="profilo-menu" class="tendina profilo-menu hidden" role="menu" aria-label="Guarda la demo come">
+      <p class="text-[11px] text-grigio px-2 pt-1.5 pb-1">Guarda la demo come</p>
+      <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="dir"><span class="av">GI</span><span><b>Giorgio</b><small>Direzione</small></span></button>
+      <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="rt"><span class="av">RT</span><span><b>Responsabile tecnico</b><small>Socio, segue i tecnici</small></span></button>
+      <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="amm"><span class="av">EM</span><span><b>Elena Moretti</b><small>Amministrazione</small></span></button>
+      <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="tec"><span class="av">PF</span><span><b>Paolo Ferri</b><small>Tecnico</small></span></button>
+      <div id="profilo-extra"></div>
     </div>
-    <div id="pagine-tel" aria-label="Pagine della sezione"></div>
+    <nav id="nav" class="pagine" aria-label="Pagine della sezione"></nav>
     <main id="vista" class="flex-1 overflow-y-auto"></main>
   </div>
 </div>
@@ -899,29 +947,21 @@ function renderNav() {
     contabilita: daPagare().filter(x => x.scad <= 7).length,
   };
   const att = sezDi(S.view).id, sezioni = SEZ.map(z => ({ ...z, l: z.viste.filter(v => vede(v)) })).filter(z => z.l.length);
-  const voce = v => { const { ico, t, mod } = VOCI[v]; return `<li><button class="nav-i" data-a="vai" data-v="${v}" ${S.view === v ? 'aria-current="page"' : ''}><i class="bi ${ico}"></i>${t}${mod ? `<span class="${badge[v] ? 'ml-1' : 'ml-auto'}">${modulo(mod)}</span>` : ''}${badge[v] ? `<span class="badge ${urgente[v] ? '' : 'calmo'}" aria-label="${badge[v]} da guardare${urgente[v] ? ', urgente' : ''}">${badge[v]}</span>` : ''}</button></li>`; };
-  const tasto = z => { const n = sum(z.l, v => badge[v] || 0), u = z.l.some(v => badge[v] && urgente[v]); return `<button class="rail-b" data-a="vai" data-v="${z.l[0]}" ${z.id === att ? 'aria-current="true"' : ''} title="${z.nome}" aria-label="${z.nome}${n ? `, ${n} da guardare` : ''}"><i class="bi ${z.ico}"></i>${n && z.id !== att ? `<span class="rail-n ${u ? 'urg' : ''}">${n}</span>` : ''}</button>`; };
-  const logo = '<span class="rail-logo" title="Progesi" aria-hidden="true"><i class="bi bi-shield-check"></i></span>';
-  $('#rail').innerHTML = tec ? `<div class="rail-capsula">${logo}<button class="rail-b" aria-current="true" title="I miei lavori" aria-label="I miei lavori"><i class="bi bi-tools"></i></button></div>`
-    : `<div class="rail-capsula">${logo}${sezioni.filter(z => !z.giu).map(tasto).join('')}</div>${sezioni.some(z => z.giu) ? `<div class="rail-capsula giu">${sezioni.filter(z => z.giu).map(tasto).join('')}</div>` : ''}`;
-  $('#nav').innerHTML = tec
-    ? `<p class="nav-titolo">I miei lavori</p><ul><li><button class="nav-i" aria-current="page"><i class="bi bi-tools"></i>I miei lavori</button></li></ul>
-       <p class="px-3 mt-4 text-xs text-grigio leading-relaxed"><i class="bi bi-phone"></i> Il tecnico vede solo i suoi lavori, anche da telefono. Niente prezzi, niente margini.</p>`
-    : sezioni.map(z => { const fare = avvisi().filter(e => z.id === 'home' || z.viste.includes(e.go));
-      return `<div data-sez="${z.id}" ${z.id === att ? '' : 'hidden'}><p class="nav-titolo">${z.nome}</p><ul class="space-y-0.5">${z.l.map(voce).join('')}</ul>${fare.length ? `<p class="nav-sub">Da fare<span class="badge calmo !ml-0">${fare.length}</span></p><ul class="space-y-0.5">${fare.slice(0, 5).map(e => `<li><button class="nav-fare" data-a="vai" data-v="${e.go}"><i class="bi ${e.ico}"></i><span class="truncate">${e.tit}</span></button></li>`).join('')}</ul>` : ''}</div>`; }).join('') +
-      (S.ruolo === 'dir' ? `<p class="px-3 mt-6 text-xs text-grigio leading-relaxed">Le voci senza etichetta sono la proposta base. ${modulo('CRM')} si aggiunge con la proposta con CRM, ${modulo('Opzionale')} si sceglie a parte.</p>` : `<p class="px-3 mt-6 text-xs text-grigio leading-relaxed"><i class="bi bi-person-lock"></i> ${RUOLO[S.ruolo][1]} vede solo le pagine del suo lavoro.</p>`);
-  // telefono: barra in basso con le sezioni, la Sala e il profilo; sotto l'header le pagine della sezione
-  const TAB = { home: 'Controllo', comm: 'Vendite', lav: 'Lavori', amm: 'Ammin.', imp: 'Impost.' };
+  const TAB = { home: 'Controllo', comm: 'Vendite', lav: 'Lavori', amm: 'Ammin.', imp: 'Impost.' }, NOMI = { home: 'Controllo', comm: 'Commerciale', lav: 'Lavori e margini', amm: 'Amministrazione', imp: 'Impostazioni' };
+  const tasto = z => { const n = sum(z.l, v => badge[v] || 0), u = z.l.some(v => badge[v] && urgente[v]), cur = S.modo !== 'sala' && z.id === att; return `<button class="rail-b" data-a="vai" data-v="${z.l[0]}" ${cur ? 'aria-current="true"' : ''} title="${z.nome}" aria-label="${z.nome}${n ? `, ${n} da guardare` : ''}"><i class="bi ${z.ico}"></i><span class="rail-t">${NOMI[z.id]}</span>${n && !cur ? `<span class="rail-n ${u ? 'urg' : ''}">${n}</span>` : ''}</button>`; };
+  $('#rail').innerHTML = tec ? `<button class="rail-b" aria-current="true" title="I miei lavori"><i class="bi bi-tools"></i><span class="rail-t">I miei lavori</span></button>` : sezioni.map(tasto).join('');
+  // le pagine della sezione: in pillole sotto la barra, solo se la sezione ne ha più di una; le altre restano nascoste per i test
+  $('#nav').innerHTML = tec ? '' : sezioni.map(z => `<div class="pagine-sez" data-sez="${z.id}" ${z.id === att && z.l.length > 1 && S.modo !== 'sala' ? '' : 'hidden'}>${z.l.map(v => { const { ico, t, mod } = VOCI[v]; return `<button class="nav-i" data-a="vai" data-v="${v}" ${S.view === v ? 'aria-current="page"' : ''}><i class="bi ${ico}"></i>${t}${mod ? modulo(mod) : ''}${badge[v] ? `<span class="badge ${urgente[v] ? '' : 'calmo'}" aria-label="${badge[v]} da guardare${urgente[v] ? ', urgente' : ''}">${badge[v]}</span>` : ''}</button>`; }).join('')}</div>`).join('');
+  $('#nav').classList.toggle('vuota', tec || S.modo === 'sala' || !sezioni.some(z => z.id === att && z.l.length > 1));
+  $('#profilo-extra').innerHTML = tec ? '' : `<div class="border-t border-linea mt-1.5 pt-1.5">${['impostazioni', 'sicurezza'].filter(v => vede(v)).map(v => `<button class="profilo-voce" role="menuitem" data-a="vai" data-v="${v}"><span class="av"><i class="bi ${VOCI[v].ico}"></i></span><span><b>${VOCI[v].t}</b></span></button>`).join('')}${S.ruolo === 'dir' ? `<p class="px-2 pt-2 pb-1 text-[11px] text-grigio leading-relaxed">Le voci senza etichetta sono la proposta base. ${modulo('CRM')} si aggiunge con la proposta con CRM, ${modulo('Opzionale')} si sceglie a parte.</p>` : ''}</div>`;
+  // telefono: barra in basso con le sezioni, la Sala e il profilo
   const tab = (az, v, ico, t, cur, n = 0, u = false) => `<button class="tab-b" data-a="${az}" data-v="${v}" ${cur ? 'aria-current="true"' : ''} aria-label="${t}${n ? `, ${n} da guardare` : ''}"><i class="bi ${ico}"></i>${t}${n ? `<span class="tab-n ${u ? 'urg' : ''}">${n}</span>` : ''}</button>`;
   $('#tabbar').innerHTML = tec ? tab('vai', 'tecnico', 'bi-tools', 'I miei lavori', true) + tab('menu', '', 'bi-person', 'Profilo', false)
     : sezioni.filter(z => !z.giu).map(z => tab('vai', z.l[0], z.ico, TAB[z.id], S.modo !== 'sala' && z.id === att, sum(z.l, v => badge[v] || 0), z.l.some(v => badge[v] && urgente[v]))).join('') + tab('modo', 'sala', 'bi-people', 'Sala', S.modo === 'sala') + tab('menu', '', 'bi-person', 'Profilo', false);
-  const pag = !tec && S.modo !== 'sala' && sezioni.find(z => z.id === att);
-  $('#pagine-tel').innerHTML = pag && pag.l.length > 1 ? pag.l.map(v => `<button data-a="vai" data-v="${v}" ${S.view === v ? 'aria-current="page"' : ''}>${VOCI[v].t}</button>`).join('') : '';
   $('#spot-btn').classList.toggle('hidden', tec);
   document.querySelectorAll('[data-a="ruolo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.ruolo));
   document.querySelectorAll('[data-a="modo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.modo));
   document.querySelectorAll('.modo-seg').forEach(x => x.classList.toggle('!hidden', tec));
-  $('#barra-modo').classList.toggle('!hidden', tec);
   $('[data-a="guida"]').setAttribute('aria-pressed', S.guida !== false);
   const [ini, nome, ruolo] = RUOLO[S.ruolo];
   $('#avatar').textContent = ini; $('#utente-nome').textContent = nome; $('#utente-ruolo').textContent = ruolo;
@@ -948,11 +988,11 @@ function render(nuova) {
   glossa($('#vista'));
 }
 const prova = t => S.guida === false ? '' : `<p class="prova-riga mb-4 text-sm text-ambra bg-arancio-velo border border-arancio/40 rounded px-3.5 py-2 flex gap-2"><i class="bi bi-hand-index"></i><span><strong>Prova:</strong> ${t}</span></p>`;
-const kpi = (label, val, sub = '', cls = '', az = '', box = '', extra = '') => { const corpo = `<span class="flex items-start justify-between gap-2 text-sm text-grigio"><span>${label}</span>${az ? '<i class="bi bi-arrow-up-right text-xs mt-1 opacity-60 group-hover:opacity-100 transition-opacity"></i>' : ''}</span><span class="kpi-n block font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3 text-[1.6rem] sm:text-[2rem] xl:text-[2.35rem] ${cls}">${val}</span>${sub ? `<span class="block text-xs sm:text-sm mt-2.5 text-grigio">${sub}</span>` : ''}${extra}`;
-  return az ? `<button type="button" class="group card p-4 sm:p-6 text-left w-full hover:border-white transition-colors ${box}" data-a="dettaglio" data-v="${az}" aria-label="${label}: apri il dettaglio">${corpo}</button>` : `<div class="card p-4 sm:p-6 ${box}">${corpo}</div>`; };
+const kpi = (label, val, sub = '', cls = '', az = '', box = '', extra = '') => { const corpo = `<span class="flex items-start justify-between gap-2 text-sm text-grigio"><span>${label}</span>${az ? '<i class="bi bi-arrow-up-right text-xs mt-1 opacity-60 group-hover:opacity-100 transition-opacity"></i>' : ''}</span><span class="kpi-n block font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3 text-[1.6rem] sm:text-[2rem] xl:text-[2.35rem] ${cls}">${val}</span><span class="block mt-auto">${sub ? `<span class="block text-xs sm:text-sm mt-2.5 text-grigio">${sub}</span>` : ''}${extra}</span>`;
+  return az ? `<button type="button" class="group card kpi-box p-4 sm:p-5 text-left w-full h-full flex flex-col hover:border-white transition-colors ${box}" data-a="dettaglio" data-v="${az}" aria-label="${label}: apri il dettaglio">${corpo}</button>` : `<div class="card kpi-box p-4 sm:p-5 h-full flex flex-col ${box}">${corpo}</div>`; };
 // arco del margine, come un indicatore: pieno al 60% del fatturato, la tacca segna l'obiettivo
 const arco = (q, obiettivo) => { const v = Math.max(0, Math.min(1, q / .6)) * 100, o = Math.max(0, Math.min(1, obiettivo / .6)) * Math.PI, ox = 100 - Math.cos(o) * 80, oy = 100 - Math.sin(o) * 80;
-  return `<svg viewBox="0 0 200 112" class="w-full max-w-[220px] mt-3" aria-hidden="true"><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="rgba(48,48,48,.12)" stroke-width="14" stroke-linecap="round"/><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#3A3A3A" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="${v.toFixed(1)} 100"/><circle cx="${ox.toFixed(1)}" cy="${oy.toFixed(1)}" r="4" fill="#fff" stroke="#3A3A3A" stroke-width="2"/><text x="100" y="92" text-anchor="middle" font-family="Inter" font-size="26" font-weight="600" fill="currentColor">${pc(q)}</text><text x="100" y="108" text-anchor="middle" font-family="Inter" font-size="10" fill="#6B6B6B">obiettivo ${pc(obiettivo)}</text></svg>`; };
+  return `<svg viewBox="0 0 200 112" class="w-full max-w-[160px] mt-2" aria-hidden="true"><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="rgba(48,48,48,.12)" stroke-width="14" stroke-linecap="round"/><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#3A3A3A" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="${v.toFixed(1)} 100"/><circle cx="${ox.toFixed(1)}" cy="${oy.toFixed(1)}" r="4" fill="#fff" stroke="#3A3A3A" stroke-width="2"/><text x="100" y="92" text-anchor="middle" font-family="Inter" font-size="26" font-weight="600" fill="currentColor">${pc(q)}</text><text x="100" y="108" text-anchor="middle" font-family="Inter" font-size="10" fill="#6B6B6B">obiettivo ${pc(obiettivo)}</text></svg>`; };
 /* ---------- parole spiegate ----------
    La prima volta che una parola tecnica compare in una pagina viene sottolineata a puntini:
    passandoci sopra, o toccandola da telefono, compare la spiegazione in parole semplici. */
@@ -1359,40 +1399,39 @@ const VISTE = {
     return `<div class="flex flex-wrap items-end justify-between gap-4 mb-4"><div><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${saluto()}, ${NOME[S.ruolo] || NOME.dir}</h1><p class="text-grigio mt-1 max-w-[34rem]">I numeri ${P.label}, aggiornati a stamattina. Oggi li vedete solo con il bilancio del commercialista, ogni tre mesi.</p></div>
       <div class="seg" role="group" aria-label="Periodo">${[['mese', 'Mese'], ['trim', 'Ultimi 3 mesi'], ['anno', 'Da inizio anno']].map(([v, t]) => `<button data-a="per" data-v="${v}" aria-pressed="${S.per === v}">${t}</button>`).join('')}</div></div>
     ${S.ruolo === 'dir' ? prova('passa in alto a <strong>Tecnico</strong>, chiudi il DVR di Cascina Rosa con le ore fatte, poi torna su <strong>Direzione</strong>. I quattro riquadri qui sotto si aprono nel dettaglio. Per gli aggiornamenti normativi: <strong>Impostazioni</strong>, primo riquadro.') : ''}
-    <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] 2xl:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)_minmax(0,1.1fr)] gap-4 sm:gap-5 mb-5 items-start">
-      <div class="grid grid-cols-2 lg:grid-cols-1 gap-4 sm:gap-5 scaglione">
-        ${kpi(`Fatturato ${P.label}`, eur(P.f), 'dalle fatture elettroniche emesse', '', 'fatt', 'vetro-scuro', `<span class="flex items-end justify-between gap-2 h-14 mt-4" aria-hidden="true">${(() => { const lo = Math.min(...serie.map(x => x.f)); return serie.map((x, i) => `<span class="flex flex-col items-center justify-end gap-1 h-full flex-1"><span class="cresce block w-full max-w-[12px] rounded-full ${i === 5 ? 'bg-white' : 'bg-white/30'}" style="height:${Math.round(30 + 70 * (x.f - lo) / Math.max(1, max - lo))}%;animation-delay:${i * 50}ms"></span><span class="text-[10px] ${i === 5 ? 'text-white' : 'text-white/50'}">${MESI6[i].slice(0, 3)}</span></span>`).join(''); })()}</span>`)}
-        ${kpi('Margine sulle commesse', eur(P.marg), 'prima dei costi fissi', '', 'marg', '', arco(P.marg / P.f, TARGET))}
-      </div>
-      ${(() => { const r = SALA.decisioni().length; return `<button type="button" class="card ufficio-home relative overflow-hidden text-left p-0 hover:border-white transition-colors" data-a="modo" data-v="sala" aria-label="Apri la Sala agenti: ${r} ${pl(r, 'decisione', 'decisioni')} per voi">${SALA.scena()}
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-3 sm:mb-4 scaglione">
+      ${kpi(`Fatturato ${P.label}`, eur(P.f), 'dalle fatture elettroniche emesse', '', 'fatt', 'vetro-scuro', `<span class="flex items-end justify-between gap-2 h-12 mt-3" aria-hidden="true">${(() => { const lo = Math.min(...serie.map(x => x.f)); return serie.map((x, i) => `<span class="flex flex-col items-center justify-end gap-1 h-full flex-1"><span class="cresce block w-full max-w-[10px] rounded-full ${i === 5 ? 'bg-white' : 'bg-white/30'}" style="height:${Math.round(30 + 70 * (x.f - lo) / Math.max(1, max - lo))}%;animation-delay:${i * 50}ms"></span><span class="text-[10px] ${i === 5 ? 'text-white' : 'text-white/50'}">${MESI6[i].slice(0, 3)}</span></span>`).join(''); })()}</span>`)}
+      ${kpi('Margine sulle commesse', eur(P.marg), 'prima dei costi fissi', '', 'marg', '', arco(P.marg / P.f, TARGET))}
+      ${kpi('Ordini fornitori', eur(P.forn), S.per === 'mese' ? `${FORN.length} ordini del mese` : 'a consuntivo, mese per mese', '', 'forn', '', `<span class="flex justify-between gap-1 h-9 mt-3" aria-hidden="true">${FORN.map(f => `<span class="w-[6px] rounded-full ${f.stato === 'ricevuto' ? 'bg-grafite' : 'bg-[#D6D6D6]'}"></span>`).join('')}</span><span class="block text-[11px] text-grigio mt-1.5">${FORN.filter(f => f.stato === 'ricevuto').length} ricevuti su ${FORN.length}</span>`)}
+      ${kpi('Costo delle ore interne', eur(P.cOre), S.per === 'mese' ? `${nf(m.ore, 1)} ore × ${eur(S.costoH)}` : 'ore dei tecnici e dei soci', '', 'ore', '', `${(() => { const q = sum(ORE, o => o.dich) / (ORE.length * 168), n = 20, k = Math.round(q * n); return `<span class="flex justify-between gap-1 h-9 mt-3" aria-hidden="true">${Array.from({ length: n }, (_, i) => `<span class="w-[6px] rounded-full ${i < k ? 'bg-grafite' : 'bg-[#D6D6D6]'}"></span>`).join('')}</span><span class="block text-[11px] text-grigio mt-1.5">${pc(q)} delle ore del mese, ${ORE.length} persone</span>`; })()}`)}
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
+      ${(() => { const r = SALA.decisioni().length; return `<button type="button" class="card ufficio-home relative overflow-hidden text-left p-0 flex items-center hover:border-white transition-colors" data-a="modo" data-v="sala" aria-label="Apri la Sala agenti: ${r} ${pl(r, 'decisione', 'decisioni')} per voi">${SALA.scena()}
         <span class="absolute left-3 top-3 sm:left-4 sm:top-4 flex flex-wrap gap-2"><span class="pillola"><i class="bi bi-people"></i>Sala agenti</span><span class="pillola"><span class="w-2 h-2 rounded-full bg-ok pulsa"></span>11 agenti al lavoro</span></span>
         ${r ? `<span class="absolute right-3 bottom-3 sm:right-4 sm:bottom-4 btn btn-pri !py-2 pointer-events-none">${r} ${pl(r, 'decisione', 'decisioni')} per voi <i class="bi bi-arrow-right"></i></span>` : ''}</button>`; })()}
-      <div class="card lg:col-span-2 2xl:col-span-1"><div class="px-6 py-4 border-b border-linea flex items-center gap-2"><i class="bi bi-flag text-arancio"></i><p class="font-bold">Aspetta qualcuno</p><span class="badge !ml-0">${c.length}</span></div>
-        <ul class="p-3 space-y-2 scaglione">${c.map(e => `<li><button class="group w-full text-left px-4 py-3 rounded bg-carta hover:bg-velo transition-colors flex gap-3 items-center" data-a="vai" data-v="${e.go}">
-          <span class="w-10 h-10 rounded bg-white border border-linea text-petrolio flex items-center justify-center shrink-0"><i class="bi ${e.ico}"></i></span>
+      <div class="card flex flex-col min-h-0 lg:max-h-[min(560px,52vw)]"><div class="px-5 py-3.5 border-b border-linea flex items-center gap-2 shrink-0"><i class="bi bi-flag text-arancio"></i><p class="font-bold">Aspetta qualcuno</p><span class="badge !ml-0">${c.length}</span></div>
+        <ul class="p-2.5 space-y-1.5 scaglione flex-1 min-h-0 overflow-y-auto">${c.map(e => `<li><button class="group w-full text-left px-3 py-2.5 rounded bg-carta hover:bg-velo transition-colors flex gap-3 items-center" data-a="vai" data-v="${e.go}">
+          <span class="w-9 h-9 rounded bg-white border border-linea text-petrolio flex items-center justify-center shrink-0"><i class="bi ${e.ico}"></i></span>
           <span class="flex-1 min-w-0"><span class="block font-medium">${e.tit}</span><span class="block text-sm text-grigio">${e.sub}</span></span><i class="bi bi-chevron-right text-grigio text-xs transition-transform group-hover:translate-x-0.5"></i></button></li>`).join('') || '<li class="p-4 text-sm text-grigio">Niente in sospeso.</li>'}</ul></div>
     </div>
-    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 mb-5 items-start">
-      ${kpi('Ordini fornitori', eur(P.forn), S.per === 'mese' ? `${FORN.length} ordini del mese` : 'a consuntivo, mese per mese', '', 'forn')}
-      ${kpi('Costo delle ore interne', eur(P.cOre), S.per === 'mese' ? `${nf(m.ore, 1)} ore × ${eur(S.costoH)}` : 'ore dei tecnici e dei soci', '', 'ore')}
-      <div class="card p-6 flex flex-col col-span-2"><div class="flex items-center justify-between gap-3 mb-1"><p class="font-bold">Ultimi sei mesi</p>
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div class="card p-5 flex flex-col lg:col-span-2"><div class="flex items-center justify-between gap-3 mb-1"><p class="font-bold">Ultimi sei mesi</p>
         <p class="text-xs text-grigio flex items-center gap-3"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-fumo"></span>Fatturato</span><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-grafite"></span>Margine</span></p></div>
-        <div class="flex items-end gap-3 sm:gap-5 flex-1 min-h-[150px] mt-4" role="img" aria-label="Fatturato e margine degli ultimi sei mesi">
+        <div class="flex items-end gap-3 sm:gap-5 flex-1 min-h-[140px] mt-3" role="img" aria-label="Fatturato e margine degli ultimi sei mesi">
           ${serie.map((x, i) => `<div class="flex-1 flex flex-col items-center justify-end h-full gap-1.5"><span class="num text-xs ${i === 5 ? 'font-bold' : 'text-grigio'}">${nf(x.f / 1000, 1)}k</span>
             <div class="cresce w-full max-w-[56px] rounded-t-[10px] overflow-hidden bg-fumo flex items-end" style="height:${Math.round(x.f / max * 72)}%;animation-delay:${i * 50}ms"><div class="w-full bg-grafite" style="height:${Math.round(x.m / x.f * 100)}%"></div></div>
             <span class="text-xs ${i === 5 ? 'font-bold' : 'text-grigio'}">${MESI6[i]}</span></div>`).join('')}
         </div>
-        <p class="text-xs text-grigio mt-4 pt-3 border-t border-linea">Il margine conta fornitori e ore dei tecnici su ogni commessa. Il mese in corso si aggiorna a ogni fattura e a ogni lavoro chiuso.</p></div>
-    </div>
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
-      <div class="card p-6 xl:col-span-2"><p class="font-bold">Da dove arriva il fatturato del mese</p>
-        <div class="flex h-4 rounded-sm overflow-hidden mt-4 bg-fumo"><div class="apre bg-grafite" style="width:${Math.round(quota * 100)}%"></div></div>
-        <div class="flex flex-wrap justify-between gap-3 mt-3 text-sm"><p><span class="font-bold">${eur(ric)}</span> <span class="text-grigio">da contratti che si rinnovano (${pc(quota)})</span></p><p><span class="font-bold">${eur(m.fatt - ric)}</span> <span class="text-grigio">da lavori una tantum</span></p></div>
-        <p class="text-xs text-grigio mt-3">${AZ.contratti} contratti attivi valgono ${eur(AZ.ricorrente)} l'anno: ${eur(AZ.ricorrente)} / 12 = ${eur(ric)} al mese già in casa prima di vendere niente.</p></div>
-      <div class="card p-6"><p class="font-bold">Da incassare</p><p class="font-display font-medium tabular-nums text-[1.6rem] sm:text-[2rem] leading-none mt-3">${eur(daIncassare())}</p><p class="text-sm text-grigio mt-1">${FATT.filter(aperta).length} fatture aperte</p>
-        <button class="btn btn-sec mt-4 w-full" data-a="vai" data-v="incassi">Vai agli incassi <i class="bi bi-arrow-right"></i></button></div>
+        <p class="text-xs text-grigio mt-3 pt-3 border-t border-linea">Il margine conta fornitori e ore dei tecnici su ogni commessa. Il mese in corso si aggiorna a ogni fattura e a ogni lavoro chiuso.</p></div>
+      <div class="card p-5 flex flex-col"><p class="font-bold">Da dove arriva il fatturato del mese</p>
+        <div class="flex h-3 rounded-full overflow-hidden mt-4 bg-fumo"><div class="apre bg-grafite" style="width:${Math.round(quota * 100)}%"></div></div>
+        <p class="text-sm mt-3"><span class="font-bold">${eur(ric)}</span> <span class="text-grigio">da contratti che si rinnovano (${pc(quota)})</span></p><p class="text-sm mt-1"><span class="font-bold">${eur(m.fatt - ric)}</span> <span class="text-grigio">da lavori una tantum</span></p>
+        <p class="text-xs text-grigio mt-auto pt-3">${AZ.contratti} contratti attivi valgono ${eur(AZ.ricorrente)} l'anno: ${eur(ric)} al mese già in casa prima di vendere niente.</p></div>
+      <div class="card kpi-box p-5 flex flex-col"><p class="font-bold">Da incassare</p><p class="kpi-n font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3">${eur(daIncassare())}</p><p class="text-sm text-grigio mt-1.5">${FATT.filter(aperta).length} fatture aperte</p>
+        <button class="btn btn-sec mt-auto w-full" data-a="vai" data-v="incassi">Vai agli incassi <i class="bi bi-arrow-right"></i></button></div>
     </div>`;
   },
+
 
   ordini() {
     return `${testata('Preventivi e ordini', "Dal preventivo alla fattura senza far girare la carta: ogni passaggio avvisa chi deve fare il successivo.")}${S.ruolo === 'rt' ? prova('trascina <strong>Carpenteria Oglio</strong> in <strong>In lavorazione</strong>: si apre l\'assegnazione con tecnico e data.') : S.prev.cli === 3 && S.prev.righe.length === 1 && S.prev.righe[0].serv === 'dvr' ? prova('nel nuovo preventivo lascia <strong>Trafilerie Adda</strong> e <strong>DVR</strong>: guarda cosa dice lo storico prima di mandarlo a listino.') : prova(`il preventivo è intestato a <strong>${esc(cli(S.prev.cli).nome)}</strong>: controlla righe e prezzi suggeriti, poi premi <strong>Crea e invia</strong>.`)}
@@ -1662,7 +1701,7 @@ function toast(msg) { $('#toast-t').textContent = msg.replace(/\.\.(?=\s|$)/g, '
 const spegni = () => { ORDINI.forEach(o => o.nuovo = false); CONTRATTI.forEach(k => k.agg = false); FATT.forEach(f => { f.agg = false; f.nuovo = false; }); };
 
 const AZ_ = {
-  menu: () => document.body.classList.add('menu-aperto'),
+  menu: () => AZ_.profilo(),
   'chiudi-menu': () => document.body.classList.remove('menu-aperto'),
   vai: (v, el) => vai(v, el.dataset.p),
   ruolo: v => { S.ruolo = v; S.chiudi = null; chiudiTendine(); document.body.classList.remove('menu-aperto'); if (v !== 'tec' && (!vede(S.view) || S.view === 'home')) S.view = RUOLO[v][3]; render(true); $('#vista').scrollTop = 0; },
