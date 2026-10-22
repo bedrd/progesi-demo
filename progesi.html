@@ -266,24 +266,27 @@
   :root { --vetro: linear-gradient(160deg, rgba(255,255,255,.93) 0%, rgba(255,255,255,.78) 48%, rgba(255,255,255,.7) 100%); --vetro-forte: rgba(255,255,255,.9); --vetro-tenue: rgba(255,255,255,.5); --bordo-vetro: rgba(255,255,255,.85); --ombra-vetro: 0 1px 1px rgba(90,0,0,.06), 0 26px 50px -28px rgba(90,0,0,.6); --luce: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(255,255,255,.3); }
   body {
     background:
-      radial-gradient(50rem 38rem at 90% 112%, rgba(255,128,36,.8), transparent 62%),
-      radial-gradient(34rem 28rem at 104% 64%, rgba(255,160,60,.32), transparent 66%),
-      radial-gradient(46rem 34rem at 8% -10%, rgba(255,255,255,.3), transparent 62%),
-      radial-gradient(38rem 30rem at 46% 46%, rgba(255,72,72,.32), transparent 70%),
-      linear-gradient(155deg, #EA161E 0%, #CC0000 44%, #960409 100%);
+      radial-gradient(26rem 20rem at 16% 20%, rgba(255,255,255,.42), transparent 70%),
+      radial-gradient(34rem 26rem at 74% 26%, rgba(110,0,8,.6), transparent 70%),
+      radial-gradient(42rem 30rem at 28% 88%, rgba(255,146,36,.78), transparent 66%),
+      radial-gradient(30rem 24rem at 96% 96%, rgba(255,206,130,.6), transparent 70%),
+      radial-gradient(36rem 30rem at 56% 62%, rgba(255,70,70,.5), transparent 70%),
+      radial-gradient(22rem 18rem at 88% 58%, rgba(255,255,255,.22), transparent 70%),
+      linear-gradient(155deg, #EA161E 0%, #C00000 46%, #860207 100%);
     background-attachment: fixed;
   }
   body::before, body::after { content: ''; position: fixed; z-index: 0; border-radius: 50%; filter: blur(70px); pointer-events: none; }
-  body::before { width: 30rem; height: 30rem; left: -7rem; top: 32vh; background: rgba(255,255,255,.16); }
-  body::after { width: 26rem; height: 26rem; right: 6vw; bottom: -9rem; background: rgba(255,140,40,.5); }
+  body::before { width: 30rem; height: 30rem; left: -6rem; top: 34vh; background: rgba(255,200,170,.35); }
+  body::after { width: 24rem; height: 24rem; right: 18vw; top: -6rem; background: rgba(90,0,6,.45); }
   #app { position: relative; z-index: 1; }
   /* il menu e il contenuto galleggiano sul rosso, staccati dai bordi */
   #sidebar > div { border-color: rgba(120,0,0,.08) !important; }
   header, #barra-modo { background: transparent !important; border-bottom-color: transparent !important; }
   h1.font-display, .font-display.font-medium { font-weight: 600; letter-spacing: -.02em; }
   /* pannelli */
-  .card { background: var(--vetro); border-color: var(--bordo-vetro); border-radius: 22px; box-shadow: var(--ombra-vetro), var(--luce); }
+  .card { background: var(--vetro); border-color: rgba(255,255,255,.75); border-radius: 22px; box-shadow: 0 1px 1px rgba(90,0,0,.05), 0 22px 44px -26px rgba(90,0,0,.55), inset 0 1px 0 #fff, inset 1px 0 0 rgba(255,255,255,.6); }
   .card .card { background: var(--vetro-forte); }
+  .card.p-6 { padding: 1.25rem; } @media (min-width: 640px) { .card.sm\:p-6 { padding: 1.25rem; } }
   .vetro-scuro { background: linear-gradient(160deg, rgba(44,14,14,.9), rgba(22,8,8,.82)) !important; color: #fff; border-color: rgba(255,255,255,.14) !important; box-shadow: 0 26px 50px -26px rgba(40,0,0,.75), inset 0 1px 0 rgba(255,255,255,.2) !important; }
   .vetro-scuro .text-grigio { color: rgba(255,255,255,.66) !important; }
   .rounded { border-radius: 12px; }
@@ -335,7 +338,9 @@
   #barra-demo { background: transparent; display: flex; justify-content: center; padding: 8px 12px; }
   .demo-pillola { display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .25rem .6rem; background: rgba(30,6,6,.4); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 4px 6px; box-shadow: inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); }
   .demo-btn { border-radius: 999px; }
-  #app { margin: 0 16px 16px; border-radius: 30px; background: rgba(247,246,246,.95); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 50px 90px -40px rgba(60,0,0,.85), 0 2px 6px rgba(60,0,0,.12), inset 0 1px 0 #fff; backdrop-filter: blur(40px) saturate(110%); -webkit-backdrop-filter: blur(40px) saturate(110%); }
+  #app { margin: 0 14px 14px; border-radius: 30px; background: linear-gradient(135deg, rgba(255,255,255,.34) 0%, rgba(255,255,255,0) 38%), linear-gradient(160deg, rgba(255,250,248,.6), rgba(255,244,240,.48)); border: 1px solid rgba(255,255,255,.5); box-shadow: 0 50px 90px -40px rgba(50,0,0,.9), 0 2px 6px rgba(60,0,0,.15), inset 0 1px 0 rgba(255,255,255,.95), inset 1px 0 0 rgba(255,255,255,.45), inset 0 0 0 1px rgba(255,255,255,.18), inset 0 -1px 0 rgba(255,255,255,.25); backdrop-filter: blur(56px) saturate(190%) brightness(1.05); -webkit-backdrop-filter: blur(56px) saturate(190%) brightness(1.05); }
+  /* la grana del vetro smerigliato: si vede dove il vetro è scoperto, mai sopra i riquadri */
+  #app::after { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 180px; opacity: .09; mix-blend-mode: soft-light; }
   @media (max-width: 1023px) { #app { margin: 0 8px 8px; border-radius: 24px; } }
   @media (min-width: 1024px) { #app { grid-template-columns: auto minmax(0, 1fr); } }
   body.sala #app { grid-template-columns: minmax(0, 1fr); }
@@ -349,7 +354,7 @@
   .rail-b[aria-current="true"] { color: #fff; background: rgba(255,255,255,.17); box-shadow: inset 0 1px 0 rgba(255,255,255,.14); }
   .rail-n { position: absolute; top: 3px; right: 3px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 99px; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; background: rgba(255,255,255,.24); color: #fff; }
   .rail-n.urg { background: #B45309; }
-  #pannello { width: 236px; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid rgba(60,0,0,.07); }
+  #pannello { width: 236px; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid rgba(255,255,255,.4); }
   .finestra-top { display: flex; align-items: center; gap: .6rem; padding: 16px 18px 10px; }
   .semafori { display: inline-flex; gap: 7px; }
   .semafori i { width: 12px; height: 12px; border-radius: 99px; display: block; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.18); }
@@ -366,17 +371,17 @@
   .profilo-voce[aria-pressed="true"] .av { background: #DD0000; color: #fff; }
   .profilo-voce b { font-weight: 600; } .profilo-voce small { display: block; color: #6B6B6B; font-size: 11px; }
   .nav-titolo { font-size: 1.05rem; font-weight: 600; letter-spacing: -.01em; padding: 0 .75rem; margin: .4rem 0 .6rem; color: #1F1F1F; }
-  .nav-sub { display: flex; align-items: center; justify-content: space-between; font-size: .75rem; font-weight: 500; color: #8A8A8A; padding: 0 .75rem; margin: 1.25rem 0 .35rem; }
+  .nav-sub { display: flex; align-items: center; justify-content: space-between; font-size: .75rem; font-weight: 500; color: #5E5E5E; padding: 0 .75rem; margin: 1.25rem 0 .35rem; }
   .nav-i { border-radius: 12px; padding: .5rem .7rem; font-size: .875rem; color: #3A3A3A; }
   .nav-i:hover { background: rgba(255,255,255,.75); }
   .nav-i[aria-current="page"] { background: #fff; color: #1F1F1F; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 18px -10px rgba(60,0,0,.35), inset 0 1px 0 #fff; }
   .nav-i[aria-current="page"] > .bi:first-child, .nav-i[aria-current="page"] > .ico:first-child { color: #DD0000; }
   .nav-fare { width: 100%; display: flex; align-items: center; gap: .6rem; padding: .4rem .7rem; border-radius: 10px; font-size: .8125rem; color: #4A4A4A; text-align: left; }
   .nav-fare:hover { background: rgba(255,255,255,.75); }
-  .nav-fare .bi, .nav-fare .ico { color: #8A8A8A; }
-  #colonna { background: rgba(255,255,255,.55); }
-  header { border-bottom-color: rgba(60,0,0,.06) !important; }
-  header #titolo { color: #6B6B6B; font-size: .875rem; font-weight: 500; }
+  .nav-fare .bi, .nav-fare .ico { color: #6B6B6B; }
+  #colonna { background: rgba(255,255,255,.4); }
+  header { border-bottom-color: rgba(255,255,255,.45) !important; }
+  header #titolo { color: #4A4A4A; font-size: .875rem; font-weight: 500; }
   .campo, #cerca-tutto { background: rgba(0,0,0,.035); border-color: transparent; box-shadow: inset 0 1px 2px rgba(0,0,0,.08); }
   .campo:hover { border-color: rgba(0,0,0,.08); }
   .campo:focus, #cerca-tutto:focus { background: #fff; box-shadow: 0 0 0 3px rgba(221,0,0,.14); }
@@ -423,8 +428,12 @@
     #pagine-tel button { flex: none; border-radius: 999px; padding: .4rem .85rem; font-size: .8125rem; font-weight: 500; color: #4A4A4A; background: rgba(0,0,0,.04); }
     #pagine-tel button[aria-current="page"] { background: #fff; color: #1F1F1F; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 6px 14px -8px rgba(60,0,0,.35); }
     header [data-a="menu"], #barra-modo { display: none !important; }
+    header { height: 3.25rem !important; }
+    header .sala-marchio { display: flex; }
+    body:not(.scorso) header #titolo { position: absolute; }
     header #titolo { opacity: 0; transition: opacity .2s; }
     body.scorso header #titolo { opacity: 1; }
+    body.scorso:not(.sala) header .sala-marchio { display: none; }
     .spot-btn { right: 18px; bottom: 86px; width: 48px; height: 48px; border-radius: 16px; font-size: 1.25rem; }
     .modale-velo:not(.spot-velo) { align-items: flex-end; padding: 0; }
     .modale-velo:not(.spot-velo) .modale { max-width: none !important; border-radius: 26px 26px 0 0; max-height: 92dvh; overflow-y: auto; animation: foglio .38s cubic-bezier(.2,.8,.2,1); }
@@ -483,7 +492,7 @@
   <div id="velo-menu" class="fixed inset-0 bg-inchiostro/40 z-30" data-a="chiudi-menu"></div>
 
   <div id="colonna" class="flex flex-col h-full">
-    <header class="relative z-40 h-16 shrink-0 bg-white/80 backdrop-blur border-b border-linea flex items-center gap-3 px-4 sm:px-6">
+    <header class="relative z-40 h-14 shrink-0 bg-white/80 backdrop-blur border-b border-linea flex items-center gap-3 px-4 sm:px-6">
       <button class="lg:hidden btn btn-sec !px-2.5" data-a="menu" aria-label="Apri il menu"><i class="bi bi-list text-lg"></i></button>
       <span class="sala-marchio items-center gap-2 shrink-0"><span class="w-7 h-7 rounded bg-petrolio text-white flex items-center justify-center text-sm"><i class="bi bi-shield-check"></i></span><span class="font-display font-bold tracking-wide text-petrolio hidden sm:inline">PROGESI</span><span class="text-linea hidden sm:inline">|</span></span>
       <h2 id="titolo" class="font-display font-medium text-base sm:text-lg truncate min-w-0"></h2>
@@ -859,7 +868,7 @@ const RUOLO = { dir: ['GI', 'Giorgio', 'Direttore commerciale', 'home'], rt: ['R
 const VISIBILI = { rt: ['pianifica', 'ordini', 'contratti', 'clienti', 'margini', 'ore', 'sicurezza'], amm: ['home', 'contabilita', 'fatture', 'incassi', 'banca', 'fornitori', 'ore', 'clienti', 'contratti', 'sicurezza'] };
 const vede = v => !VISIBILI[S.ruolo] || VISIBILI[S.ruolo].includes(v);
 const modulo = t => `<span class="text-[0.6rem] font-bold uppercase text-grigio border border-[#C8C8C8] rounded-sm px-1 leading-4 whitespace-nowrap">${t}</span>`;
-const nota = (tag, t) => `<div class="card p-4 mb-5 flex flex-wrap gap-x-3 gap-y-2 items-center text-sm"><span class="chip c-pieno">${tag}</span><p class="text-grigio">${t}</p></div>`;
+const nota = (tag, t) => `<p class="mb-4 flex flex-wrap gap-x-2 gap-y-1 items-center text-sm text-grigio"><span class="chip c-pieno">${tag}</span>${t}</p>`;
 
 // sezioni della barra scura: ognuna apre le sue pagine nella barra laterale
 const VOCI = Object.fromEntries(NAV.flatMap(([, l]) => l.map(([v, ico, t, mod]) => [v, { ico, t, mod }])));
@@ -935,11 +944,11 @@ function render(nuova) {
   if (S.ruolo !== 'tec' && !vede(S.view)) S.view = RUOLO[S.ruolo][3];
   const v = S.ruolo === 'tec' ? 'tecnico' : S.modo === 'sala' ? 'sala' : S.view;
   $('#titolo').textContent = TITOLI[v];
-  $('#vista').innerHTML = `<div class="${v === 'sala' ? 'px-4 sm:px-6 py-4 lg:py-5 pb-24' : 'px-4 sm:px-6 lg:px-8 py-6 lg:py-8 pb-24'} ${nuova ? 'entra' : ''}">${VISTE[v]()}</div>`;
+  $('#vista').innerHTML = `<div class="${v === 'sala' ? 'px-4 sm:px-6 py-4 lg:py-5 pb-24 lg:pb-6' : 'px-4 sm:px-6 lg:px-8 pt-5 lg:pt-6 pb-24 lg:pb-8'} ${nuova ? 'entra' : ''}">${VISTE[v]()}</div>`;
   glossa($('#vista'));
 }
-const prova = t => S.guida === false ? '' : `<p class="prova-riga mb-5 text-sm text-ambra bg-arancio-velo border border-arancio/40 rounded px-3.5 py-2.5 flex gap-2"><i class="bi bi-hand-index"></i><span><strong>Prova:</strong> ${t}</span></p>`;
-const kpi = (label, val, sub = '', cls = '', az = '', box = '', extra = '') => { const corpo = `<span class="flex items-start justify-between gap-2 text-sm text-grigio"><span>${label}</span>${az ? '<i class="bi bi-arrow-up-right text-xs mt-1 opacity-60 group-hover:opacity-100 transition-opacity"></i>' : ''}</span><span class="kpi-n block font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3 text-[1.7rem] sm:text-[2.2rem] xl:text-[2.6rem] ${cls}">${val}</span>${sub ? `<span class="block text-xs sm:text-sm mt-2.5 text-grigio">${sub}</span>` : ''}${extra}`;
+const prova = t => S.guida === false ? '' : `<p class="prova-riga mb-4 text-sm text-ambra bg-arancio-velo border border-arancio/40 rounded px-3.5 py-2 flex gap-2"><i class="bi bi-hand-index"></i><span><strong>Prova:</strong> ${t}</span></p>`;
+const kpi = (label, val, sub = '', cls = '', az = '', box = '', extra = '') => { const corpo = `<span class="flex items-start justify-between gap-2 text-sm text-grigio"><span>${label}</span>${az ? '<i class="bi bi-arrow-up-right text-xs mt-1 opacity-60 group-hover:opacity-100 transition-opacity"></i>' : ''}</span><span class="kpi-n block font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3 text-[1.6rem] sm:text-[2rem] xl:text-[2.35rem] ${cls}">${val}</span>${sub ? `<span class="block text-xs sm:text-sm mt-2.5 text-grigio">${sub}</span>` : ''}${extra}`;
   return az ? `<button type="button" class="group card p-4 sm:p-6 text-left w-full hover:border-white transition-colors ${box}" data-a="dettaglio" data-v="${az}" aria-label="${label}: apri il dettaglio">${corpo}</button>` : `<div class="card p-4 sm:p-6 ${box}">${corpo}</div>`; };
 // arco del margine, come un indicatore: pieno al 60% del fatturato, la tacca segna l'obiettivo
 const arco = (q, obiettivo) => { const v = Math.max(0, Math.min(1, q / .6)) * 100, o = Math.max(0, Math.min(1, obiettivo / .6)) * Math.PI, ox = 100 - Math.cos(o) * 80, oy = 100 - Math.sin(o) * 80;
@@ -1026,7 +1035,7 @@ function benvenuto() {
     <div class="grid sm:grid-cols-2 gap-2 mt-2">${ordine.map(k => { const [ic, t, d] = PARTENZE[k]; return `<button class="text-left rounded border border-linea bg-white hover:border-grafite px-3.5 py-3 flex gap-3 items-start transition-colors" data-a="benvenuto-ruolo" data-v="${k}"><i class="bi ${ic} text-lg text-grigio"></i><span><span class="block font-bold">${t}</span><span class="block text-grigio">${d}</span></span></button>`; }).join('')}</div>
   </div>`, true);
 }
-const testata = (tit, sotto) => `<div class="mb-6"><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${tit}</h1><p class="text-grigio mt-1.5 max-w-3xl">${sotto}</p></div>`;
+const testata = (tit, sotto) => `<div class="mb-4"><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${tit}</h1><p class="text-grigio mt-1 max-w-[38rem]">${sotto}</p></div>`;
 const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const pulisci = t => String(t ?? '').replace(/[<>]/g, '').trim();
 const campo = (label, input, aiuto = '', cls = '') => `<label class="block text-sm font-bold ${cls}">${label}<span class="block mt-1 font-normal">${input}</span>${aiuto ? `<span class="block text-xs text-grigio font-normal mt-1">${aiuto}</span>` : ''}</label>`;
@@ -1347,7 +1356,7 @@ const VISTE = {
   home() {
     const m = mese(), P = periodo(), c = avvisi(), ric = AZ.ricorrente / 12, quota = ric / m.fatt;
     const serie = [...TREND, { f: m.fatt, m: m.marg }], max = Math.max(...serie.map(x => x.f));
-    return `<div class="flex flex-wrap items-end justify-between gap-4 mb-6"><div><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${saluto()}, ${NOME[S.ruolo] || NOME.dir}</h1><p class="text-grigio mt-1.5 max-w-3xl">I numeri ${P.label}, aggiornati a stamattina. Oggi li vedete solo con il bilancio del commercialista, ogni tre mesi.</p></div>
+    return `<div class="flex flex-wrap items-end justify-between gap-4 mb-4"><div><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${saluto()}, ${NOME[S.ruolo] || NOME.dir}</h1><p class="text-grigio mt-1 max-w-[34rem]">I numeri ${P.label}, aggiornati a stamattina. Oggi li vedete solo con il bilancio del commercialista, ogni tre mesi.</p></div>
       <div class="seg" role="group" aria-label="Periodo">${[['mese', 'Mese'], ['trim', 'Ultimi 3 mesi'], ['anno', 'Da inizio anno']].map(([v, t]) => `<button data-a="per" data-v="${v}" aria-pressed="${S.per === v}">${t}</button>`).join('')}</div></div>
     ${S.ruolo === 'dir' ? prova('passa in alto a <strong>Tecnico</strong>, chiudi il DVR di Cascina Rosa con le ore fatte, poi torna su <strong>Direzione</strong>. I quattro riquadri qui sotto si aprono nel dettaglio. Per gli aggiornamenti normativi: <strong>Impostazioni</strong>, primo riquadro.') : ''}
     <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] 2xl:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)_minmax(0,1.1fr)] gap-4 sm:gap-5 mb-5 items-start">
