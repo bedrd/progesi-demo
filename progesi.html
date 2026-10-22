@@ -8,8 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='3' fill='%23DD0000'/%3E%3Cpath d='M10 8h8a6 6 0 0 1 0 12h-4v4h-4z' fill='%23fff'/%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Lato:wght@400;700&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/light/style.css">
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <style type="text/tailwindcss">
   @theme {
@@ -28,15 +29,15 @@
     --color-ok-velo: #E4F2EA;
     --color-grafite: #3A3A3A;
     --color-fumo: #CFD2D4;
-    --font-display: "Ubuntu", sans-serif;
-    --font-body: "Lato", sans-serif;
+    --font-display: "Inter", system-ui, sans-serif;
+    --font-body: "Inter", system-ui, sans-serif;
     --font-mono: "IBM Plex Mono", monospace;
   }
 </style>
 <style>
   @layer theme, base, components, utilities;
   html, body { height: 100%; }
-  body { overflow: hidden; margin: 0; background: #F6F6F6; color: #303030; font-family: "Lato", sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow: hidden; margin: 0; background: #F6F6F6; color: #303030; font-family: "Inter", system-ui, sans-serif; font-feature-settings: "cv11", "ss01"; -webkit-font-smoothing: antialiased; }
   button:not(:disabled), [role="button"]:not(:disabled), label[for], select, summary, tr.clic, input[type="checkbox"], input[type="range"] { cursor: pointer; }
   :disabled { cursor: not-allowed; }
   :focus-visible { outline: 2px solid #DD0000; outline-offset: 2px; border-radius: 6px; }
@@ -68,7 +69,7 @@
   body.menu-aperto #velo-menu { display: block; }
 
   @layer components {
-  .num { font-family: "Lato", sans-serif; font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; }
+  .num { font-family: "Inter", system-ui, sans-serif; font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; }
   .mono { font-family: "IBM Plex Mono", monospace; }
   .card { background: #fff; border: 1px solid #E2E2E2; border-radius: 4px; box-shadow: 0 1px 2px rgba(48,48,48,.04), 0 10px 24px -16px rgba(48,48,48,.16); }
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 3px; font-weight: 700; font-size: .875rem; padding: .55rem .95rem; transition: background-color .15s, border-color .15s, transform .1s; white-space: nowrap; }
@@ -106,7 +107,7 @@
   .nav-i { display: flex; align-items: center; gap: .7rem; padding: .5rem .7rem; border-radius: 3px; font-size: .9rem; font-weight: 400; color: #4A4A4A; width: 100%; text-align: left; transition: background-color .12s; }
   .nav-i:hover { background: #F1F1F1; }
   .nav-i[aria-current="page"] { background: #FBEAEA; color: #DD0000; font-weight: 700; box-shadow: inset 3px 0 0 #DD0000; }
-  .nav-i .bi { font-size: 1.05rem; }
+  .nav-i .bi, .nav-i .ico { font-size: 1.1rem; }
   #nav .nav-i { white-space: nowrap; }
   .badge { margin-left: auto; background: #B45309; color: #fff; font-size: .75rem; font-weight: 700; border-radius: 3px; min-width: 1.25rem; padding: 0 .35rem; text-align: center; }
   /* numerini calmi: grigi per le cose da fare, arancio solo per quelle urgenti (scadute, scartate, da pagare entro 7 giorni) */
@@ -169,7 +170,7 @@
     .impila td[data-l]::before { content: attr(data-l); display: block; font-size: .6875rem; font-weight: 700; color: #555555; margin-bottom: .1rem; }
     .impila tr.clic:hover { background: #F7F7F7; }
     .impila tr.sel { background: #F1F1F1; box-shadow: inset 3px 0 0 #3A3A3A; }
-  }  @media (max-width: 1299px) {
+  }  @media (max-width: 1399px) {
     .impila.larga { min-width: 0 !important; }
     .impila.larga thead { display: none; }
     .impila.larga tbody { display: block; }
@@ -185,7 +186,7 @@
     .impila.larga tr.clic:hover { background: #F7F7F7; }
     .impila.larga tr.sel { background: #F1F1F1; box-shadow: inset 3px 0 0 #3A3A3A; }
   }
-  @media (max-width: 1399px) {
+  @media (max-width: 1479px) {
     .impila.larghissima { min-width: 0 !important; }
     .impila.larghissima thead { display: none; }
     .impila.larghissima tbody { display: block; }
@@ -251,11 +252,11 @@
   .conta-leg { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; font-size: 9px; font-weight: 700; color: #fff; background: #DD0000; border-radius: 99px; }
   /* nome del reparto stampato sul tappeto: stessa prospettiva del pavimento, misura che segue la scena */
   .scena { container-type: inline-size; }
-  .stanza { position: absolute; z-index: 2; transform-origin: 0 0; transform: matrix(.866, -.5, .866, .5, 0, 0) translateY(-100%); display: inline-flex; align-items: center; gap: .45em; padding: .1em .15em; background: none; border: 0; font-family: Ubuntu, sans-serif; font-weight: 700; font-size: 1.5cqw; line-height: 1; letter-spacing: .08em; text-transform: uppercase; color: #DD0000; white-space: nowrap; cursor: pointer; transition: opacity .3s, color .15s; }
+  .stanza { position: absolute; z-index: 2; transform-origin: 0 0; transform: matrix(.866, -.5, .866, .5, 0, 0) translateY(-100%); display: inline-flex; align-items: center; gap: .45em; padding: .1em .15em; background: none; border: 0; font-family: Inter, sans-serif; font-weight: 700; font-size: 1.5cqw; line-height: 1; letter-spacing: .08em; text-transform: uppercase; color: #DD0000; white-space: nowrap; cursor: pointer; transition: opacity .3s, color .15s; }
   .stanza .nome-st { border-bottom: .12em solid transparent; padding-bottom: .06em; }
   .stanza:hover .nome-st { border-bottom-color: rgba(221,0,0,.35); }
   .stanza.sel .nome-st { border-bottom-color: #DD0000; }
-  .stanza .n-st { display: inline-flex; align-items: center; justify-content: center; min-width: 1.5em; height: 1.5em; padding: 0 .3em; border-radius: 99px; background: #DD0000; color: #fff; font-family: Lato, sans-serif; font-size: .72em; letter-spacing: 0; }
+  .stanza .n-st { display: inline-flex; align-items: center; justify-content: center; min-width: 1.5em; height: 1.5em; padding: 0 .3em; border-radius: 99px; background: #DD0000; color: #fff; font-family: Inter, sans-serif; font-size: .72em; letter-spacing: 0; }
   .stanza.spenta, .stanza.fuori { opacity: .38; }
   @media (max-width: 767px) { .stanza { display: none; } }
   .fumetto { pointer-events: none; }
@@ -271,65 +272,266 @@
   @media (min-width: 1024px) { .saluto-velo { padding: .75rem 2.5rem 2rem .75rem; margin: -.75rem; background: radial-gradient(ellipse 100% 100% at 0 0, rgba(243,238,230,.97) 60%, rgba(243,238,230,0) 100%); } }
   .bolla-a { background: #F1F1F1; border-radius: 3px; padding: .5rem .75rem; }
   .bolla-u { background: #3A3A3A; color: #fff; border-radius: 3px; padding: .5rem .75rem; margin-left: 2rem; }
-  /* ================= variante vetro =================
-     superfici semitrasparenti e sfocate su uno sfondo con luci tenui grigie e rosse.
-     Angoli ancora squadrati, rosso solo per marchio e azioni, testi su fondo abbastanza pieno da restare leggibili. */
-  :root { --vetro: linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,255,255,.34)); --vetro-forte: rgba(255,255,255,.74); --vetro-tenue: rgba(255,255,255,.34); --bordo-vetro: rgba(255,255,255,.7); --ombra-vetro: 0 1px 1px rgba(48,48,48,.04), 0 18px 40px -18px rgba(60,30,30,.28); }
+  /* ================= vetro liquido =================
+     Sfondo rosso Progesi con luci morbide e una macchia arancione. Sopra, pannelli di vetro chiaro
+     smerigliato con il bordo luminoso, angoli tondi e pillole, come il vetro dell'iPhone.
+     Il rosso è il colore principale: sfondo, marchio, voce attiva e azioni. Grafici in grafite, errori e urgenze in ambra. */
+  :root { --vetro: linear-gradient(160deg, rgba(255,255,255,.93) 0%, rgba(255,255,255,.78) 48%, rgba(255,255,255,.7) 100%); --vetro-forte: rgba(255,255,255,.9); --vetro-tenue: rgba(255,255,255,.5); --bordo-vetro: rgba(255,255,255,.85); --ombra-vetro: 0 1px 1px rgba(90,0,0,.06), 0 26px 50px -28px rgba(90,0,0,.6); --luce: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(255,255,255,.3); }
   body {
     background:
-      radial-gradient(46rem 34rem at 95% -10%, rgba(221,0,0,.20), transparent 68%),
-      radial-gradient(40rem 32rem at 30% 55%, rgba(255,176,160,.34), transparent 70%),
-      radial-gradient(44rem 34rem at 8% 112%, rgba(90,100,125,.32), transparent 70%),
-      radial-gradient(30rem 26rem at 70% 105%, rgba(221,0,0,.14), transparent 70%),
-      linear-gradient(160deg, #F1EEEE, #E3E0E2);
+      radial-gradient(26rem 20rem at 16% 20%, rgba(255,255,255,.42), transparent 70%),
+      radial-gradient(34rem 26rem at 74% 26%, rgba(110,0,8,.6), transparent 70%),
+      radial-gradient(42rem 30rem at 28% 88%, rgba(255,146,36,.78), transparent 66%),
+      radial-gradient(30rem 24rem at 96% 96%, rgba(255,206,130,.6), transparent 70%),
+      radial-gradient(36rem 30rem at 56% 62%, rgba(255,70,70,.5), transparent 70%),
+      radial-gradient(22rem 18rem at 88% 58%, rgba(255,255,255,.22), transparent 70%),
+      linear-gradient(155deg, #EA161E 0%, #C00000 46%, #860207 100%);
     background-attachment: fixed;
   }
-  body::before, body::after { content: ''; position: fixed; z-index: 0; border-radius: 50%; filter: blur(60px); pointer-events: none; }
-  body::before { width: 34rem; height: 34rem; right: -8rem; top: 18vh; background: rgba(221,0,0,.10); }
-  body::after { width: 28rem; height: 28rem; left: 22vw; bottom: -10rem; background: rgba(70,80,110,.18); }
+  body::before, body::after { content: ''; position: fixed; z-index: 0; border-radius: 50%; filter: blur(70px); pointer-events: none; }
+  body::before { width: 30rem; height: 30rem; left: -6rem; top: 34vh; background: rgba(255,200,170,.35); }
+  body::after { width: 24rem; height: 24rem; right: 18vw; top: -6rem; background: rgba(90,0,6,.45); }
   #app { position: relative; z-index: 1; }
-  #sidebar { background: rgba(255,255,255,.4); border-right-color: var(--bordo-vetro); backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%); }
-  #sidebar > div { border-color: rgba(48,48,48,.08); }
-  header, #colonna > div.xl\:hidden { background: var(--vetro-tenue) !important; border-bottom-color: rgba(255,255,255,.6) !important; backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%); }
-  .card { background: var(--vetro); border-color: var(--bordo-vetro); border-radius: 6px; box-shadow: var(--ombra-vetro), inset 0 1px 0 rgba(255,255,255,.7); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); }
-  .card .card { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--vetro-forte); }
-  .modale.card { background: rgba(255,255,255,.86); }
-  .col-k { background: rgba(255,255,255,.26); border: 1px solid rgba(255,255,255,.55); border-radius: 6px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
-  .tess { background: var(--vetro-forte); border-color: var(--bordo-vetro); box-shadow: 0 4px 14px -8px rgba(48,48,48,.2); }
-  .tess:hover { border-color: rgba(48,48,48,.18); }
-  .bg-carta { background-color: var(--vetro-tenue) !important; }
-  .border-linea, .divide-\[\#EEEEEE\] > * { border-color: rgba(48,48,48,.08) !important; }
-  .tab-t th { border-bottom-color: rgba(48,48,48,.1); }
-  .tab-t td { border-bottom-color: rgba(48,48,48,.06); }
-  .tab-t tr.clic:hover td, .impila tr.clic:hover { background: rgba(255,255,255,.55); }
-  .tab-t tr.sel td, .impila tr.sel { background: rgba(255,255,255,.7); }
-  .campo { background: rgba(255,255,255,.72); border-color: rgba(48,48,48,.16); }
-  .campo:focus { background: rgba(255,255,255,.92); }
-  .seg { background: rgba(48,48,48,.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-  .seg button[aria-pressed="true"] { background: rgba(255,255,255,.92); }
-  .btn-sec { background: rgba(255,255,255,.7); border-color: rgba(48,48,48,.16); }
-  .btn-sec:hover { background: rgba(255,255,255,.9); border-color: #303030; }
-  .nav-i:hover { background: rgba(255,255,255,.55); }
-  .nav-i[aria-current="page"] { background: rgba(221,0,0,.09); }
+  /* il menu e il contenuto galleggiano sul rosso, staccati dai bordi */
+  #sidebar > div { border-color: rgba(120,0,0,.08) !important; }
+  header, #barra-modo { background: transparent !important; border-bottom-color: transparent !important; }
+  h1.font-display, .font-display.font-medium { font-weight: 600; letter-spacing: -.02em; }
+  /* pannelli */
+  .card { background: var(--vetro); border-color: rgba(255,255,255,.75); border-radius: 22px; box-shadow: 0 1px 1px rgba(90,0,0,.05), 0 22px 44px -26px rgba(90,0,0,.55), inset 0 1px 0 #fff, inset 1px 0 0 rgba(255,255,255,.6); }
+  .card .card { background: var(--vetro-forte); }
+  .card.p-6 { padding: 1.25rem; } @media (min-width: 640px) { .card.sm\:p-6 { padding: 1.25rem; } }
+  .vetro-scuro { background: linear-gradient(160deg, rgba(44,14,14,.9), rgba(22,8,8,.82)) !important; color: #fff; border-color: rgba(255,255,255,.14) !important; box-shadow: 0 26px 50px -26px rgba(40,0,0,.75), inset 0 1px 0 rgba(255,255,255,.2) !important; }
+  .vetro-scuro .text-grigio { color: rgba(255,255,255,.66) !important; }
+  .rounded { border-radius: 12px; }
+  .col-k { background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.65); border-radius: 22px; }
+  .tess { background: var(--vetro-forte); border-color: var(--bordo-vetro); border-radius: 16px; box-shadow: 0 10px 22px -14px rgba(90,0,0,.4), var(--luce); }
+  .tess:hover { border-color: #fff; }
+  .bg-carta { background-color: rgba(255,255,255,.58) !important; }
+  .border-linea, .divide-\[\#EEEEEE\] > * { border-color: rgba(120,0,0,.08) !important; }
+  .tab-t th { border-bottom-color: rgba(120,0,0,.1); }
+  .tab-t td { border-bottom-color: rgba(120,0,0,.06); }
+  .tab-t tr.clic:hover td, .impila tr.clic:hover { background: rgba(255,255,255,.62); }
+  .tab-t tr.sel td, .impila tr.sel { background: rgba(255,236,236,.85); }
+  .campo { background: rgba(255,255,255,.82); border-color: rgba(120,0,0,.14); border-radius: 12px; }
+  .campo:focus { background: #fff; }
+  /* pillole: selettori, pulsanti, chip, numerini */
+  .seg { background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.7); border-radius: 999px; padding: 4px; box-shadow: var(--luce); backdrop-filter: blur(16px) saturate(170%); -webkit-backdrop-filter: blur(16px) saturate(170%); }
+  .seg button { border-radius: 999px; padding: .4rem .95rem; color: #4A4A4A; }
+  .seg button[aria-pressed="true"] { background: #fff; color: #1F1F1F; box-shadow: 0 6px 14px -6px rgba(120,0,0,.4), var(--luce); }
+  .btn { border-radius: 999px; }
+  .btn-pri { background: linear-gradient(180deg, #F2262B, #CC0000); box-shadow: 0 10px 20px -10px rgba(200,0,0,.75), inset 0 1px 0 rgba(255,255,255,.35); }
+  .btn-pri:hover { background: linear-gradient(180deg, #E01C21, #B00000); }
+  .btn-sec { background: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.95); box-shadow: 0 6px 14px -8px rgba(90,0,0,.35), var(--luce); }
+  .btn-sec:hover { background: #fff; border-color: #fff; }
+  .btn-gh:hover { background: rgba(255,255,255,.6); }
+  .chip { border-radius: 999px; padding: .18rem .6rem; }
   .chip.c-at { background: rgba(48,48,48,.07); }
-  .chip.c-bl { background: rgba(255,255,255,.7); }
-  p.text-ambra.bg-arancio-velo { background: rgba(254,243,199,.72); border-color: rgba(180,83,9,.25); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-  .bg-arancio-velo { background-color: rgba(254,243,199,.75) !important; }
-  .bg-ok-velo { background-color: rgba(228,242,234,.8) !important; }
-  .barra { background: rgba(48,48,48,.1); }
-  .bg-\[\#FAFAFA\] { background-color: rgba(255,255,255,.4) !important; }
-  .bg-white:not(.modale *) { background-color: rgba(255,255,255,.72); }
-  .modale-velo { background: rgba(48,48,48,.28); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-  .modale { background: rgba(255,255,255,.86); backdrop-filter: blur(26px) saturate(160%); -webkit-backdrop-filter: blur(26px) saturate(160%); }
-  .tendina { background: rgba(255,255,255,.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-  #toast > div { background: rgba(48,48,48,.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .chip.c-bl { background: rgba(255,255,255,.78); }
+  .badge { border-radius: 999px; }
+  .barra { background: rgba(48,48,48,.1); border-radius: 99px; }
+  /* menu: voce attiva in pillola rossa */
+  /* righe Prova, avvisi, toast, finestre */
+  p.text-ambra.bg-arancio-velo { background: rgba(255,248,226,.88); border-color: rgba(180,83,9,.22); border-radius: 16px; }
+  .bg-arancio-velo { background-color: rgba(254,243,199,.82) !important; }
+  .bg-ok-velo { background-color: rgba(228,242,234,.86) !important; }
+  .bg-\[\#FAFAFA\] { background-color: rgba(255,255,255,.48) !important; }
+  .bg-white:not(.modale *) { background-color: rgba(255,255,255,.8); }
+  .modale-velo { background: rgba(70,0,0,.34); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .modale { background: rgba(255,255,255,.92); border-radius: 26px; backdrop-filter: blur(30px) saturate(170%); -webkit-backdrop-filter: blur(30px) saturate(170%); }
+  .tendina { background: #fff; border-radius: 18px; box-shadow: 0 24px 48px -20px rgba(90,0,0,.45); }
+  body.menu-aperto #velo-menu { z-index: 50; background: rgba(60,0,0,.35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+  #toast > div { background: rgba(40,10,10,.82); border-radius: 18px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .seg-demo, .seg-demo button { border-radius: 999px; }
+  #glossa { border-radius: 14px; }
+  :focus-visible { outline-color: #1F1F1F; }
+  /* ================= finestra Mac =================
+     Il rosso è la scrivania; Progesi è una finestra di vetro chiaro che ci galleggia sopra, con i tre pallini.
+     Dentro: la barra scura delle sezioni, la barra laterale con il profilo e le pagine della sezione, il contenuto.
+     Dentro la finestra il rosso è solo un accento: il pulsante principale, l'icona della voce attiva. */
+  #barra-demo { background: transparent; display: flex; justify-content: center; padding: 8px 12px; }
+  .demo-pillola { display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .25rem .6rem; background: rgba(30,6,6,.4); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 4px 6px; box-shadow: inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); }
+  .demo-btn { border-radius: 999px; }
+  #app { margin: 0 14px 14px; border-radius: 30px; background: linear-gradient(135deg, rgba(255,255,255,.34) 0%, rgba(255,255,255,0) 38%), linear-gradient(160deg, rgba(255,250,248,.6), rgba(255,244,240,.48)); border: 1px solid rgba(255,255,255,.5); box-shadow: 0 50px 90px -40px rgba(50,0,0,.9), 0 2px 6px rgba(60,0,0,.15), inset 0 1px 0 rgba(255,255,255,.95), inset 1px 0 0 rgba(255,255,255,.45), inset 0 0 0 1px rgba(255,255,255,.18), inset 0 -1px 0 rgba(255,255,255,.25); backdrop-filter: blur(56px) saturate(190%) brightness(1.05); -webkit-backdrop-filter: blur(56px) saturate(190%) brightness(1.05); }
+  /* la grana del vetro smerigliato: si vede dove il vetro è scoperto, mai sopra i riquadri */
+  #app::after { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 180px; opacity: .09; mix-blend-mode: soft-light; }
+  @media (max-width: 1023px) { #app { margin: 0 8px 8px; border-radius: 24px; } }
+  @media (min-width: 1024px) { #app { grid-template-columns: auto minmax(0, 1fr); } }
+  body.sala #app { grid-template-columns: minmax(0, 1fr); }
+  #sidebar { flex-direction: row; background: transparent; }
+  #rail { width: 70px; padding: 12px 0 12px 10px; display: flex; flex-direction: column; gap: 12px; flex: none; }
+  .rail-capsula { background: linear-gradient(180deg, #2C2C2F, #1C1C1E); border-radius: 22px; padding: 10px 0; display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 16px 30px -16px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.1); }
+  .rail-capsula.giu { margin-top: auto; }
+  .rail-logo { width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; background: linear-gradient(180deg, #F2262B, #CC0000); color: #fff; margin-bottom: 6px; box-shadow: 0 8px 16px -8px rgba(220,0,0,.8), inset 0 1px 0 rgba(255,255,255,.35); }
+  .rail-b { position: relative; width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; color: rgba(255,255,255,.6); font-size: 1.15rem; transition: background-color .15s, color .15s; }
+  .rail-b:hover { color: #fff; background: rgba(255,255,255,.08); }
+  .rail-b[aria-current="true"] { color: #fff; background: rgba(255,255,255,.17); box-shadow: inset 0 1px 0 rgba(255,255,255,.14); }
+  .rail-n { position: absolute; top: 3px; right: 3px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 99px; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; background: rgba(255,255,255,.24); color: #fff; }
+  .rail-n.urg { background: #B45309; }
+  #pannello { width: 236px; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid rgba(255,255,255,.4); }
+  .finestra-top { display: flex; align-items: center; gap: .6rem; padding: 16px 18px 10px; }
+  .semafori { display: inline-flex; gap: 7px; }
+  .semafori i { width: 12px; height: 12px; border-radius: 99px; display: block; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.18); }
+  .semafori i:nth-child(1) { background: #FF5F57; } .semafori i:nth-child(2) { background: #FEBC2E; } .semafori i:nth-child(3) { background: #28C840; }
+  .marchio-pic { margin-left: auto; font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #CC0000; text-transform: uppercase; }
+  .profilo { width: 100%; display: flex; align-items: center; gap: .65rem; padding: .5rem .55rem; border-radius: 16px; transition: background-color .15s; }
+  .profilo:hover, .profilo[aria-expanded="true"] { background: rgba(255,255,255,.8); box-shadow: 0 1px 2px rgba(0,0,0,.05), inset 0 1px 0 #fff; }
+  #avatar { width: 38px; height: 38px; border-radius: 99px; background: linear-gradient(180deg, #3A3A3C, #1C1C1E); color: #fff; font-size: 13px; font-weight: 600; display: grid; place-items: center; flex: none; box-shadow: 0 0 0 2px #fff, 0 4px 10px -4px rgba(0,0,0,.45); }
+  .profilo-menu { position: absolute; left: 12px; right: 12px; top: calc(100% + 6px); z-index: 60; padding: 6px; }
+  .profilo-voce { width: 100%; display: flex; align-items: center; gap: .6rem; padding: .45rem .5rem; border-radius: 12px; text-align: left; font-size: 13px; color: #1F1F1F; }
+  .profilo-voce:hover { background: rgba(0,0,0,.04); }
+  .profilo-voce[aria-pressed="true"] { background: rgba(221,0,0,.07); }
+  .profilo-voce .av { width: 30px; height: 30px; border-radius: 99px; background: #EDEDED; color: #303030; font-size: 11px; font-weight: 600; display: grid; place-items: center; flex: none; }
+  .profilo-voce[aria-pressed="true"] .av { background: #DD0000; color: #fff; }
+  .profilo-voce b { font-weight: 600; } .profilo-voce small { display: block; color: #6B6B6B; font-size: 11px; }
+  .nav-titolo { font-size: 1.05rem; font-weight: 600; letter-spacing: -.01em; padding: 0 .75rem; margin: .4rem 0 .6rem; color: #1F1F1F; }
+  .nav-sub { display: flex; align-items: center; justify-content: space-between; font-size: .75rem; font-weight: 500; color: #5E5E5E; padding: 0 .75rem; margin: 1.25rem 0 .35rem; }
+  .nav-i { border-radius: 12px; padding: .5rem .7rem; font-size: .875rem; color: #3A3A3A; }
+  .nav-i:hover { background: rgba(255,255,255,.75); }
+  .nav-i[aria-current="page"] { background: #fff; color: #1F1F1F; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 18px -10px rgba(60,0,0,.35), inset 0 1px 0 #fff; }
+  .nav-i[aria-current="page"] > .bi:first-child, .nav-i[aria-current="page"] > .ico:first-child { color: #DD0000; }
+  .nav-fare { width: 100%; display: flex; align-items: center; gap: .6rem; padding: .4rem .7rem; border-radius: 10px; font-size: .8125rem; color: #4A4A4A; text-align: left; }
+  .nav-fare:hover { background: rgba(255,255,255,.75); }
+  .nav-fare .bi, .nav-fare .ico { color: #6B6B6B; }
+  #colonna { background: rgba(255,255,255,.4); }
+  header { border-bottom-color: rgba(255,255,255,.45) !important; }
+  header #titolo { color: #4A4A4A; font-size: .875rem; font-weight: 500; }
+  .campo, #cerca-tutto { background: rgba(0,0,0,.035); border-color: transparent; box-shadow: inset 0 1px 2px rgba(0,0,0,.08); }
+  .campo:hover { border-color: rgba(0,0,0,.08); }
+  .campo:focus, #cerca-tutto:focus { background: #fff; box-shadow: 0 0 0 3px rgba(221,0,0,.14); }
+  h1.font-display { font-weight: 500 !important; letter-spacing: -.025em; }
+  .kpi-n { font-weight: 300 !important; letter-spacing: -.035em; }
+  body.menu-aperto #sidebar { z-index: 55; top: 8px; bottom: 8px; left: 8px; width: auto; border-radius: 26px; border: 1px solid rgba(255,255,255,.9); background: rgba(250,247,247,.97); }
+  /* rifiniture: il rosso pieno resta per l'azione della pagina; nelle righe e nelle schede i pulsanti sono tinti */
+  .btn-pri.\!py-1\.5 { background: rgba(221,0,0,.09); color: #C00000; box-shadow: none; }
+  .btn-pri.\!py-1\.5:hover { background: rgba(221,0,0,.16); }
+  #sala-pannello .btn-pri.\!py-1\.5 { background: linear-gradient(180deg, #F2262B, #CC0000); color: #fff; box-shadow: 0 10px 20px -10px rgba(200,0,0,.75), inset 0 1px 0 rgba(255,255,255,.35); }
+  /* schede dentro la pagina: sottolineate, come nelle app Apple; le pillole restano per i filtri */
+  .seg[role="tablist"] { background: transparent; border: 0; border-bottom: 1px solid rgba(0,0,0,.08); border-radius: 0; padding: 0; gap: 1.4rem; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .seg[role="tablist"] button { border-radius: 0; padding: .55rem .1rem; color: #6B6B6B; background: transparent !important; box-shadow: none !important; font-weight: 500; }
+  .seg[role="tablist"] button:hover { color: #1F1F1F; }
+  .seg[role="tablist"] button[aria-pressed="true"] { color: #1F1F1F; font-weight: 600; box-shadow: inset 0 -2px 0 #DD0000 !important; }
+  .col-k { background: rgba(0,0,0,.035); border: 0; border-radius: 20px; }
+  /* Spotlight: cerca e chiede agli agenti, da ⌘K o dal pulsante flottante */
+  .cerca-pill { display: inline-flex; align-items: center; gap: .5rem; height: 36px; min-width: 250px; padding: 0 .45rem 0 .85rem; border-radius: 999px; background: rgba(0,0,0,.04); box-shadow: inset 0 1px 2px rgba(0,0,0,.08); color: #6B6B6B; font-size: .8125rem; text-align: left; }
+  .cerca-pill:hover { background: rgba(0,0,0,.06); }
+  .tasto-k, .spot-campo kbd { margin-left: auto; font-family: Inter, sans-serif; font-size: 11px; font-weight: 500; color: #6B6B6B; background: rgba(0,0,0,.06); border-radius: 7px; padding: 2px 7px; }
+  .spot-btn { position: fixed; right: 24px; bottom: 24px; z-index: 45; width: 54px; height: 54px; border-radius: 18px; display: grid; place-items: center; font-size: 1.4rem; color: #1F1F1F; background: rgba(255,255,255,.84); border: 1px solid rgba(255,255,255,.95); box-shadow: 0 18px 32px -14px rgba(60,0,0,.6), inset 0 1px 0 #fff; backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%); transition: transform .15s; }
+  .spot-btn:hover { transform: translateY(-2px); }
+  .spot-velo { align-items: flex-start !important; padding-top: 13vh !important; background: rgba(40,0,0,.26) !important; }
+  .spotlight { width: min(640px, 100%); border-radius: 22px; background: rgba(252,250,250,.94); border: 1px solid rgba(255,255,255,.9); box-shadow: 0 40px 80px -30px rgba(40,0,0,.65), inset 0 1px 0 #fff; backdrop-filter: blur(40px) saturate(160%); -webkit-backdrop-filter: blur(40px) saturate(160%); overflow: hidden; }
+  .spot-campo { display: flex; align-items: center; gap: .75rem; padding: 1rem 1.15rem; border-bottom: 1px solid rgba(0,0,0,.06); font-size: 1.2rem; color: #6B6B6B; }
+  .spot-campo input { flex: 1; min-width: 0; background: transparent; outline: none; font-size: 1.1rem; color: #1F1F1F; }
+  .spot-campo input::-webkit-search-cancel-button { display: none; }
+  .spot-ris p.uppercase { text-transform: none; letter-spacing: 0; font-size: .72rem; font-weight: 600; color: #8A8A8A; padding-top: .8rem; }
+  .spot-ris { max-height: 56vh; overflow-y: auto; padding: 4px 6px 10px; }
+  .spot-h { display: flex; align-items: center; gap: .35rem; font-size: .72rem; font-weight: 600; color: #8A8A8A; padding: .8rem .75rem .35rem; }
+  .spot-riga, .spot-ris button.w-full { width: 100%; text-align: left; padding: .55rem .75rem; border-radius: 12px; font-size: .875rem; }
+  .spot-riga:hover, .spot-ris button.w-full:hover, .spot-riga:focus-visible { background: rgba(221,0,0,.07); }
+  /* telefono stile iPhone: barra in basso, pagine della sezione in pillole, titolo piccolo che compare scorrendo, finestre che salgono dal basso */
+  #tabbar, #pagine-tel { display: none; }
+  @media (max-width: 1023px) {
+    #tabbar { display: flex; position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 45; height: 64px; padding: 6px; border-radius: 26px; background: rgba(252,250,250,.86); border: 1px solid rgba(255,255,255,.95); box-shadow: 0 18px 36px -14px rgba(60,0,0,.6), inset 0 1px 0 #fff; backdrop-filter: blur(30px) saturate(170%); -webkit-backdrop-filter: blur(30px) saturate(170%); }
+    .tab-b { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 18px; color: #6B6B6B; font-size: 10px; font-weight: 500; position: relative; }
+    .tab-b > i { font-size: 1.35rem; }
+    .tab-b[aria-current="true"] { color: #DD0000; background: rgba(221,0,0,.07); }
+    .tab-n { position: absolute; top: 3px; left: calc(50% + 6px); min-width: 15px; height: 15px; padding: 0 4px; border-radius: 99px; font-size: 9px; font-weight: 700; line-height: 15px; text-align: center; background: #E4E4E4; color: #3A3A3A; }
+    .tab-n.urg { background: #B45309; color: #fff; }
+    #pagine-tel { display: flex; gap: 6px; overflow-x: auto; padding: 8px 16px 0; scrollbar-width: none; }
+    #pagine-tel:empty { display: none; }
+    #pagine-tel button { flex: none; border-radius: 999px; padding: .4rem .85rem; font-size: .8125rem; font-weight: 500; color: #4A4A4A; background: rgba(0,0,0,.04); }
+    #pagine-tel button[aria-current="page"] { background: #fff; color: #1F1F1F; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 6px 14px -8px rgba(60,0,0,.35); }
+    header [data-a="menu"], #barra-modo { display: none !important; }
+    header { height: 3.25rem !important; }
+    header .sala-marchio { display: flex; }
+    body:not(.scorso) header #titolo { position: absolute; }
+    header #titolo { opacity: 0; transition: opacity .2s; }
+    body.scorso header #titolo { opacity: 1; }
+    body.scorso:not(.sala) header .sala-marchio { display: none; }
+    .spot-btn { right: 18px; bottom: 86px; width: 48px; height: 48px; border-radius: 16px; font-size: 1.25rem; }
+    .modale-velo:not(.spot-velo) { align-items: flex-end; padding: 0; }
+    .modale-velo:not(.spot-velo) .modale { max-width: none !important; border-radius: 26px 26px 0 0; max-height: 92dvh; overflow-y: auto; animation: foglio .38s cubic-bezier(.2,.8,.2,1); }
+    .modale-velo:not(.spot-velo) .modale::before { content: ''; display: block; width: 38px; height: 5px; border-radius: 99px; background: rgba(0,0,0,.18); margin: 8px auto 0; }
+    .spot-velo { padding: 10px !important; }
+  }
+  @keyframes foglio { from { transform: translateY(100%); } to { transform: none; } }
+  /* ================= iOS 26: navigazione in alto, liquid glass sui controlli =================
+     Come fa Apple: il vetro liquido è per lo strato che si tocca (barre, pulsanti, selettori, pillole);
+     i riquadri con i dati restano vetro quasi pieno, per leggere bene. Niente barra laterale, contenuto a tutta larghezza. */
+  #app { display: flex !important; flex-direction: column; }
+  #sidebar, #velo-menu { display: none !important; }
+  .liquido { position: relative; background: linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.34)); border: 0; box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 1px rgba(255,255,255,.35), inset 1px 0 0 rgba(255,255,255,.45), inset -1px 0 0 rgba(255,255,255,.25), 0 0 0 .5px rgba(80,0,0,.08), 0 10px 26px -12px rgba(90,0,0,.45); backdrop-filter: blur(16px) saturate(200%) brightness(1.06); -webkit-backdrop-filter: blur(16px) saturate(200%) brightness(1.06); }
+  .liquido::before { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,255,255,.08) 38%, rgba(255,255,255,0) 62%, rgba(255,255,255,.55)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+  .barra-alta { height: 64px; background: transparent !important; border: 0 !important; }
+  .marchio { display: inline-flex; align-items: center; gap: .5rem; height: 44px; padding: 0 .9rem 0 .35rem; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: .1em; color: #CC0000; flex: none; }
+  .marchio-ico { width: 34px; height: 34px; border-radius: 999px; display: grid; place-items: center; color: #fff; background: linear-gradient(180deg, #FF3B3B, #D10000); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 6px 14px -6px rgba(200,0,0,.8); }
+  .titolo-barra { display: none; font-size: .95rem; color: #1F1F1F; }
+  #rail.sezioni { display: none; width: auto; padding: 4px; gap: 2px; border-radius: 999px; flex-direction: row; align-items: center; flex: none; }
+  @media (min-width: 1024px) { #rail.sezioni { display: flex; } }
+  .rail-b { position: relative; width: auto; height: 40px; padding: 0 .9rem; border-radius: 999px; display: inline-flex; align-items: center; gap: .45rem; color: #3A3A3A; font-size: .875rem; font-weight: 500; background: transparent; box-shadow: none; transition: background-color .2s, color .2s; white-space: nowrap; }
+  .rail-b > .bi, .rail-b > .ico { font-size: 1.15rem; }
+  .rail-b:hover { background: rgba(255,255,255,.5); color: #1F1F1F; }
+  .rail-b[aria-current="true"] { background: #fff; color: #1F1F1F; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 6px 16px -8px rgba(90,0,0,.45), inset 0 1px 0 #fff; }
+  .rail-b[aria-current="true"] > .bi, .rail-b[aria-current="true"] > .ico { color: #DD0000; }
+  .rail-t { display: none; }
+  .rail-b[aria-current="true"] .rail-t { display: inline; }
+  @media (min-width: 1600px) { .rail-t { display: inline; } }
+  .rail-n { position: static; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 99px; font-size: 10px; font-weight: 700; line-height: 18px; text-align: center; background: rgba(0,0,0,.08); color: #3A3A3A; }
+  .rail-n.urg { background: #B45309; color: #fff; }
+  @media (max-width: 1599px) { .rail-b:not([aria-current]) .rail-n { position: absolute; top: 0; right: 0; min-width: 15px; height: 15px; line-height: 15px; font-size: 9px; padding: 0 3px; } }
+  .tondo { width: 44px; height: 44px; border-radius: 999px; display: grid; place-items: center; color: #1F1F1F; font-size: 1.1rem; flex: none; }
+  .tondo:hover { background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.5)); }
+  .cerca-pill { height: 44px; min-width: 210px; background: none; box-shadow: none; }
+  header .seg.liquido { padding: 4px; height: 44px; align-items: center; background: linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.34)); border: 0; }
+  header .seg.liquido button { height: 36px; }
+  .profilo { height: 44px; width: auto; padding: 0 .65rem 0 4px; gap: .55rem; border-radius: 999px; align-items: center; }
+  .profilo:hover, .profilo[aria-expanded="true"] { background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.55)); }
+  #avatar { width: 36px; height: 36px; box-shadow: 0 0 0 2px rgba(255,255,255,.9); }
+  .profilo-menu { position: absolute; left: auto; right: 16px; top: 66px; width: 290px; z-index: 60; }
+  .pagine { display: flex; gap: 8px; padding: 0 1rem 10px; overflow-x: auto; scrollbar-width: none; flex: none; }
+  .pagine.vuota { display: none; }
+  .pagine-sez { display: flex; gap: 8px; }
+  .pagine-sez[hidden] { display: none; }
+  .pagine .nav-i { width: auto; flex: none; height: 40px; padding: 0 .9rem; gap: .5rem; border-radius: 999px; font-size: .875rem; color: #3A3A3A; white-space: nowrap; background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.28)); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 1px rgba(255,255,255,.3), 0 0 0 .5px rgba(80,0,0,.08); backdrop-filter: blur(12px) saturate(180%); -webkit-backdrop-filter: blur(12px) saturate(180%); }
+  .pagine .nav-i:hover { background: rgba(255,255,255,.75); }
+  .pagine .nav-i[aria-current="page"] { background: #fff; color: #1F1F1F; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 6px 16px -8px rgba(90,0,0,.45), inset 0 1px 0 #fff; }
+  .pagine .nav-i .badge { margin-left: .15rem; }
+  /* pulsanti in vetro liquido: il secondario trasparente con il riflesso, il principale rosso lucido */
+  .btn-sec { background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.55)); border: 0; box-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgba(255,255,255,.4), 0 0 0 .5px rgba(80,0,0,.12), 0 6px 14px -8px rgba(90,0,0,.35); backdrop-filter: blur(10px) saturate(180%); -webkit-backdrop-filter: blur(10px) saturate(180%); }
+  .btn-sec:hover { background: #fff; }
+  .btn-pri { background: linear-gradient(180deg, #FF3B3B 0%, #E00000 55%, #C40000 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 6px rgba(110,0,0,.3), 0 10px 22px -10px rgba(200,0,0,.8); }
+  .btn-pri:hover { background: linear-gradient(180deg, #F52E2E, #C80000); }
+  .seg { background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,255,255,.25)); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 0 0 .5px rgba(80,0,0,.08); }
+  .card { border-radius: 26px; }
+  /* numeri grandi che si adattano al riquadro: non escono mai */
+  .kpi-box { container-type: inline-size; }
+  .kpi-box .kpi-n { font-size: clamp(1.3rem, 14.5cqi, 2.4rem) !important; overflow: hidden; text-overflow: ellipsis; }
+  .nav-i, .chip { min-width: 0; }
+  @media (max-width: 1023px) {
+    .barra-alta { height: 56px; }
+    .titolo-barra { display: block; opacity: 0; transition: opacity .2s; }
+    body.scorso .titolo-barra { opacity: 1; }
+    body.scorso .marchio > span:last-child { display: none; }
+    .marchio { height: 40px; }
+    .tondo { width: 40px; height: 40px; }
+    .profilo-menu { position: fixed; left: 10px; right: 10px; top: auto; bottom: 84px; width: auto; }
+    .pagine { padding: 0 12px 8px; }
+  }
+  /* il pulsante flottante copriva i testi in basso a destra: la ricerca sta nella barra in alto e con Ctrl K */
+  .spot-btn { display: none !important; }
+  /* home: l'ufficio al centro */
+  @media (min-width: 1024px) { .saluto-velo { background: radial-gradient(ellipse 100% 100% at 0 0, rgba(255,255,255,.5) 55%, rgba(255,255,255,0) 100%) !important; border-radius: 22px; } }
+  .scena-vista { border-radius: 22px; }
+  /* la scena della Sala sta tutta nella finestra: la larghezza segue l'altezza dello schermo */
+  @media (min-width: 1024px) { .scena-vista { max-width: calc((100dvh - 250px) * 1.3); margin-inline: auto; } }
+  .ufficio-home svg { display: block; width: 100%; height: auto; max-height: 100%; pointer-events: none; }
+  .pillola { display: inline-flex; align-items: center; gap: .45rem; border-radius: 999px; padding: .4rem .8rem; font-size: .8125rem; font-weight: 600; background: rgba(255,255,255,.82); border: 1px solid rgba(255,255,255,.95); box-shadow: 0 8px 18px -10px rgba(90,0,0,.45), var(--luce); backdrop-filter: blur(14px) saturate(170%); -webkit-backdrop-filter: blur(14px) saturate(170%); color: #1F1F1F; }
   /* chi chiede meno trasparenze, o un browser senza sfocatura, vede superfici piene */
   @media (prefers-reduced-transparency: reduce) {
-    #sidebar, header, .card, .col-k, .modale, .seg { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-    #sidebar, .card, .modale { background: #fff; } header { background: rgba(255,255,255,.96) !important; } .col-k { background: #EFEFEF; }
+    #sidebar, #vista, .seg, .modale, .pillola, #barra-demo { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    #sidebar, .card, .modale { background: #fff; } #vista { background: #FBF3F3; }
   }
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    #sidebar, .card, .modale { background: rgba(255,255,255,.92); } header { background: rgba(255,255,255,.95) !important; }
+    #sidebar, .modale { background: rgba(255,255,255,.95); } #vista { background: rgba(255,246,246,.9); }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -339,68 +541,49 @@
 <body>
 
 <div id="barra-demo" role="region" aria-label="Comandi della demo">
-  <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 px-4 sm:px-6 py-1.5">
-    <span class="text-[10px] font-bold tracking-wider uppercase bg-white text-inchiostro rounded-sm px-1.5 py-0.5">Demo</span>
-    <span class="text-xs text-white/70 hidden lg:inline">Dati di esempio: ricaricando la pagina si riparte da capo.</span>
-    <span class="text-xs text-white/70 hidden sm:inline sm:ml-auto">Guarda come:</span>
-    <div class="seg-demo order-last w-full sm:order-none sm:w-auto" role="group" aria-label="Chi sta usando il sistema">
-      <button data-a="ruolo" data-v="dir">Direzione</button>
-      <button data-a="ruolo" data-v="rt">Resp. tecnico</button>
-      <button data-a="ruolo" data-v="amm"><span class="sm:hidden">Ammin.</span><span class="hidden sm:inline">Amministrazione</span></button>
-      <button data-a="ruolo" data-v="tec">Tecnico</button>
-    </div>
-    <button class="demo-btn ml-auto sm:ml-0" data-a="guida" aria-pressed="true" title="Mostra o nasconde le righe gialle Prova"><i class="bi bi-lightbulb"></i>Suggerimenti</button>
+  <div class="demo-pillola">
+    <span class="text-[10px] font-bold tracking-wider uppercase bg-white text-inchiostro rounded-full px-2 py-0.5">Demo</span>
+    <span class="text-xs text-white/75 hidden md:inline">Dati di esempio: ricaricando la pagina si riparte da capo. Chi siete si sceglie dal profilo.</span>
+    <button class="demo-btn" data-a="guida" aria-pressed="true" title="Mostra o nasconde le righe gialle Prova"><i class="bi bi-lightbulb"></i>Suggerimenti</button>
     <button class="demo-btn" data-a="benvenuto"><i class="bi bi-question-circle"></i>Guida</button>
   </div>
 </div>
 <div id="app">
-  <aside id="sidebar" class="flex-col bg-white border-r border-linea h-full" aria-label="Menu principale">
-    <div class="px-5 h-16 flex items-center gap-2.5 border-b border-linea shrink-0">
-      <span class="w-8 h-8 rounded bg-petrolio text-white flex items-center justify-center"><i class="bi bi-shield-check"></i></span>
-      <div class="leading-tight">
-        <p class="font-display font-bold tracking-wide text-petrolio">PROGESI</p>
-        <p class="text-[0.65rem] uppercase tracking-wider text-grigio">Società di ingegneria · demo</p>
-      </div>
-    </div>
-    <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-5" id="nav"></nav>
-    <div class="p-3 border-t border-linea shrink-0">
-      <div class="flex items-center gap-3 px-2 py-2">
-        <span id="avatar" class="w-9 h-9 rounded bg-inchiostro text-white text-sm font-bold flex items-center justify-center">GI</span>
-        <div class="leading-tight text-sm"><p class="font-bold" id="utente-nome">Giorgio</p><p class="text-grigio text-xs" id="utente-ruolo">Direttore commerciale</p></div>
-      </div>
-    </div>
-  </aside>
-  <div id="velo-menu" class="fixed inset-0 bg-inchiostro/40 z-30" data-a="chiudi-menu"></div>
-
-  <div id="colonna" class="flex flex-col h-full">
-    <header class="relative z-40 h-16 shrink-0 bg-white/80 backdrop-blur border-b border-linea flex items-center gap-3 px-4 sm:px-6">
-      <button class="lg:hidden btn btn-sec !px-2.5" data-a="menu" aria-label="Apri il menu"><i class="bi bi-list text-lg"></i></button>
-      <span class="sala-marchio items-center gap-2 shrink-0"><span class="w-7 h-7 rounded bg-petrolio text-white flex items-center justify-center text-sm"><i class="bi bi-shield-check"></i></span><span class="font-display font-bold tracking-wide text-petrolio hidden sm:inline">PROGESI</span><span class="text-linea hidden sm:inline">|</span></span>
-      <h2 id="titolo" class="font-display font-medium text-base sm:text-lg truncate min-w-0"></h2>
+  <div id="colonna" class="flex flex-col h-full min-h-0">
+    <header class="barra-alta relative z-40 shrink-0 flex items-center gap-2 px-3 sm:px-4">
+      <span class="marchio liquido"><span class="marchio-ico"><i class="bi bi-shield-check"></i></span><span class="hidden sm:inline">PROGESI</span></span>
+      <h2 id="titolo" class="titolo-barra font-display font-medium truncate min-w-0"></h2>
+      <nav id="rail" class="sezioni liquido" aria-label="Sezioni"></nav>
       <div class="ml-auto flex items-center gap-2 shrink-0">
-        <div class="relative hidden 2xl:block" id="cerca-box"><i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-grigio text-sm"></i><input id="cerca-tutto" type="search" class="campo !py-1.5 !pl-8 w-64" placeholder="Cerca clienti, preventivi, fatture" data-cerca-tutto="d" autocomplete="off" aria-label="Cerca in tutto il sistema"><div id="risultati" class="tendina card hidden"></div></div>
-        <button class="btn btn-sec !px-2.5 2xl:hidden" data-a="cerca-apri" aria-label="Cerca in tutto il sistema" id="cerca-btn"><i class="bi bi-search"></i></button>
-        <div class="relative" id="avvisi-box"><button class="btn btn-sec !px-2.5 relative" data-a="avvisi" aria-label="Avvisi" aria-expanded="false" id="avvisi-btn"><i class="bi bi-bell"></i><span id="avvisi-n" class="badge absolute -top-1.5 -right-1.5 !ml-0 hidden"></span></button><div id="avvisi" class="tendina card hidden"></div></div>
-        <div class="hidden xl:flex items-center gap-2 ml-1">
-          <div class="seg modo-seg" role="group" aria-label="Come vedere il sistema">
+        <div class="relative hidden 2xl:block" id="cerca-box"><button class="cerca-pill liquido" data-a="spotlight" aria-label="Cerca o chiedi agli agenti"><i class="bi bi-search"></i>Cerca o chiedi<kbd class="tasto-k">Ctrl K</kbd></button><div id="risultati" class="hidden"></div></div>
+        <button class="tondo liquido 2xl:hidden" data-a="cerca-apri" aria-label="Cerca o chiedi agli agenti" id="cerca-btn"><i class="bi bi-search"></i></button>
+        <div class="relative" id="avvisi-box"><button class="tondo liquido" data-a="avvisi" aria-label="Avvisi" aria-expanded="false" id="avvisi-btn"><i class="bi bi-bell"></i><span id="avvisi-n" class="badge absolute -top-1 -right-1 !ml-0 hidden"></span></button><div id="avvisi" class="tendina card hidden"></div></div>
+        <div class="hidden lg:flex items-center">
+          <div class="seg modo-seg liquido" role="group" aria-label="Come vedere il sistema">
             <button data-a="modo" data-v="gestionale"><i class="bi bi-grid-1x2"></i> Gestionale</button>
             <button data-a="modo" data-v="sala"><i class="bi bi-people"></i> Sala agenti</button>
           </div>
         </div>
+        <button id="profilo" class="profilo liquido hidden lg:flex" data-a="profilo" aria-expanded="false" aria-haspopup="menu" aria-label="Chi sta usando il sistema: cambia ruolo"><span id="avatar">GI</span><span class="hidden min-[1600px]:block min-w-0 text-left leading-tight"><span class="block font-semibold text-[13px] truncate max-w-[9rem]" id="utente-nome">Giorgio</span><span class="block text-[11px] text-grigio truncate max-w-[9rem]" id="utente-ruolo">Direttore commerciale</span></span><i class="bi bi-chevron-expand text-grigio"></i></button>
       </div>
     </header>
-    <div id="barra-modo" class="xl:hidden shrink-0 bg-white border-b border-linea px-4 sm:px-6 py-2">
-      <div class="seg modo-seg w-full" role="group" aria-label="Come vedere il sistema">
-        <button class="!px-1.5 !text-xs" data-a="modo" data-v="gestionale"><i class="bi bi-grid-1x2"></i> Gestionale</button>
-        <button class="!px-1.5 !text-xs" data-a="modo" data-v="sala"><i class="bi bi-people"></i> Sala agenti</button>
-      </div>
+    <div id="profilo-menu" class="tendina profilo-menu hidden" role="menu" aria-label="Guarda la demo come">
+      <p class="text-[11px] text-grigio px-2 pt-1.5 pb-1">Guarda la demo come</p>
+      <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="dir"><span class="av">GI</span><span><b>Giorgio</b><small>Direzione</small></span></button>
+      <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="rt"><span class="av">RT</span><span><b>Responsabile tecnico</b><small>Socio, segue i tecnici</small></span></button>
+      <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="amm"><span class="av">EM</span><span><b>Elena Moretti</b><small>Amministrazione</small></span></button>
+      <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="tec"><span class="av">PF</span><span><b>Paolo Ferri</b><small>Tecnico</small></span></button>
+      <div id="profilo-extra"></div>
     </div>
+    <nav id="nav" class="pagine" aria-label="Pagine della sezione"></nav>
     <main id="vista" class="flex-1 overflow-y-auto"></main>
   </div>
 </div>
 
 <div id="modale"></div>
 <div id="glossa" role="tooltip" hidden></div>
+<button id="spot-btn" class="spot-btn" data-a="spotlight" aria-label="Cerca o chiedi agli agenti" title="Cerca o chiedi agli agenti"><i class="bi bi-stars"></i></button>
+<nav id="tabbar" aria-label="Sezioni"></nav>
 <div id="toast" role="status" aria-live="polite"><div class="bg-inchiostro text-white text-sm rounded px-4 py-3 shadow-xl flex items-center gap-2.5 max-w-xl"><i class="bi bi-check2-circle text-[#8FD3A9] text-base"></i><span id="toast-t"></span></div></div>
 
 <script>
@@ -656,7 +839,7 @@ const ad = t => /^[aeiouAEIOU]/.test(t) ? 'ad' : 'a';
 const saluto = () => { const h = new Date().getHours(); return h >= 5 && h < 13 ? 'Buongiorno' : h >= 13 && h < 18 ? 'Buon pomeriggio' : 'Buonasera'; };
 const NOME = { dir: 'Giorgio', rt: '', amm: 'Elena', tec: 'Paolo' };
 function nuovoPrev(cliId, serv = 'dvr') { return { id: null, cli: cliId, righe: [{ serv, qty: 1, prezzo: srv(serv).prezzo }], sconto: 0, validita: 30, note: '' }; }
-const S = { view: 'home', ruolo: 'dir', costoH: 38, servSel: 'dvr', cliSel: 3, estratto: 'no', chiudi: null, perdi: null, doc: null, confOra: 0, prev: nuovoPrev(3), numPrev: 48, modo: 'gestionale', tabCont: 'prima', tabFatt: 'emesse', vistoIva: false, pacchetto: false, ob: false, migr: 2, cerca: '', filtro: 'tutti', kf: { tec: '', q: '' }, per: 'mese', perM: 12, oreMese: 0, oreFile: { timb: null, dich: null }, richiesta: null, mese: { fatt: 0, ore: 0 }, prossimaFt: 432, prossimaNc: 1, navAperti: {}, margDett: false };
+const S = { view: 'home', ruolo: 'dir', costoH: 38, servSel: 'dvr', cliSel: 3, estratto: 'no', chiudi: null, perdi: null, doc: null, confOra: 0, prev: nuovoPrev(3), numPrev: 48, modo: 'gestionale', tabCont: 'prima', tabFatt: 'emesse', vistoIva: false, pacchetto: false, ob: false, migr: 2, cerca: '', filtro: 'tutti', kf: { tec: '', q: '' }, per: 'mese', perM: 12, oreMese: 0, oreFile: { timb: null, dich: null }, richiesta: null, mese: { fatt: 0, ore: 0 }, prossimaFt: 432, prossimaNc: 1, margDett: false };
 
 /* ---------- calcoli ---------- */
 const lavori = (serv, per = 12) => [
@@ -746,10 +929,18 @@ const RUOLO = { dir: ['GI', 'Giorgio', 'Direttore commerciale', 'home'], rt: ['R
 const VISIBILI = { rt: ['pianifica', 'ordini', 'contratti', 'clienti', 'margini', 'ore', 'sicurezza'], amm: ['home', 'contabilita', 'fatture', 'incassi', 'banca', 'fornitori', 'ore', 'clienti', 'contratti', 'sicurezza'] };
 const vede = v => !VISIBILI[S.ruolo] || VISIBILI[S.ruolo].includes(v);
 const modulo = t => `<span class="text-[0.6rem] font-bold uppercase text-grigio border border-[#C8C8C8] rounded-sm px-1 leading-4 whitespace-nowrap">${t}</span>`;
-const nota = (tag, t) => `<div class="card p-4 mb-5 flex flex-wrap gap-x-3 gap-y-2 items-center text-sm"><span class="chip c-pieno">${tag}</span><p class="text-grigio">${t}</p></div>`;
+const nota = (tag, t) => `<p class="mb-4 flex flex-wrap gap-x-2 gap-y-1 items-center text-sm text-grigio"><span class="chip c-pieno">${tag}</span>${t}</p>`;
 
-// un gruppo lungo del menu della direzione parte chiuso, salvo che ci siate dentro; si apre e chiude a mano
-const aperto = (g, items) => S.navAperti[g] ?? (S.ruolo !== 'dir' || items.length <= 4 || items.some(([v]) => v === S.view));
+// sezioni della barra scura: ognuna apre le sue pagine nella barra laterale
+const VOCI = Object.fromEntries(NAV.flatMap(([, l]) => l.map(([v, ico, t, mod]) => [v, { ico, t, mod }])));
+const SEZ = [
+  { id: 'home', ico: 'bi-speedometer2', nome: 'Controllo di gestione', viste: ['home'] },
+  { id: 'comm', ico: 'bi-briefcase', nome: 'Commerciale', viste: ['ordini', 'trattative', 'clienti', 'contratti'] },
+  { id: 'lav', ico: 'bi-tools', nome: 'Lavori e margini', viste: ['pianifica', 'margini'] },
+  { id: 'amm', ico: 'bi-calculator', nome: 'Amministrazione', viste: ['contabilita', 'fatture', 'incassi', 'banca', 'fornitori', 'ore'] },
+  { id: 'imp', ico: 'bi-gear', nome: 'Impostazioni e sicurezza', viste: ['impostazioni', 'sicurezza'], giu: true },
+];
+const sezDi = v => SEZ.find(z => z.viste.includes(v)) || SEZ[0];
 function renderNav() {
   const tec = S.ruolo === 'tec';
   // urgenti: fatture scadute senza sollecito, fatture scartate dallo SdI, pagamenti entro 7 giorni
@@ -768,18 +959,22 @@ function renderNav() {
     fatture: SCARTI.length + PASSIVE.filter(x => !x.registrata).length + ORDINI.filter(o => o.stato === 'chiuso').length + (ncDi(NC_RICH.ft).length ? 0 : 1),
     contabilita: daPagare().filter(x => x.scad <= 7).length,
   };
-  $('#nav').innerHTML = tec
-    ? `<ul><li><button class="nav-i" aria-current="page"><i class="bi bi-tools"></i>I miei lavori</button></li></ul>
-       <p class="px-3 text-xs text-grigio leading-relaxed"><i class="bi bi-phone"></i> Il tecnico vede solo i suoi lavori, anche da telefono. Niente prezzi, niente margini.</p>`
-    : NAV.map(([g, tutte]) => { const items = tutte.filter(([v]) => vede(v)); if (!items.length) return '';
-      const chiuso = g && !aperto(g, items), n = sum(items, ([v]) => badge[v] || 0), urg = items.some(([v]) => badge[v] && urgente[v]);
-      return `<div>${g ? `<button class="nav-g" data-a="nav-gruppo" data-v="${g}" aria-expanded="${!chiuso}"><i class="bi bi-chevron-${chiuso ? 'right' : 'down'} text-[0.65rem]"></i>${g}${chiuso ? `<span class="font-normal normal-case tracking-normal text-grigio">${items.length} voci</span>${n ? `<span class="badge ${urg ? '' : 'calmo'}" aria-label="${n} da guardare">${n}</span>` : ''}` : ''}</button>` : ''}
-      <ul class="space-y-0.5" ${chiuso ? 'hidden' : ''}>${items.map(([v, ico, t, mod]) => `<li><button class="nav-i" data-a="vai" data-v="${v}" ${S.view === v ? 'aria-current="page"' : ''}><i class="bi ${ico}"></i>${t}${mod ? `<span class="${badge[v] ? 'ml-1' : 'ml-auto'}">${modulo(mod)}</span>` : ''}${badge[v] ? `<span class="badge ${urgente[v] ? '' : 'calmo'}" aria-label="${badge[v]} da guardare${urgente[v] ? ', urgente' : ''}">${badge[v]}</span>` : ''}</button></li>`).join('')}</ul></div>`; }).join('') +
-      (S.ruolo === 'dir' ? `<p class="px-3 text-xs text-grigio leading-relaxed">Le voci senza etichetta sono la proposta base. ${modulo('CRM')} si aggiunge con la proposta con CRM, ${modulo('Opzionale')} si sceglie a parte.</p>` : `<p class="px-3 text-xs text-grigio leading-relaxed"><i class="bi bi-person-lock"></i> ${RUOLO[S.ruolo][1]} vede solo le pagine del suo lavoro.</p>`);
+  const att = sezDi(S.view).id, sezioni = SEZ.map(z => ({ ...z, l: z.viste.filter(v => vede(v)) })).filter(z => z.l.length);
+  const TAB = { home: 'Controllo', comm: 'Vendite', lav: 'Lavori', amm: 'Ammin.', imp: 'Impost.' }, NOMI = { home: 'Controllo', comm: 'Commerciale', lav: 'Lavori e margini', amm: 'Amministrazione', imp: 'Impostazioni' };
+  const tasto = z => { const n = sum(z.l, v => badge[v] || 0), u = z.l.some(v => badge[v] && urgente[v]), cur = S.modo !== 'sala' && z.id === att; return `<button class="rail-b" data-a="vai" data-v="${z.l[0]}" ${cur ? 'aria-current="true"' : ''} title="${z.nome}" aria-label="${z.nome}${n ? `, ${n} da guardare` : ''}"><i class="bi ${z.ico}"></i><span class="rail-t">${NOMI[z.id]}</span>${n && !cur ? `<span class="rail-n ${u ? 'urg' : ''}">${n}</span>` : ''}</button>`; };
+  $('#rail').innerHTML = tec ? `<button class="rail-b" aria-current="true" title="I miei lavori"><i class="bi bi-tools"></i><span class="rail-t">I miei lavori</span></button>` : sezioni.map(tasto).join('');
+  // le pagine della sezione: in pillole sotto la barra, solo se la sezione ne ha più di una; le altre restano nascoste per i test
+  $('#nav').innerHTML = tec ? '' : sezioni.map(z => `<div class="pagine-sez" data-sez="${z.id}" ${z.id === att && z.l.length > 1 && S.modo !== 'sala' ? '' : 'hidden'}>${z.l.map(v => { const { ico, t, mod } = VOCI[v]; return `<button class="nav-i" data-a="vai" data-v="${v}" ${S.view === v ? 'aria-current="page"' : ''}><i class="bi ${ico}"></i>${t}${mod ? modulo(mod) : ''}${badge[v] ? `<span class="badge ${urgente[v] ? '' : 'calmo'}" aria-label="${badge[v]} da guardare${urgente[v] ? ', urgente' : ''}">${badge[v]}</span>` : ''}</button>`; }).join('')}</div>`).join('');
+  $('#nav').classList.toggle('vuota', tec || S.modo === 'sala' || !sezioni.some(z => z.id === att && z.l.length > 1));
+  $('#profilo-extra').innerHTML = tec ? '' : `<div class="border-t border-linea mt-1.5 pt-1.5">${['impostazioni', 'sicurezza'].filter(v => vede(v)).map(v => `<button class="profilo-voce" role="menuitem" data-a="vai" data-v="${v}"><span class="av"><i class="bi ${VOCI[v].ico}"></i></span><span><b>${VOCI[v].t}</b></span></button>`).join('')}${S.ruolo === 'dir' ? `<p class="px-2 pt-2 pb-1 text-[11px] text-grigio leading-relaxed">Le voci senza etichetta sono la proposta base. ${modulo('CRM')} si aggiunge con la proposta con CRM, ${modulo('Opzionale')} si sceglie a parte.</p>` : ''}</div>`;
+  // telefono: barra in basso con le sezioni, la Sala e il profilo
+  const tab = (az, v, ico, t, cur, n = 0, u = false) => `<button class="tab-b" data-a="${az}" data-v="${v}" ${cur ? 'aria-current="true"' : ''} aria-label="${t}${n ? `, ${n} da guardare` : ''}"><i class="bi ${ico}"></i>${t}${n ? `<span class="tab-n ${u ? 'urg' : ''}">${n}</span>` : ''}</button>`;
+  $('#tabbar').innerHTML = tec ? tab('vai', 'tecnico', 'bi-tools', 'I miei lavori', true) + tab('menu', '', 'bi-person', 'Profilo', false)
+    : sezioni.filter(z => !z.giu).map(z => tab('vai', z.l[0], z.ico, TAB[z.id], S.modo !== 'sala' && z.id === att, sum(z.l, v => badge[v] || 0), z.l.some(v => badge[v] && urgente[v]))).join('') + tab('modo', 'sala', 'bi-people', 'Sala', S.modo === 'sala') + tab('menu', '', 'bi-person', 'Profilo', false);
+  $('#spot-btn').classList.toggle('hidden', tec);
   document.querySelectorAll('[data-a="ruolo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.ruolo));
   document.querySelectorAll('[data-a="modo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.modo));
   document.querySelectorAll('.modo-seg').forEach(x => x.classList.toggle('!hidden', tec));
-  $('#barra-modo').classList.toggle('!hidden', tec);
   $('[data-a="guida"]').setAttribute('aria-pressed', S.guida !== false);
   const [ini, nome, ruolo] = RUOLO[S.ruolo];
   $('#avatar').textContent = ini; $('#utente-nome').textContent = nome; $('#utente-ruolo').textContent = ruolo;
@@ -802,12 +997,15 @@ function render(nuova) {
   if (S.ruolo !== 'tec' && !vede(S.view)) S.view = RUOLO[S.ruolo][3];
   const v = S.ruolo === 'tec' ? 'tecnico' : S.modo === 'sala' ? 'sala' : S.view;
   $('#titolo').textContent = TITOLI[v];
-  $('#vista').innerHTML = `<div class="${v === 'sala' ? 'px-4 sm:px-6 py-4 lg:py-5 pb-24' : 'px-4 sm:px-6 lg:px-10 py-6 lg:py-8 pb-24'} ${nuova ? 'entra' : ''}">${VISTE[v]()}</div>`;
+  $('#vista').innerHTML = `<div class="${v === 'sala' ? 'px-4 sm:px-6 py-4 lg:py-5 pb-24 lg:pb-6' : 'px-4 sm:px-6 lg:px-8 pt-5 lg:pt-6 pb-24 lg:pb-8'} ${nuova ? 'entra' : ''}">${VISTE[v]()}</div>`;
   glossa($('#vista'));
 }
-const prova = t => S.guida === false ? '' : `<p class="prova-riga mb-5 text-sm text-ambra bg-arancio-velo border border-arancio/40 rounded px-3.5 py-2.5 flex gap-2"><i class="bi bi-hand-index"></i><span><strong>Prova:</strong> ${t}</span></p>`;
-const kpi = (label, val, sub = '', cls = '', az = '') => { const corpo = `<span class="flex items-start justify-between gap-2 text-sm text-grigio"><span>${label}</span>${az ? '<i class="bi bi-arrow-up-right text-xs mt-1 opacity-60 group-hover:opacity-100 transition-opacity"></i>' : ''}</span><span class="block font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3 text-[1.6rem] sm:text-[2rem] xl:text-[2.4rem] ${cls}">${val}</span>${sub ? `<span class="block text-xs sm:text-sm mt-2.5 text-grigio">${sub}</span>` : ''}`;
-  return az ? `<button type="button" class="group card p-4 sm:p-6 text-left w-full hover:border-[#BDBDBD] transition-colors" data-a="dettaglio" data-v="${az}" aria-label="${label}: apri il dettaglio">${corpo}</button>` : `<div class="card p-4 sm:p-6">${corpo}</div>`; };
+const prova = t => S.guida === false ? '' : `<p class="prova-riga mb-4 text-sm text-ambra bg-arancio-velo border border-arancio/40 rounded px-3.5 py-2 flex gap-2"><i class="bi bi-hand-index"></i><span><strong>Prova:</strong> ${t}</span></p>`;
+const kpi = (label, val, sub = '', cls = '', az = '', box = '', extra = '') => { const corpo = `<span class="flex items-start justify-between gap-2 text-sm text-grigio"><span>${label}</span>${az ? '<i class="bi bi-arrow-up-right text-xs mt-1 opacity-60 group-hover:opacity-100 transition-opacity"></i>' : ''}</span><span class="kpi-n block font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3 text-[1.6rem] sm:text-[2rem] xl:text-[2.35rem] ${cls}">${val}</span><span class="block mt-auto">${sub ? `<span class="block text-xs sm:text-sm mt-2.5 text-grigio">${sub}</span>` : ''}${extra}</span>`;
+  return az ? `<button type="button" class="group card kpi-box p-4 sm:p-5 text-left w-full h-full flex flex-col hover:border-white transition-colors ${box}" data-a="dettaglio" data-v="${az}" aria-label="${label}: apri il dettaglio">${corpo}</button>` : `<div class="card kpi-box p-4 sm:p-5 h-full flex flex-col ${box}">${corpo}</div>`; };
+// arco del margine, come un indicatore: pieno al 60% del fatturato, la tacca segna l'obiettivo
+const arco = (q, obiettivo) => { const v = Math.max(0, Math.min(1, q / .6)) * 100, o = Math.max(0, Math.min(1, obiettivo / .6)) * Math.PI, ox = 100 - Math.cos(o) * 80, oy = 100 - Math.sin(o) * 80;
+  return `<svg viewBox="0 0 200 112" class="w-full max-w-[160px] mt-2" aria-hidden="true"><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="rgba(48,48,48,.12)" stroke-width="14" stroke-linecap="round"/><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#3A3A3A" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="${v.toFixed(1)} 100"/><circle cx="${ox.toFixed(1)}" cy="${oy.toFixed(1)}" r="4" fill="#fff" stroke="#3A3A3A" stroke-width="2"/><text x="100" y="92" text-anchor="middle" font-family="Inter" font-size="26" font-weight="600" fill="currentColor">${pc(q)}</text><text x="100" y="108" text-anchor="middle" font-family="Inter" font-size="10" fill="#6B6B6B">obiettivo ${pc(obiettivo)}</text></svg>`; };
 /* ---------- parole spiegate ----------
    La prima volta che una parola tecnica compare in una pagina viene sottolineata a puntini:
    passandoci sopra, o toccandola da telefono, compare la spiegazione in parole semplici. */
@@ -890,7 +1088,7 @@ function benvenuto() {
     <div class="grid sm:grid-cols-2 gap-2 mt-2">${ordine.map(k => { const [ic, t, d] = PARTENZE[k]; return `<button class="text-left rounded border border-linea bg-white hover:border-grafite px-3.5 py-3 flex gap-3 items-start transition-colors" data-a="benvenuto-ruolo" data-v="${k}"><i class="bi ${ic} text-lg text-grigio"></i><span><span class="block font-bold">${t}</span><span class="block text-grigio">${d}</span></span></button>`; }).join('')}</div>
   </div>`, true);
 }
-const testata = (tit, sotto) => `<div class="mb-6"><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${tit}</h1><p class="text-grigio mt-1.5 max-w-3xl">${sotto}</p></div>`;
+const testata = (tit, sotto) => `<div class="mb-4"><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${tit}</h1><p class="text-grigio mt-1 max-w-[38rem]">${sotto}</p></div>`;
 const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const pulisci = t => String(t ?? '').replace(/[<>]/g, '').trim();
 const campo = (label, input, aiuto = '', cls = '') => `<label class="block text-sm font-bold ${cls}">${label}<span class="block mt-1 font-normal">${input}</span>${aiuto ? `<span class="block text-xs text-grigio font-normal mt-1">${aiuto}</span>` : ''}</label>`;
@@ -1149,7 +1347,20 @@ function cercaTutto(q) {
   add('Fornitori', 'fornitori', FORN.filter(f => has(`${f.forn} ${f.cosa}`)).map(f => riga('vai', 'fornitori', esc(f.forn), `${esc(f.cosa)} · ${eur(f.imp)}`)));
   return `<div class="p-1.5 max-h-[60vh] overflow-y-auto">${gruppi.join('') || `<p class="px-3 py-4 text-sm text-grigio">Niente trovato per "${esc(q)}".</p>`}</div>`;
 }
-function chiudiTendine() { $('#risultati').classList.add('hidden'); $('#avvisi').classList.add('hidden'); $('#avvisi-btn').setAttribute('aria-expanded', 'false'); }
+/* ---------- Spotlight: le pagine, le cose da cercare, e le domande agli agenti ---------- */
+const spotVuoto = () => { const vai = [['home', 'bi-speedometer2', 'Controllo di gestione'], ['ordini', 'bi-kanban', 'Nuovo preventivo'], ['clienti', 'bi-person-vcard', 'Clienti'], ['contabilita', 'bi-journal-bookmark', 'Contabilità'], ['fatture', 'bi-receipt-cutoff', 'Fatture'], ['impostazioni', 'bi-gear', 'Aggiornamenti normativi']].filter(([v]) => vede(v));
+  return `<p class="spot-h">Prova a cercare</p><div class="flex flex-wrap gap-1.5 px-3 pb-1">${['Trafilerie', 'FT 430', 'Crotti', 'cosa aspetta una decisione?'].map(t => `<button class="chip c-bl !py-1 !px-2.5" data-a="spot-prova" data-v="${t}">${t}</button>`).join('')}</div>
+    <p class="spot-h">Vai a</p>${vai.map(([v, ic, t]) => `<button class="spot-riga flex items-center gap-2.5" data-a="vai-chiudi" data-v="${v}"><i class="bi ${ic} text-grigio"></i>${t}</button>`).join('')}<button class="spot-riga flex items-center gap-2.5" data-a="spot-sala"><i class="bi bi-people text-grigio"></i>Sala agenti</button>`; };
+function chiediAgenti(q) {
+  if (S.ruolo === 'tec') return '';
+  q = q.toLowerCase(); const d = SALA.decisioni(), parole = q.split(/\s+/).filter(w => w.length > 2);
+  const domanda = /\?|cosa|chi |aspett|decid|agent|sala|fare/.test(q), l = domanda ? d : d.filter(x => parole.some(w => x.titolo.toLowerCase().includes(w)));
+  if (!l.length) return '';
+  const g = l.filter(x => SALA.peso(x) === 'guardare').length;
+  return `<p class="spot-h"><i class="bi bi-stars"></i>Gli agenti</p>${domanda ? `<p class="px-3 pb-1.5 text-sm">${l.length} ${pl(l.length, 'decisione aspetta', 'decisioni aspettano')} un vostro ok: ${g} da guardare, ${l.length - g} di routine.</p>` : ''}${l.slice(0, 4).map(x => `<button class="spot-riga" data-a="spot-dec" data-v="${x.id}"><span class="block truncate">${x.titolo}</span><span class="block text-xs text-grigio">${SALA.peso(x) === 'guardare' ? 'da guardare' : 'di routine'} · apri nella Sala</span></button>`).join('')}`;
+}
+function chiudiTendine() { $('#risultati').classList.add('hidden'); $('#avvisi').classList.add('hidden'); $('#avvisi-btn').setAttribute('aria-expanded', 'false'); $('#profilo-menu').classList.add('hidden'); $('#profilo').setAttribute('aria-expanded', 'false'); }
+document.addEventListener('click', e => { if (!e.target.closest?.('#profilo, #profilo-menu')) { $('#profilo-menu')?.classList.add('hidden'); $('#profilo')?.setAttribute('aria-expanded', 'false'); } });
 function scarica(nome, righe) {
   const csv = '\ufeff' + righe.map(r => r.map(v => { const t = String(v ?? ''); return /[;"\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t; }).join(';')).join('\r\n');
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); a.download = nome + '.csv';
@@ -1198,38 +1409,42 @@ const VISTE = {
   home() {
     const m = mese(), P = periodo(), c = avvisi(), ric = AZ.ricorrente / 12, quota = ric / m.fatt;
     const serie = [...TREND, { f: m.fatt, m: m.marg }], max = Math.max(...serie.map(x => x.f));
-    return `<div class="flex flex-wrap items-end justify-between gap-4 mb-6"><div><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${saluto()}, ${NOME[S.ruolo] || NOME.dir}</h1><p class="text-grigio mt-1.5 max-w-3xl">I numeri ${P.label}, aggiornati a stamattina. Oggi li vedete solo con il bilancio del commercialista, ogni tre mesi.</p></div>
+    return `<div class="flex flex-wrap items-end justify-between gap-4 mb-4"><div><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${saluto()}, ${NOME[S.ruolo] || NOME.dir}</h1><p class="text-grigio mt-1 max-w-[34rem]">I numeri ${P.label}, aggiornati a stamattina. Oggi li vedete solo con il bilancio del commercialista, ogni tre mesi.</p></div>
       <div class="seg" role="group" aria-label="Periodo">${[['mese', 'Mese'], ['trim', 'Ultimi 3 mesi'], ['anno', 'Da inizio anno']].map(([v, t]) => `<button data-a="per" data-v="${v}" aria-pressed="${S.per === v}">${t}</button>`).join('')}</div></div>
     ${S.ruolo === 'dir' ? prova('passa in alto a <strong>Tecnico</strong>, chiudi il DVR di Cascina Rosa con le ore fatte, poi torna su <strong>Direzione</strong>. I quattro riquadri qui sotto si aprono nel dettaglio. Per gli aggiornamenti normativi: <strong>Impostazioni</strong>, primo riquadro.') : ''}
-    <div class="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-6 scaglione">
-      ${kpi(`Fatturato ${P.label}`, eur(P.f), 'dalle fatture elettroniche emesse', '', 'fatt')}
-      ${kpi('Ordini fornitori', eur(P.forn), S.per === 'mese' ? `${FORN.length} ordini del mese` : 'a consuntivo, mese per mese', '', 'forn')}
-      ${kpi('Costo delle ore interne', eur(P.cOre), S.per === 'mese' ? `${nf(m.ore, 1)} ore × ${eur(S.costoH)}` : 'ore dei tecnici e dei soci', '', 'ore')}
-      ${kpi('Margine sulle commesse', eur(P.marg), `${pc(P.marg / P.f)} del fatturato, prima dei costi fissi`, '', 'marg')}
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-3 sm:mb-4 scaglione">
+      ${kpi(`Fatturato ${P.label}`, eur(P.f), 'dalle fatture elettroniche emesse', '', 'fatt', 'vetro-scuro', `<span class="flex items-end justify-between gap-2 h-12 mt-3" aria-hidden="true">${(() => { const lo = Math.min(...serie.map(x => x.f)); return serie.map((x, i) => `<span class="flex flex-col items-center justify-end gap-1 h-full flex-1"><span class="cresce block w-full max-w-[10px] rounded-full ${i === 5 ? 'bg-white' : 'bg-white/30'}" style="height:${Math.round(30 + 70 * (x.f - lo) / Math.max(1, max - lo))}%;animation-delay:${i * 50}ms"></span><span class="text-[10px] ${i === 5 ? 'text-white' : 'text-white/50'}">${MESI6[i].slice(0, 3)}</span></span>`).join(''); })()}</span>`)}
+      ${kpi('Margine sulle commesse', eur(P.marg), 'prima dei costi fissi', '', 'marg', '', arco(P.marg / P.f, TARGET))}
+      ${kpi('Ordini fornitori', eur(P.forn), S.per === 'mese' ? `${FORN.length} ordini del mese` : 'a consuntivo, mese per mese', '', 'forn', '', `<span class="flex justify-between gap-1 h-9 mt-3" aria-hidden="true">${FORN.map(f => `<span class="w-[6px] rounded-full ${f.stato === 'ricevuto' ? 'bg-grafite' : 'bg-[#D6D6D6]'}"></span>`).join('')}</span><span class="block text-[11px] text-grigio mt-1.5">${FORN.filter(f => f.stato === 'ricevuto').length} ricevuti su ${FORN.length}</span>`)}
+      ${kpi('Costo delle ore interne', eur(P.cOre), S.per === 'mese' ? `${nf(m.ore, 1)} ore × ${eur(S.costoH)}` : 'ore dei tecnici e dei soci', '', 'ore', '', `${(() => { const q = sum(ORE, o => o.dich) / (ORE.length * 168), n = 20, k = Math.round(q * n); return `<span class="flex justify-between gap-1 h-9 mt-3" aria-hidden="true">${Array.from({ length: n }, (_, i) => `<span class="w-[6px] rounded-full ${i < k ? 'bg-grafite' : 'bg-[#D6D6D6]'}"></span>`).join('')}</span><span class="block text-[11px] text-grigio mt-1.5">${pc(q)} delle ore del mese, ${ORE.length} persone</span>`; })()}`)}
     </div>
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6">
-      <div class="card"><div class="px-6 py-4 border-b border-linea flex items-center gap-2"><i class="bi bi-flag text-arancio"></i><p class="font-bold">Aspetta qualcuno</p><span class="badge !ml-0">${c.length}</span></div>
-        <ul class="p-3 space-y-2 scaglione">${c.map(e => `<li><button class="group w-full text-left px-4 py-3 rounded bg-carta hover:bg-velo transition-colors flex gap-3 items-center" data-a="vai" data-v="${e.go}">
-          <span class="w-10 h-10 rounded bg-white border border-linea text-petrolio flex items-center justify-center shrink-0"><i class="bi ${e.ico}"></i></span>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
+      ${(() => { const r = SALA.decisioni().length; return `<button type="button" class="card ufficio-home relative overflow-hidden text-left p-0 flex items-center hover:border-white transition-colors" data-a="modo" data-v="sala" aria-label="Apri la Sala agenti: ${r} ${pl(r, 'decisione', 'decisioni')} per voi">${SALA.scena()}
+        <span class="absolute left-3 top-3 sm:left-4 sm:top-4 flex flex-wrap gap-2"><span class="pillola"><i class="bi bi-people"></i>Sala agenti</span><span class="pillola"><span class="w-2 h-2 rounded-full bg-ok pulsa"></span>11 agenti al lavoro</span></span>
+        ${r ? `<span class="absolute right-3 bottom-3 sm:right-4 sm:bottom-4 btn btn-pri !py-2 pointer-events-none">${r} ${pl(r, 'decisione', 'decisioni')} per voi <i class="bi bi-arrow-right"></i></span>` : ''}</button>`; })()}
+      <div class="card flex flex-col min-h-0 lg:max-h-[min(560px,52vw)]"><div class="px-5 py-3.5 border-b border-linea flex items-center gap-2 shrink-0"><i class="bi bi-flag text-arancio"></i><p class="font-bold">Aspetta qualcuno</p><span class="badge !ml-0">${c.length}</span></div>
+        <ul class="p-2.5 space-y-1.5 scaglione flex-1 min-h-0 overflow-y-auto">${c.map(e => `<li><button class="group w-full text-left px-3 py-2.5 rounded bg-carta hover:bg-velo transition-colors flex gap-3 items-center" data-a="vai" data-v="${e.go}">
+          <span class="w-9 h-9 rounded bg-white border border-linea text-petrolio flex items-center justify-center shrink-0"><i class="bi ${e.ico}"></i></span>
           <span class="flex-1 min-w-0"><span class="block font-medium">${e.tit}</span><span class="block text-sm text-grigio">${e.sub}</span></span><i class="bi bi-chevron-right text-grigio text-xs transition-transform group-hover:translate-x-0.5"></i></button></li>`).join('') || '<li class="p-4 text-sm text-grigio">Niente in sospeso.</li>'}</ul></div>
-      <div class="card p-6 flex flex-col"><div class="flex items-center justify-between gap-3 mb-1"><p class="font-bold">Ultimi sei mesi</p>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div class="card p-5 flex flex-col lg:col-span-2"><div class="flex items-center justify-between gap-3 mb-1"><p class="font-bold">Ultimi sei mesi</p>
         <p class="text-xs text-grigio flex items-center gap-3"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-fumo"></span>Fatturato</span><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-grafite"></span>Margine</span></p></div>
-        <div class="flex items-end gap-3 sm:gap-5 flex-1 min-h-[190px] mt-4" role="img" aria-label="Fatturato e margine degli ultimi sei mesi">
+        <div class="flex items-end gap-3 sm:gap-5 flex-1 min-h-[140px] mt-3" role="img" aria-label="Fatturato e margine degli ultimi sei mesi">
           ${serie.map((x, i) => `<div class="flex-1 flex flex-col items-center justify-end h-full gap-1.5"><span class="num text-xs ${i === 5 ? 'font-bold' : 'text-grigio'}">${nf(x.f / 1000, 1)}k</span>
-            <div class="cresce w-full max-w-[56px] rounded-t-sm bg-fumo flex items-end" style="height:${Math.round(x.f / max * 72)}%;animation-delay:${i * 50}ms"><div class="w-full bg-grafite" style="height:${Math.round(x.m / x.f * 100)}%"></div></div>
+            <div class="cresce w-full max-w-[56px] rounded-t-[10px] overflow-hidden bg-fumo flex items-end" style="height:${Math.round(x.f / max * 72)}%;animation-delay:${i * 50}ms"><div class="w-full bg-grafite" style="height:${Math.round(x.m / x.f * 100)}%"></div></div>
             <span class="text-xs ${i === 5 ? 'font-bold' : 'text-grigio'}">${MESI6[i]}</span></div>`).join('')}
         </div>
-        <p class="text-xs text-grigio mt-4 pt-3 border-t border-linea">Il margine conta fornitori e ore dei tecnici su ogni commessa. Il mese in corso si aggiorna a ogni fattura e a ogni lavoro chiuso.</p></div>
-    </div>
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
-      <div class="card p-6 xl:col-span-2"><p class="font-bold">Da dove arriva il fatturato del mese</p>
-        <div class="flex h-4 rounded-sm overflow-hidden mt-4 bg-fumo"><div class="apre bg-grafite" style="width:${Math.round(quota * 100)}%"></div></div>
-        <div class="flex flex-wrap justify-between gap-3 mt-3 text-sm"><p><span class="font-bold">${eur(ric)}</span> <span class="text-grigio">da contratti che si rinnovano (${pc(quota)})</span></p><p><span class="font-bold">${eur(m.fatt - ric)}</span> <span class="text-grigio">da lavori una tantum</span></p></div>
-        <p class="text-xs text-grigio mt-3">${AZ.contratti} contratti attivi valgono ${eur(AZ.ricorrente)} l'anno: ${eur(AZ.ricorrente)} / 12 = ${eur(ric)} al mese già in casa prima di vendere niente.</p></div>
-      <div class="card p-6"><p class="font-bold">Da incassare</p><p class="font-display font-medium tabular-nums text-[1.6rem] sm:text-[2rem] leading-none mt-3">${eur(daIncassare())}</p><p class="text-sm text-grigio mt-1">${FATT.filter(aperta).length} fatture aperte</p>
-        <button class="btn btn-sec mt-4 w-full" data-a="vai" data-v="incassi">Vai agli incassi <i class="bi bi-arrow-right"></i></button></div>
+        <p class="text-xs text-grigio mt-3 pt-3 border-t border-linea">Il margine conta fornitori e ore dei tecnici su ogni commessa. Il mese in corso si aggiorna a ogni fattura e a ogni lavoro chiuso.</p></div>
+      <div class="card p-5 flex flex-col"><p class="font-bold">Da dove arriva il fatturato del mese</p>
+        <div class="flex h-3 rounded-full overflow-hidden mt-4 bg-fumo"><div class="apre bg-grafite" style="width:${Math.round(quota * 100)}%"></div></div>
+        <p class="text-sm mt-3"><span class="font-bold">${eur(ric)}</span> <span class="text-grigio">da contratti che si rinnovano (${pc(quota)})</span></p><p class="text-sm mt-1"><span class="font-bold">${eur(m.fatt - ric)}</span> <span class="text-grigio">da lavori una tantum</span></p>
+        <p class="text-xs text-grigio mt-auto pt-3">${AZ.contratti} contratti attivi valgono ${eur(AZ.ricorrente)} l'anno: ${eur(ric)} al mese già in casa prima di vendere niente.</p></div>
+      <div class="card kpi-box p-5 flex flex-col"><p class="font-bold">Da incassare</p><p class="kpi-n font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3">${eur(daIncassare())}</p><p class="text-sm text-grigio mt-1.5">${FATT.filter(aperta).length} fatture aperte</p>
+        <button class="btn btn-sec mt-auto w-full" data-a="vai" data-v="incassi">Vai agli incassi <i class="bi bi-arrow-right"></i></button></div>
     </div>`;
   },
+
 
   ordini() {
     return `${testata('Preventivi e ordini', "Dal preventivo alla fattura senza far girare la carta: ogni passaggio avvisa chi deve fare il successivo.")}${S.ruolo === 'rt' ? prova('trascina <strong>Carpenteria Oglio</strong> in <strong>In lavorazione</strong>: si apre l\'assegnazione con tecnico e data.') : S.prev.cli === 3 && S.prev.righe.length === 1 && S.prev.righe[0].serv === 'dvr' ? prova('nel nuovo preventivo lascia <strong>Trafilerie Adda</strong> e <strong>DVR</strong>: guarda cosa dice lo storico prima di mandarlo a listino.') : prova(`il preventivo è intestato a <strong>${esc(cli(S.prev.cli).nome)}</strong>: controlla righe e prezzi suggeriti, poi premi <strong>Crea e invia</strong>.`)}
@@ -1435,7 +1650,7 @@ const VISTE = {
       <p class="text-grigio mt-1.5 max-w-2xl">Oggi chi segue l'amministrazione apre la banca, cerca il pagamento e lo associa a mano alla fattura. Qui caricate l'estratto conto che scaricate già, mensile o giornaliero, e basta.</p></div>
       <button class="btn btn-pri !py-3 !px-5 !text-base" data-a="carica" ${S.estratto === 'carico' ? 'disabled' : ''}>${S.estratto === 'carico' ? '<i class="bi bi-arrow-repeat gira"></i>Sto abbinando...' : "<i class=\"bi bi-upload\"></i>Carica l'estratto conto"}</button></section>`}
     <div class="flex flex-wrap items-center justify-between gap-3 mb-3"><p class="text-sm text-grigio"><i class="bi bi-receipt-cutoff"></i> Fatture emesse e non ancora incassate. Ogni incasso va da solo in prima nota.</p><div class="flex flex-wrap gap-2">${esporta('incassi')}<button class="btn btn-sec" data-a="vai" data-v="banca"><i class="bi bi-wallet2"></i>Vai alla banca</button></div></div>
-    <div class="card scroll-x"><table class="tab-t impila larga min-w-[920px]"><thead><tr><th>Fattura</th><th>Cliente</th><th class="r">Importo</th><th>Sull'estratto conto</th><th>Stato</th><th></th></tr></thead><tbody>
+    <div class="card scroll-x"><table class="tab-t impila larga min-w-[880px]"><thead><tr><th>Fattura</th><th>Cliente</th><th class="r">Importo</th><th>Sull'estratto conto</th><th>Stato</th><th></th></tr></thead><tbody>
     ${FATT.map(f => { const [cls, t] = st(f), m = f.mov;
       return `<tr class="${f.agg || f.nuovo ? 'lampo' : ''}"><td class="num" data-l="Fattura">FT ${f.n}</td><td class="font-bold m-full m-prima">${linkCli(f.cli)}</td><td class="r num" data-l="Importo">${eur2(f.imp)}</td>
       <td class="m-full m-dopo" style="min-width:260px">${m ? `<p class="mono text-xs" style="white-space:normal">${m.causale}</p><p class="num text-xs font-bold text-ok">+ ${eur2(m.imp)}</p>${m.nota && (f.stato === 'acconto?' || f.stato === 'dubbio') ? `<p class="text-xs text-grigio mt-0.5"><i class="bi bi-lightbulb"></i> ${m.nota}</p>` : ''}` : fatto ? '<span class="text-xs text-grigio">nessun movimento</span>' : ''}</td>
@@ -1499,7 +1714,7 @@ function toast(msg) { $('#toast-t').textContent = msg.replace(/\.\.(?=\s|$)/g, '
 const spegni = () => { ORDINI.forEach(o => o.nuovo = false); CONTRATTI.forEach(k => k.agg = false); FATT.forEach(f => { f.agg = false; f.nuovo = false; }); };
 
 const AZ_ = {
-  menu: () => document.body.classList.add('menu-aperto'),
+  menu: () => AZ_.profilo(),
   'chiudi-menu': () => document.body.classList.remove('menu-aperto'),
   vai: (v, el) => vai(v, el.dataset.p),
   ruolo: v => { S.ruolo = v; S.chiudi = null; chiudiTendine(); document.body.classList.remove('menu-aperto'); if (v !== 'tec' && (!vede(S.view) || S.view === 'home')) S.view = RUOLO[v][3]; render(true); $('#vista').scrollTop = 0; },
@@ -1508,7 +1723,7 @@ const AZ_ = {
   dettaglio: v => dettaglio(v),
   'vai-chiudi': v => { chiudiModale(); vai(v); },
   'marg-dett': () => { S.margDett = !S.margDett; render(); },
-  'nav-gruppo': v => { const items = NAV.find(([g]) => g === v)[1].filter(([x]) => vede(x)); S.navAperti[v] = !aperto(v, items); renderNav(); },
+  profilo: () => { const m = $('#profilo-menu'), aperto = m.classList.contains('hidden'); m.classList.toggle('hidden', !aperto); $('#profilo').setAttribute('aria-expanded', aperto); },
   guida: () => { S.guida = S.guida === false; render(); },
   benvenuto: () => benvenuto(),
   'benvenuto-ruolo': v => { chiudiModale(); S.modo = 'gestionale'; S.view = 'home'; AZ_.ruolo(v); },
@@ -1517,7 +1732,15 @@ const AZ_ = {
   avvisi: () => { const p = $('#avvisi'), aperto = p.classList.contains('hidden'); chiudiTendine(); if (!aperto) return; const l = avvisi();
     p.innerHTML = `<p class="px-4 py-3 border-b border-linea font-bold text-sm">Avvisi</p><ul class="p-1.5 max-h-[60vh] overflow-y-auto">${l.map(e => `<li><button class="w-full text-left px-3 py-2.5 rounded hover:bg-[#F3F3F3] flex gap-3 items-start text-sm" data-a="vai" data-v="${e.go}"><i class="bi ${e.ico} text-petrolio mt-0.5"></i><span><span class="block">${e.tit}</span><span class="block text-xs text-grigio">${e.sub}</span></span></button></li>`).join('') || '<li class="px-3 py-4 text-sm text-grigio">Niente in sospeso.</li>'}</ul>`;
     p.classList.remove('hidden'); $('#avvisi-btn').setAttribute('aria-expanded', 'true'); },
-  'cerca-apri': () => { apriModale('Cerca', `<div class="p-4 sm:p-5"><label class="relative block"><span class="sr-only">Cerca</span><i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-grigio text-sm"></i><input id="cerca-m" type="search" class="campo w-full !pl-8" placeholder="Clienti, preventivi, fatture, fornitori" data-cerca-tutto="m" autocomplete="off"></label><div id="risultati-m" class="mt-2"></div></div>`); $('#cerca-m').focus(); },
+  spotlight: () => { if (S.ruolo === 'tec') return; S.focusPrima = document.activeElement; chiudiTendine(); document.body.classList.remove('menu-aperto');
+    $('#modale').innerHTML = `<div class="modale-velo spot-velo" data-a="spot-fuori"><div class="spotlight entra" role="dialog" aria-modal="true" aria-label="Cerca o chiedi agli agenti"><label class="spot-campo"><i class="bi bi-search"></i><span class="sr-only">Cerca o chiedi agli agenti</span><input id="spot-q" type="search" placeholder="Cerca clienti, fatture, preventivi, o chiedi agli agenti" autocomplete="off" data-cerca-tutto="s"><kbd>esc</kbd></label><div id="spot-ris" class="spot-ris">${spotVuoto()}</div></div></div>`;
+    glossa($('#modale')); $('#spot-q').focus(); },
+  'spot-fuori': (v, el, e) => { if (e.target === el) chiudiModale(); },
+  'spot-prova': v => { const i = $('#spot-q'); i.value = v; i.dispatchEvent(new Event('input', { bubbles: true })); i.focus(); },
+  'spot-dec': v => { chiudiModale(); AZ_.modo('sala'); if (!SALA.decisioni().some(d => d.id === v)) return; SALA.stato.sel = null; SALA.stato.stanza = null; SALA.stato.aperta = v; render(); },
+  'spot-sala': () => { chiudiModale(); AZ_.modo('sala'); },
+  'cerca-apri': () => AZ_.spotlight(),
+  'cerca-apri-vecchio': () => { apriModale('Cerca', `<div class="p-4 sm:p-5"><label class="relative block"><span class="sr-only">Cerca</span><i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-grigio text-sm"></i><input id="cerca-m" type="search" class="campo w-full !pl-8" placeholder="Clienti, preventivi, fatture, fornitori" data-cerca-tutto="m" autocomplete="off"></label><div id="risultati-m" class="mt-2"></div></div>`); $('#cerca-m').focus(); },
   'ris-cli': v => { chiudiModale(); chiudiTendine(); S.cliSel = +v; vai('clienti'); },
   'ris-ord': v => { chiudiModale(); chiudiTendine(); const o = ord(v); S.kf = { tec: '', q: o.num || cli(o.cli).nome }; vai('ordini'); setTimeout(() => $('#kanban')?.scrollIntoView({ block: 'start' }), 50); },
   'nuovo-lavoro': () => apriModale('Nuovo lavoro', formLavoro()),
@@ -1660,6 +1883,8 @@ document.addEventListener('click', e => {
   AZ_[el.dataset.a]?.(el.dataset.v, el, e);
 });
 document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); if ($('#spot-q')) chiudiModale(); else AZ_.spotlight(); return; }
+  if (e.key === 'Enter' && e.target.id === 'spot-q') { e.preventDefault(); $('#spot-ris button[data-a]:not([data-a="spot-prova"])')?.click(); return; }
   if (e.key === 'Escape') { chiudiTendine(); if ($('#modale').innerHTML) chiudiModale(); else if (!(S.modo === 'sala' && SALA.chiudi())) document.body.classList.remove('menu-aperto'); }
   if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('tr[data-a]')) { e.preventDefault(); e.target.click(); }
 });
@@ -1689,6 +1914,7 @@ document.addEventListener('input', e => {
   if (t.dataset.kf === 'q') { S.kf.q = t.value; $('#kanban').innerHTML = kanban(); }
   if (t.dataset.cercaTutto === 'd') { const h = cercaTutto(t.value); $('#risultati').innerHTML = h; $('#risultati').classList.toggle('hidden', !h); }
   if (t.dataset.cercaTutto === 'm') $('#risultati-m').innerHTML = cercaTutto(t.value);
+  if (t.dataset.cercaTutto === 's') { const q = t.value.trim(), a = q.length < 2 ? '' : chiediAgenti(q), c = q.length < 2 ? '' : cercaTutto(q); $('#spot-ris').innerHTML = q.length < 2 ? spotVuoto() : a && c.includes('Niente trovato') ? a : a + c; }
   const k = t.dataset.prev;
   if (k === 'note') S.prev.note = t.value;
   if (k === 'sconto') { S.prev.sconto = Math.min(50, Math.max(0, +t.value || 0)); aggiornaPrev(); }
@@ -2227,8 +2453,8 @@ const SALA = (() => {
   function lavagna() {
     let s = poly([P(BX0 - .1, 0, BZ1 - BH - .1), P(BX0 + BW + .1, 0, BZ1 - BH - .1), P(BX0 + BW + .1, 0, BZ1 + .1), P(BX0 - .1, 0, BZ1 + .1)], '#15181A') + poly([P(BX0, 0, BZ1 - BH), P(BX0 + BW, 0, BZ1 - BH), P(BX0 + BW, 0, BZ1), P(BX0, 0, BZ1)], '#23282B');
     const cw = (BW - 0.7) / 3;
-    const celle = LAVAGNA.map(([t, v], i) => { const u = 0.35 + (i % 3) * cw, w = 1.2 + Math.floor(i / 3) * 1.15; return `<text x="${u}" y="${w}" font-size="0.21" fill="#A9B0B3" font-family="Lato">${t}</text><text id="k-${i}" x="${u}" y="${w + 0.58}" font-size="0.46" fill="#FFFFFF" font-family="Ubuntu" font-weight="500">${v()}</text>`; }).join('');
-    return s + `<g transform="${suParete(BX0, BZ1)}"><rect x="0.35" y="0.26" width="0.06" height="0.34" fill="#DD0000"/><text x="0.5" y="0.55" font-size="0.26" fill="#FFFFFF" font-family="Ubuntu" font-weight="500">Oggi da Progesi</text><circle cx="${BW - 0.5}" cy="0.47" r="0.07" fill="#5BC48A"/><text x="${BW - 0.62}" y="0.55" font-size="0.2" fill="#A9B0B3" text-anchor="end" font-family="Lato">dal vivo</text><line x1="0.35" y1="0.75" x2="${BW - 0.35}" y2="0.75" stroke="#3A4044" stroke-width="0.02"/>${celle}</g>`;
+    const celle = LAVAGNA.map(([t, v], i) => { const u = 0.35 + (i % 3) * cw, w = 1.2 + Math.floor(i / 3) * 1.15; return `<text x="${u}" y="${w}" font-size="0.21" fill="#A9B0B3" font-family="Inter">${t}</text><text id="k-${i}" x="${u}" y="${w + 0.58}" font-size="0.46" fill="#FFFFFF" font-family="Inter" font-weight="500">${v()}</text>`; }).join('');
+    return s + `<g transform="${suParete(BX0, BZ1)}"><rect x="0.35" y="0.26" width="0.06" height="0.34" fill="#DD0000"/><text x="0.5" y="0.55" font-size="0.26" fill="#FFFFFF" font-family="Inter" font-weight="500">Oggi da Progesi</text><circle cx="${BW - 0.5}" cy="0.47" r="0.07" fill="#5BC48A"/><text x="${BW - 0.62}" y="0.55" font-size="0.2" fill="#A9B0B3" text-anchor="end" font-family="Inter">dal vivo</text><line x1="0.35" y1="0.75" x2="${BW - 0.35}" y2="0.75" stroke="#3A4044" stroke-width="0.02"/>${celle}</g>`;
   }
   let SVG = '';
   function scena() {
@@ -2248,7 +2474,7 @@ const SALA = (() => {
     // tappeti: grigio chiarissimo con un bordo tessuto; il nome del reparto è stampato sopra, sul lato est (vedi stanze())
     const tappeto = (x0, y0, x1, y1) => poly([P(x0, y0), P(x1, y0), P(x1, y1), P(x0, y1)], '#E2DFDA', 'stroke="#D3CFC8" stroke-width="1"') + poly([P(x0 + .18, y0 + .18), P(x1 - .18, y0 + .18), P(x1 - .18, y1 - .18), P(x0 + .18, y1 - .18)], 'none', 'stroke="#ECEAE6" stroke-width="1.3"');
     ZONE.forEach(z => { s += tappeto(z.x0, z.y0, z.x1, z.y1); });
-    s += tappeto(5.6, 0.15, 10.6, 4.2) + `<text transform="matrix(${f1(C * SC)} ${f1(-0.5 * SC)} ${f1(C * SC)} ${f1(0.5 * SC)} ${f1(P(10.32, 2.8)[0])} ${f1(P(10.32, 2.8)[1])})" font-size="0.42" letter-spacing="0.08" fill="#DD0000" font-family="Ubuntu" font-weight="700">REGIA</text>`;
+    s += tappeto(5.6, 0.15, 10.6, 4.2) + `<text transform="matrix(${f1(C * SC)} ${f1(-0.5 * SC)} ${f1(C * SC)} ${f1(0.5 * SC)} ${f1(P(10.32, 2.8)[0])} ${f1(P(10.32, 2.8)[1])})" font-size="0.42" letter-spacing="0.08" fill="#DD0000" font-family="Inter" font-weight="700">REGIA</text>`;
     const g = 'fill="rgba(214,226,232,0.24)" stroke="rgba(120,130,138,0.5)" stroke-width="1.2"', gh = 2.7;
     add(5.7, `<polygon points="${pts([P(5.6, 0.15), P(5.6, 4.2), P(5.6, 4.2, gh), P(5.6, 0.15, gh)])}" ${g}/>`);
     add(14.8, `<polygon points="${pts([P(10.6, 0.15), P(10.6, 4.2), P(10.6, 4.2, gh), P(10.6, 0.15, gh)])}" ${g}/>`);
@@ -2521,7 +2747,7 @@ const SALA = (() => {
   const domanda = d => { const a = ag(d.ag), q = pulisci(d.q); (st.chat[a.id] = st.chat[a.id] || []).push([q, risposta(a, q)]); ridisegna(); };
   // quando il lavoro lo fate voi nel gestionale, la sala lo racconta
   const racconta = (id, txt, sempre) => { if (st.avviata && (sempre || S.modo !== 'sala')) { st.az[id]++; log(id, txt); aggiornaPezzi(); } };
-  return { html, avvia, AZIONI, domanda, racconta, decisioni, peso, chiudi: () => { if (st.sel || st.stanza) { AZIONI['sala-chiudi'](); return true; } return false; }, stato: st };
+  return { html, avvia, AZIONI, domanda, racconta, decisioni, peso, scena: () => { const v = scena(); setTimeout(() => LAVAGNA.forEach(([, f], i) => { const e = document.getElementById('k-' + i); if (e) e.textContent = f(); }), 0); return v; }, chiudi: () => { if (st.sel || st.stanza) { AZIONI['sala-chiudi'](); return true; } return false; }, stato: st };
 })();
 VISTE.sala = SALA.html;
 Object.assign(AZ_, SALA.AZIONI, { modo: v => { S.modo = v; chiudiTendine(); document.body.classList.remove('menu-aperto'); render(true); $('#vista').scrollTop = 0; } });
@@ -2550,6 +2776,14 @@ function check() {
   return ok === esiti.length;
 }
 { const r = new URLSearchParams(location.search).get('ruolo') || location.hash.slice(1), k = { amministrazione: 'amm', direzione: 'dir', responsabile: 'rt', tecnico: 'tec' }[r] || r; if (RUOLO[k]) { S.ruolo = k; S.view = RUOLO[k][3]; } }
+// icone sottili: ogni icona Bootstrap diventa la sua gemella Phosphor light, anche quelle disegnate dopo
+const ICONE = {"arrow-counterclockwise":"arrow-counter-clockwise","arrow-down-right":"arrow-down-right","arrow-left":"arrow-left","arrow-left-right":"arrows-left-right","arrow-repeat":"arrows-clockwise","arrow-right":"arrow-right","arrow-right-circle":"arrow-circle-right","arrow-up-right":"arrow-up-right","bank":"bank","bar-chart":"chart-bar","bell":"bell","box-arrow-up-right":"arrow-square-out","briefcase":"briefcase","calculator":"calculator","calendar-event":"calendar-dot","calendar-week":"calendar-blank","calendar3":"calendar","cash-coin":"coins","chat-left-text":"chat-text","chat-square-text":"chat-centered-text","check2":"check","check2-all":"checks","check2-circle":"check-circle","chevron-expand":"caret-up-down","chevron-right":"caret-right","chevron-left":"caret-left","chevron-up":"caret-up","chevron-down":"caret-down","clock-history":"clock-counter-clockwise","diagram-3":"tree-structure","door-open":"door-open","download":"download-simple","envelope":"envelope-simple","exclamation-triangle":"warning","eye":"eye","eye-slash":"eye-slash","file-earmark-check":"file-text","file-earmark-pdf":"file-pdf","file-earmark-plus":"file-plus","file-earmark-spreadsheet":"file-xls","file-earmark-text":"file-text","files":"files","filetype-xml":"file-code","flag":"flag","floppy":"floppy-disk","folder2-open":"folder-open","funnel":"funnel","gear":"gear-six","geo-alt":"map-pin","graph-up":"chart-line-up","graph-up-arrow":"trend-up","grid-1x2":"squares-four","hand-index":"hand-pointing","inbox":"tray","info-circle":"info","journal-bookmark":"book-bookmark","journal-check":"book-open-text","journal-text":"notebook","kanban":"kanban","lightbulb":"lightbulb","link-45deg":"link","list":"list","paperclip":"paperclip","patch-check":"seal-check","pause-fill":"pause","pencil":"pencil-simple","pencil-square":"note-pencil","people":"users","person":"user","person-badge":"identification-badge","person-check":"user-check","person-lock":"lock-key","person-plus":"user-plus","person-vcard":"address-book","phone":"device-mobile","play-fill":"play","plus-lg":"plus","question-circle":"question","receipt":"receipt","receipt-cutoff":"invoice","robot":"robot","search":"magnifying-glass","send":"paper-plane-tilt","send-check":"paper-plane-tilt","shield-check":"shield-check","shield-lock":"lock-key","sliders":"sliders-horizontal","speedometer2":"gauge","telephone":"phone","tools":"wrench","trash3":"trash","truck":"truck","upload":"upload-simple","wallet2":"wallet","x-circle":"x-circle","x-lg":"x","dash-square":"minus-square","plus-square":"plus-square","stars":"sparkle","house":"house","arrow-up":"arrow-up","dash":"minus","plus":"plus","x":"x","check":"check","command":"command"};
+function sottili(r) { if (!r || !r.querySelectorAll) return; const conv = i => { const n = [...i.classList].find(c => c.startsWith('bi-')); const ph = n && ICONE[n.slice(3)]; if (!ph) return; i.classList.remove('bi', n); i.classList.add('ph-light', 'ph-' + ph, 'ico'); };
+  if (r.matches?.('i.bi')) conv(r); r.querySelectorAll('i.bi').forEach(conv); }
+new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(sottili))).observe(document.body, { childList: true, subtree: true });
+sottili(document.body);
+if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.querySelectorAll('.tasto-k').forEach(k => k.textContent = '⌘K');
+$('#vista').addEventListener('scroll', e => document.body.classList.toggle('scorso', e.target.scrollTop > 56), { passive: true });
 render(true);
 check();
 SALA.avvia();
