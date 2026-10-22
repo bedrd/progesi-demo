@@ -1,6 +1,17 @@
 # Progesi · handoff della demo
 
-Questo file serve a chi riprende il lavoro, persona o Claude, per avere tutta la situazione senza rileggere le call. Aggiornato al 19 ottobre 2026. Quando cambiate qualcosa di importante, aggiornatelo nello stesso commit.
+Questo file serve a chi riprende il lavoro, persona o Claude, per avere tutta la situazione senza rileggere le call. Aggiornato al 22 ottobre 2026. Quando cambiate qualcosa di importante, aggiornatelo nello stesso commit.
+
+## Novità del 22 ottobre (ramo `stile-liquido`): nuovo stile a vetro liquido
+
+- **Cosa**: tutto il software ha un nuovo stile, ispirato al vetro liquido dell'iPhone e a un post di riferimento (Domus, smart home dashboard), con i colori di Progesi. Sostituisce la vecchia variante vetro.
+- **Colori**: il rosso Progesi è il colore principale (sfondo, marchio, voce attiva, pulsanti principali), con il bianco e le loro sfumature. Lo sfondo è rosso con luci morbide e una macchia arancione, tutto in CSS. Grafici e barre restano in grafite, errori e urgenze in ambra.
+- **Materiale**: menu laterale e contenuto sono pannelli di vetro chiaro che galleggiano sul rosso, staccati dai bordi (`#sidebar`, `#vista`). I riquadri dentro sono vetro più pieno con il bordo luminoso (`.card`, variabili `--vetro`, `--luce`). C'è anche il vetro scuro (`.vetro-scuro`) per un numero in evidenza.
+- **Forma**: angoli tondi (22 px i riquadri, 28-30 px i pannelli), pulsanti, selettori, chip e numerini a pillola. Header trasparente con titolo bianco e pulsanti di vetro.
+- **Carattere**: Inter al posto di Ubuntu e Lato, anche dentro la scena della Sala.
+- **Home della Direzione**: il fatturato in vetro scuro con le barre degli ultimi sei mesi, il margine con un arco (pieno al 60%, la tacca è l'obiettivo, `arco()`), e al centro l'ufficio della Sala agenti (`SALA.scena()`) con le pillole "Sala agenti" e "N decisioni per voi"; cliccandolo si apre la Sala.
+- **Altre correzioni**: nella Sala il marchio nell'header è bianco; il menu aperto sul telefono è un pannello sopra a tutto; la voce scelta nelle liste (clienti) ha i sottotitoli chiari; la tendina degli avvisi è piena; il foglio ha un po' meno margine interno (`lg:px-8`) per far stare le tabelle larghe a 1366 px.
+- **Rischio da controllare**: le sfocature pesano. Il giorno prima va provato sul portatile della presentazione; chi chiede meno trasparenze, o un browser senza sfocatura, vede superfici piene.
 
 ## Novità del 19 ottobre (ramo `normativa-in-evidenza`)
 
@@ -103,7 +114,7 @@ Riepilogo per chi riprende il lavoro dopo questa giornata. I dettagli tecnici so
    - il CRM era troppo basilare.
 
    La quotazione interna era **17.000 €** sullo scope della prima call. Aggiunti: nuovo cliente, CRM con referenti, attività e promemoria, trattative, clienti persi con motivo.
-4. **Variante vetro** (glassmorphism), chiesta dal cliente. **Ora è l'unica versione**: quella a superfici piene è stata tolta.
+4. **Variante vetro** (glassmorphism), chiesta dal cliente. Il 22 ottobre è stata sostituita dallo stile a **vetro liquido** sul rosso Progesi (vedi le novità in cima).
 5. **Seconda call** (`transcript-call2.txt`). Cambio di scope: **la piattaforma sostituisce Zucchetti G1**, con tutta l'amministrazione e la contabilità dentro. Fattura elettronica tramite intermediario SdI. Collegamento diretto alla banca (open banking) come **opzionale**, perché Giorgio ha detto "è ancora da verificare". Restano **fuori** paghe, bilancio, dichiarativi e F24 delle imposte.
 6. **Sala agenti**: una seconda vista dello stesso sistema, un ufficio isometrico con 11 agenti AI in 4 reparti. Si sceglie dall'header ("Gestionale · Sala agenti"), si apre sempre su Gestionale e condivide lo stesso stato. Il modello è la demo Altalogik "sala agenti" di Ferretti Impianti.
 7. **Attenzione sul piano commerciale**, scritta in `requisiti.md` e `fattibilita.md`:
@@ -119,8 +130,8 @@ Riepilogo per chi riprende il lavoro dopo questa giornata. I dettagli tecnici so
   - il registro IVA vendite fa lo stesso totale del fatturato del mese (96.400 € all'avvio);
   - la prima nota è in pareggio (dare = avere);
   - liquidazione IVA, saldi di banca e contatori vengono dai dati.
-- **Colori**: rosso Progesi `#DD0000` solo per marchio, navigazione attiva e azioni. **Grafici e barre in grafite** (`#3A3A3A`), mai rossi. Eccezione voluta: la scena della Sala agenti usa la palette del marchio (sedute, nomi dei reparti stampati sui tappeti, numerini), come chiesto il 21 ottobre.
-- **Font**: Ubuntu per i titoli, Lato per testi e numeri (`.num` con cifre tabellari), IBM Plex Mono solo per le causali bancarie. Angoli squadrati, tono sobrio.
+- **Colori**: il rosso Progesi `#DD0000` è il colore principale: sfondo, marchio, navigazione attiva e azioni, con il bianco e le sfumature dei due. **Grafici e barre in grafite** (`#3A3A3A`), mai rossi. Errori e urgenze in ambra con l'icona. La scena della Sala agenti usa la palette del marchio (sedute, nomi dei reparti stampati sui tappeti, numerini), come chiesto il 21 ottobre.
+- **Font e forma**: Inter per tutto (`.num` con cifre tabellari), IBM Plex Mono solo per le causali bancarie. Angoli tondi, pulsanti e selettori a pillola, pannelli di vetro chiaro sul rosso. Tono sobrio.
 - **Testi in italiano, mai il trattino lungo** (né `—` né `–`). Tono concreto, niente gergo. Usare `pl()` per singolare e plurale.
 - **Ogni vista ha la riga "Prova:"**, che guida chi presenta (helper `prova()`). Si spengono tutte da "Suggerimenti" nella barra della demo (`S.guida`).
 - **Facile a primo impatto**, per chi non conosce il software:
@@ -144,7 +155,7 @@ L'ordine nel file:
    - componenti (`.card`, `.btn`, `.seg`, `.chip`, `.tab-t`, `.kanban`);
    - tabelle `.impila`, che diventano schede: sotto i 640 px, sotto i 1300 px con `.larga`, sotto i 1400 px con `.larghissima`;
    - stili della Sala;
-   - blocco **"variante vetro"**: superfici traslucide con `backdrop-filter`, sfondo a luci tenui, ripiego per `prefers-reduced-transparency` e per i browser senza sfocatura.
+   - blocco **"vetro liquido"**: sfondo rosso con luci e macchia arancione, menu e foglio di vetro che galleggiano, riquadri di vetro con il bordo luminoso, pillole, vetro scuro, ripiego per `prefers-reduced-transparency` e per i browser senza sfocatura.
 2. **HTML**: barra della demo `#barra-demo` con il selettore ruolo, poi barra laterale `#nav`, header con cerca, avvisi e selettore modo. Sotto i 1280 px il selettore modo va in una seconda barra (`#barra-modo`). Poi `#vista`, dove si disegna la pagina, `#modale` e `#toast`.
 3. **Dati**:
    - `BASE` (fatturato del mese 96.400 €, ordini fornitori 21.300 €, ore 1.020);

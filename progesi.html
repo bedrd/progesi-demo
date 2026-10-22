@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='3' fill='%23DD0000'/%3E%3Cpath d='M10 8h8a6 6 0 0 1 0 12h-4v4h-4z' fill='%23fff'/%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Lato:wght@400;700&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <style type="text/tailwindcss">
@@ -28,15 +28,15 @@
     --color-ok-velo: #E4F2EA;
     --color-grafite: #3A3A3A;
     --color-fumo: #CFD2D4;
-    --font-display: "Ubuntu", sans-serif;
-    --font-body: "Lato", sans-serif;
+    --font-display: "Inter", system-ui, sans-serif;
+    --font-body: "Inter", system-ui, sans-serif;
     --font-mono: "IBM Plex Mono", monospace;
   }
 </style>
 <style>
   @layer theme, base, components, utilities;
   html, body { height: 100%; }
-  body { overflow: hidden; margin: 0; background: #F6F6F6; color: #303030; font-family: "Lato", sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow: hidden; margin: 0; background: #F6F6F6; color: #303030; font-family: "Inter", system-ui, sans-serif; font-feature-settings: "cv11", "ss01"; -webkit-font-smoothing: antialiased; }
   button:not(:disabled), [role="button"]:not(:disabled), label[for], select, summary, tr.clic, input[type="checkbox"], input[type="range"] { cursor: pointer; }
   :disabled { cursor: not-allowed; }
   :focus-visible { outline: 2px solid #DD0000; outline-offset: 2px; border-radius: 6px; }
@@ -68,7 +68,7 @@
   body.menu-aperto #velo-menu { display: block; }
 
   @layer components {
-  .num { font-family: "Lato", sans-serif; font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; }
+  .num { font-family: "Inter", system-ui, sans-serif; font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; }
   .mono { font-family: "IBM Plex Mono", monospace; }
   .card { background: #fff; border: 1px solid #E2E2E2; border-radius: 4px; box-shadow: 0 1px 2px rgba(48,48,48,.04), 0 10px 24px -16px rgba(48,48,48,.16); }
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 3px; font-weight: 700; font-size: .875rem; padding: .55rem .95rem; transition: background-color .15s, border-color .15s, transform .1s; white-space: nowrap; }
@@ -239,11 +239,11 @@
   .conta-leg { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; font-size: 9px; font-weight: 700; color: #fff; background: #DD0000; border-radius: 99px; }
   /* nome del reparto stampato sul tappeto: stessa prospettiva del pavimento, misura che segue la scena */
   .scena { container-type: inline-size; }
-  .stanza { position: absolute; z-index: 2; transform-origin: 0 0; transform: matrix(.866, -.5, .866, .5, 0, 0) translateY(-100%); display: inline-flex; align-items: center; gap: .45em; padding: .1em .15em; background: none; border: 0; font-family: Ubuntu, sans-serif; font-weight: 700; font-size: 1.5cqw; line-height: 1; letter-spacing: .08em; text-transform: uppercase; color: #DD0000; white-space: nowrap; cursor: pointer; transition: opacity .3s, color .15s; }
+  .stanza { position: absolute; z-index: 2; transform-origin: 0 0; transform: matrix(.866, -.5, .866, .5, 0, 0) translateY(-100%); display: inline-flex; align-items: center; gap: .45em; padding: .1em .15em; background: none; border: 0; font-family: Inter, sans-serif; font-weight: 700; font-size: 1.5cqw; line-height: 1; letter-spacing: .08em; text-transform: uppercase; color: #DD0000; white-space: nowrap; cursor: pointer; transition: opacity .3s, color .15s; }
   .stanza .nome-st { border-bottom: .12em solid transparent; padding-bottom: .06em; }
   .stanza:hover .nome-st { border-bottom-color: rgba(221,0,0,.35); }
   .stanza.sel .nome-st { border-bottom-color: #DD0000; }
-  .stanza .n-st { display: inline-flex; align-items: center; justify-content: center; min-width: 1.5em; height: 1.5em; padding: 0 .3em; border-radius: 99px; background: #DD0000; color: #fff; font-family: Lato, sans-serif; font-size: .72em; letter-spacing: 0; }
+  .stanza .n-st { display: inline-flex; align-items: center; justify-content: center; min-width: 1.5em; height: 1.5em; padding: 0 .3em; border-radius: 99px; background: #DD0000; color: #fff; font-family: Inter, sans-serif; font-size: .72em; letter-spacing: 0; }
   .stanza.spenta, .stanza.fuori { opacity: .38; }
   @media (max-width: 767px) { .stanza { display: none; } }
   .fumetto { pointer-events: none; }
@@ -258,65 +258,108 @@
   @media (min-width: 1024px) { .saluto-velo { padding: .75rem 2.5rem 2rem .75rem; margin: -.75rem; background: radial-gradient(ellipse 100% 100% at 0 0, rgba(243,238,230,.97) 60%, rgba(243,238,230,0) 100%); } }
   .bolla-a { background: #F1F1F1; border-radius: 3px; padding: .5rem .75rem; }
   .bolla-u { background: #3A3A3A; color: #fff; border-radius: 3px; padding: .5rem .75rem; margin-left: 2rem; }
-  /* ================= variante vetro =================
-     superfici semitrasparenti e sfocate su uno sfondo con luci tenui grigie e rosse.
-     Angoli ancora squadrati, rosso solo per marchio e azioni, testi su fondo abbastanza pieno da restare leggibili. */
-  :root { --vetro: linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,255,255,.34)); --vetro-forte: rgba(255,255,255,.74); --vetro-tenue: rgba(255,255,255,.34); --bordo-vetro: rgba(255,255,255,.7); --ombra-vetro: 0 1px 1px rgba(48,48,48,.04), 0 18px 40px -18px rgba(60,30,30,.28); }
+  /* ================= vetro liquido =================
+     Sfondo rosso Progesi con luci morbide e una macchia arancione. Sopra, pannelli di vetro chiaro
+     smerigliato con il bordo luminoso, angoli tondi e pillole, come il vetro dell'iPhone.
+     Il rosso è il colore principale: sfondo, marchio, voce attiva e azioni. Grafici in grafite, errori e urgenze in ambra. */
+  :root { --vetro: linear-gradient(160deg, rgba(255,255,255,.93) 0%, rgba(255,255,255,.78) 48%, rgba(255,255,255,.7) 100%); --vetro-forte: rgba(255,255,255,.9); --vetro-tenue: rgba(255,255,255,.5); --bordo-vetro: rgba(255,255,255,.85); --ombra-vetro: 0 1px 1px rgba(90,0,0,.06), 0 26px 50px -28px rgba(90,0,0,.6); --luce: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(255,255,255,.3); }
   body {
     background:
-      radial-gradient(46rem 34rem at 95% -10%, rgba(221,0,0,.20), transparent 68%),
-      radial-gradient(40rem 32rem at 30% 55%, rgba(255,176,160,.34), transparent 70%),
-      radial-gradient(44rem 34rem at 8% 112%, rgba(90,100,125,.32), transparent 70%),
-      radial-gradient(30rem 26rem at 70% 105%, rgba(221,0,0,.14), transparent 70%),
-      linear-gradient(160deg, #F1EEEE, #E3E0E2);
+      radial-gradient(50rem 38rem at 90% 112%, rgba(255,128,36,.8), transparent 62%),
+      radial-gradient(34rem 28rem at 104% 64%, rgba(255,160,60,.32), transparent 66%),
+      radial-gradient(46rem 34rem at 8% -10%, rgba(255,255,255,.3), transparent 62%),
+      radial-gradient(38rem 30rem at 46% 46%, rgba(255,72,72,.32), transparent 70%),
+      linear-gradient(155deg, #EA161E 0%, #CC0000 44%, #960409 100%);
     background-attachment: fixed;
   }
-  body::before, body::after { content: ''; position: fixed; z-index: 0; border-radius: 50%; filter: blur(60px); pointer-events: none; }
-  body::before { width: 34rem; height: 34rem; right: -8rem; top: 18vh; background: rgba(221,0,0,.10); }
-  body::after { width: 28rem; height: 28rem; left: 22vw; bottom: -10rem; background: rgba(70,80,110,.18); }
+  body::before, body::after { content: ''; position: fixed; z-index: 0; border-radius: 50%; filter: blur(70px); pointer-events: none; }
+  body::before { width: 30rem; height: 30rem; left: -7rem; top: 32vh; background: rgba(255,255,255,.16); }
+  body::after { width: 26rem; height: 26rem; right: 6vw; bottom: -9rem; background: rgba(255,140,40,.5); }
   #app { position: relative; z-index: 1; }
-  #sidebar { background: rgba(255,255,255,.4); border-right-color: var(--bordo-vetro); backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%); }
-  #sidebar > div { border-color: rgba(48,48,48,.08); }
-  header, #colonna > div.xl\:hidden { background: var(--vetro-tenue) !important; border-bottom-color: rgba(255,255,255,.6) !important; backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%); }
-  .card { background: var(--vetro); border-color: var(--bordo-vetro); border-radius: 6px; box-shadow: var(--ombra-vetro), inset 0 1px 0 rgba(255,255,255,.7); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); }
-  .card .card { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--vetro-forte); }
-  .modale.card { background: rgba(255,255,255,.86); }
-  .col-k { background: rgba(255,255,255,.26); border: 1px solid rgba(255,255,255,.55); border-radius: 6px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
-  .tess { background: var(--vetro-forte); border-color: var(--bordo-vetro); box-shadow: 0 4px 14px -8px rgba(48,48,48,.2); }
-  .tess:hover { border-color: rgba(48,48,48,.18); }
-  .bg-carta { background-color: var(--vetro-tenue) !important; }
-  .border-linea, .divide-\[\#EEEEEE\] > * { border-color: rgba(48,48,48,.08) !important; }
-  .tab-t th { border-bottom-color: rgba(48,48,48,.1); }
-  .tab-t td { border-bottom-color: rgba(48,48,48,.06); }
-  .tab-t tr.clic:hover td, .impila tr.clic:hover { background: rgba(255,255,255,.55); }
-  .tab-t tr.sel td, .impila tr.sel { background: rgba(255,255,255,.7); }
-  .campo { background: rgba(255,255,255,.72); border-color: rgba(48,48,48,.16); }
-  .campo:focus { background: rgba(255,255,255,.92); }
-  .seg { background: rgba(48,48,48,.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-  .seg button[aria-pressed="true"] { background: rgba(255,255,255,.92); }
-  .btn-sec { background: rgba(255,255,255,.7); border-color: rgba(48,48,48,.16); }
-  .btn-sec:hover { background: rgba(255,255,255,.9); border-color: #303030; }
-  .nav-i:hover { background: rgba(255,255,255,.55); }
-  .nav-i[aria-current="page"] { background: rgba(221,0,0,.09); }
+  /* il menu e il contenuto galleggiano sul rosso, staccati dai bordi */
+  @media (min-width: 1024px) { #app { grid-template-columns: 272px 1fr; } #sidebar { margin: 12px 0 12px 12px; border-radius: 28px; border: 1px solid var(--bordo-vetro) !important; } }
+  #sidebar { background: rgba(255,255,255,.74); backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%); box-shadow: var(--ombra-vetro), var(--luce); overflow: hidden; }
+  #sidebar > div { border-color: rgba(120,0,0,.08) !important; }
+  header, #barra-modo { background: transparent !important; border-bottom-color: transparent !important; }
+  header #titolo { color: #fff; font-weight: 600; letter-spacing: -.01em; }
+  #vista { margin: 0 12px 12px; border-radius: 30px; background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.55); box-shadow: var(--ombra-vetro), var(--luce); backdrop-filter: blur(34px) saturate(170%); -webkit-backdrop-filter: blur(34px) saturate(170%); }
+  @media (max-width: 1023px) { #vista { margin: 0 8px 8px; border-radius: 24px; } }
+  h1.font-display, .font-display.font-medium { font-weight: 600; letter-spacing: -.02em; }
+  /* pannelli */
+  .card { background: var(--vetro); border-color: var(--bordo-vetro); border-radius: 22px; box-shadow: var(--ombra-vetro), var(--luce); }
+  .card .card { background: var(--vetro-forte); }
+  .vetro-scuro { background: linear-gradient(160deg, rgba(44,14,14,.9), rgba(22,8,8,.82)) !important; color: #fff; border-color: rgba(255,255,255,.14) !important; box-shadow: 0 26px 50px -26px rgba(40,0,0,.75), inset 0 1px 0 rgba(255,255,255,.2) !important; }
+  .vetro-scuro .text-grigio { color: rgba(255,255,255,.66) !important; }
+  .rounded { border-radius: 12px; }
+  .col-k { background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.65); border-radius: 22px; }
+  .tess { background: var(--vetro-forte); border-color: var(--bordo-vetro); border-radius: 16px; box-shadow: 0 10px 22px -14px rgba(90,0,0,.4), var(--luce); }
+  .tess:hover { border-color: #fff; }
+  .bg-carta { background-color: rgba(255,255,255,.58) !important; }
+  .border-linea, .divide-\[\#EEEEEE\] > * { border-color: rgba(120,0,0,.08) !important; }
+  .tab-t th { border-bottom-color: rgba(120,0,0,.1); }
+  .tab-t td { border-bottom-color: rgba(120,0,0,.06); }
+  .tab-t tr.clic:hover td, .impila tr.clic:hover { background: rgba(255,255,255,.62); }
+  .tab-t tr.sel td, .impila tr.sel { background: rgba(255,236,236,.85); }
+  .campo { background: rgba(255,255,255,.82); border-color: rgba(120,0,0,.14); border-radius: 12px; }
+  .campo:focus { background: #fff; }
+  /* pillole: selettori, pulsanti, chip, numerini */
+  .seg { background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.7); border-radius: 999px; padding: 4px; box-shadow: var(--luce); backdrop-filter: blur(16px) saturate(170%); -webkit-backdrop-filter: blur(16px) saturate(170%); }
+  .seg button { border-radius: 999px; padding: .4rem .95rem; color: #4A4A4A; }
+  .seg button[aria-pressed="true"] { background: #fff; color: #1F1F1F; box-shadow: 0 6px 14px -6px rgba(120,0,0,.4), var(--luce); }
+  header .seg, #barra-modo .seg { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.4); }
+  header .seg button, #barra-modo .seg button { color: rgba(255,255,255,.9); }
+  header .seg button[aria-pressed="true"], #barra-modo .seg button[aria-pressed="true"] { color: #CC0000; }
+  .btn { border-radius: 999px; }
+  .btn-pri { background: linear-gradient(180deg, #F2262B, #CC0000); box-shadow: 0 10px 20px -10px rgba(200,0,0,.75), inset 0 1px 0 rgba(255,255,255,.35); }
+  .btn-pri:hover { background: linear-gradient(180deg, #E01C21, #B00000); }
+  .btn-sec { background: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.95); box-shadow: 0 6px 14px -8px rgba(90,0,0,.35), var(--luce); }
+  .btn-sec:hover { background: #fff; border-color: #fff; }
+  header .btn-sec { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.45); color: #fff; box-shadow: var(--luce); }
+  header .btn-sec:hover { background: rgba(255,255,255,.34); }
+  .btn-gh:hover { background: rgba(255,255,255,.6); }
+  .chip { border-radius: 999px; padding: .18rem .6rem; }
   .chip.c-at { background: rgba(48,48,48,.07); }
-  .chip.c-bl { background: rgba(255,255,255,.7); }
-  p.text-ambra.bg-arancio-velo { background: rgba(254,243,199,.72); border-color: rgba(180,83,9,.25); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-  .bg-arancio-velo { background-color: rgba(254,243,199,.75) !important; }
-  .bg-ok-velo { background-color: rgba(228,242,234,.8) !important; }
-  .barra { background: rgba(48,48,48,.1); }
-  .bg-\[\#FAFAFA\] { background-color: rgba(255,255,255,.4) !important; }
-  .bg-white:not(.modale *) { background-color: rgba(255,255,255,.72); }
-  .modale-velo { background: rgba(48,48,48,.28); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-  .modale { background: rgba(255,255,255,.86); backdrop-filter: blur(26px) saturate(160%); -webkit-backdrop-filter: blur(26px) saturate(160%); }
-  .tendina { background: rgba(255,255,255,.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-  #toast > div { background: rgba(48,48,48,.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .chip.c-bl { background: rgba(255,255,255,.78); }
+  .badge { border-radius: 999px; }
+  .barra { background: rgba(48,48,48,.1); border-radius: 99px; }
+  /* menu: voce attiva in pillola rossa */
+  .nav-i { border-radius: 14px; padding: .55rem .8rem; }
+  .nav-i:hover { background: rgba(255,255,255,.7); }
+  .nav-i[aria-current="page"] { background: linear-gradient(180deg, #F2262B, #CC0000); color: #fff; box-shadow: 0 10px 20px -10px rgba(200,0,0,.7), inset 0 1px 0 rgba(255,255,255,.35); }
+  .nav-i[aria-current="page"] .badge.calmo { background: rgba(255,255,255,.28); color: #fff; }
+  .nav-i[aria-current="page"] span[class*="border-"] { color: #fff; border-color: rgba(255,255,255,.6); }
+  /* righe Prova, avvisi, toast, finestre */
+  p.text-ambra.bg-arancio-velo { background: rgba(255,248,226,.88); border-color: rgba(180,83,9,.22); border-radius: 16px; }
+  .bg-arancio-velo { background-color: rgba(254,243,199,.82) !important; }
+  .bg-ok-velo { background-color: rgba(228,242,234,.86) !important; }
+  .bg-\[\#FAFAFA\] { background-color: rgba(255,255,255,.48) !important; }
+  .bg-white:not(.modale *) { background-color: rgba(255,255,255,.8); }
+  .modale-velo { background: rgba(70,0,0,.34); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .modale { background: rgba(255,255,255,.92); border-radius: 26px; backdrop-filter: blur(30px) saturate(170%); -webkit-backdrop-filter: blur(30px) saturate(170%); }
+  .tendina { background: #fff; border-radius: 18px; box-shadow: 0 24px 48px -20px rgba(90,0,0,.45); }
+  body.menu-aperto #sidebar { z-index: 55; top: 8px; bottom: 8px; left: 8px; width: 280px; border-radius: 26px; border: 1px solid var(--bordo-vetro); background: rgba(255,255,255,.9); }
+  body.menu-aperto #velo-menu { z-index: 50; background: rgba(60,0,0,.35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+  #toast > div { background: rgba(40,10,10,.82); border-radius: 18px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  #barra-demo { background: rgba(28,6,6,.5); backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%); }
+  .seg-demo, .seg-demo button { border-radius: 999px; }
+  #glossa { border-radius: 14px; }
+  :focus-visible { outline-color: #1F1F1F; }
+  /* home: l'ufficio al centro */
+  .nav-i[aria-current="page"] .text-grigio { color: rgba(255,255,255,.82) !important; }
+  .sala-marchio > span:first-child { background: #fff !important; color: #CC0000 !important; box-shadow: 0 6px 14px -6px rgba(90,0,0,.5); }
+  .sala-marchio > span:nth-child(2) { color: #fff !important; }
+  .sala-marchio > span:nth-child(3) { color: rgba(255,255,255,.5) !important; }
+  @media (min-width: 1024px) { .saluto-velo { background: radial-gradient(ellipse 100% 100% at 0 0, rgba(255,255,255,.5) 55%, rgba(255,255,255,0) 100%) !important; border-radius: 22px; } }
+  .scena-vista { border-radius: 22px; }
+  .ufficio-home svg { display: block; width: 100%; height: auto; pointer-events: none; }
+  .pillola { display: inline-flex; align-items: center; gap: .45rem; border-radius: 999px; padding: .4rem .8rem; font-size: .8125rem; font-weight: 600; background: rgba(255,255,255,.82); border: 1px solid rgba(255,255,255,.95); box-shadow: 0 8px 18px -10px rgba(90,0,0,.45), var(--luce); backdrop-filter: blur(14px) saturate(170%); -webkit-backdrop-filter: blur(14px) saturate(170%); color: #1F1F1F; }
   /* chi chiede meno trasparenze, o un browser senza sfocatura, vede superfici piene */
   @media (prefers-reduced-transparency: reduce) {
-    #sidebar, header, .card, .col-k, .modale, .seg { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-    #sidebar, .card, .modale { background: #fff; } header { background: rgba(255,255,255,.96) !important; } .col-k { background: #EFEFEF; }
+    #sidebar, #vista, .seg, .modale, .pillola, #barra-demo { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    #sidebar, .card, .modale { background: #fff; } #vista { background: #FBF3F3; }
   }
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    #sidebar, .card, .modale { background: rgba(255,255,255,.92); } header { background: rgba(255,255,255,.95) !important; }
+    #sidebar, .modale { background: rgba(255,255,255,.95); } #vista { background: rgba(255,246,246,.9); }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -760,7 +803,7 @@ function renderNav() {
        <p class="px-3 text-xs text-grigio leading-relaxed"><i class="bi bi-phone"></i> Il tecnico vede solo i suoi lavori, anche da telefono. Niente prezzi, niente margini.</p>`
     : NAV.map(([g, tutte]) => { const items = tutte.filter(([v]) => vede(v)); if (!items.length) return '';
       const chiuso = g && !aperto(g, items), n = sum(items, ([v]) => badge[v] || 0), urg = items.some(([v]) => badge[v] && urgente[v]);
-      return `<div>${g ? `<button class="nav-g" data-a="nav-gruppo" data-v="${g}" aria-expanded="${!chiuso}"><i class="bi bi-chevron-${chiuso ? 'right' : 'down'} text-[0.65rem]"></i>${g}${chiuso ? `<span class="font-normal normal-case tracking-normal text-grigio">${items.length} voci</span>${n ? `<span class="badge ${urg ? '' : 'calmo'}" aria-label="${n} da guardare">${n}</span>` : ''}` : ''}</button>` : ''}
+      return `<div>${g ? `<button class="nav-g" data-a="nav-gruppo" data-v="${g}" aria-expanded="${!chiuso}"><i class="bi bi-chevron-${chiuso ? 'right' : 'down'} text-[0.65rem]"></i>${g}${chiuso ? `<span class="font-normal normal-case tracking-normal text-grigio whitespace-nowrap">${items.length} voci</span>${n ? `<span class="badge ${urg ? '' : 'calmo'}" aria-label="${n} da guardare">${n}</span>` : ''}` : ''}</button>` : ''}
       <ul class="space-y-0.5" ${chiuso ? 'hidden' : ''}>${items.map(([v, ico, t, mod]) => `<li><button class="nav-i" data-a="vai" data-v="${v}" ${S.view === v ? 'aria-current="page"' : ''}><i class="bi ${ico}"></i>${t}${mod ? `<span class="${badge[v] ? 'ml-1' : 'ml-auto'}">${modulo(mod)}</span>` : ''}${badge[v] ? `<span class="badge ${urgente[v] ? '' : 'calmo'}" aria-label="${badge[v]} da guardare${urgente[v] ? ', urgente' : ''}">${badge[v]}</span>` : ''}</button></li>`).join('')}</ul></div>`; }).join('') +
       (S.ruolo === 'dir' ? `<p class="px-3 text-xs text-grigio leading-relaxed">Le voci senza etichetta sono la proposta base. ${modulo('CRM')} si aggiunge con la proposta con CRM, ${modulo('Opzionale')} si sceglie a parte.</p>` : `<p class="px-3 text-xs text-grigio leading-relaxed"><i class="bi bi-person-lock"></i> ${RUOLO[S.ruolo][1]} vede solo le pagine del suo lavoro.</p>`);
   document.querySelectorAll('[data-a="ruolo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.ruolo));
@@ -789,12 +832,15 @@ function render(nuova) {
   if (S.ruolo !== 'tec' && !vede(S.view)) S.view = RUOLO[S.ruolo][3];
   const v = S.ruolo === 'tec' ? 'tecnico' : S.modo === 'sala' ? 'sala' : S.view;
   $('#titolo').textContent = TITOLI[v];
-  $('#vista').innerHTML = `<div class="${v === 'sala' ? 'px-4 sm:px-6 py-4 lg:py-5 pb-24' : 'px-4 sm:px-6 lg:px-10 py-6 lg:py-8 pb-24'} ${nuova ? 'entra' : ''}">${VISTE[v]()}</div>`;
+  $('#vista').innerHTML = `<div class="${v === 'sala' ? 'px-4 sm:px-6 py-4 lg:py-5 pb-24' : 'px-4 sm:px-6 lg:px-8 py-6 lg:py-8 pb-24'} ${nuova ? 'entra' : ''}">${VISTE[v]()}</div>`;
   glossa($('#vista'));
 }
 const prova = t => S.guida === false ? '' : `<p class="prova-riga mb-5 text-sm text-ambra bg-arancio-velo border border-arancio/40 rounded px-3.5 py-2.5 flex gap-2"><i class="bi bi-hand-index"></i><span><strong>Prova:</strong> ${t}</span></p>`;
-const kpi = (label, val, sub = '', cls = '', az = '') => { const corpo = `<span class="flex items-start justify-between gap-2 text-sm text-grigio"><span>${label}</span>${az ? '<i class="bi bi-arrow-up-right text-xs mt-1 opacity-60 group-hover:opacity-100 transition-opacity"></i>' : ''}</span><span class="block font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3 text-[1.6rem] sm:text-[2rem] xl:text-[2.4rem] ${cls}">${val}</span>${sub ? `<span class="block text-xs sm:text-sm mt-2.5 text-grigio">${sub}</span>` : ''}`;
-  return az ? `<button type="button" class="group card p-4 sm:p-6 text-left w-full hover:border-[#BDBDBD] transition-colors" data-a="dettaglio" data-v="${az}" aria-label="${label}: apri il dettaglio">${corpo}</button>` : `<div class="card p-4 sm:p-6">${corpo}</div>`; };
+const kpi = (label, val, sub = '', cls = '', az = '', box = '', extra = '') => { const corpo = `<span class="flex items-start justify-between gap-2 text-sm text-grigio"><span>${label}</span>${az ? '<i class="bi bi-arrow-up-right text-xs mt-1 opacity-60 group-hover:opacity-100 transition-opacity"></i>' : ''}</span><span class="block font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3 text-[1.6rem] sm:text-[2rem] xl:text-[2.4rem] ${cls}">${val}</span>${sub ? `<span class="block text-xs sm:text-sm mt-2.5 text-grigio">${sub}</span>` : ''}${extra}`;
+  return az ? `<button type="button" class="group card p-4 sm:p-6 text-left w-full hover:border-white transition-colors ${box}" data-a="dettaglio" data-v="${az}" aria-label="${label}: apri il dettaglio">${corpo}</button>` : `<div class="card p-4 sm:p-6 ${box}">${corpo}</div>`; };
+// arco del margine, come un indicatore: pieno al 60% del fatturato, la tacca segna l'obiettivo
+const arco = (q, obiettivo) => { const v = Math.max(0, Math.min(1, q / .6)) * 100, o = Math.max(0, Math.min(1, obiettivo / .6)) * Math.PI, ox = 100 - Math.cos(o) * 80, oy = 100 - Math.sin(o) * 80;
+  return `<svg viewBox="0 0 200 112" class="w-full max-w-[220px] mt-3" aria-hidden="true"><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="rgba(48,48,48,.12)" stroke-width="14" stroke-linecap="round"/><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#3A3A3A" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="${v.toFixed(1)} 100"/><circle cx="${ox.toFixed(1)}" cy="${oy.toFixed(1)}" r="4" fill="#fff" stroke="#3A3A3A" stroke-width="2"/><text x="100" y="92" text-anchor="middle" font-family="Inter" font-size="26" font-weight="600" fill="currentColor">${pc(q)}</text><text x="100" y="108" text-anchor="middle" font-family="Inter" font-size="10" fill="#6B6B6B">obiettivo ${pc(obiettivo)}</text></svg>`; };
 /* ---------- parole spiegate ----------
    La prima volta che una parola tecnica compare in una pagina viene sottolineata a puntini:
    passandoci sopra, o toccandola da telefono, compare la spiegazione in parole semplici. */
@@ -1188,22 +1234,27 @@ const VISTE = {
     return `<div class="flex flex-wrap items-end justify-between gap-4 mb-6"><div><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${saluto()}, ${NOME[S.ruolo] || NOME.dir}</h1><p class="text-grigio mt-1.5 max-w-3xl">I numeri ${P.label}, aggiornati a stamattina. Oggi li vedete solo con il bilancio del commercialista, ogni tre mesi.</p></div>
       <div class="seg" role="group" aria-label="Periodo">${[['mese', 'Mese'], ['trim', 'Ultimi 3 mesi'], ['anno', 'Da inizio anno']].map(([v, t]) => `<button data-a="per" data-v="${v}" aria-pressed="${S.per === v}">${t}</button>`).join('')}</div></div>
     ${S.ruolo === 'dir' ? prova('passa in alto a <strong>Tecnico</strong>, chiudi il DVR di Cascina Rosa con le ore fatte, poi torna su <strong>Direzione</strong>. I quattro riquadri qui sotto si aprono nel dettaglio. Per gli aggiornamenti normativi: <strong>Impostazioni</strong>, primo riquadro.') : ''}
-    <div class="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-6 scaglione">
-      ${kpi(`Fatturato ${P.label}`, eur(P.f), 'dalle fatture elettroniche emesse', '', 'fatt')}
-      ${kpi('Ordini fornitori', eur(P.forn), S.per === 'mese' ? `${FORN.length} ordini del mese` : 'a consuntivo, mese per mese', '', 'forn')}
-      ${kpi('Costo delle ore interne', eur(P.cOre), S.per === 'mese' ? `${nf(m.ore, 1)} ore × ${eur(S.costoH)}` : 'ore dei tecnici e dei soci', '', 'ore')}
-      ${kpi('Margine sulle commesse', eur(P.marg), `${pc(P.marg / P.f)} del fatturato, prima dei costi fissi`, '', 'marg')}
-    </div>
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6">
-      <div class="card"><div class="px-6 py-4 border-b border-linea flex items-center gap-2"><i class="bi bi-flag text-arancio"></i><p class="font-bold">Aspetta qualcuno</p><span class="badge !ml-0">${c.length}</span></div>
+    <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] 2xl:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)_minmax(0,1.1fr)] gap-4 sm:gap-5 mb-5 items-start">
+      <div class="grid grid-cols-2 lg:grid-cols-1 gap-4 sm:gap-5 scaglione">
+        ${kpi(`Fatturato ${P.label}`, eur(P.f), 'dalle fatture elettroniche emesse', '', 'fatt', 'vetro-scuro', `<span class="flex items-end justify-between gap-2 h-14 mt-4" aria-hidden="true">${(() => { const lo = Math.min(...serie.map(x => x.f)); return serie.map((x, i) => `<span class="flex flex-col items-center justify-end gap-1 h-full flex-1"><span class="cresce block w-full max-w-[12px] rounded-full ${i === 5 ? 'bg-white' : 'bg-white/30'}" style="height:${Math.round(30 + 70 * (x.f - lo) / Math.max(1, max - lo))}%;animation-delay:${i * 50}ms"></span><span class="text-[10px] ${i === 5 ? 'text-white' : 'text-white/50'}">${MESI6[i].slice(0, 3)}</span></span>`).join(''); })()}</span>`)}
+        ${kpi('Margine sulle commesse', eur(P.marg), 'prima dei costi fissi', '', 'marg', '', arco(P.marg / P.f, TARGET))}
+      </div>
+      ${(() => { const r = SALA.decisioni().length; return `<button type="button" class="card ufficio-home relative overflow-hidden text-left p-0 hover:border-white transition-colors" data-a="modo" data-v="sala" aria-label="Apri la Sala agenti: ${r} ${pl(r, 'decisione', 'decisioni')} per voi">${SALA.scena()}
+        <span class="absolute left-3 top-3 sm:left-4 sm:top-4 flex flex-wrap gap-2"><span class="pillola"><i class="bi bi-people"></i>Sala agenti</span><span class="pillola"><span class="w-2 h-2 rounded-full bg-ok pulsa"></span>11 agenti al lavoro</span></span>
+        ${r ? `<span class="absolute right-3 bottom-3 sm:right-4 sm:bottom-4 btn btn-pri !py-2 pointer-events-none">${r} ${pl(r, 'decisione', 'decisioni')} per voi <i class="bi bi-arrow-right"></i></span>` : ''}</button>`; })()}
+      <div class="card lg:col-span-2 2xl:col-span-1"><div class="px-6 py-4 border-b border-linea flex items-center gap-2"><i class="bi bi-flag text-arancio"></i><p class="font-bold">Aspetta qualcuno</p><span class="badge !ml-0">${c.length}</span></div>
         <ul class="p-3 space-y-2 scaglione">${c.map(e => `<li><button class="group w-full text-left px-4 py-3 rounded bg-carta hover:bg-velo transition-colors flex gap-3 items-center" data-a="vai" data-v="${e.go}">
           <span class="w-10 h-10 rounded bg-white border border-linea text-petrolio flex items-center justify-center shrink-0"><i class="bi ${e.ico}"></i></span>
           <span class="flex-1 min-w-0"><span class="block font-medium">${e.tit}</span><span class="block text-sm text-grigio">${e.sub}</span></span><i class="bi bi-chevron-right text-grigio text-xs transition-transform group-hover:translate-x-0.5"></i></button></li>`).join('') || '<li class="p-4 text-sm text-grigio">Niente in sospeso.</li>'}</ul></div>
-      <div class="card p-6 flex flex-col"><div class="flex items-center justify-between gap-3 mb-1"><p class="font-bold">Ultimi sei mesi</p>
+    </div>
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 mb-5">
+      ${kpi('Ordini fornitori', eur(P.forn), S.per === 'mese' ? `${FORN.length} ordini del mese` : 'a consuntivo, mese per mese', '', 'forn')}
+      ${kpi('Costo delle ore interne', eur(P.cOre), S.per === 'mese' ? `${nf(m.ore, 1)} ore × ${eur(S.costoH)}` : 'ore dei tecnici e dei soci', '', 'ore')}
+      <div class="card p-6 flex flex-col col-span-2"><div class="flex items-center justify-between gap-3 mb-1"><p class="font-bold">Ultimi sei mesi</p>
         <p class="text-xs text-grigio flex items-center gap-3"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-fumo"></span>Fatturato</span><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-grafite"></span>Margine</span></p></div>
-        <div class="flex items-end gap-3 sm:gap-5 flex-1 min-h-[190px] mt-4" role="img" aria-label="Fatturato e margine degli ultimi sei mesi">
+        <div class="flex items-end gap-3 sm:gap-5 flex-1 min-h-[150px] mt-4" role="img" aria-label="Fatturato e margine degli ultimi sei mesi">
           ${serie.map((x, i) => `<div class="flex-1 flex flex-col items-center justify-end h-full gap-1.5"><span class="num text-xs ${i === 5 ? 'font-bold' : 'text-grigio'}">${nf(x.f / 1000, 1)}k</span>
-            <div class="cresce w-full max-w-[56px] rounded-t-sm bg-fumo flex items-end" style="height:${Math.round(x.f / max * 72)}%;animation-delay:${i * 50}ms"><div class="w-full bg-grafite" style="height:${Math.round(x.m / x.f * 100)}%"></div></div>
+            <div class="cresce w-full max-w-[56px] rounded-t-[10px] overflow-hidden bg-fumo flex items-end" style="height:${Math.round(x.f / max * 72)}%;animation-delay:${i * 50}ms"><div class="w-full bg-grafite" style="height:${Math.round(x.m / x.f * 100)}%"></div></div>
             <span class="text-xs ${i === 5 ? 'font-bold' : 'text-grigio'}">${MESI6[i]}</span></div>`).join('')}
         </div>
         <p class="text-xs text-grigio mt-4 pt-3 border-t border-linea">Il margine conta fornitori e ore dei tecnici su ogni commessa. Il mese in corso si aggiorna a ogni fattura e a ogni lavoro chiuso.</p></div>
@@ -1422,7 +1473,7 @@ const VISTE = {
       <p class="text-grigio mt-1.5 max-w-2xl">Oggi chi segue l'amministrazione apre la banca, cerca il pagamento e lo associa a mano alla fattura. Qui caricate l'estratto conto che scaricate già, mensile o giornaliero, e basta.</p></div>
       <button class="btn btn-pri !py-3 !px-5 !text-base" data-a="carica" ${S.estratto === 'carico' ? 'disabled' : ''}>${S.estratto === 'carico' ? '<i class="bi bi-arrow-repeat gira"></i>Sto abbinando...' : "<i class=\"bi bi-upload\"></i>Carica l'estratto conto"}</button></section>`}
     <div class="flex flex-wrap items-center justify-between gap-3 mb-3"><p class="text-sm text-grigio"><i class="bi bi-receipt-cutoff"></i> Fatture emesse e non ancora incassate. Ogni incasso va da solo in prima nota.</p><div class="flex flex-wrap gap-2">${esporta('incassi')}<button class="btn btn-sec" data-a="vai" data-v="banca"><i class="bi bi-wallet2"></i>Vai alla banca</button></div></div>
-    <div class="card scroll-x"><table class="tab-t impila larga min-w-[920px]"><thead><tr><th>Fattura</th><th>Cliente</th><th class="r">Importo</th><th>Sull'estratto conto</th><th>Stato</th><th></th></tr></thead><tbody>
+    <div class="card scroll-x"><table class="tab-t impila larga min-w-[880px]"><thead><tr><th>Fattura</th><th>Cliente</th><th class="r">Importo</th><th>Sull'estratto conto</th><th>Stato</th><th></th></tr></thead><tbody>
     ${FATT.map(f => { const [cls, t] = st(f), m = f.mov;
       return `<tr class="${f.agg || f.nuovo ? 'lampo' : ''}"><td class="num" data-l="Fattura">FT ${f.n}</td><td class="font-bold m-full m-prima">${linkCli(f.cli)}</td><td class="r num" data-l="Importo">${eur2(f.imp)}</td>
       <td class="m-full m-dopo" style="min-width:260px">${m ? `<p class="mono text-xs" style="white-space:normal">${m.causale}</p><p class="num text-xs font-bold text-ok">+ ${eur2(m.imp)}</p>${m.nota && (f.stato === 'acconto?' || f.stato === 'dubbio') ? `<p class="text-xs text-grigio mt-0.5"><i class="bi bi-lightbulb"></i> ${m.nota}</p>` : ''}` : fatto ? '<span class="text-xs text-grigio">nessun movimento</span>' : ''}</td>
@@ -2214,8 +2265,8 @@ const SALA = (() => {
   function lavagna() {
     let s = poly([P(BX0 - .1, 0, BZ1 - BH - .1), P(BX0 + BW + .1, 0, BZ1 - BH - .1), P(BX0 + BW + .1, 0, BZ1 + .1), P(BX0 - .1, 0, BZ1 + .1)], '#15181A') + poly([P(BX0, 0, BZ1 - BH), P(BX0 + BW, 0, BZ1 - BH), P(BX0 + BW, 0, BZ1), P(BX0, 0, BZ1)], '#23282B');
     const cw = (BW - 0.7) / 3;
-    const celle = LAVAGNA.map(([t, v], i) => { const u = 0.35 + (i % 3) * cw, w = 1.2 + Math.floor(i / 3) * 1.15; return `<text x="${u}" y="${w}" font-size="0.21" fill="#A9B0B3" font-family="Lato">${t}</text><text id="k-${i}" x="${u}" y="${w + 0.58}" font-size="0.46" fill="#FFFFFF" font-family="Ubuntu" font-weight="500">${v()}</text>`; }).join('');
-    return s + `<g transform="${suParete(BX0, BZ1)}"><rect x="0.35" y="0.26" width="0.06" height="0.34" fill="#DD0000"/><text x="0.5" y="0.55" font-size="0.26" fill="#FFFFFF" font-family="Ubuntu" font-weight="500">Oggi da Progesi</text><circle cx="${BW - 0.5}" cy="0.47" r="0.07" fill="#5BC48A"/><text x="${BW - 0.62}" y="0.55" font-size="0.2" fill="#A9B0B3" text-anchor="end" font-family="Lato">dal vivo</text><line x1="0.35" y1="0.75" x2="${BW - 0.35}" y2="0.75" stroke="#3A4044" stroke-width="0.02"/>${celle}</g>`;
+    const celle = LAVAGNA.map(([t, v], i) => { const u = 0.35 + (i % 3) * cw, w = 1.2 + Math.floor(i / 3) * 1.15; return `<text x="${u}" y="${w}" font-size="0.21" fill="#A9B0B3" font-family="Inter">${t}</text><text id="k-${i}" x="${u}" y="${w + 0.58}" font-size="0.46" fill="#FFFFFF" font-family="Inter" font-weight="500">${v()}</text>`; }).join('');
+    return s + `<g transform="${suParete(BX0, BZ1)}"><rect x="0.35" y="0.26" width="0.06" height="0.34" fill="#DD0000"/><text x="0.5" y="0.55" font-size="0.26" fill="#FFFFFF" font-family="Inter" font-weight="500">Oggi da Progesi</text><circle cx="${BW - 0.5}" cy="0.47" r="0.07" fill="#5BC48A"/><text x="${BW - 0.62}" y="0.55" font-size="0.2" fill="#A9B0B3" text-anchor="end" font-family="Inter">dal vivo</text><line x1="0.35" y1="0.75" x2="${BW - 0.35}" y2="0.75" stroke="#3A4044" stroke-width="0.02"/>${celle}</g>`;
   }
   let SVG = '';
   function scena() {
@@ -2235,7 +2286,7 @@ const SALA = (() => {
     // tappeti: grigio chiarissimo con un bordo tessuto; il nome del reparto è stampato sopra, sul lato est (vedi stanze())
     const tappeto = (x0, y0, x1, y1) => poly([P(x0, y0), P(x1, y0), P(x1, y1), P(x0, y1)], '#E2DFDA', 'stroke="#D3CFC8" stroke-width="1"') + poly([P(x0 + .18, y0 + .18), P(x1 - .18, y0 + .18), P(x1 - .18, y1 - .18), P(x0 + .18, y1 - .18)], 'none', 'stroke="#ECEAE6" stroke-width="1.3"');
     ZONE.forEach(z => { s += tappeto(z.x0, z.y0, z.x1, z.y1); });
-    s += tappeto(5.6, 0.15, 10.6, 4.2) + `<text transform="matrix(${f1(C * SC)} ${f1(-0.5 * SC)} ${f1(C * SC)} ${f1(0.5 * SC)} ${f1(P(10.32, 2.8)[0])} ${f1(P(10.32, 2.8)[1])})" font-size="0.42" letter-spacing="0.08" fill="#DD0000" font-family="Ubuntu" font-weight="700">REGIA</text>`;
+    s += tappeto(5.6, 0.15, 10.6, 4.2) + `<text transform="matrix(${f1(C * SC)} ${f1(-0.5 * SC)} ${f1(C * SC)} ${f1(0.5 * SC)} ${f1(P(10.32, 2.8)[0])} ${f1(P(10.32, 2.8)[1])})" font-size="0.42" letter-spacing="0.08" fill="#DD0000" font-family="Inter" font-weight="700">REGIA</text>`;
     const g = 'fill="rgba(214,226,232,0.24)" stroke="rgba(120,130,138,0.5)" stroke-width="1.2"', gh = 2.7;
     add(5.7, `<polygon points="${pts([P(5.6, 0.15), P(5.6, 4.2), P(5.6, 4.2, gh), P(5.6, 0.15, gh)])}" ${g}/>`);
     add(14.8, `<polygon points="${pts([P(10.6, 0.15), P(10.6, 4.2), P(10.6, 4.2, gh), P(10.6, 0.15, gh)])}" ${g}/>`);
@@ -2457,7 +2508,7 @@ const SALA = (() => {
   const domanda = d => { const a = ag(d.ag), q = pulisci(d.q); (st.chat[a.id] = st.chat[a.id] || []).push([q, risposta(a, q)]); ridisegna(); };
   // quando il lavoro lo fate voi nel gestionale, la sala lo racconta
   const racconta = (id, txt, sempre) => { if (st.avviata && (sempre || S.modo !== 'sala')) { st.az[id]++; log(id, txt); aggiornaPezzi(); } };
-  return { html, avvia, AZIONI, domanda, racconta, decisioni, peso, chiudi: () => { if (st.sel || st.stanza) { AZIONI['sala-chiudi'](); return true; } return false; }, stato: st };
+  return { html, avvia, AZIONI, domanda, racconta, decisioni, peso, scena: () => { const v = scena(); setTimeout(() => LAVAGNA.forEach(([, f], i) => { const e = document.getElementById('k-' + i); if (e) e.textContent = f(); }), 0); return v; }, chiudi: () => { if (st.sel || st.stanza) { AZIONI['sala-chiudi'](); return true; } return false; }, stato: st };
 })();
 VISTE.sala = SALA.html;
 Object.assign(AZ_, SALA.AZIONI, { modo: v => { S.modo = v; chiudiTendine(); document.body.classList.remove('menu-aperto'); render(true); $('#vista').scrollTop = 0; } });
