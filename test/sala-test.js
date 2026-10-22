@@ -75,9 +75,9 @@ const OUT = __dirname + '/shots/sala-';
   ok('nessun doppione per lo stesso cliente', await p.evaluate(() => { const c = SALA.decisioni().map(d => d.titolo.split(':')[0]); return new Set(c).size === c.length; }));
   await foto('tutto-deciso');
   // ruoli
-  await clic('#barra-demo [data-a="ruolo"][data-v="amm"]'); ok('amministrazione resta nella sala, solo le sue decisioni', (await titolo()) === 'Sala agenti');
-  await clic('#barra-demo [data-a="ruolo"][data-v="tec"]'); ok('il tecnico non vede la sala né il selettore', (await titolo()) === 'I miei lavori' && await p.evaluate(() => getComputedStyle(document.querySelector('header .modo-seg')).display === 'none'));
-  await clic('#barra-demo [data-a="ruolo"][data-v="dir"]');
+  await clic('#profilo-menu [data-a="ruolo"][data-v="amm"]'); ok('amministrazione resta nella sala, solo le sue decisioni', (await titolo()) === 'Sala agenti');
+  await clic('#profilo-menu [data-a="ruolo"][data-v="tec"]'); ok('il tecnico non vede la sala né il selettore', (await titolo()) === 'I miei lavori' && await p.evaluate(() => getComputedStyle(document.querySelector('header .modo-seg')).display === 'none'));
+  await clic('#profilo-menu [data-a="ruolo"][data-v="dir"]');
   // telefono
   await p.setViewport({ width: 390, height: 844 }); await clic('[data-a="modo"][data-v="sala"]');
   ok('telefono senza scorrimento laterale', await p.evaluate(() => document.documentElement.scrollWidth) <= 390);

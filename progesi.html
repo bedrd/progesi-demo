@@ -169,7 +169,7 @@
     .impila td[data-l]::before { content: attr(data-l); display: block; font-size: .6875rem; font-weight: 700; color: #555555; margin-bottom: .1rem; }
     .impila tr.clic:hover { background: #F7F7F7; }
     .impila tr.sel { background: #F1F1F1; box-shadow: inset 3px 0 0 #3A3A3A; }
-  }  @media (max-width: 1299px) {
+  }  @media (max-width: 1399px) {
     .impila.larga { min-width: 0 !important; }
     .impila.larga thead { display: none; }
     .impila.larga tbody { display: block; }
@@ -185,7 +185,7 @@
     .impila.larga tr.clic:hover { background: #F7F7F7; }
     .impila.larga tr.sel { background: #F1F1F1; box-shadow: inset 3px 0 0 #3A3A3A; }
   }
-  @media (max-width: 1399px) {
+  @media (max-width: 1479px) {
     .impila.larghissima { min-width: 0 !important; }
     .impila.larghissima thead { display: none; }
     .impila.larghissima tbody { display: block; }
@@ -277,13 +277,8 @@
   body::after { width: 26rem; height: 26rem; right: 6vw; bottom: -9rem; background: rgba(255,140,40,.5); }
   #app { position: relative; z-index: 1; }
   /* il menu e il contenuto galleggiano sul rosso, staccati dai bordi */
-  @media (min-width: 1024px) { #app { grid-template-columns: 272px 1fr; } #sidebar { margin: 12px 0 12px 12px; border-radius: 28px; border: 1px solid var(--bordo-vetro) !important; } }
-  #sidebar { background: rgba(255,255,255,.74); backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%); box-shadow: var(--ombra-vetro), var(--luce); overflow: hidden; }
   #sidebar > div { border-color: rgba(120,0,0,.08) !important; }
   header, #barra-modo { background: transparent !important; border-bottom-color: transparent !important; }
-  header #titolo { color: #fff; font-weight: 600; letter-spacing: -.01em; }
-  #vista { margin: 0 12px 12px; border-radius: 30px; background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.55); box-shadow: var(--ombra-vetro), var(--luce); backdrop-filter: blur(34px) saturate(170%); -webkit-backdrop-filter: blur(34px) saturate(170%); }
-  @media (max-width: 1023px) { #vista { margin: 0 8px 8px; border-radius: 24px; } }
   h1.font-display, .font-display.font-medium { font-weight: 600; letter-spacing: -.02em; }
   /* pannelli */
   .card { background: var(--vetro); border-color: var(--bordo-vetro); border-radius: 22px; box-shadow: var(--ombra-vetro), var(--luce); }
@@ -306,16 +301,11 @@
   .seg { background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.7); border-radius: 999px; padding: 4px; box-shadow: var(--luce); backdrop-filter: blur(16px) saturate(170%); -webkit-backdrop-filter: blur(16px) saturate(170%); }
   .seg button { border-radius: 999px; padding: .4rem .95rem; color: #4A4A4A; }
   .seg button[aria-pressed="true"] { background: #fff; color: #1F1F1F; box-shadow: 0 6px 14px -6px rgba(120,0,0,.4), var(--luce); }
-  header .seg, #barra-modo .seg { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.4); }
-  header .seg button, #barra-modo .seg button { color: rgba(255,255,255,.9); }
-  header .seg button[aria-pressed="true"], #barra-modo .seg button[aria-pressed="true"] { color: #CC0000; }
   .btn { border-radius: 999px; }
   .btn-pri { background: linear-gradient(180deg, #F2262B, #CC0000); box-shadow: 0 10px 20px -10px rgba(200,0,0,.75), inset 0 1px 0 rgba(255,255,255,.35); }
   .btn-pri:hover { background: linear-gradient(180deg, #E01C21, #B00000); }
   .btn-sec { background: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.95); box-shadow: 0 6px 14px -8px rgba(90,0,0,.35), var(--luce); }
   .btn-sec:hover { background: #fff; border-color: #fff; }
-  header .btn-sec { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.45); color: #fff; box-shadow: var(--luce); }
-  header .btn-sec:hover { background: rgba(255,255,255,.34); }
   .btn-gh:hover { background: rgba(255,255,255,.6); }
   .chip { border-radius: 999px; padding: .18rem .6rem; }
   .chip.c-at { background: rgba(48,48,48,.07); }
@@ -323,11 +313,6 @@
   .badge { border-radius: 999px; }
   .barra { background: rgba(48,48,48,.1); border-radius: 99px; }
   /* menu: voce attiva in pillola rossa */
-  .nav-i { border-radius: 14px; padding: .55rem .8rem; }
-  .nav-i:hover { background: rgba(255,255,255,.7); }
-  .nav-i[aria-current="page"] { background: linear-gradient(180deg, #F2262B, #CC0000); color: #fff; box-shadow: 0 10px 20px -10px rgba(200,0,0,.7), inset 0 1px 0 rgba(255,255,255,.35); }
-  .nav-i[aria-current="page"] .badge.calmo { background: rgba(255,255,255,.28); color: #fff; }
-  .nav-i[aria-current="page"] span[class*="border-"] { color: #fff; border-color: rgba(255,255,255,.6); }
   /* righe Prova, avvisi, toast, finestre */
   p.text-ambra.bg-arancio-velo { background: rgba(255,248,226,.88); border-color: rgba(180,83,9,.22); border-radius: 16px; }
   .bg-arancio-velo { background-color: rgba(254,243,199,.82) !important; }
@@ -337,20 +322,71 @@
   .modale-velo { background: rgba(70,0,0,.34); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
   .modale { background: rgba(255,255,255,.92); border-radius: 26px; backdrop-filter: blur(30px) saturate(170%); -webkit-backdrop-filter: blur(30px) saturate(170%); }
   .tendina { background: #fff; border-radius: 18px; box-shadow: 0 24px 48px -20px rgba(90,0,0,.45); }
-  body.menu-aperto #sidebar { z-index: 55; top: 8px; bottom: 8px; left: 8px; width: 280px; border-radius: 26px; border: 1px solid var(--bordo-vetro); background: rgba(255,255,255,.9); }
   body.menu-aperto #velo-menu { z-index: 50; background: rgba(60,0,0,.35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
   #toast > div { background: rgba(40,10,10,.82); border-radius: 18px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
-  #barra-demo { background: rgba(28,6,6,.5); backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%); }
   .seg-demo, .seg-demo button { border-radius: 999px; }
   #glossa { border-radius: 14px; }
   :focus-visible { outline-color: #1F1F1F; }
+  /* ================= finestra Mac =================
+     Il rosso è la scrivania; Progesi è una finestra di vetro chiaro che ci galleggia sopra, con i tre pallini.
+     Dentro: la barra scura delle sezioni, la barra laterale con il profilo e le pagine della sezione, il contenuto.
+     Dentro la finestra il rosso è solo un accento: il pulsante principale, l'icona della voce attiva. */
+  #barra-demo { background: transparent; display: flex; justify-content: center; padding: 8px 12px; }
+  .demo-pillola { display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .25rem .6rem; background: rgba(30,6,6,.4); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 4px 6px; box-shadow: inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); }
+  .demo-btn { border-radius: 999px; }
+  #app { margin: 0 16px 16px; border-radius: 30px; background: rgba(247,246,246,.95); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 50px 90px -40px rgba(60,0,0,.85), 0 2px 6px rgba(60,0,0,.12), inset 0 1px 0 #fff; backdrop-filter: blur(40px) saturate(110%); -webkit-backdrop-filter: blur(40px) saturate(110%); }
+  @media (max-width: 1023px) { #app { margin: 0 8px 8px; border-radius: 24px; } }
+  @media (min-width: 1024px) { #app { grid-template-columns: auto minmax(0, 1fr); } }
+  body.sala #app { grid-template-columns: minmax(0, 1fr); }
+  #sidebar { flex-direction: row; background: transparent; }
+  #rail { width: 70px; padding: 12px 0 12px 10px; display: flex; flex-direction: column; gap: 12px; flex: none; }
+  .rail-capsula { background: linear-gradient(180deg, #2C2C2F, #1C1C1E); border-radius: 22px; padding: 10px 0; display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 16px 30px -16px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.1); }
+  .rail-capsula.giu { margin-top: auto; }
+  .rail-logo { width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; background: linear-gradient(180deg, #F2262B, #CC0000); color: #fff; margin-bottom: 6px; box-shadow: 0 8px 16px -8px rgba(220,0,0,.8), inset 0 1px 0 rgba(255,255,255,.35); }
+  .rail-b { position: relative; width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; color: rgba(255,255,255,.6); font-size: 1.15rem; transition: background-color .15s, color .15s; }
+  .rail-b:hover { color: #fff; background: rgba(255,255,255,.08); }
+  .rail-b[aria-current="true"] { color: #fff; background: rgba(255,255,255,.17); box-shadow: inset 0 1px 0 rgba(255,255,255,.14); }
+  .rail-n { position: absolute; top: 3px; right: 3px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 99px; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; background: rgba(255,255,255,.24); color: #fff; }
+  .rail-n.urg { background: #B45309; }
+  #pannello { width: 236px; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid rgba(60,0,0,.07); }
+  .finestra-top { display: flex; align-items: center; gap: .6rem; padding: 16px 18px 10px; }
+  .semafori { display: inline-flex; gap: 7px; }
+  .semafori i { width: 12px; height: 12px; border-radius: 99px; display: block; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.18); }
+  .semafori i:nth-child(1) { background: #FF5F57; } .semafori i:nth-child(2) { background: #FEBC2E; } .semafori i:nth-child(3) { background: #28C840; }
+  .marchio-pic { margin-left: auto; font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #CC0000; text-transform: uppercase; }
+  .profilo { width: 100%; display: flex; align-items: center; gap: .65rem; padding: .5rem .55rem; border-radius: 16px; transition: background-color .15s; }
+  .profilo:hover, .profilo[aria-expanded="true"] { background: rgba(255,255,255,.8); box-shadow: 0 1px 2px rgba(0,0,0,.05), inset 0 1px 0 #fff; }
+  #avatar { width: 38px; height: 38px; border-radius: 99px; background: linear-gradient(180deg, #3A3A3C, #1C1C1E); color: #fff; font-size: 13px; font-weight: 600; display: grid; place-items: center; flex: none; box-shadow: 0 0 0 2px #fff, 0 4px 10px -4px rgba(0,0,0,.45); }
+  .profilo-menu { position: absolute; left: 12px; right: 12px; top: calc(100% + 6px); z-index: 60; padding: 6px; }
+  .profilo-voce { width: 100%; display: flex; align-items: center; gap: .6rem; padding: .45rem .5rem; border-radius: 12px; text-align: left; font-size: 13px; color: #1F1F1F; }
+  .profilo-voce:hover { background: rgba(0,0,0,.04); }
+  .profilo-voce[aria-pressed="true"] { background: rgba(221,0,0,.07); }
+  .profilo-voce .av { width: 30px; height: 30px; border-radius: 99px; background: #EDEDED; color: #303030; font-size: 11px; font-weight: 600; display: grid; place-items: center; flex: none; }
+  .profilo-voce[aria-pressed="true"] .av { background: #DD0000; color: #fff; }
+  .profilo-voce b { font-weight: 600; } .profilo-voce small { display: block; color: #6B6B6B; font-size: 11px; }
+  .nav-titolo { font-size: 1.05rem; font-weight: 600; letter-spacing: -.01em; padding: 0 .75rem; margin: .4rem 0 .6rem; color: #1F1F1F; }
+  .nav-sub { display: flex; align-items: center; justify-content: space-between; font-size: .75rem; font-weight: 500; color: #8A8A8A; padding: 0 .75rem; margin: 1.25rem 0 .35rem; }
+  .nav-i { border-radius: 12px; padding: .5rem .7rem; font-size: .875rem; color: #3A3A3A; }
+  .nav-i:hover { background: rgba(255,255,255,.75); }
+  .nav-i[aria-current="page"] { background: #fff; color: #1F1F1F; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 18px -10px rgba(60,0,0,.35), inset 0 1px 0 #fff; }
+  .nav-i[aria-current="page"] > .bi:first-child { color: #DD0000; }
+  .nav-fare { width: 100%; display: flex; align-items: center; gap: .6rem; padding: .4rem .7rem; border-radius: 10px; font-size: .8125rem; color: #4A4A4A; text-align: left; }
+  .nav-fare:hover { background: rgba(255,255,255,.75); }
+  .nav-fare .bi { color: #8A8A8A; }
+  #colonna { background: rgba(255,255,255,.55); }
+  header { border-bottom-color: rgba(60,0,0,.06) !important; }
+  header #titolo { color: #6B6B6B; font-size: .875rem; font-weight: 500; }
+  .campo, #cerca-tutto { background: rgba(0,0,0,.035); border-color: transparent; box-shadow: inset 0 1px 2px rgba(0,0,0,.08); }
+  .campo:hover { border-color: rgba(0,0,0,.08); }
+  .campo:focus, #cerca-tutto:focus { background: #fff; box-shadow: 0 0 0 3px rgba(221,0,0,.14); }
+  h1.font-display { font-weight: 500 !important; letter-spacing: -.025em; }
+  .kpi-n { font-weight: 300 !important; letter-spacing: -.035em; }
+  body.menu-aperto #sidebar { z-index: 55; top: 8px; bottom: 8px; left: 8px; width: auto; border-radius: 26px; border: 1px solid rgba(255,255,255,.9); background: rgba(250,247,247,.97); }
   /* home: l'ufficio al centro */
-  .nav-i[aria-current="page"] .text-grigio { color: rgba(255,255,255,.82) !important; }
-  .sala-marchio > span:first-child { background: #fff !important; color: #CC0000 !important; box-shadow: 0 6px 14px -6px rgba(90,0,0,.5); }
-  .sala-marchio > span:nth-child(2) { color: #fff !important; }
-  .sala-marchio > span:nth-child(3) { color: rgba(255,255,255,.5) !important; }
   @media (min-width: 1024px) { .saluto-velo { background: radial-gradient(ellipse 100% 100% at 0 0, rgba(255,255,255,.5) 55%, rgba(255,255,255,0) 100%) !important; border-radius: 22px; } }
   .scena-vista { border-radius: 22px; }
+  /* la scena della Sala sta tutta nella finestra: la larghezza segue l'altezza dello schermo */
+  @media (min-width: 1024px) { .scena-vista { max-width: calc((100dvh - 250px) * 1.3); margin-inline: auto; } }
   .ufficio-home svg { display: block; width: 100%; height: auto; pointer-events: none; }
   .pillola { display: inline-flex; align-items: center; gap: .45rem; border-radius: 999px; padding: .4rem .8rem; font-size: .8125rem; font-weight: 600; background: rgba(255,255,255,.82); border: 1px solid rgba(255,255,255,.95); box-shadow: 0 8px 18px -10px rgba(90,0,0,.45), var(--luce); backdrop-filter: blur(14px) saturate(170%); -webkit-backdrop-filter: blur(14px) saturate(170%); color: #1F1F1F; }
   /* chi chiede meno trasparenze, o un browser senza sfocatura, vede superfici piene */
@@ -369,35 +405,29 @@
 <body>
 
 <div id="barra-demo" role="region" aria-label="Comandi della demo">
-  <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 px-4 sm:px-6 py-1.5">
-    <span class="text-[10px] font-bold tracking-wider uppercase bg-white text-inchiostro rounded-sm px-1.5 py-0.5">Demo</span>
-    <span class="text-xs text-white/70 hidden lg:inline">Dati di esempio: ricaricando la pagina si riparte da capo.</span>
-    <span class="text-xs text-white/70 hidden sm:inline sm:ml-auto">Guarda come:</span>
-    <div class="seg-demo order-last w-full sm:order-none sm:w-auto" role="group" aria-label="Chi sta usando il sistema">
-      <button data-a="ruolo" data-v="dir">Direzione</button>
-      <button data-a="ruolo" data-v="rt">Resp. tecnico</button>
-      <button data-a="ruolo" data-v="amm"><span class="sm:hidden">Ammin.</span><span class="hidden sm:inline">Amministrazione</span></button>
-      <button data-a="ruolo" data-v="tec">Tecnico</button>
-    </div>
-    <button class="demo-btn ml-auto sm:ml-0" data-a="guida" aria-pressed="true" title="Mostra o nasconde le righe gialle Prova"><i class="bi bi-lightbulb"></i>Suggerimenti</button>
+  <div class="demo-pillola">
+    <span class="text-[10px] font-bold tracking-wider uppercase bg-white text-inchiostro rounded-full px-2 py-0.5">Demo</span>
+    <span class="text-xs text-white/75 hidden md:inline">Dati di esempio: ricaricando la pagina si riparte da capo. Chi siete si sceglie dal profilo.</span>
+    <button class="demo-btn" data-a="guida" aria-pressed="true" title="Mostra o nasconde le righe gialle Prova"><i class="bi bi-lightbulb"></i>Suggerimenti</button>
     <button class="demo-btn" data-a="benvenuto"><i class="bi bi-question-circle"></i>Guida</button>
   </div>
 </div>
 <div id="app">
-  <aside id="sidebar" class="flex-col bg-white border-r border-linea h-full" aria-label="Menu principale">
-    <div class="px-5 h-16 flex items-center gap-2.5 border-b border-linea shrink-0">
-      <span class="w-8 h-8 rounded bg-petrolio text-white flex items-center justify-center"><i class="bi bi-shield-check"></i></span>
-      <div class="leading-tight">
-        <p class="font-display font-bold tracking-wide text-petrolio">PROGESI</p>
-        <p class="text-[0.65rem] uppercase tracking-wider text-grigio">Società di ingegneria · demo</p>
+  <aside id="sidebar" class="h-full" aria-label="Menu principale">
+    <div id="rail" aria-label="Sezioni"></div>
+    <div id="pannello">
+      <div class="finestra-top"><span class="semafori" aria-hidden="true"><i></i><i></i><i></i></span><span class="marchio-pic">Progesi</span></div>
+      <div class="relative px-3">
+        <button id="profilo" class="profilo" data-a="profilo" aria-expanded="false" aria-haspopup="menu" aria-label="Chi sta usando il sistema: cambia ruolo"><span id="avatar">GI</span><span class="flex-1 min-w-0 text-left leading-tight"><span class="block font-semibold text-sm truncate" id="utente-nome">Giorgio</span><span class="block text-xs text-grigio truncate" id="utente-ruolo">Direttore commerciale</span></span><i class="bi bi-chevron-expand text-grigio"></i></button>
+        <div id="profilo-menu" class="tendina profilo-menu hidden" role="menu" aria-label="Guarda la demo come">
+          <p class="text-[11px] text-grigio px-2 pt-1.5 pb-1">Guarda la demo come</p>
+          <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="dir"><span class="av">GI</span><span><b>Giorgio</b><small>Direzione</small></span></button>
+          <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="rt"><span class="av">RT</span><span><b>Responsabile tecnico</b><small>Socio, segue i tecnici</small></span></button>
+          <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="amm"><span class="av">EM</span><span><b>Elena Moretti</b><small>Amministrazione</small></span></button>
+          <button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="tec"><span class="av">PF</span><span><b>Paolo Ferri</b><small>Tecnico</small></span></button>
+        </div>
       </div>
-    </div>
-    <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-5" id="nav"></nav>
-    <div class="p-3 border-t border-linea shrink-0">
-      <div class="flex items-center gap-3 px-2 py-2">
-        <span id="avatar" class="w-9 h-9 rounded bg-inchiostro text-white text-sm font-bold flex items-center justify-center">GI</span>
-        <div class="leading-tight text-sm"><p class="font-bold" id="utente-nome">Giorgio</p><p class="text-grigio text-xs" id="utente-ruolo">Direttore commerciale</p></div>
-      </div>
+      <nav class="flex-1 overflow-y-auto px-3 py-3" id="nav"></nav>
     </div>
   </aside>
   <div id="velo-menu" class="fixed inset-0 bg-inchiostro/40 z-30" data-a="chiudi-menu"></div>
@@ -686,7 +716,7 @@ const ad = t => /^[aeiouAEIOU]/.test(t) ? 'ad' : 'a';
 const saluto = () => { const h = new Date().getHours(); return h >= 5 && h < 13 ? 'Buongiorno' : h >= 13 && h < 18 ? 'Buon pomeriggio' : 'Buonasera'; };
 const NOME = { dir: 'Giorgio', rt: '', amm: 'Elena', tec: 'Paolo' };
 function nuovoPrev(cliId, serv = 'dvr') { return { id: null, cli: cliId, righe: [{ serv, qty: 1, prezzo: srv(serv).prezzo }], sconto: 0, validita: 30, note: '' }; }
-const S = { view: 'home', ruolo: 'dir', costoH: 38, servSel: 'dvr', cliSel: 3, estratto: 'no', chiudi: null, perdi: null, doc: null, confOra: 0, prev: nuovoPrev(3), numPrev: 48, modo: 'gestionale', tabCont: 'prima', tabFatt: 'emesse', vistoIva: false, pacchetto: false, ob: false, migr: 2, cerca: '', filtro: 'tutti', kf: { tec: '', q: '' }, per: 'mese', perM: 12, oreMese: 0, oreFile: { timb: null, dich: null }, richiesta: null, mese: { fatt: 0, ore: 0 }, prossimaFt: 432, prossimaNc: 1, navAperti: {}, margDett: false };
+const S = { view: 'home', ruolo: 'dir', costoH: 38, servSel: 'dvr', cliSel: 3, estratto: 'no', chiudi: null, perdi: null, doc: null, confOra: 0, prev: nuovoPrev(3), numPrev: 48, modo: 'gestionale', tabCont: 'prima', tabFatt: 'emesse', vistoIva: false, pacchetto: false, ob: false, migr: 2, cerca: '', filtro: 'tutti', kf: { tec: '', q: '' }, per: 'mese', perM: 12, oreMese: 0, oreFile: { timb: null, dich: null }, richiesta: null, mese: { fatt: 0, ore: 0 }, prossimaFt: 432, prossimaNc: 1, margDett: false };
 
 /* ---------- calcoli ---------- */
 const lavori = (serv, per = 12) => [
@@ -778,8 +808,16 @@ const vede = v => !VISIBILI[S.ruolo] || VISIBILI[S.ruolo].includes(v);
 const modulo = t => `<span class="text-[0.6rem] font-bold uppercase text-grigio border border-[#C8C8C8] rounded-sm px-1 leading-4 whitespace-nowrap">${t}</span>`;
 const nota = (tag, t) => `<div class="card p-4 mb-5 flex flex-wrap gap-x-3 gap-y-2 items-center text-sm"><span class="chip c-pieno">${tag}</span><p class="text-grigio">${t}</p></div>`;
 
-// un gruppo lungo del menu della direzione parte chiuso, salvo che ci siate dentro; si apre e chiude a mano
-const aperto = (g, items) => S.navAperti[g] ?? (S.ruolo !== 'dir' || items.length <= 4 || items.some(([v]) => v === S.view));
+// sezioni della barra scura: ognuna apre le sue pagine nella barra laterale
+const VOCI = Object.fromEntries(NAV.flatMap(([, l]) => l.map(([v, ico, t, mod]) => [v, { ico, t, mod }])));
+const SEZ = [
+  { id: 'home', ico: 'bi-speedometer2', nome: 'Controllo di gestione', viste: ['home'] },
+  { id: 'comm', ico: 'bi-briefcase', nome: 'Commerciale', viste: ['ordini', 'trattative', 'clienti', 'contratti'] },
+  { id: 'lav', ico: 'bi-tools', nome: 'Lavori e margini', viste: ['pianifica', 'margini'] },
+  { id: 'amm', ico: 'bi-calculator', nome: 'Amministrazione', viste: ['contabilita', 'fatture', 'incassi', 'banca', 'fornitori', 'ore'] },
+  { id: 'imp', ico: 'bi-gear', nome: 'Impostazioni e sicurezza', viste: ['impostazioni', 'sicurezza'], giu: true },
+];
+const sezDi = v => SEZ.find(z => z.viste.includes(v)) || SEZ[0];
 function renderNav() {
   const tec = S.ruolo === 'tec';
   // urgenti: fatture scadute senza sollecito, fatture scartate dallo SdI, pagamenti entro 7 giorni
@@ -798,14 +836,18 @@ function renderNav() {
     fatture: SCARTI.length + PASSIVE.filter(x => !x.registrata).length + ORDINI.filter(o => o.stato === 'chiuso').length + (ncDi(NC_RICH.ft).length ? 0 : 1),
     contabilita: daPagare().filter(x => x.scad <= 7).length,
   };
+  const att = sezDi(S.view).id, sezioni = SEZ.map(z => ({ ...z, l: z.viste.filter(v => vede(v)) })).filter(z => z.l.length);
+  const voce = v => { const { ico, t, mod } = VOCI[v]; return `<li><button class="nav-i" data-a="vai" data-v="${v}" ${S.view === v ? 'aria-current="page"' : ''}><i class="bi ${ico}"></i>${t}${mod ? `<span class="${badge[v] ? 'ml-1' : 'ml-auto'}">${modulo(mod)}</span>` : ''}${badge[v] ? `<span class="badge ${urgente[v] ? '' : 'calmo'}" aria-label="${badge[v]} da guardare${urgente[v] ? ', urgente' : ''}">${badge[v]}</span>` : ''}</button></li>`; };
+  const tasto = z => { const n = sum(z.l, v => badge[v] || 0), u = z.l.some(v => badge[v] && urgente[v]); return `<button class="rail-b" data-a="vai" data-v="${z.l[0]}" ${z.id === att ? 'aria-current="true"' : ''} title="${z.nome}" aria-label="${z.nome}${n ? `, ${n} da guardare` : ''}"><i class="bi ${z.ico}"></i>${n && z.id !== att ? `<span class="rail-n ${u ? 'urg' : ''}">${n}</span>` : ''}</button>`; };
+  const logo = '<span class="rail-logo" title="Progesi" aria-hidden="true"><i class="bi bi-shield-check"></i></span>';
+  $('#rail').innerHTML = tec ? `<div class="rail-capsula">${logo}<button class="rail-b" aria-current="true" title="I miei lavori" aria-label="I miei lavori"><i class="bi bi-tools"></i></button></div>`
+    : `<div class="rail-capsula">${logo}${sezioni.filter(z => !z.giu).map(tasto).join('')}</div>${sezioni.some(z => z.giu) ? `<div class="rail-capsula giu">${sezioni.filter(z => z.giu).map(tasto).join('')}</div>` : ''}`;
   $('#nav').innerHTML = tec
-    ? `<ul><li><button class="nav-i" aria-current="page"><i class="bi bi-tools"></i>I miei lavori</button></li></ul>
-       <p class="px-3 text-xs text-grigio leading-relaxed"><i class="bi bi-phone"></i> Il tecnico vede solo i suoi lavori, anche da telefono. Niente prezzi, niente margini.</p>`
-    : NAV.map(([g, tutte]) => { const items = tutte.filter(([v]) => vede(v)); if (!items.length) return '';
-      const chiuso = g && !aperto(g, items), n = sum(items, ([v]) => badge[v] || 0), urg = items.some(([v]) => badge[v] && urgente[v]);
-      return `<div>${g ? `<button class="nav-g" data-a="nav-gruppo" data-v="${g}" aria-expanded="${!chiuso}"><i class="bi bi-chevron-${chiuso ? 'right' : 'down'} text-[0.65rem]"></i>${g}${chiuso ? `<span class="font-normal normal-case tracking-normal text-grigio whitespace-nowrap">${items.length} voci</span>${n ? `<span class="badge ${urg ? '' : 'calmo'}" aria-label="${n} da guardare">${n}</span>` : ''}` : ''}</button>` : ''}
-      <ul class="space-y-0.5" ${chiuso ? 'hidden' : ''}>${items.map(([v, ico, t, mod]) => `<li><button class="nav-i" data-a="vai" data-v="${v}" ${S.view === v ? 'aria-current="page"' : ''}><i class="bi ${ico}"></i>${t}${mod ? `<span class="${badge[v] ? 'ml-1' : 'ml-auto'}">${modulo(mod)}</span>` : ''}${badge[v] ? `<span class="badge ${urgente[v] ? '' : 'calmo'}" aria-label="${badge[v]} da guardare${urgente[v] ? ', urgente' : ''}">${badge[v]}</span>` : ''}</button></li>`).join('')}</ul></div>`; }).join('') +
-      (S.ruolo === 'dir' ? `<p class="px-3 text-xs text-grigio leading-relaxed">Le voci senza etichetta sono la proposta base. ${modulo('CRM')} si aggiunge con la proposta con CRM, ${modulo('Opzionale')} si sceglie a parte.</p>` : `<p class="px-3 text-xs text-grigio leading-relaxed"><i class="bi bi-person-lock"></i> ${RUOLO[S.ruolo][1]} vede solo le pagine del suo lavoro.</p>`);
+    ? `<p class="nav-titolo">I miei lavori</p><ul><li><button class="nav-i" aria-current="page"><i class="bi bi-tools"></i>I miei lavori</button></li></ul>
+       <p class="px-3 mt-4 text-xs text-grigio leading-relaxed"><i class="bi bi-phone"></i> Il tecnico vede solo i suoi lavori, anche da telefono. Niente prezzi, niente margini.</p>`
+    : sezioni.map(z => { const fare = avvisi().filter(e => z.id === 'home' || z.viste.includes(e.go));
+      return `<div data-sez="${z.id}" ${z.id === att ? '' : 'hidden'}><p class="nav-titolo">${z.nome}</p><ul class="space-y-0.5">${z.l.map(voce).join('')}</ul>${fare.length ? `<p class="nav-sub">Da fare<span class="badge calmo !ml-0">${fare.length}</span></p><ul class="space-y-0.5">${fare.slice(0, 5).map(e => `<li><button class="nav-fare" data-a="vai" data-v="${e.go}"><i class="bi ${e.ico}"></i><span class="truncate">${e.tit}</span></button></li>`).join('')}</ul>` : ''}</div>`; }).join('') +
+      (S.ruolo === 'dir' ? `<p class="px-3 mt-6 text-xs text-grigio leading-relaxed">Le voci senza etichetta sono la proposta base. ${modulo('CRM')} si aggiunge con la proposta con CRM, ${modulo('Opzionale')} si sceglie a parte.</p>` : `<p class="px-3 mt-6 text-xs text-grigio leading-relaxed"><i class="bi bi-person-lock"></i> ${RUOLO[S.ruolo][1]} vede solo le pagine del suo lavoro.</p>`);
   document.querySelectorAll('[data-a="ruolo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.ruolo));
   document.querySelectorAll('[data-a="modo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.modo));
   document.querySelectorAll('.modo-seg').forEach(x => x.classList.toggle('!hidden', tec));
@@ -836,7 +878,7 @@ function render(nuova) {
   glossa($('#vista'));
 }
 const prova = t => S.guida === false ? '' : `<p class="prova-riga mb-5 text-sm text-ambra bg-arancio-velo border border-arancio/40 rounded px-3.5 py-2.5 flex gap-2"><i class="bi bi-hand-index"></i><span><strong>Prova:</strong> ${t}</span></p>`;
-const kpi = (label, val, sub = '', cls = '', az = '', box = '', extra = '') => { const corpo = `<span class="flex items-start justify-between gap-2 text-sm text-grigio"><span>${label}</span>${az ? '<i class="bi bi-arrow-up-right text-xs mt-1 opacity-60 group-hover:opacity-100 transition-opacity"></i>' : ''}</span><span class="block font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3 text-[1.6rem] sm:text-[2rem] xl:text-[2.4rem] ${cls}">${val}</span>${sub ? `<span class="block text-xs sm:text-sm mt-2.5 text-grigio">${sub}</span>` : ''}${extra}`;
+const kpi = (label, val, sub = '', cls = '', az = '', box = '', extra = '') => { const corpo = `<span class="flex items-start justify-between gap-2 text-sm text-grigio"><span>${label}</span>${az ? '<i class="bi bi-arrow-up-right text-xs mt-1 opacity-60 group-hover:opacity-100 transition-opacity"></i>' : ''}</span><span class="kpi-n block font-display font-medium tabular-nums whitespace-nowrap leading-none mt-3 text-[1.7rem] sm:text-[2.2rem] xl:text-[2.6rem] ${cls}">${val}</span>${sub ? `<span class="block text-xs sm:text-sm mt-2.5 text-grigio">${sub}</span>` : ''}${extra}`;
   return az ? `<button type="button" class="group card p-4 sm:p-6 text-left w-full hover:border-white transition-colors ${box}" data-a="dettaglio" data-v="${az}" aria-label="${label}: apri il dettaglio">${corpo}</button>` : `<div class="card p-4 sm:p-6 ${box}">${corpo}</div>`; };
 // arco del margine, come un indicatore: pieno al 60% del fatturato, la tacca segna l'obiettivo
 const arco = (q, obiettivo) => { const v = Math.max(0, Math.min(1, q / .6)) * 100, o = Math.max(0, Math.min(1, obiettivo / .6)) * Math.PI, ox = 100 - Math.cos(o) * 80, oy = 100 - Math.sin(o) * 80;
@@ -1182,7 +1224,8 @@ function cercaTutto(q) {
   add('Fornitori', 'fornitori', FORN.filter(f => has(`${f.forn} ${f.cosa}`)).map(f => riga('vai', 'fornitori', esc(f.forn), `${esc(f.cosa)} · ${eur(f.imp)}`)));
   return `<div class="p-1.5 max-h-[60vh] overflow-y-auto">${gruppi.join('') || `<p class="px-3 py-4 text-sm text-grigio">Niente trovato per "${esc(q)}".</p>`}</div>`;
 }
-function chiudiTendine() { $('#risultati').classList.add('hidden'); $('#avvisi').classList.add('hidden'); $('#avvisi-btn').setAttribute('aria-expanded', 'false'); }
+function chiudiTendine() { $('#risultati').classList.add('hidden'); $('#avvisi').classList.add('hidden'); $('#avvisi-btn').setAttribute('aria-expanded', 'false'); $('#profilo-menu').classList.add('hidden'); $('#profilo').setAttribute('aria-expanded', 'false'); }
+document.addEventListener('click', e => { if (!e.target.closest?.('#profilo, #profilo-menu')) { $('#profilo-menu')?.classList.add('hidden'); $('#profilo')?.setAttribute('aria-expanded', 'false'); } });
 function scarica(nome, righe) {
   const csv = '\ufeff' + righe.map(r => r.map(v => { const t = String(v ?? ''); return /[;"\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t; }).join(';')).join('\r\n');
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); a.download = nome + '.csv';
@@ -1247,7 +1290,7 @@ const VISTE = {
           <span class="w-10 h-10 rounded bg-white border border-linea text-petrolio flex items-center justify-center shrink-0"><i class="bi ${e.ico}"></i></span>
           <span class="flex-1 min-w-0"><span class="block font-medium">${e.tit}</span><span class="block text-sm text-grigio">${e.sub}</span></span><i class="bi bi-chevron-right text-grigio text-xs transition-transform group-hover:translate-x-0.5"></i></button></li>`).join('') || '<li class="p-4 text-sm text-grigio">Niente in sospeso.</li>'}</ul></div>
     </div>
-    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 mb-5">
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 mb-5 items-start">
       ${kpi('Ordini fornitori', eur(P.forn), S.per === 'mese' ? `${FORN.length} ordini del mese` : 'a consuntivo, mese per mese', '', 'forn')}
       ${kpi('Costo delle ore interne', eur(P.cOre), S.per === 'mese' ? `${nf(m.ore, 1)} ore × ${eur(S.costoH)}` : 'ore dei tecnici e dei soci', '', 'ore')}
       <div class="card p-6 flex flex-col col-span-2"><div class="flex items-center justify-between gap-3 mb-1"><p class="font-bold">Ultimi sei mesi</p>
@@ -1546,7 +1589,7 @@ const AZ_ = {
   dettaglio: v => dettaglio(v),
   'vai-chiudi': v => { chiudiModale(); vai(v); },
   'marg-dett': () => { S.margDett = !S.margDett; render(); },
-  'nav-gruppo': v => { const items = NAV.find(([g]) => g === v)[1].filter(([x]) => vede(x)); S.navAperti[v] = !aperto(v, items); renderNav(); },
+  profilo: () => { const m = $('#profilo-menu'), aperto = m.classList.contains('hidden'); m.classList.toggle('hidden', !aperto); $('#profilo').setAttribute('aria-expanded', aperto); },
   guida: () => { S.guida = S.guida === false; render(); },
   benvenuto: () => benvenuto(),
   'benvenuto-ruolo': v => { chiudiModale(); S.modo = 'gestionale'; S.view = 'home'; AZ_.ruolo(v); },
