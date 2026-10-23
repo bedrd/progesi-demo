@@ -53,6 +53,17 @@ const { CHROME, URL_DEMO } = require('./config');
   ok('sala: niente decisioni già prese nel gestionale', !ids.some(id => ['prev-traf', 'rich-1', 'rinn-1', 'pian-3', 'pian-4', 'inc-estratto', 'inc-dub-426', 'ore-file'].includes(id)), ids.join(','));
   ok('sala: il diario racconta il giro', await p.evaluate(() => ['P-2026-048', 'FT 432', 'FT 426'].every(t => SALA.stato.feed.some(f => f.txt.includes(t)))));
   await clic('header [data-a="modo"][data-v="gestionale"]'); ok('ritorno al gestionale nella stessa pagina', (await p.evaluate(() => document.querySelector('#titolo').textContent)) === 'Controllo di gestione');
+  // B3: la guida dice dove si sceglie il ruolo
+  const guida = await p.evaluate(() => { AZ_.benvenuto(); const t = document.querySelector('#modale').innerText; chiudiModale(); return t; });
+  ok('guida: il ruolo si sceglie dal profilo', guida.includes('Dal profilo') && !guida.includes('barra scura') && guida.includes('Ricomincia'));
+  // A4: Ricomincia, con conferma, riporta tutto com'era all'apertura
+  ok('ricomincia: pulsante nella barra della demo', await p.evaluate(() => !!document.querySelector('#barra-demo [data-a="ricomincia"]')));
+  await clic('#barra-demo [data-a="ricomincia"]'); ok('ricomincia: chiede conferma', (await p.evaluate(() => document.querySelector('#modale-t')?.textContent)) === 'Ricominciare la demo?');
+  await Promise.all([p.waitForNavigation({ waitUntil: 'networkidle0' }), p.evaluate(() => document.querySelector('#modale [data-a="ricomincia"][data-v="si"]').click())]); await pausa(500);
+  const dopo = await p.evaluate(() => ({ fatt: mese().fatt, ordini: ORDINI.some(o => o.num === 'P-2026-048'), ft: FATT.some(f => f.n === 432), dec: SALA.decisioni().length, toast: document.querySelector('#toast-t').textContent, guida: !!document.querySelector('#modale').innerHTML }));
+  ok("ricomincia: dati come all'apertura", dopo.fatt === 96400 && !dopo.ordini && !dopo.ft && dopo.dec >= 13, JSON.stringify(dopo));
+  ok('ricomincia: toast e niente benvenuto', dopo.toast.includes('Demo ricominciata') && !dopo.guida, dopo.toast);
+  ok('ricomincia: console ancora 44/44', logs.filter(l => l.includes('44/44')).length >= 2);
   await p.setViewport({ width: 390, height: 844 }); await ruolo('tec'); ok('telefono: largo 390', await p.evaluate(() => document.documentElement.scrollWidth) <= 390);
   console.log(esiti.join('\n')); console.log('ERRORI:', errs.length ? errs : 'nessuno');
   await b.close();
