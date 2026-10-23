@@ -351,6 +351,7 @@
   #barra-demo { background: transparent; display: flex; justify-content: center; padding: 8px 12px; }
   .demo-pillola { display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .25rem .6rem; background: rgba(30,6,6,.4); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 4px 6px; box-shadow: inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); }
   .demo-btn { border-radius: 999px; }
+  @media (max-width: 639px) { .demo-pillola { gap: .2rem .25rem; flex-wrap: nowrap; } .demo-btn { padding: .25rem .4rem; gap: .25rem; } }
   #app { margin: 0 14px 14px; border-radius: 30px; background: linear-gradient(135deg, rgba(255,255,255,.34) 0%, rgba(255,255,255,0) 38%), linear-gradient(160deg, rgba(255,250,248,.6), rgba(255,244,240,.48)); border: 1px solid rgba(255,255,255,.5); box-shadow: 0 50px 90px -40px rgba(50,0,0,.9), 0 2px 6px rgba(60,0,0,.15), inset 0 1px 0 rgba(255,255,255,.95), inset 1px 0 0 rgba(255,255,255,.45), inset 0 0 0 1px rgba(255,255,255,.18), inset 0 -1px 0 rgba(255,255,255,.25); backdrop-filter: blur(56px) saturate(190%) brightness(1.05); -webkit-backdrop-filter: blur(56px) saturate(190%) brightness(1.05); }
   /* la grana del vetro smerigliato: si vede dove il vetro è scoperto, mai sopra i riquadri */
   #app::after { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 180px; opacity: .09; mix-blend-mode: soft-light; }
@@ -573,7 +574,8 @@
 <div id="barra-demo" role="region" aria-label="Comandi della demo">
   <div class="demo-pillola">
     <span class="text-[10px] font-bold tracking-wider uppercase bg-white text-inchiostro rounded-full px-2 py-0.5">Demo</span>
-    <span class="text-xs text-white/75 hidden md:inline">Dati di esempio: ricaricando la pagina si riparte da capo. Chi siete si sceglie dal profilo.</span>
+    <span class="text-xs text-white/75 hidden md:inline">Dati di esempio. Chi siete si sceglie dal profilo.</span>
+    <button class="demo-btn" data-a="ricomincia" title="Riporta la demo com&#39;era all&#39;apertura"><i class="bi bi-arrow-counterclockwise"></i>Ricomincia</button>
     <button class="demo-btn" data-a="guida" aria-pressed="true" title="Mostra o nasconde le righe gialle Prova"><i class="bi bi-lightbulb"></i>Suggerimenti</button>
     <button class="demo-btn" data-a="benvenuto"><i class="bi bi-question-circle"></i>Guida</button>
   </div>
@@ -962,7 +964,7 @@ const vede = v => !VISIBILI[S.ruolo] || VISIBILI[S.ruolo].includes(v);
 const modulo = t => `<span class="text-[0.6rem] font-bold uppercase text-grigio border border-[#C8C8C8] rounded-sm px-1 leading-4 whitespace-nowrap">${t}</span>`;
 const nota = (tag, t) => `<p class="mb-4 flex flex-wrap gap-x-2 gap-y-1 items-center text-sm text-grigio"><span class="chip c-pieno">${tag}</span>${t}</p>`;
 
-// sezioni della barra scura: ognuna apre le sue pagine nella barra laterale
+// sezioni della barra alta: ognuna apre le sue pagine nelle pillole sotto
 const VOCI = Object.fromEntries(NAV.flatMap(([, l]) => l.map(([v, ico, t, mod]) => [v, { ico, t, mod }])));
 const SEZ = [
   { id: 'home', ico: 'bi-speedometer2', nome: 'Controllo di gestione', viste: ['home'] },
@@ -1110,10 +1112,10 @@ function benvenuto() {
     <p class="text-base">Preventivi, lavori, fatture, banca e contabilità in un posto solo. Gli agenti preparano il lavoro, voi decidete.</p>
     <p class="font-bold mt-5">Come si usa questa demo</p>
     <ul class="mt-2 space-y-2">
-      <li class="flex gap-2.5"><i class="bi bi-person-badge text-grigio mt-0.5"></i><span>Nella <strong>barra scura in alto</strong> scegliete chi siete: ognuno vede solo le pagine del suo lavoro.</span></li>
+      <li class="flex gap-2.5"><i class="bi bi-person-badge text-grigio mt-0.5"></i><span>Dal <strong>profilo</strong>, in alto a destra (sul telefono è nella barra in basso), scegliete chi siete: ognuno vede solo le pagine del suo lavoro.</span></li>
       <li class="flex gap-2.5"><i class="bi bi-hand-index text-grigio mt-0.5"></i><span>Le <strong>righe gialle "Prova"</strong> dicono cosa cliccare in ogni pagina. Si spengono da <strong>Suggerimenti</strong>.</span></li>
       <li class="flex gap-2.5"><i class="bi bi-chat-square-text text-grigio mt-0.5"></i><span>Le <span class="border-b border-dotted border-[#555]">parole sottolineate a puntini</span> hanno la spiegazione: passateci sopra, o toccatele da telefono.</span></li>
-      <li class="flex gap-2.5"><i class="bi bi-arrow-counterclockwise text-grigio mt-0.5"></i><span>I dati sono di esempio: ricaricando la pagina si riparte da capo. Questa guida si riapre da <strong>Guida</strong>.</span></li>
+      <li class="flex gap-2.5"><i class="bi bi-arrow-counterclockwise text-grigio mt-0.5"></i><span>I dati sono di esempio: <strong>Ricomincia</strong>, nella barra in alto, riporta tutto com'era all'apertura. Questa guida si riapre da <strong>Guida</strong>.</span></li>
     </ul>
     <p class="font-bold mt-5">Da dove volete partire?</p>
     <div class="grid sm:grid-cols-2 gap-2 mt-2">${ordine.map(k => { const [ic, t, d] = PARTENZE[k]; return `<button class="text-left rounded border border-linea bg-white hover:border-grafite px-3.5 py-3 flex gap-3 items-start transition-colors" data-a="benvenuto-ruolo" data-v="${k}"><i class="bi ${ic} text-lg text-grigio"></i><span><span class="block font-bold">${t}</span><span class="block text-grigio">${d}</span></span></button>`; }).join('')}</div>
@@ -1764,6 +1766,9 @@ const AZ_ = {
   profilo: () => { const m = $('#profilo-menu'), aperto = m.classList.contains('hidden'); m.classList.toggle('hidden', !aperto); $('#profilo').setAttribute('aria-expanded', aperto); },
   guida: () => { S.guida = S.guida === false; render(); },
   benvenuto: () => benvenuto(),
+  // Ricomincia: dopo la conferma la pagina riparte con i dati di partenza (tutto lo stato è in memoria)
+  ricomincia: v => { if (v === 'si') { try { sessionStorage.setItem('progesi-ricomincia', '1'); } catch (e) {} location.reload(); return; }
+    apriModale('Ricominciare la demo?', `<div class="px-5 sm:px-6 py-5 text-sm"><p>Tutto quello che avete fatto in questa demo torna com'era all'apertura: preventivi, fatture, decisioni degli agenti e numeri.</p></div><div class="flex flex-wrap justify-end gap-2 px-5 sm:px-6 py-4 border-t border-linea"><button class="btn btn-sec" data-a="chiudi-modale">Annulla</button><button class="btn btn-pri" data-a="ricomincia" data-v="si"><i class="bi bi-arrow-counterclockwise"></i>Ricomincia</button></div>`); },
   'benvenuto-ruolo': v => { chiudiModale(); S.modo = 'gestionale'; S.view = 'home'; AZ_.ruolo(v); },
   normativa: () => apriModale('Aggiornamenti normativi', `<div class="px-5 sm:px-6 py-5 max-h-[70vh] overflow-y-auto">${normativaCorpo()}</div><div class="flex justify-end px-5 sm:px-6 py-4 border-t border-linea"><button class="btn btn-sec" data-a="chiudi-modale">Chiudi</button></div>`, true),
   esporta: v => ESPORTA[v](),
@@ -2864,6 +2869,7 @@ render(true);
 check();
 SALA.avvia();
 { let visto = false; try { visto = !!localStorage.getItem('progesi-benvenuto'); } catch (e) {} if (!visto && !navigator.webdriver) benvenuto(); }
+{ let rifatta = false; try { rifatta = !!sessionStorage.getItem('progesi-ricomincia'); sessionStorage.removeItem('progesi-ricomincia'); } catch (e) {} if (rifatta) setTimeout(() => toast("Demo ricominciata: tutto è com'era all'apertura."), 250); }
 </script>
 </body>
 </html>

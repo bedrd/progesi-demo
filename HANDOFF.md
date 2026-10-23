@@ -2,6 +2,14 @@
 
 Questo file serve a chi riprende il lavoro, persona o Claude, per avere tutta la situazione senza rileggere le call. Aggiornato al 22 ottobre 2026. Quando cambiate qualcosa di importante, aggiornatelo nello stesso commit.
 
+## Novità del 23 ottobre (ramo `ricomincia-e-guida`)
+
+Progesi è diventata lo standard per le demo Altalogik (repo `demo-altalogik`: `_reference/progesi/`, `_stile/DESIGN.md`, `_stile/CHECKLIST.md`). Mancavano due punti della checklist, ora fatti:
+- **Ricomincia** (A4): nella barra della demo, prima di Suggerimenti. Chiede conferma ("Ricominciare la demo?"), poi la pagina riparte con i dati di partenza e un toast dice "Demo ricominciata". Nel codice: azione `ricomincia`, segnale in `sessionStorage` (`progesi-ricomincia`) letto all'avvio. Il benvenuto non ricompare.
+- **Benvenuto** (B3): dice di scegliere il ruolo "dal profilo, in alto a destra (sul telefono è nella barra in basso)" e che Ricomincia riporta tutto all'apertura. Prima diceva ancora "barra scura in alto".
+- La frase della barra della demo ora è "Dati di esempio. Chi siete si sceglie dal profilo."; su telefono la pillola sta su una riga anche a 360 px.
+- Test: `giro.js` prova la guida e il reset dopo il giro completo (39 controlli); in tutto 141 OK.
+
 ## Novità del 22 ottobre (ramo `stile-liquido`): nuovo stile a vetro liquido
 
 - **Cosa**: tutto il software ha un nuovo stile, ispirato al vetro liquido dell'iPhone e a un post di riferimento (Domus, smart home dashboard), con i colori di Progesi. Sostituisce la vecchia variante vetro.
@@ -289,7 +297,7 @@ npm test
 - I test usano `puppeteer-core` con il Chrome installato. Il percorso si trova da solo su Windows, Mac e Linux; altrimenti impostate `CHROME_PATH`.
 - Per provare il sito online: `node giro.js https://progesi-demo-b376.netlify.app`.
 - **Gli script**:
-  - `giro.js`: il giro di presentazione completo (33 controlli);
+  - `giro.js`: il giro di presentazione completo, più guida e Ricomincia (39 controlli);
   - `sala-test.js`: la Sala agenti, con routine e da guardare, stanze a fuoco e nastro (31 controlli);
   - `amm-test.js`: l'amministrazione dal primo all'ultimo passo, più gli aggiornamenti normativi, più barra della demo, benvenuto, parole spiegate, nota di credito, menu, numerini, margini, prezzo consigliato, Spotlight, icone sottili e barra del telefono, con le schermate a 1440 e 390 px in `test/shots/` (54 controlli);
   - `zoom-prova.js`: zoom libero della Sala, con pulsanti, rotella, trascinamento, tastiera e due dita su telefono (17 controlli);
@@ -313,7 +321,7 @@ npm test
 ## 11. Limiti noti e cose aperte
 
 **Limiti della demo, da dire in presentazione**
-- Niente salvataggio: ricaricando la pagina si torna ai dati di partenza.
+- Niente salvataggio: ricaricando la pagina, o con Ricomincia nella barra della demo, si torna ai dati di partenza.
 - Invii allo SdI, collegamento con la banca, email e PDF sono simulati. L'XML FatturaPA invece si scarica davvero ed è plausibile.
 - Il trascinamento nel kanban funziona solo da computer; su telefono ci sono i pulsanti.
 
