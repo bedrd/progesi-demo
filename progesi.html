@@ -567,6 +567,52 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   }
+  /* ================= menu laterale, come GHL: si apre e si chiude (da 1024 px) =================
+     Stesso vetro della finestra. In cima il logo e il pulsante, poi "Guarda la demo come", poi le pagine per sezione.
+     Chiuso resta largo 76 px con le sole icone. Sotto i 1024 px non c'è: si usa la barra in basso. */
+  .lato { display: none; }
+  @media (min-width: 1024px) {
+    #app { flex-direction: row !important; }
+    #app > #colonna { flex: 1 1 0; }
+    .lato { display: flex; flex-direction: column; gap: 10px; flex: none; width: 264px; padding: 14px 12px; border-right: 1px solid rgba(255,255,255,.55); background: linear-gradient(180deg, rgba(255,255,255,.44), rgba(255,255,255,.24)); border-radius: 30px 0 0 30px; overflow: hidden auto; scrollbar-width: none; transition: width .25s cubic-bezier(.2,.7,.3,1), padding .25s; }
+    .lato.chiuso { width: 76px; padding: 14px 10px; }
+    #rail.sezioni, .pagine, .barra-alta .marchio { display: none !important; }
+  }
+  .lato-top { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 2px 0 6px; }
+  .lato-top .logo-progesi { width: 128px; height: 36px; flex: none; }
+  .lato.chiuso .lato-top { flex-direction: column; gap: 8px; padding: 0; }
+  .lato.chiuso .lato-top .logo-progesi { width: 33px; background-size: 130px 36px; background-position: left center; }
+  .lato-chiudi { margin-left: auto; width: 34px; height: 34px; border-radius: 999px; display: grid; place-items: center; color: #3A3A3A; flex: none; transition: background-color .15s, color .15s; }
+  .lato-chiudi:hover { background: rgba(255,255,255,.7); color: #DD0000; }
+  .lato.chiuso .lato-chiudi { margin: 0; background: rgba(255,255,255,.55); }
+  .lato-utente { width: 100%; display: flex; align-items: center; gap: .6rem; padding: .5rem .55rem; border-radius: 16px; text-align: left; background: rgba(255,255,255,.6); box-shadow: inset 0 1px 0 #fff, 0 6px 14px -10px rgba(90,0,0,.45); transition: background-color .15s; }
+  .lato-utente:hover { background: rgba(255,255,255,.85); }
+  .lato-utente > .bi, .lato-utente > .ico { color: #6B6B6B; margin-left: auto; }
+  .lato.chiuso .lato-utente { padding: 4px; justify-content: center; background: transparent; box-shadow: none; }
+  .av-l { width: 36px; height: 36px; border-radius: 99px; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: #fff; background: linear-gradient(180deg, #3A3A3C, #1C1C1E); box-shadow: 0 0 0 2px rgba(255,255,255,.9); }
+  .lato-utente .chi { flex: 1; min-width: 0; line-height: 1.25; }
+  .lato-utente .chi small { display: block; font-size: 11px; color: #6B6B6B; }
+  .lato-utente .chi b { display: block; font-size: 13px; font-weight: 600; color: #1F1F1F; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lato-ruoli { margin-top: 6px; padding: 4px; border-radius: 16px; background: rgba(255,255,255,.82); box-shadow: inset 0 1px 0 #fff, 0 10px 24px -14px rgba(90,0,0,.45); }
+  .lato-menu { display: flex; flex-direction: column; gap: 6px; }
+  .lato-g { display: flex; flex-direction: column; gap: 2px; }
+  .lato-h { font-size: 12px; font-weight: 600; color: #6B6B6B; padding: 8px 10px 3px; }
+  .lato-sep { display: none; border: 0; border-top: 1px solid rgba(0,0,0,.08); margin: 6px 8px; }
+  .lato.chiuso .lato-sep { display: block; }
+  .lato-i { position: relative; display: flex; align-items: center; gap: .7rem; height: 40px; padding: 0 .7rem; border-radius: 12px; font-size: .875rem; font-weight: 500; color: #3A3A3A; text-align: left; white-space: nowrap; transition: background-color .15s, color .15s; }
+  .lato-i > .bi, .lato-i > .ico { font-size: 1.15rem; width: 1.25rem; text-align: center; flex: none; }
+  .lato-i:hover { background: rgba(255,255,255,.6); color: #1F1F1F; }
+  .lato-i[aria-current] { background: #fff; color: #1F1F1F; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 6px 16px -8px rgba(90,0,0,.45), inset 0 1px 0 #fff; }
+  .lato-i[aria-current] > .bi, .lato-i[aria-current] > .ico { color: #DD0000; }
+  .lato-i .mod { margin-left: auto; }
+  .lato-n { margin-left: auto; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; display: grid; place-items: center; font-size: 11px; font-weight: 700; background: rgba(0,0,0,.07); color: #3A3A3A; }
+  .lato-i .mod + .lato-n { margin-left: .35rem; }
+  .lato-n.urg { background: #B45309; color: #fff; }
+  .lato-giu { margin-top: auto; }
+  .lato.chiuso .t, .lato.chiuso .lato-h { display: none !important; }
+  .lato.chiuso .lato-i { width: 44px; padding: 0; margin: 0 auto; justify-content: center; }
+  .lato.chiuso .lato-n { position: absolute; top: 0; right: -3px; min-width: 16px; height: 16px; padding: 0 4px; font-size: 9px; }
+  @media (prefers-reduced-motion: reduce) { .lato { transition: none; } }
 </style>
 </head>
 <body>
@@ -574,13 +620,14 @@
 <div id="barra-demo" role="region" aria-label="Comandi della demo">
   <div class="demo-pillola">
     <span class="text-[10px] font-bold tracking-wider uppercase bg-white text-inchiostro rounded-full px-2 py-0.5">Demo</span>
-    <span class="text-xs text-white/75 hidden md:inline">Dati di esempio. Chi siete si sceglie dal profilo.</span>
+    <span class="text-xs text-white/75 hidden md:inline">Dati di esempio. Chi siete si sceglie da "Guarda la demo come", nel menu a sinistra.</span>
     <button class="demo-btn" data-a="ricomincia" title="Riporta la demo com&#39;era all&#39;apertura"><i class="bi bi-arrow-counterclockwise"></i>Ricomincia</button>
     <button class="demo-btn" data-a="guida" aria-pressed="true" title="Mostra o nasconde le righe gialle Prova"><i class="bi bi-lightbulb"></i>Suggerimenti</button>
     <button class="demo-btn" data-a="benvenuto"><i class="bi bi-question-circle"></i>Guida</button>
   </div>
 </div>
 <div id="app">
+  <aside id="lato" class="lato" aria-label="Menu"></aside>
   <div id="colonna" class="flex flex-col h-full min-h-0">
     <header class="barra-alta relative z-40 shrink-0 flex items-center gap-2 px-3 sm:px-4">
       <span class="marchio liquido"><span class="logo-progesi" role="img" aria-label="Progesi S.r.l., società di ingegneria"></span></span>
@@ -871,7 +918,7 @@ const ad = t => /^[aeiouAEIOU]/.test(t) ? 'ad' : 'a';
 const saluto = () => { const h = new Date().getHours(); return h >= 5 && h < 13 ? 'Buongiorno' : h >= 13 && h < 18 ? 'Buon pomeriggio' : 'Buonasera'; };
 const NOME = { dir: 'Giorgio', rt: '', amm: 'Elena', tec: 'Paolo' };
 function nuovoPrev(cliId, serv = 'dvr') { return { id: null, cli: cliId, righe: [{ serv, qty: 1, prezzo: srv(serv).prezzo }], sconto: 0, validita: 30, note: '' }; }
-const S = { view: 'home', ruolo: 'dir', costoH: 38, servSel: 'dvr', cliSel: 3, estratto: 'no', chiudi: null, perdi: null, doc: null, confOra: 0, prev: nuovoPrev(3), numPrev: 48, modo: 'gestionale', tabCont: 'prima', tabFatt: 'emesse', vistoIva: false, pacchetto: false, ob: false, migr: 2, cerca: '', filtro: 'tutti', kf: { tec: '', q: '' }, per: 'mese', perM: 12, oreMese: 0, oreFile: { timb: null, dich: null }, richiesta: null, mese: { fatt: 0, ore: 0 }, prossimaFt: 432, prossimaNc: 1, margDett: false };
+const S = { lato: (() => { let v = null; try { v = localStorage.getItem('progesi-lato'); } catch (e) {} return v ? v !== 'chiuso' : innerWidth >= 1280; })(), latoRuoli: false, view: 'home', ruolo: 'dir', costoH: 38, servSel: 'dvr', cliSel: 3, estratto: 'no', chiudi: null, perdi: null, doc: null, confOra: 0, prev: nuovoPrev(3), numPrev: 48, modo: 'gestionale', tabCont: 'prima', tabFatt: 'emesse', vistoIva: false, pacchetto: false, ob: false, migr: 2, cerca: '', filtro: 'tutti', kf: { tec: '', q: '' }, per: 'mese', perM: 12, oreMese: 0, oreFile: { timb: null, dich: null }, richiesta: null, mese: { fatt: 0, ore: 0 }, prossimaFt: 432, prossimaNc: 1, margDett: false };
 
 /* ---------- calcoli ---------- */
 const lavori = (serv, per = 12) => [
@@ -1004,6 +1051,7 @@ function renderNav() {
   const tab = (az, v, ico, t, cur, n = 0, u = false) => `<button class="tab-b" data-a="${az}" data-v="${v}" ${cur ? 'aria-current="true"' : ''} aria-label="${t}${n ? `, ${n} da guardare` : ''}"><i class="bi ${ico}"></i>${t}${n ? `<span class="tab-n ${u ? 'urg' : ''}">${n}</span>` : ''}</button>`;
   $('#tabbar').innerHTML = tec ? tab('vai', 'tecnico', 'bi-tools', 'I miei lavori', true) + tab('menu', '', 'bi-person', 'Profilo', false)
     : sezioni.filter(z => !z.giu).map(z => tab('vai', z.l[0], z.ico, TAB[z.id], S.modo !== 'sala' && z.id === att, sum(z.l, v => badge[v] || 0), z.l.some(v => badge[v] && urgente[v]))).join('') + tab('modo', 'sala', 'bi-people', 'Sala', S.modo === 'sala') + tab('menu', '', 'bi-person', 'Profilo', false);
+  renderLato(sezioni, badge, urgente, tec);
   $('#spot-btn').classList.toggle('hidden', tec);
   document.querySelectorAll('[data-a="ruolo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.ruolo));
   document.querySelectorAll('[data-a="modo"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.modo));
@@ -1015,6 +1063,22 @@ function renderNav() {
   $('#avvisi-n').textContent = n; $('#avvisi-n').classList.toggle('hidden', !n);
   $('#avvisi-box').classList.toggle('hidden', tec); $('#cerca-box').classList.toggle('!hidden', tec); $('#cerca-btn').classList.toggle('!hidden', tec);
 }
+// menu laterale, come in GHL: logo, "Guarda la demo come", le pagine per sezione; si apre e si chiude
+function renderLato(sezioni, badge, urgente, tec) {
+  const el = $('#lato'); if (!el) return;
+  el.classList.toggle('chiuso', !S.lato);
+  const [ini, nome, ruolo] = RUOLO[S.ruolo];
+  const voce = (v, az = 'vai', cur = S.modo !== 'sala' && S.view === v) => { const { ico, t, mod } = VOCI[v] || { ico: 'bi-tools', t: 'I miei lavori' }, n = badge[v] || 0;
+    return `<button class="lato-i" data-a="${az}" data-v="${v}" ${cur ? 'aria-current="page"' : ''} title="${t}" aria-label="${t}${n ? `, ${n} da guardare` : ''}"><i class="bi ${ico}"></i><span class="t">${t}</span>${mod ? `<span class="t mod">${modulo(mod)}</span>` : ''}${n ? `<span class="lato-n ${urgente[v] ? 'urg' : ''}">${n}</span>` : ''}</button>`; };
+  const sala = `<button class="lato-i" data-a="modo" data-v="sala" ${S.modo === 'sala' ? 'aria-current="page"' : ''} title="Sala agenti" aria-label="Sala agenti"><i class="bi bi-people"></i><span class="t">Sala agenti</span></button>`;
+  const gruppo = (z, extra = '') => `<div class="lato-g">${z.id !== 'home' ? `<p class="lato-h t">${NOMI_SEZ[z.id] || z.nome}</p><hr class="lato-sep">` : ''}${z.l.map(v => voce(v)).join('')}${extra}</div>`;
+  const ruoli = S.latoRuoli && S.lato ? `<div class="lato-ruoli" role="menu" aria-label="Guarda la demo come">${Object.entries(RUOLO).map(([k, [i, n, r]]) => `<button class="profilo-voce" role="menuitem" data-a="ruolo" data-v="${k}"><span class="av">${i}</span><span><b>${n}</b><small>${r}</small></span></button>`).join('')}</div>` : '';
+  el.innerHTML = `<div class="lato-top"><span class="logo-progesi" role="img" aria-label="Progesi S.r.l."></span><button class="lato-chiudi" data-a="lato" aria-expanded="${S.lato}" aria-label="${S.lato ? 'Chiudi il menu' : 'Apri il menu'}" title="${S.lato ? 'Chiudi il menu' : 'Apri il menu'}"><i class="bi ${S.lato ? 'bi-chevron-left' : 'bi-chevron-right'}"></i></button></div>
+    <div class="lato-chi"><button class="lato-utente" data-a="lato-ruoli" aria-expanded="${!!ruoli}" aria-haspopup="menu" title="Guarda la demo come: ${nome}, ${ruolo}. Cambia ruolo"><span class="av-l">${ini}</span><span class="t chi"><small>Guarda la demo come</small><b>${nome}</b><small>${ruolo}</small></span><i class="bi bi-chevron-expand t"></i></button>${ruoli}</div>
+    <nav class="lato-menu" aria-label="Pagine">${tec ? `<div class="lato-g">${voce('tecnico', 'vai', true)}</div>` : (() => { const g = sezioni.filter(z => !z.giu), h = g[0]?.id === 'home'; return (h ? gruppo(g[0], sala) : `<div class="lato-g">${sala}</div>`) + g.slice(h ? 1 : 0).map(z => gruppo(z)).join(''); })()}</nav>
+    ${tec ? '' : `<div class="lato-g lato-giu"><hr class="lato-sep !block">${sezioni.filter(z => z.giu).flatMap(z => z.l).map(v => voce(v)).join('')}</div>`}`;
+}
+const NOMI_SEZ = { comm: 'Commerciale', lav: 'Lavori e margini', amm: 'Amministrazione' };
 const avvisi = () => coda().filter(e => vede(e.go));
 function vai(view, p) {
   S.view = view; S.modo = 'gestionale'; chiudiTendine();
@@ -1112,7 +1176,7 @@ function benvenuto() {
     <p class="text-base">Preventivi, lavori, fatture, banca e contabilità in un posto solo. Gli agenti preparano il lavoro, voi decidete.</p>
     <p class="font-bold mt-5">Come si usa questa demo</p>
     <ul class="mt-2 space-y-2">
-      <li class="flex gap-2.5"><i class="bi bi-person-badge text-grigio mt-0.5"></i><span>Dal <strong>profilo</strong>, in alto a destra (sul telefono è nella barra in basso), scegliete chi siete: ognuno vede solo le pagine del suo lavoro.</span></li>
+      <li class="flex gap-2.5"><i class="bi bi-person-badge text-grigio mt-0.5"></i><span>Da <strong>Guarda la demo come</strong>, in cima al menu a sinistra, scegliete chi siete (anche dal profilo in alto a destra; sul telefono da Profilo, nella barra in basso): ognuno vede solo le pagine del suo lavoro.</span></li>
       <li class="flex gap-2.5"><i class="bi bi-hand-index text-grigio mt-0.5"></i><span>Le <strong>righe gialle "Prova"</strong> dicono cosa cliccare in ogni pagina. Si spengono da <strong>Suggerimenti</strong>.</span></li>
       <li class="flex gap-2.5"><i class="bi bi-chat-square-text text-grigio mt-0.5"></i><span>Le <span class="border-b border-dotted border-[#555]">parole sottolineate a puntini</span> hanno la spiegazione: passateci sopra, o toccatele da telefono.</span></li>
       <li class="flex gap-2.5"><i class="bi bi-arrow-counterclockwise text-grigio mt-0.5"></i><span>I dati sono di esempio: <strong>Ricomincia</strong>, nella barra in alto, riporta tutto com'era all'apertura. Questa guida si riapre da <strong>Guida</strong>.</span></li>
@@ -1444,7 +1508,7 @@ const VISTE = {
     const serie = [...TREND, { f: m.fatt, m: m.marg }], max = Math.max(...serie.map(x => x.f));
     return `<div class="flex flex-wrap items-end justify-between gap-4 mb-4"><div><h1 class="font-display font-medium text-[1.75rem] sm:text-[2.1rem] leading-tight">${saluto()}, ${NOME[S.ruolo] || NOME.dir}</h1><p class="text-grigio mt-1 max-w-[34rem]">I numeri ${P.label}, aggiornati a stamattina. Oggi li vedete solo con il bilancio del commercialista, ogni tre mesi.</p></div>
       <div class="seg" role="group" aria-label="Periodo">${[['mese', 'Mese'], ['trim', 'Ultimi 3 mesi'], ['anno', 'Da inizio anno']].map(([v, t]) => `<button data-a="per" data-v="${v}" aria-pressed="${S.per === v}">${t}</button>`).join('')}</div></div>
-    ${S.ruolo === 'dir' ? prova('passa in alto a <strong>Tecnico</strong>, chiudi il DVR di Cascina Rosa con le ore fatte, poi torna su <strong>Direzione</strong>. I quattro riquadri qui sotto si aprono nel dettaglio. Per gli aggiornamenti normativi: <strong>Impostazioni</strong>, primo riquadro.') : ''}
+    ${S.ruolo === 'dir' ? prova('da <strong>Guarda la demo come</strong>, in cima al menu, passa a <strong>Tecnico</strong>, chiudi il DVR di Cascina Rosa con le ore fatte, poi torna su <strong>Direzione</strong>. I quattro riquadri qui sotto si aprono nel dettaglio. Per gli aggiornamenti normativi: <strong>Impostazioni</strong>, primo riquadro.') : ''}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-3 sm:mb-4 scaglione">
       ${kpi(`Fatturato ${P.label}`, eur(P.f), 'dalle fatture elettroniche emesse', '', 'fatt', 'vetro-scuro', `<span class="flex items-end justify-between gap-2 h-12 mt-3" aria-hidden="true">${(() => { const lo = Math.min(...serie.map(x => x.f)); return serie.map((x, i) => `<span class="flex flex-col items-center justify-end gap-1 h-full flex-1"><span class="cresce block w-full max-w-[10px] rounded-full ${i === 5 ? 'bg-white' : 'bg-white/30'}" style="height:${Math.round(30 + 70 * (x.f - lo) / Math.max(1, max - lo))}%;animation-delay:${i * 50}ms"></span><span class="text-[10px] ${i === 5 ? 'text-white' : 'text-white/50'}">${MESI6[i].slice(0, 3)}</span></span>`).join(''); })()}</span>`)}
       ${kpi('Margine sulle commesse', eur(P.marg), 'prima dei costi fissi', '', 'marg', '', arco(P.marg / P.f, TARGET))}
@@ -1756,8 +1820,10 @@ const spegni = () => { ORDINI.forEach(o => o.nuovo = false); CONTRATTI.forEach(k
 const AZ_ = {
   menu: () => AZ_.profilo(),
   'chiudi-menu': () => document.body.classList.remove('menu-aperto'),
+  lato: () => { S.lato = !S.lato; S.latoRuoli = false; try { localStorage.setItem('progesi-lato', S.lato ? 'aperto' : 'chiuso'); } catch (e) {} renderNav(); },
+  'lato-ruoli': () => { if (!S.lato) { S.lato = true; S.latoRuoli = true; } else S.latoRuoli = !S.latoRuoli; renderNav(); },
   vai: (v, el) => vai(v, el.dataset.p),
-  ruolo: v => { S.ruolo = v; S.chiudi = null; chiudiTendine(); document.body.classList.remove('menu-aperto'); if (v !== 'tec' && (!vede(S.view) || S.view === 'home')) S.view = RUOLO[v][3]; render(true); $('#vista').scrollTop = 0; },
+  ruolo: v => { S.ruolo = v; S.latoRuoli = false; S.chiudi = null; chiudiTendine(); document.body.classList.remove('menu-aperto'); if (v !== 'tec' && (!vede(S.view) || S.view === 'home')) S.view = RUOLO[v][3]; render(true); $('#vista').scrollTop = 0; },
   per: v => { S.per = v; render(); },
   'per-marg': v => { S.perM = +v; render(); },
   dettaglio: v => dettaglio(v),
@@ -1913,7 +1979,7 @@ document.addEventListener('submit', e => {
   e.preventDefault();
   FORM[f.dataset.form](Object.fromEntries(new FormData(f)));
 });
-document.addEventListener('mousedown', e => { if (e.target.classList?.contains('modale-velo')) chiudiModale(); if (!e.target.closest?.('#avvisi-box, #cerca-box')) chiudiTendine(); });
+document.addEventListener('mousedown', e => { if (e.target.classList?.contains('modale-velo')) chiudiModale(); if (!e.target.closest?.('#avvisi-box, #cerca-box, #profilo-menu, #profilo, #tabbar')) chiudiTendine(); });
 // trascinare le schede del kanban
 let trascina = null;
 document.addEventListener('dragstart', e => { const t = e.target.closest?.('.tess[data-id]'); if (!t) return; trascina = +t.dataset.id; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', t.dataset.id); t.classList.add('opacity-50'); });
