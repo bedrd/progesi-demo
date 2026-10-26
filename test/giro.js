@@ -55,7 +55,15 @@ const { CHROME, URL_DEMO } = require('./config');
   await clic('header [data-a="modo"][data-v="gestionale"]'); ok('ritorno al gestionale nella stessa pagina', (await p.evaluate(() => document.querySelector('#titolo').textContent)) === 'Controllo di gestione');
   // B3: la guida dice dove si sceglie il ruolo
   const guida = await p.evaluate(() => { AZ_.benvenuto(); const t = document.querySelector('#modale').innerText; chiudiModale(); return t; });
-  ok('guida: il ruolo si sceglie dal profilo', guida.includes('Dal profilo') && !guida.includes('barra scura') && guida.includes('Ricomincia'));
+  ok('guida: il ruolo si sceglie da Guarda la demo come, nel menu a sinistra', guida.includes('Guarda la demo come') && guida.includes('menu a sinistra') && !guida.includes('barra scura') && guida.includes('Ricomincia'));
+  // il bug di Mihail: con clic veri del mouse il ruolo deve cambiare, dal menu laterale e dal profilo
+  const clicVero = async sel => { const r = await p.evaluate(sel => { const e = document.querySelector(sel); if (!e) return null; const x = e.getBoundingClientRect(); return [x.left + x.width / 2, x.top + x.height / 2]; }, sel); if (r) { await p.mouse.click(r[0], r[1]); await pausa(350); } return !!r; };
+  await clicVero('#lato [data-a="lato-ruoli"]'); await clicVero('#lato [data-a="ruolo"][data-v="tec"]'); const r1 = await p.evaluate(() => S.ruolo);
+  await clicVero('#profilo'); await clicVero('#profilo-menu [data-a="ruolo"][data-v="amm"]'); const r2 = await p.evaluate(() => S.ruolo);
+  await clicVero('#lato [data-a="lato-ruoli"]'); await clicVero('#lato [data-a="ruolo"][data-v="dir"]'); const r3 = await p.evaluate(() => S.ruolo);
+  ok('cambio ruolo con clic veri: menu laterale e profilo', r1 === 'tec' && r2 === 'amm' && r3 === 'dir', [r1, r2, r3].join(' > '));
+  await clicVero('#lato [data-a="lato"]'); const chiuso = await p.evaluate(() => [document.querySelector('#lato').getBoundingClientRect().width, localStorage.getItem('progesi-lato')]); await clicVero('#lato [data-a="lato"]');
+  ok('menu laterale: si chiude a icone e si riapre, la scelta resta', chiuso[0] < 90 && chiuso[1] === 'chiuso' && await p.evaluate(() => document.querySelector('#lato').getBoundingClientRect().width > 250), String(chiuso));
   // A4: Ricomincia, con conferma, riporta tutto com'era all'apertura
   ok('ricomincia: pulsante nella barra della demo', await p.evaluate(() => !!document.querySelector('#barra-demo [data-a="ricomincia"]')));
   await clic('#barra-demo [data-a="ricomincia"]'); ok('ricomincia: chiede conferma', (await p.evaluate(() => document.querySelector('#modale-t')?.textContent)) === 'Ricominciare la demo?');

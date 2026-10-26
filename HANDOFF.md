@@ -2,6 +2,19 @@
 
 Questo file serve a chi riprende il lavoro, persona o Claude, per avere tutta la situazione senza rileggere le call. Aggiornato al 22 ottobre 2026. Quando cambiate qualcosa di importante, aggiornatelo nello stesso commit.
 
+## Novità del 26 ottobre (ramo `menu-laterale`): menu a sinistra e cambio ruolo
+
+Feedback di Mihail: "col menu laterale è più semplice da navigare" e "non riesco a cambiare utente, vedo solo il portale come direzione". Il design resta com'è.
+- **Bug del cambio ruolo, corretto**: alla pressione del mouse (`mousedown`) si chiudevano tutte le tendine, compreso il menu "Guarda la demo come", e il clic sul ruolo andava perso. Succedeva a ogni larghezza, anche su telefono. I test non se ne accorgevano perché cambiavano ruolo da codice. Ora `#profilo-menu`, `#profilo` e `#tabbar` sono esclusi da quella chiusura, e `giro.js` prova il cambio ruolo con clic veri del mouse.
+- **Menu laterale, come in GHL** (`#lato`, `renderLato()`, da 1024 px in su), nello stesso vetro della finestra:
+  - in cima il logo e il pulsante per chiudere e aprire il menu (azione `lato`);
+  - sotto, **"Guarda la demo come"** con persona e ruolo: un clic apre l'elenco dei ruoli dentro il menu (azione `lato-ruoli`). Il profilo in alto a destra resta;
+  - poi Controllo di gestione e Sala agenti, e le pagine raggruppate per sezione (Commerciale, Lavori e margini, Amministrazione), con i numerini; in fondo Impostazioni e Sicurezza;
+  - chiuso resta largo 76 px con le sole icone e i numerini sull'angolo. La scelta resta in `localStorage` (`progesi-lato`); la prima volta parte aperto da 1280 px in su e chiuso sotto.
+- Da 1024 px in su la pillola delle sezioni e le pillole delle pagine in alto non si vedono più (restano nel DOM per i test), e nemmeno il logo nella barra alta, che è nel menu. Sotto i 1024 px non cambia niente: barra in basso e pillole.
+- Testi: la barra della demo, il benvenuto e la riga Prova della home dicono di scegliere il ruolo da "Guarda la demo come", nel menu a sinistra.
+- Test: 143 controlli OK.
+
 ## Novità del 23 ottobre (ramo `ricomincia-e-guida`)
 
 Progesi è diventata lo standard per le demo Altalogik (repo `demo-altalogik`: `_reference/progesi/`, `_stile/DESIGN.md`, `_stile/CHECKLIST.md`). Mancavano due punti della checklist, ora fatti:
