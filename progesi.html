@@ -277,20 +277,19 @@
      smerigliato con il bordo luminoso, angoli tondi e pillole, come il vetro dell'iPhone.
      Il rosso è il colore principale: sfondo, marchio, voce attiva e azioni. Grafici in grafite, errori e urgenze in ambra. */
   :root { --vetro: linear-gradient(160deg, rgba(255,255,255,.93) 0%, rgba(255,255,255,.78) 48%, rgba(255,255,255,.7) 100%); --vetro-forte: rgba(255,255,255,.9); --vetro-tenue: rgba(255,255,255,.5); --bordo-vetro: rgba(255,255,255,.85); --ombra-vetro: 0 1px 1px rgba(90,0,0,.06), 0 26px 50px -28px rgba(90,0,0,.6); --luce: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(255,255,255,.3); }
+  /* sfondo grigio fumo (richiesta di Mihail, 3 novembre): lo stesso della variante vetro di prima, grigio chiaro con luci tenui grigie e rosate */
   body {
     background:
-      radial-gradient(26rem 20rem at 16% 20%, rgba(255,255,255,.42), transparent 70%),
-      radial-gradient(34rem 26rem at 74% 26%, rgba(110,0,8,.6), transparent 70%),
-      radial-gradient(42rem 30rem at 28% 88%, rgba(255,146,36,.78), transparent 66%),
-      radial-gradient(30rem 24rem at 96% 96%, rgba(255,206,130,.6), transparent 70%),
-      radial-gradient(36rem 30rem at 56% 62%, rgba(255,70,70,.5), transparent 70%),
-      radial-gradient(22rem 18rem at 88% 58%, rgba(255,255,255,.22), transparent 70%),
-      linear-gradient(155deg, #EA161E 0%, #C00000 46%, #860207 100%);
+      radial-gradient(46rem 34rem at 95% -10%, rgba(221,0,0,.20), transparent 68%),
+      radial-gradient(40rem 32rem at 30% 55%, rgba(255,176,160,.34), transparent 70%),
+      radial-gradient(44rem 34rem at 8% 112%, rgba(90,100,125,.32), transparent 70%),
+      radial-gradient(30rem 26rem at 70% 105%, rgba(221,0,0,.14), transparent 70%),
+      linear-gradient(160deg, #F1EEEE, #E3E0E2);
     background-attachment: fixed;
   }
-  body::before, body::after { content: ''; position: fixed; z-index: 0; border-radius: 50%; filter: blur(70px); pointer-events: none; }
-  body::before { width: 30rem; height: 30rem; left: -6rem; top: 34vh; background: rgba(255,200,170,.35); }
-  body::after { width: 24rem; height: 24rem; right: 18vw; top: -6rem; background: rgba(90,0,6,.45); }
+  body::before, body::after { content: ''; position: fixed; z-index: 0; border-radius: 50%; filter: blur(60px); pointer-events: none; }
+  body::before { width: 34rem; height: 34rem; right: -8rem; top: 18vh; background: rgba(221,0,0,.10); }
+  body::after { width: 28rem; height: 28rem; left: 22vw; bottom: -10rem; background: rgba(70,80,110,.18); }
   #app { position: relative; z-index: 1; }
   /* il menu e il contenuto galleggiano sul rosso, staccati dai bordi */
   #sidebar > div { border-color: rgba(120,0,0,.08) !important; }
@@ -349,7 +348,7 @@
      Dentro: la barra scura delle sezioni, la barra laterale con il profilo e le pagine della sezione, il contenuto.
      Dentro la finestra il rosso è solo un accento: il pulsante principale, l'icona della voce attiva. */
   #barra-demo { background: transparent; display: flex; justify-content: center; padding: 8px 12px; }
-  .demo-pillola { display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .25rem .6rem; background: rgba(30,6,6,.4); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 4px 6px; box-shadow: inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); }
+  .demo-pillola { display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .25rem .6rem; background: rgba(40,36,38,.82); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 4px 6px; box-shadow: inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); }
   .demo-btn { border-radius: 999px; }
   @media (max-width: 639px) { .demo-pillola { gap: .2rem .25rem; flex-wrap: nowrap; } .demo-btn { padding: .25rem .4rem; gap: .25rem; } }
   #app { margin: 0 14px 14px; border-radius: 30px; background: linear-gradient(135deg, rgba(255,255,255,.34) 0%, rgba(255,255,255,0) 38%), linear-gradient(160deg, rgba(255,250,248,.6), rgba(255,244,240,.48)); border: 1px solid rgba(255,255,255,.5); box-shadow: 0 50px 90px -40px rgba(50,0,0,.9), 0 2px 6px rgba(60,0,0,.15), inset 0 1px 0 rgba(255,255,255,.95), inset 1px 0 0 rgba(255,255,255,.45), inset 0 0 0 1px rgba(255,255,255,.18), inset 0 -1px 0 rgba(255,255,255,.25); backdrop-filter: blur(56px) saturate(190%) brightness(1.05); -webkit-backdrop-filter: blur(56px) saturate(190%) brightness(1.05); }
