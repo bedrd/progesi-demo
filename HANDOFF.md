@@ -2,6 +2,10 @@
 
 Questo file serve a chi riprende il lavoro, persona o Claude, per avere tutta la situazione senza rileggere le call. Aggiornato al 22 ottobre 2026. Quando cambiate qualcosa di importante, aggiornatelo nello stesso commit.
 
+## Novità del 3 novembre (ramo `sfondo-grigio-fumo`)
+
+- **Sfondo grigio fumo**, su richiesta di Mihail: torna lo sfondo che c'era prima del 22 ottobre, grigio chiaro (`#F1EEEE` → `#E3E0E2`) con luci tenui grigie e rosate, al posto del rosso. Dentro la finestra non cambia niente. La pillola della barra della demo è più scura (`rgba(40,36,38,.82)`), così il testo bianco si legge sul grigio.
+
 ## Novità del 26 ottobre (ramo `menu-laterale`): menu a sinistra e cambio ruolo
 
 Feedback di Mihail: "col menu laterale è più semplice da navigare" e "non riesco a cambiare utente, vedo solo il portale come direzione". Il design resta com'è.
